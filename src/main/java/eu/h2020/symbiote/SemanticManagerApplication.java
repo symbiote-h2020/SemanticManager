@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 
 /**
+ * Spring application for Semantic Manager.
+ *
  * Created by tipech on 06.03.2017.
  */
 @EnableDiscoveryClient

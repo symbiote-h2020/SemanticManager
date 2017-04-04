@@ -3,7 +3,7 @@ package eu.h2020.symbiote.ontology.validation;
 /**
  * Represents a generic validation result for ontologies.
  *
- * Created by Mael on 16/03/2017.
+ * Created by Szymon Mueller on 16/03/2017.
  */
 public abstract class ValidationResult<T> {
 

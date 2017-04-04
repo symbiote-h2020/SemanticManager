@@ -1,10 +1,11 @@
 package eu.h2020.symbiote.ontology.validation;
 
-import eu.h2020.symbiote.model.PIMMetaModelDescription;
+import eu.h2020.symbiote.core.internal.PIMMetaModelDescription;
 
 /**
+ * Result of the validation of PIM meta model.
  *
- * Created by Mael on 16/03/2017.
+ * Created by Szymon Mueller on 16/03/2017.
  */
 public class PIMMetaModelValidationResult extends ValidationResult<PIMMetaModelDescription> {
 

@@ -1,11 +1,11 @@
 package eu.h2020.symbiote.ontology;
 
+import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
+import eu.h2020.symbiote.core.internal.PIMMetaModelDescription;
+import eu.h2020.symbiote.core.internal.ResourceDescription;
+import eu.h2020.symbiote.core.model.InterworkingService;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
-import eu.h2020.symbiote.model.InterworkingService;
-import eu.h2020.symbiote.model.PIMInstanceDescription;
-import eu.h2020.symbiote.model.PIMMetaModelDescription;
-import eu.h2020.symbiote.model.ResourceDescription;
 import eu.h2020.symbiote.ontology.validation.PIMInstanceValidationResult;
 import eu.h2020.symbiote.ontology.validation.PIMMetaModelValidationResult;
 import eu.h2020.symbiote.ontology.validation.ResourceInstanceValidationResult;
@@ -23,7 +23,7 @@ import java.util.List;
  * Main class for handling validation and translation. All RDF-related tasks are redirected to this class for
  * execution and implementation.
  *
- * Created by Mael on 21/03/2017.
+ * Created by Szymon Mueller on 21/03/2017.
  */
 public class SemanticManager {
 
@@ -61,8 +61,8 @@ public class SemanticManager {
      *
      * Returns object representing validation result as well as POJO representing basic PIM meta model information.
      *
-     * @param request
-     * @return
+     * @param request Request containing RDF.
+     * @return result of the meta model validation.
      */
     public PIMMetaModelValidationResult validatePIMMetaModel(RDFInfo request ) {
         log.info("Validating PIM meta model " + request.getRdf().substring(0,30) + " ... ");

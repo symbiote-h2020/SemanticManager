@@ -1,12 +1,13 @@
 package eu.h2020.symbiote.ontology.validation;
 
-import eu.h2020.symbiote.model.ResourceDescription;
+import eu.h2020.symbiote.core.internal.ResourceDescription;
 
 import java.util.List;
 
 /**
+ * Result of the resource instance validation.
  *
- * Created by Mael on 16/03/2017.
+ * Created by Szymon Mueller on 16/03/2017.
  */
 public class ResourceInstanceValidationResult extends ValidationResult<List<ResourceDescription>> {
 

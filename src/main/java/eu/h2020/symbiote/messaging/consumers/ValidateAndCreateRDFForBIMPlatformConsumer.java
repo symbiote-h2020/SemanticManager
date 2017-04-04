@@ -7,9 +7,10 @@ import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
-import eu.h2020.symbiote.core.internal.PIMMetaModelDescription;
+import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
 import eu.h2020.symbiote.messaging.RabbitManager;
 import eu.h2020.symbiote.ontology.SemanticManager;
+import eu.h2020.symbiote.ontology.validation.PIMInstanceValidationResult;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -20,9 +21,9 @@ import java.io.IOException;
  *
  * Created by Szymon Mueller
  */
-public class RegisterPIMMetaModelConsumer extends DefaultConsumer {
+public class ValidateAndCreateRDFForBIMPlatformConsumer extends DefaultConsumer {
 
-    private static Log log = LogFactory.getLog(RegisterPIMMetaModelConsumer.class);
+    private static Log log = LogFactory.getLog(ValidateAndCreateRDFForBIMPlatformConsumer.class);
     private RabbitManager rabbitManager;
 
     /**
@@ -32,8 +33,8 @@ public class RegisterPIMMetaModelConsumer extends DefaultConsumer {
      * @param channel           the channel to which this consumer is attached
      * @param rabbitManager     rabbit manager bean passed for access to messages manager
      */
-    public RegisterPIMMetaModelConsumer(Channel channel,
-                                        RabbitManager rabbitManager) {
+    public ValidateAndCreateRDFForBIMPlatformConsumer(Channel channel,
+                                                      RabbitManager rabbitManager) {
         super(channel);
         this.rabbitManager = rabbitManager;
     }
@@ -53,21 +54,32 @@ public class RegisterPIMMetaModelConsumer extends DefaultConsumer {
                                AMQP.BasicProperties properties, byte[] body)
             throws IOException {
         String msg = new String(body);
-        log.debug( "Consume register PIM meta model message: " + msg );
+        log.debug( "Consume validate PIM meta model message: " + msg );
 
         //Try to parse the message
         try {
             ObjectMapper mapper = new ObjectMapper();
-            PIMMetaModelDescription  registerRequest = mapper.readValue(msg, PIMMetaModelDescription.class);
+            PIMInstanceDescription validateAndTranslateRequest = mapper.readValue(msg, PIMInstanceDescription.class);
 
-            SemanticManager.getManager().registerNewPIMMetaModel(registerRequest);
+            PIMInstanceValidationResult response = SemanticManager.getManager().validateAndCreateBIMPlatformToRDF(validateAndTranslateRequest);
+            //Send the response back to the client
+            log.debug( "Validation status: " + response.isSuccess() + ", message: " + response.getMessage());
 
-            getChannel().basicAck(envelope.getDeliveryTag(),false);
+            byte[] responseBytes = mapper.writeValueAsBytes(response!=null?response:"[]");
+
+            AMQP.BasicProperties replyProps = new AMQP.BasicProperties
+                    .Builder()
+                    .correlationId(properties.getCorrelationId())
+                    .build();
+            this.getChannel().basicPublish("", properties.getReplyTo(), replyProps, responseBytes);
+            log.debug("-> Message was sent back");
+
+            this.getChannel().basicAck(envelope.getDeliveryTag(), false);
 
         } catch( JsonParseException | JsonMappingException e ) {
-            log.error("Error occurred when registering new PIM meta model: " + msg, e);
+            log.error("Error occurred when parsing Resource object JSON: " + msg, e);
         } catch( IOException e ) {
-            log.error("I/O Exception occurred when parsing PIM meta model object" , e);
+            log.error("I/O Exception occurred when parsing Resource object" , e);
         }
     }
 }

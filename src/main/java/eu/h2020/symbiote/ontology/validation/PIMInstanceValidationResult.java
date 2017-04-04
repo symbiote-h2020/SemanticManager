@@ -1,11 +1,11 @@
 package eu.h2020.symbiote.ontology.validation;
 
-import eu.h2020.symbiote.model.PIMInstanceDescription;
-import eu.h2020.symbiote.model.PIMMetaModelDescription;
+import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
 
 /**
+ * Result of the validation of the platform instance.
  *
- * Created by Mael on 16/03/2017.
+ * Created by Szymon Mueller on 16/03/2017.
  */
 public class PIMInstanceValidationResult extends ValidationResult<PIMInstanceDescription> {
 
