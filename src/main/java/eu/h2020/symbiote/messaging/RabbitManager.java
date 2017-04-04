@@ -1,7 +1,7 @@
 package eu.h2020.symbiote.messaging;
 
-import com.google.gson.Gson;
 import com.rabbitmq.client.*;
+import eu.h2020.symbiote.messaging.consumers.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.util.concurrent.TimeoutException;
  * Bean used to manage internal communication using RabbitMQ.
  * It is responsible for declaring exchanges and using routing keys from centralized config server.
  * <p>
- * Created by mateuszl
+ * Created by Szymon Mueller
  */
 @Component
 public class RabbitManager {
@@ -29,18 +29,69 @@ public class RabbitManager {
     private String rabbitUsername;
     @Value("${rabbit.password}")
     private String rabbitPassword;
-    @Value("${rabbit.exchange.placeholder.name}")
-    private String placeholderExchangeName;
-    @Value("${rabbit.exchange.placeholder.type}")
-    private String placeholderExchangeType;
-    @Value("${rabbit.exchange.placeholder.durable}")
-    private boolean placeholderExchangeDurable;
-    @Value("${rabbit.exchange.placeholder.autodelete}")
-    private boolean placeholderExchangeAutodelete;
-    @Value("${rabbit.exchange.placeholder.internal}")
-    private boolean placeholderExchangeInternal;
-    @Value("${rabbit.routingKey.placeholder.placeholder}")
-    private String placeholderRoutingKey;
+
+    //Platform ontology routing keys
+    @Value("${rabbit.routingKey.platform.model.validationRequested}")
+    private String platformModelValidationRequestedRoutingKey;
+    @Value("${rabbit.routingKey.platform.model.validationPerformed}")
+    private String platformModelValidationPerformedRoutingKey;
+    @Value("${rabbit.routingKey.platform.model.created}")
+    private String platformModelCreatedRoutingKey;
+    @Value("${rabbit.routingKey.platform.model.modified}")
+    private String platformModelModifiedRoutingKey;
+    @Value("${rabbit.routingKey.platform.model.removed}")
+    private String platformModelRemovedRoutingKey;
+    @Value("${rabbit.routingKey.platform.instance.validationRequested}")
+    private String platformInstanceValidationRequestedRoutingKey;
+    @Value("${rabbit.routingKey.platform.instance.validationPerformed}")
+    private String platformInstanceValidationPerformedRoutingKey;
+    @Value("${rabbit.routingKey.platform.instance.translationRequested}")
+    private String platformInstanceTranslationRequestedRoutingKey;
+    @Value("${rabbit.routingKey.platform.instance.translationPerformed}")
+    private String platformInstanceTranslationPerformedRoutingKey;
+
+    //Resource ontology routing keys
+    @Value("${rabbit.routingKey.resource.instance.validationRequested}")
+    private String resourceInstanceValidationRequestedRoutingKey;
+    @Value("${rabbit.routingKey.resource.instance.validationPerformed}")
+    private String resourceInstanceValidationPerformedRoutingKey;
+    @Value("${rabbit.routingKey.resource.instance.translationRequested}")
+    private String resourceInstanceTranslationRequestedRoutingKey;
+    @Value("${rabbit.routingKey.resource.instance.translationPerformed}")
+    private String resourceInstanceTranslationPerformedRoutingKey;
+
+    //Platform exchange
+    @Value("${rabbit.exchange.platform.name}")
+    private String platformExchangeName;
+    @Value("${rabbit.exchange.platform.type}")
+    private String platformExchangeType;
+    @Value("${rabbit.exchange.platform.durable}")
+    private boolean plaftormExchangeDurable;
+    @Value("${rabbit.exchange.platform.autodelete}")
+    private boolean platformExchangeAutodelete;
+    @Value("${rabbit.exchange.platform.internal}")
+    private boolean platformExchangeInternal;
+    @Value("${rabbit.routingKey.platform.creationRequested}")
+    private String platformCreationRequestedRoutingKey;
+    @Value("${rabbit.routingKey.platform.created}")
+    private String platformCreatedRoutingKey;
+    @Value("${rabbit.routingKey.platform.modified}")
+    private String platformModifiedRoutingKey;
+    @Value("${rabbit.routingKey.platform.removed}")
+    private String platformDeletedRoutingKey;
+
+    //Resource exchange
+    @Value("${rabbit.exchange.resource.name}")
+    private String resourceExchangeName;
+    @Value("${rabbit.exchange.resource.type}")
+    private String resourceExchangeType;
+    @Value("${rabbit.exchange.resource.durable}")
+    private boolean resourceExchangeDurable;
+    @Value("${rabbit.exchange.resource.autodelete}")
+    private boolean resourceExchangeAutodelete;
+    @Value("${rabbit.exchange.resource.internal}")
+    private boolean resourceExchangeInternal;
+
     private Connection connection;
 
     @Autowired
@@ -69,34 +120,45 @@ public class RabbitManager {
      * It triggers start of all consumers used in Registry communication.
      */
     public void init() {
+        //FIXME check if there is better exception handling in @postconstruct method
         Channel channel = null;
 
         try {
-            getConnection();
+            ConnectionFactory factory = new ConnectionFactory();
+//            factory.setHost("127.0.0.1"); //todo value from properties
+            factory.setHost(this.rabbitHost);
+            factory.setUsername(this.rabbitUsername);
+            factory.setPassword(this.rabbitPassword);
+
+            this.connection = factory.newConnection();
+
+            channel = this.connection.createChannel();
+            channel.exchangeDeclare(this.platformExchangeName,
+                    this.platformExchangeType,
+                    this.plaftormExchangeDurable,
+                    this.platformExchangeAutodelete,
+                    this.platformExchangeInternal,
+                    null);
+
+            channel.exchangeDeclare(this.resourceExchangeName,
+                    this.resourceExchangeType,
+                    this.resourceExchangeDurable,
+                    this.resourceExchangeAutodelete,
+                    this.resourceExchangeInternal,
+                    null);
+
+
+            //message retrieval
+            //receiveMessages();
+
+            // message to Search Service
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (TimeoutException e) {
             e.printStackTrace();
-        }
-
-        if (connection != null) {
-            try {
-                channel = this.connection.createChannel();
-
-                channel.exchangeDeclare(this.placeholderExchangeName,
-                        this.placeholderExchangeType,
-                        this.placeholderExchangeDurable,
-                        this.placeholderExchangeAutodelete,
-                        this.placeholderExchangeInternal,
-                        null);
-
-                startConsumers();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                closeChannel(channel);
-            }
+        } finally {
+            closeChannel(channel);
         }
     }
 
@@ -105,17 +167,23 @@ public class RabbitManager {
      */
     @PreDestroy
     public void cleanup() {
-        //FIXME check if there is better exception handling in @predestroy method
-        log.info("Rabbit cleaned!");
+//        FIXME check if there is better exception handling in @predestroy method
+//        log.info("Rabbit cleaned!");
+//        try {
+//            Channel channel;
+//            if (this.connection != null && this.connection.isOpen()) {
+//                channel = connection.createChannel();
+//                channel.queueUnbind("placeholderQueue", this.placeholderExchangeName, this.placeholderRoutingKey);
+//                channel.queueDelete("placeholderQueue");
+//                closeChannel(channel);
+//                this.connection.close();
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         try {
-            Channel channel;
-            if (this.connection != null && this.connection.isOpen()) {
-                channel = connection.createChannel();
-                channel.queueUnbind("placeholderQueue", this.placeholderExchangeName, this.placeholderRoutingKey);
-                channel.queueDelete("placeholderQueue");
-                closeChannel(channel);
+            if (this.connection != null && this.connection.isOpen())
                 this.connection.close();
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -126,49 +194,21 @@ public class RabbitManager {
      */
     public void startConsumers() {
         try {
-            startConsumerOfPlaceholderMessages();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            registerPIMInstanceCreationConsumer();
+            registerPIMMetaModelCreationConsumer();
+            registerValidateAndCreateBIMPlatform();
+            registerValidateAndCreateBIMResource();
+            registerValidatePIMInstanceConsumer();
+            registerValidatePIMMetaModelConsumer();
+            registerValidateResourceInstanceConsumer();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void sendPlaceholderMessage(String placeholder) { // arg should be object instead of String, e.g. Resource
-        Gson gson = new Gson();
-        String message = gson.toJson(placeholder);
-        sendMessage(this.placeholderExchangeName, this.placeholderRoutingKey, message);
-        log.info("- placeholder message sent");
     }
 
     public void sendCustomMessage(String exchange, String routingKey, String objectInJson) {
         sendMessage(exchange, routingKey, objectInJson);
         log.info("- Custom message sent");
-    }
-
-    /**
-     * Method creates queue and binds it globally available exchange and adequate Routing Key.
-     * It also creates a consumer for messages incoming to this queue, regarding to -placeholder- requests.
-     *
-     * @throws InterruptedException
-     * @throws IOException
-     */
-    private void startConsumerOfPlaceholderMessages() throws InterruptedException, IOException {
-        String queueName = "placeholderQueue";
-        Channel channel;
-        try {
-            channel = this.connection.createChannel();
-            channel.queueDeclare(queueName, true, false, false, null);
-            channel.queueBind(queueName, this.placeholderExchangeName, this.placeholderRoutingKey);
-//            channel.basicQos(1); // to spread the load over multiple servers we set the prefetchCount setting
-
-            log.info("Receiver waiting for Placeholder messages....");
-
-            Consumer consumer = new PlaceholderConsumer(channel, this);
-            channel.basicConsume(queueName, false, consumer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -212,4 +252,103 @@ public class RabbitManager {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Registers a Validate PIM Meta Model consumer
+     */
+    private void registerValidatePIMMetaModelConsumer() throws IOException {
+
+        Channel channel = connection.createChannel();
+        String queueName = channel.queueDeclare().getQueue();
+        channel.queueBind(queueName, platformExchangeName, platformModelValidationRequestedRoutingKey);
+        ValidatePIMMetaModelConsumer consumer = new ValidatePIMMetaModelConsumer(channel, this);
+
+        log.debug("Creating PIM meta model consumer");
+        channel.basicConsume(queueName, false, consumer);
+    }
+
+    /**
+     * Registers a Validate PIM Instance consumer
+     */
+    private void registerValidatePIMInstanceConsumer() throws IOException {
+
+        Channel channel = connection.createChannel();
+        String queueName = channel.queueDeclare().getQueue();
+        channel.queueBind(queueName, platformExchangeName, platformInstanceValidationRequestedRoutingKey);
+        ValidatePIMInstancelConsumer consumer = new ValidatePIMInstancelConsumer(channel, this);
+
+        log.debug("Creating PIM instance consumer");
+        channel.basicConsume(queueName, false, consumer);
+    }
+
+    /**
+     * Registers a Validate Resource Instance consumer
+     */
+    private void registerValidateResourceInstanceConsumer() throws IOException {
+
+        Channel channel = connection.createChannel();
+        String queueName = channel.queueDeclare().getQueue();
+        channel.queueBind(queueName, platformExchangeName, resourceInstanceValidationRequestedRoutingKey);
+        ValidateResourcesInstanceConsumer consumer = new ValidateResourcesInstanceConsumer(channel, this);
+
+        log.debug("Creating resource instance consumer");
+        channel.basicConsume(queueName, false, consumer);
+    }
+
+    /**
+     * Registers a Validate and Create BIM platform consumer
+     */
+    private void registerValidateAndCreateBIMPlatform() throws IOException {
+
+        Channel channel = connection.createChannel();
+        String queueName = channel.queueDeclare().getQueue();
+        channel.queueBind(queueName, platformExchangeName, platformInstanceTranslationRequestedRoutingKey);
+        ValidateAndCreateRDFForBIMPlatformConsumer consumer = new ValidateAndCreateRDFForBIMPlatformConsumer(channel, this);
+
+        log.debug("Creating BIM platform validation and creation consumer");
+        channel.basicConsume(queueName, false, consumer);
+    }
+
+    /**
+     * Registers a Validate and Create BIM resource consumer
+     */
+    private void registerValidateAndCreateBIMResource() throws IOException {
+
+        Channel channel = connection.createChannel();
+        String queueName = channel.queueDeclare().getQueue();
+        channel.queueBind(queueName, platformExchangeName, resourceInstanceTranslationRequestedRoutingKey);
+        ValidateAndCreateRDFForBIMResourceConsumer consumer = new ValidateAndCreateRDFForBIMResourceConsumer(channel, this);
+
+        log.debug("Creating BIM resource validation and creation consumer");
+        channel.basicConsume(queueName, false, consumer);
+    }
+
+    /**
+     * Registers a platform instance creation consumer
+     */
+    private void registerPIMInstanceCreationConsumer() throws IOException {
+
+        Channel channel = connection.createChannel();
+        String queueName = channel.queueDeclare().getQueue();
+        channel.queueBind(queueName, platformExchangeName, platformCreatedRoutingKey);
+        RegisterPIMInstanceConsumer consumer = new RegisterPIMInstanceConsumer(channel, this);
+
+        log.debug("Creating PIM platform instance consumer");
+        channel.basicConsume(queueName, false, consumer);
+    }
+
+    /**
+     * Registers a platform model creation consumer
+     */
+    private void registerPIMMetaModelCreationConsumer() throws IOException {
+
+        Channel channel = connection.createChannel();
+        String queueName = channel.queueDeclare().getQueue();
+        channel.queueBind(queueName, platformExchangeName, platformModelCreatedRoutingKey);
+        RegisterPIMMetaModelConsumer consumer = new RegisterPIMMetaModelConsumer(channel, this);
+
+        log.debug("Creating PIM Meta Model consumer");
+        channel.basicConsume(queueName, false, consumer);
+    }
+
 }

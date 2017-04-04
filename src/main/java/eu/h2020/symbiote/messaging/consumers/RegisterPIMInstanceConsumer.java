@@ -1,11 +1,15 @@
-package eu.h2020.symbiote.messaging;
+package eu.h2020.symbiote.messaging.consumers;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
-import eu.h2020.symbiote.model.PlaceholderResponse;
+import eu.h2020.symbiote.messaging.RabbitManager;
+import eu.h2020.symbiote.model.PIMInstanceDescription;
+import eu.h2020.symbiote.ontology.SemanticManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -14,11 +18,11 @@ import java.io.IOException;
 /**
  * RabbitMQ Consumer implementation used for Placeholder actions
  *
- * Created by mateuszl
+ * Created by Szymon Mueller
  */
-public class PlaceholderConsumer extends DefaultConsumer {
+public class RegisterPIMInstanceConsumer extends DefaultConsumer {
 
-    private static Log log = LogFactory.getLog(PlaceholderConsumer.class);
+    private static Log log = LogFactory.getLog(RegisterPIMInstanceConsumer.class);
     private RabbitManager rabbitManager;
 
     /**
@@ -27,10 +31,9 @@ public class PlaceholderConsumer extends DefaultConsumer {
      *
      * @param channel           the channel to which this consumer is attached
      * @param rabbitManager     rabbit manager bean passed for access to messages manager
-     * @param repositoryManager repository manager bean passed for persistence actions
      */
-    public PlaceholderConsumer(Channel channel,
-                                           RabbitManager rabbitManager) {
+    public RegisterPIMInstanceConsumer(Channel channel,
+                                       RabbitManager rabbitManager) {
         super(channel);
         this.rabbitManager = rabbitManager;
     }
@@ -49,32 +52,22 @@ public class PlaceholderConsumer extends DefaultConsumer {
     public void handleDelivery(String consumerTag, Envelope envelope,
                                AMQP.BasicProperties properties, byte[] body)
             throws IOException {
-        Gson gson = new Gson();
-        String response = "";
-        String message = new String(body, "UTF-8");
-        log.info(" [x] Received -placeholder- message: '" + message + "'");
+        String msg = new String(body);
+        log.debug( "Consume register PIM meta model message: " + msg );
 
-        AMQP.BasicProperties replyProps = new AMQP.BasicProperties
-                .Builder()
-                .correlationId(properties.getCorrelationId())
-                .build();
+        //Try to parse the message
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            PIMInstanceDescription registerRequest = mapper.readValue(msg, PIMInstanceDescription.class);
 
-        PlaceholderResponse placeholderResponse = new PlaceholderResponse();
-        // try {
+            SemanticManager.getManager().registerNewPIMInstanceModel(registerRequest);
 
-            // do stuff
-            placeholderResponse.setStatus(200);
+            getChannel().basicAck(envelope.getDeliveryTag(),false);
 
-        // } catch (Exception e) {
-        //     log.error("Error occurred during Placeholder", e);
-        //     placeholderResponse.setStatus(400);
-        // }
-
-        response = gson.toJson(placeholderResponse);
-
-        this.getChannel().basicPublish("", properties.getReplyTo(), replyProps, response.getBytes());
-        log.info("Message with status: " + placeholderResponse.getStatus() + " sent back");
-
-        this.getChannel().basicAck(envelope.getDeliveryTag(), false);
+        } catch( JsonParseException | JsonMappingException e ) {
+            log.error("Error occurred when registering new PIM meta model: " + msg, e);
+        } catch( IOException e ) {
+            log.error("I/O Exception occurred when parsing PIM meta model object" , e);
+        }
     }
 }
