@@ -1,0 +1,17 @@
+{
+  "@c":".StationarySensor",
+  "id":"stationary1",
+  "labels":[
+    "Stationary 1"
+  ],
+  "comments":[
+    "This is stationary 1"
+  ],
+  "interworkingServiceURL":"http://symbiote-h2020.eu/example/interworkingService",
+  "locatedAt":"Paris",
+  "featureOfInterest":"Home1",
+  "observesProperty":[
+    "Temperature",
+    "Humidity"
+  ]
+}
