@@ -1,13 +1,14 @@
 package eu.h2020.symbiote.messaging.consumers;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
-import eu.h2020.symbiote.core.internal.ResourceDescription;
+import eu.h2020.symbiote.core.model.resources.Resource;
 import eu.h2020.symbiote.messaging.RabbitManager;
 import eu.h2020.symbiote.ontology.SemanticManager;
 import eu.h2020.symbiote.ontology.validation.ResourceInstanceValidationResult;
@@ -15,6 +16,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * RabbitMQ Consumer implementation used for Placeholder actions
@@ -59,7 +61,7 @@ public class ValidateAndCreateRDFForBIMResourceConsumer extends DefaultConsumer 
         //Try to parse the message
         try {
             ObjectMapper mapper = new ObjectMapper();
-            ResourceDescription validateAndTranslateRequest = mapper.readValue(msg, ResourceDescription.class);
+            List<Resource> validateAndTranslateRequest = mapper.readValue(msg, new TypeReference<List<Resource>>(){});
 
             ResourceInstanceValidationResult response = SemanticManager.getManager().validateAndCreateBIMResourceToRDF(validateAndTranslateRequest);
             //Send the response back to the client

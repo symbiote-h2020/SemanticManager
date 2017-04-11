@@ -16,7 +16,6 @@ public class RabbitManagerTests {
     public void testPlaceholder_success() {
         RabbitManager rabbitManager = spy(new RabbitManager());
         // doReturn(null).when(rabbitManager).sendRpcMessage(any(), any(), any());
-
     }
 
 }
