@@ -2,39 +2,33 @@ package eu.h2020.symbiote;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import eu.h2020.symbiote.core.model.internal.CoreResource;
 import eu.h2020.symbiote.core.model.resources.*;
 import eu.h2020.symbiote.ontology.SemanticManager;
+import eu.h2020.symbiote.ontology.validation.ResourceInstanceValidationResult;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.Assert.*;
+import static eu.h2020.symbiote.TestSetupConfig.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SemanticManagerTests {
 
     @Test
-    public void test() {
-        Actuator actuator = new Actuator();
-        actuator.setId("actuator1");
-        actuator.setLabels(Arrays.asList("Actuator 1"));
-        actuator.setComments(Arrays.asList("This is actuator 1"));
-        actuator.setInterworkingServiceURL("http://symbiote-h2020.eu/example/interworkingService");
-
-    }
-
-    @Test
     public void testStationarySensorValidateAndCreate() {
         StationarySensor stationarySensor = new StationarySensor();
-        stationarySensor.setId("stationary1");
-        stationarySensor.setLabels(Arrays.asList("Stationary 1"));
-        stationarySensor.setComments(Arrays.asList("This is stationary 1"));
-        stationarySensor.setLocatedAt("Paris");
-        stationarySensor.setInterworkingServiceURL("http://symbiote-h2020.eu/example/interworkingService");
-        stationarySensor.setFeatureOfInterest("Home1");
-        stationarySensor.setObservesProperty(Arrays.asList("Temperature","Humidity"));
+        stationarySensor.setId(STATIONARY1_ID);
+        stationarySensor.setLabels(STATIONARY1_LABELS);
+        stationarySensor.setComments(STATIONARY1_COMMENTS);
+        stationarySensor.setLocatedAt(STATIONARY1_LOCATION);
+        stationarySensor.setInterworkingServiceURL(STATIONARY1_URL);
+        stationarySensor.setFeatureOfInterest(STATIONARY1_FOI);
+        stationarySensor.setObservesProperty(STATIONARY1_PROPERTIES);
 
         resourceValidateAndTranslate(stationarySensor);
     }
@@ -42,12 +36,12 @@ public class SemanticManagerTests {
     @Test
     public void testMobileSensorValidateAndCreate() {
         MobileSensor mobileSensor = new MobileSensor();
-        mobileSensor.setId("mobile1");
-        mobileSensor.setLabels(Arrays.asList("Mobile 1"));
-        mobileSensor.setComments(Arrays.asList("This is mobile 1"));
-        mobileSensor.setLocatedAt("Paris");
-        mobileSensor.setInterworkingServiceURL("http://symbiote-h2020.eu/example/interworkingService");
-        mobileSensor.setObservesProperty(Arrays.asList("Temperature"));
+        mobileSensor.setId(MOBILE1_ID);
+        mobileSensor.setLabels(MOBILE1_LABELS);
+        mobileSensor.setComments(MOBILE1_COMMENTS);
+        mobileSensor.setLocatedAt(MOBILE1_LOCATION);
+        mobileSensor.setInterworkingServiceURL(MOBILE1_URL);
+        mobileSensor.setObservesProperty(MOBILE1_PROPERTIES);
 
         resourceValidateAndTranslate(mobileSensor);
     }
@@ -55,27 +49,27 @@ public class SemanticManagerTests {
     @Test
     public void testServiceValidateAndCreate() {
         Service service = new Service();
-        service.setId("service1");
-        service.setLabels(Arrays.asList("Service 1"));
-        service.setComments(Arrays.asList("This is service 1"));
-        service.setInterworkingServiceURL("http://symbiote-h2020.eu/example/interworkingService");
-        service.setName("service1Name");
+        service.setId(SERVICE1_ID);
+        service.setLabels(SERVICE1_LABELS);
+        service.setComments(SERVICE1_COMMENTS);
+        service.setInterworkingServiceURL(SERVICE1_URL);
+        service.setName(SERVICE1_NAME);
 
         InputParameter inParam = new InputParameter();
-        inParam.setName("inputParam1");
-        inParam.setMandatory(true);
-        inParam.setArray(false);
-        inParam.setDatatype("xsd:string");
+        inParam.setName(SERVICE1_INPUT_NAME);
+        inParam.setMandatory(SERVICE1_INPUT_MANDATORY);
+        inParam.setArray(SERVICE1_INPUT_ARRAY);
+        inParam.setDatatype(SERVICE1_INPUT_DATATYPE);
 
         RangeRestriction restriction1 = new RangeRestriction();
-        restriction1.setMin(Double.valueOf(2.0));
-        restriction1.setMax(Double.valueOf(10.0));
+        restriction1.setMin(SERVICE1_INPUT_RESTRICTION_MIN);
+        restriction1.setMax(SERVICE1_INPUT_RESTRICTION_MAX);
         inParam.setRestrictions(Arrays.asList(restriction1));
         service.setInputParameter(Arrays.asList(inParam));
 
         Parameter outputParameter = new Parameter();
-        outputParameter.setDatatype("xsd:string");
-        outputParameter.setArray(false);
+        outputParameter.setDatatype(SERVICE1_OUTPUT_DATATYPE);
+        outputParameter.setArray(SERVICE1_OUTPUT_ARRAY);
         service.setOutputParameter(outputParameter);
 
         resourceValidateAndTranslate(service);
@@ -84,29 +78,29 @@ public class SemanticManagerTests {
     @Test
     public void testActuatingServiceValidateAndCreate() {
         ActuatingService service = new ActuatingService();
-        service.setId("actuatingService1");
-        service.setLabels(Arrays.asList("Actuating service 1"));
-        service.setComments(Arrays.asList("This is actuating service 1"));
-        service.setInterworkingServiceURL("http://symbiote-h2020.eu/example/interworkingService");
-        service.setName("actuatingService1Name");
-        service.setActsOn("Room1");
-        service.setAffects(Arrays.asList("Temperature"));
+        service.setId(ACTUATING_SERVICE1_ID);
+        service.setLabels(ACTUATING_SERVICE1_LABELS);
+        service.setComments(ACTUATING_SERVICE1_COMMENTS);
+        service.setInterworkingServiceURL(ACTUATING_SERVICE1_URL);
+        service.setName(ACTUATING_SERVICE1_NAME);
+        service.setActsOn(ACTUATING_SERVICE1_ACTSON);
+        service.setAffects(ACTUATING_SERVICE1_AFFECTS);
 
         InputParameter inParam = new InputParameter();
-        inParam.setName("inputParam1");
-        inParam.setMandatory(true);
-        inParam.setArray(false);
-        inParam.setDatatype("xsd:string");
+        inParam.setName(ACTUATING_SERVICE1_INPUT_NAME);
+        inParam.setMandatory(ACTUATING_SERVICE1_INPUT_MANDATORY);
+        inParam.setArray(ACTUATING_SERVICE1_INPUT_ARRAY);
+        inParam.setDatatype(ACTUATING_SERVICE1_INPUT_DATATYPE);
 
         RangeRestriction restriction1 = new RangeRestriction();
-        restriction1.setMin(Double.valueOf(2.0));
-        restriction1.setMax(Double.valueOf(10.0));
+        restriction1.setMin(ACTUATING_SERVICE1_INPUT_RESTRICTION_MIN);
+        restriction1.setMax(ACTUATING_SERVICE1_INPUT_RESTRICTION_MAX);
         inParam.setRestrictions(Arrays.asList(restriction1));
         service.setInputParameter(Arrays.asList(inParam));
 
         Parameter outputParameter = new Parameter();
-        outputParameter.setDatatype("xsd:string");
-        outputParameter.setArray(false);
+        outputParameter.setDatatype(ACTUATING_SERVICE1_OUTPUT_DATATYPE);
+        outputParameter.setArray(ACTUATING_SERVICE1_OUTPUT_ARRAY);
         service.setOutputParameter(outputParameter);
 
         resourceValidateAndTranslate(service);
@@ -116,13 +110,13 @@ public class SemanticManagerTests {
     @Test
     public void testActuatorValidateAndCreate() {
         Actuator actuator = new Actuator();
-        actuator.setId("mobile1");
-        actuator.setLabels(Arrays.asList("Mobile 1"));
-        actuator.setComments(Arrays.asList("This is mobile 1"));
-        actuator.setLocatedAt("Paris");
-        actuator.setInterworkingServiceURL("http://symbiote-h2020.eu/example/interworkingService");
+        actuator.setId(ACTUATOR1_ID);
+        actuator.setLabels(ACTUATOR1_LABELS);
+        actuator.setComments(ACTUATOR1_COMMENTS);
+        actuator.setLocatedAt(ACTUATOR1_LOCATION);
+        actuator.setInterworkingServiceURL(ACTUATOR1_URL);
 
-        actuator.setCapabilities(Arrays.asList("actuatingService1Name"));
+        actuator.setCapabilities(ACTUATOR1_CAPABILITIES);
 
         resourceValidateAndTranslate(actuator);
     }
@@ -141,7 +135,19 @@ public class SemanticManagerTests {
 
         SemanticManager manager = SemanticManager.getManager();
         List<Resource> resources = Arrays.asList(resource);
-        manager.validateAndCreateBIMResourceToRDF(resources);
+        ResourceInstanceValidationResult validationResult = manager.validateAndCreateBIMResourceToRDF(resources);
+
+        assertNotNull(validationResult);
+        assertNotNull(validationResult.getObjectDescription());
+        assertEquals("Validation result should contain single resource",1,validationResult.getObjectDescription().size());
+        CoreResource resultResource = validationResult.getObjectDescription().get(0);
+        assertNotNull("Result should not be null",resultResource);
+        assertEquals("Id of the result must be the same", resource.getId(),resultResource.getId());
+        assertEquals("Labels of the result must be the same", resource.getLabels(),resultResource.getLabels());
+        assertEquals("Comments of the result must be the same", resource.getComments(),resultResource.getComments());
+        assertEquals("Interworking service URL of the result must be the same", resource.getInterworkingServiceURL(),resultResource.getInterworkingServiceURL());
+        assertNotNull("Created RDF must not be null", resultResource.getRdf());
+        assertFalse("Created RDF must not be empty", resultResource.getRdf().isEmpty());
     }
 
 }

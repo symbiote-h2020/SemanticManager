@@ -148,6 +148,7 @@ public class RabbitManager {
                     null);
 
 
+            startConsumers();
             //message retrieval
             //receiveMessages();
 
@@ -193,6 +194,7 @@ public class RabbitManager {
      * Method gathers all of the rabbit consumer starter methods
      */
     public void startConsumers() {
+        log.debug("Starting consumers...");
         try {
             registerPIMInstanceCreationConsumer();
             registerPIMMetaModelCreationConsumer();
@@ -288,7 +290,7 @@ public class RabbitManager {
 
         Channel channel = connection.createChannel();
         String queueName = channel.queueDeclare().getQueue();
-        channel.queueBind(queueName, platformExchangeName, resourceInstanceValidationRequestedRoutingKey);
+        channel.queueBind(queueName, resourceExchangeName, resourceInstanceValidationRequestedRoutingKey);
         ValidateResourcesInstanceConsumer consumer = new ValidateResourcesInstanceConsumer(channel, this);
 
         log.debug("Creating resource instance consumer");
@@ -316,7 +318,7 @@ public class RabbitManager {
 
         Channel channel = connection.createChannel();
         String queueName = channel.queueDeclare().getQueue();
-        channel.queueBind(queueName, platformExchangeName, resourceInstanceTranslationRequestedRoutingKey);
+        channel.queueBind(queueName, resourceExchangeName, resourceInstanceTranslationRequestedRoutingKey);
         ValidateAndCreateRDFForBIMResourceConsumer consumer = new ValidateAndCreateRDFForBIMResourceConsumer(channel, this);
 
         log.debug("Creating BIM resource validation and creation consumer");
