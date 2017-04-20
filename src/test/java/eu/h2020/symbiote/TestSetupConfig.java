@@ -10,6 +10,8 @@ import java.util.List;
  */
 public class TestSetupConfig {
 
+    public static final String PLATFORM_ID = "Platform1";
+
     public static final String GENERAL_INTERWORKING_URL = "http://symbiote-h2020.eu/example/interworkingService";
     public static final String GENERAL_FOI = "Room1";
     public static final String GENERAL_LOCATION = "Paris";

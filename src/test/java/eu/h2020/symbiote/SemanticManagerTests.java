@@ -1,7 +1,11 @@
 package eu.h2020.symbiote;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import eu.h2020.symbiote.core.internal.CoreResourceRegisteredOrModifiedEventPayload;
+import eu.h2020.symbiote.core.internal.CoreResourceRegistryRequest;
+import eu.h2020.symbiote.core.internal.DescriptionType;
 import eu.h2020.symbiote.core.model.internal.CoreResource;
 import eu.h2020.symbiote.core.model.resources.*;
 import eu.h2020.symbiote.ontology.SemanticManager;
@@ -10,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -134,8 +139,29 @@ public class SemanticManagerTests {
         }
 
         SemanticManager manager = SemanticManager.getManager();
-        List<Resource> resources = Arrays.asList(resource);
-        ResourceInstanceValidationResult validationResult = manager.validateAndCreateBIMResourceToRDF(resources);
+
+
+
+        CoreResourceRegistryRequest request = new CoreResourceRegistryRequest();
+        request.setPlatformId(PLATFORM_ID);
+            try {
+                String resourcesJson = mapper.writerFor(new TypeReference<List<Resource>>() {
+                }).writeValueAsString(Arrays.asList(resource));
+                request.setBody(resourcesJson);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                fail("Error occured when using Json mapper" + e.getMessage());
+            }
+        request.setDescriptionType(DescriptionType.BASIC);
+        request.setToken("Token");
+
+        ResourceInstanceValidationResult validationResult = null;
+        try {
+            validationResult = manager.validateAndCreateBIMResourceToRDF(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail("Error during handling of the validate and create resource request");
+        }
 
         assertNotNull(validationResult);
         assertNotNull(validationResult.getObjectDescription());
