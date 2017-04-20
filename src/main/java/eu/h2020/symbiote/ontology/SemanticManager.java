@@ -3,18 +3,14 @@ package eu.h2020.symbiote.ontology;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import eu.h2020.symbiote.core.internal.CoreResourceRegistryRequest;
 import eu.h2020.symbiote.core.internal.DescriptionType;
 import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
 import eu.h2020.symbiote.core.internal.PIMMetaModelDescription;
-import eu.h2020.symbiote.core.model.InterworkingService;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.core.model.internal.CoreResource;
-import eu.h2020.symbiote.core.model.resources.*;
-import eu.h2020.symbiote.ontology.utils.CoreInformationModel;
-import eu.h2020.symbiote.ontology.utils.OntologyHelper;
+import eu.h2020.symbiote.core.model.resources.Resource;
 import eu.h2020.symbiote.ontology.utils.RDFGenerator;
 import eu.h2020.symbiote.ontology.utils.RDFReader;
 import eu.h2020.symbiote.ontology.validation.PIMInstanceValidationResult;
@@ -22,18 +18,14 @@ import eu.h2020.symbiote.ontology.validation.PIMMetaModelValidationResult;
 import eu.h2020.symbiote.ontology.validation.ResourceInstanceValidationResult;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.jena.ext.com.google.common.reflect.Reflection;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.vocabulary.RDF;
 import org.bson.types.ObjectId;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**

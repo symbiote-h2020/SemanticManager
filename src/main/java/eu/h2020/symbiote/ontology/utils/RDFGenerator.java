@@ -3,12 +3,10 @@ package eu.h2020.symbiote.ontology.utils;
 import eu.h2020.symbiote.core.model.Platform;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.resources.*;
-import eu.h2020.symbiote.core.model.resources.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.jena.ontology.Ontology;
-import org.apache.jena.rdf.model.*;
-import sun.reflect.Reflection;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
