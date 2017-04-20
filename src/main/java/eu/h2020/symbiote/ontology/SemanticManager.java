@@ -1,5 +1,11 @@
 package eu.h2020.symbiote.ontology;
 
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.javaws.exceptions.InvalidArgumentException;
+import eu.h2020.symbiote.core.internal.CoreResourceRegistryRequest;
+import eu.h2020.symbiote.core.internal.DescriptionType;
 import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
 import eu.h2020.symbiote.core.internal.PIMMetaModelDescription;
 import eu.h2020.symbiote.core.model.InterworkingService;
@@ -19,8 +25,12 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.jena.ext.com.google.common.reflect.Reflection;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.vocabulary.RDF;
+import org.bson.types.ObjectId;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -103,7 +113,9 @@ public class SemanticManager {
         log.info("Registering new PIM meta model " + pimMetaModel.getUri());
 
         Model model = ModelFactory.createDefaultModel();
-        model.read(new ByteArrayInputStream(pimMetaModel.getRdf().getBytes()), null, pimMetaModel.getRdfFormat().toString());
+        try( StringReader reader = new StringReader( pimMetaModel.getRdf() ) ) {
+            model.read(reader, null, pimMetaModel.getRdfFormat().toString());
+        }
         //TODO save meta model in rdf store
 
     }
@@ -144,7 +156,9 @@ public class SemanticManager {
             log.info("Registering new PIM instance " + pimLabel);
             if (pimInstanceModel.getRdf() != null && pimInstanceModel.getRdf().trim().length() > 0 && pimInstanceModel.getRdfFormat() != null) {
                 Model model = ModelFactory.createDefaultModel();
-                model.read(new ByteArrayInputStream(pimInstanceModel.getRdf().getBytes()), null, pimInstanceModel.getRdfFormat().toString());
+                try( StringReader reader = new StringReader( pimInstanceModel.getRdf() ) ) {
+                    model.read(reader, null, pimInstanceModel.getRdfFormat().toString());
+                }
             } else {
                 log.error("Could not register PIM instance with empty ");
             }
@@ -197,17 +211,26 @@ public class SemanticManager {
      * @param request Request containing RDF to be validated
      * @return Validation result as well as POJO representing the platform which was validated.
      */
-    public ResourceInstanceValidationResult validateResourcesInstance(RDFInfo request) {
+    public ResourceInstanceValidationResult validateResourcesInstance(CoreResourceRegistryRequest request) throws IOException {
         log.info("Validating Resource instance ... ");
+
+        if( !request.getDescriptionType().equals(DescriptionType.RDF) ) {
+            log.fatal("Validate resource instance should only be used by RDF type of description");
+            throw new IllegalArgumentException("Validate resource instance should only be used by RDF type of description");
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        RDFInfo rdfInfo = mapper.readValue(request.getBody(), RDFInfo.class);
+
         ResourceInstanceValidationResult result = new ResourceInstanceValidationResult();
-        result.setModelValidated(request.getRdf());
+        result.setModelValidated(rdfInfo.getRdf());
 
         //TODO change with proper implementation
         result.setSuccess(true);
         result.setMessage("Validation successful");
         result.setModelValidatedAgainst("http://www.symbiote-h2020.eu/ontology/platforms/1111"); //Set URI of the platform instance this resources are being registered to
 
-        List<CoreResource> resources = RDFReader.readResourceInstances(request);
+        List<CoreResource> resources = RDFReader.readResourceInstances(rdfInfo, request.getPlatformId());
 
         result.setObjectDescription(resources);
 
@@ -217,13 +240,13 @@ public class SemanticManager {
     /**
      * Validates description of resources of BIM-compliant platform and translates them into RDF.
      *
-     * @param resources List of resources, for which RDF will be created.
+     * @param request Request containing list of resources, for which RDF will be created.
      * @return Validation result, containing information about the resources and created RDF.
      */
-    public ResourceInstanceValidationResult validateAndCreateBIMResourceToRDF(List<Resource> resources) {
+    public ResourceInstanceValidationResult validateAndCreateBIMResourceToRDF(CoreResourceRegistryRequest request) throws IOException {
         ResourceInstanceValidationResult result = new ResourceInstanceValidationResult();
-        if (resources != null) {
-            log.info("Validating and creating RDF for " + resources.size() + " resources");
+        if (request != null) {
+            log.info("Validating and creating RDF for platform " + request.getPlatformId());
 
             Model completeModel = ModelFactory.createDefaultModel();
 
@@ -231,6 +254,14 @@ public class SemanticManager {
             StringBuilder errorMessage = new StringBuilder();
 
             List<CoreResource> resourceList = new ArrayList<>();
+            if( !request.getDescriptionType().equals(DescriptionType.BASIC) ) {
+                log.fatal("Validate and create should only be used by BASIC (JSON) type of description");
+                throw new IllegalArgumentException("Validate and create should only be used by BASIC (JSON) type of description");
+            }
+
+            ObjectMapper mapper = new ObjectMapper();
+            List<Resource> resources = null;
+            resources = mapper.readValue(request.getBody(), new TypeReference<List<Resource>>(){});
             for (Resource resource : resources) {
                 //Verify that instance translatedDescription has all fields to create RDF
                 try {
@@ -241,10 +272,17 @@ public class SemanticManager {
                     translatedResource.setLabels(resource.getLabels());
                     translatedResource.setComments(resource.getComments());
                     translatedResource.setInterworkingServiceURL(resource.getInterworkingServiceURL());
-                    translatedResource.setId(resource.getId());
+
+                    //TODO refactor generating IDs
+                    if( resource.getId() == null || resource.getId().isEmpty() ) {
+                        translatedResource.setId(String.valueOf(ObjectId.get()));
+                        resource.setId(translatedResource.getId());
+                    } else {
+                        translatedResource.setId(resource.getId());
+                    }
 
                     //Generate the rdf for the resource and save it into CoreResource
-                    Model rdf = RDFGenerator.generateRDFForResource(resource);
+                    Model rdf = RDFGenerator.generateRDFForResource(resource,request.getPlatformId());
                     completeModel.add(rdf);
                     StringWriter stringWriter = new StringWriter();
                     rdf.write(stringWriter, DEFAULT_RDF_FORMAT.toString());

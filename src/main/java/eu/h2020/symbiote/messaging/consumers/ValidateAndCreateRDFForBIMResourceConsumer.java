@@ -8,6 +8,7 @@ import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
+import eu.h2020.symbiote.core.internal.CoreResourceRegistryRequest;
 import eu.h2020.symbiote.core.model.resources.Resource;
 import eu.h2020.symbiote.messaging.RabbitManager;
 import eu.h2020.symbiote.ontology.SemanticManager;
@@ -61,9 +62,11 @@ public class ValidateAndCreateRDFForBIMResourceConsumer extends DefaultConsumer 
         //Try to parse the message
         try {
             ObjectMapper mapper = new ObjectMapper();
-            List<Resource> validateAndTranslateRequest = mapper.readValue(msg, new TypeReference<List<Resource>>(){});
+//            List<Resource> validateAndTranslateRequest = mapper.readValue(msg, new TypeReference<List<Resource>>(){});
 
-            ResourceInstanceValidationResult response = SemanticManager.getManager().validateAndCreateBIMResourceToRDF(validateAndTranslateRequest);
+            CoreResourceRegistryRequest coreResourceRegistryRequest = mapper.readValue(msg, CoreResourceRegistryRequest.class);
+
+            ResourceInstanceValidationResult response = SemanticManager.getManager().validateAndCreateBIMResourceToRDF(coreResourceRegistryRequest);
             //Send the response back to the client
             log.debug( "Validation status: " + response.isSuccess() + ", message: " + response.getMessage());
 

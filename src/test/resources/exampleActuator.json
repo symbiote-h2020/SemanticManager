@@ -10,6 +10,6 @@
   "interworkingServiceURL":"http://symbiote-h2020.eu/example/interworkingService",
   "locatedAt":"Paris",
   "capabilites":[
-    "actuatingService1Name"
+    "actuatingService1"
   ]
 }

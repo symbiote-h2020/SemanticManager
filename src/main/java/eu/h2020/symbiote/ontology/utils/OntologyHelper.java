@@ -62,6 +62,18 @@ public class OntologyHelper {
         return RESOURCES_GRAPH + "/" + resourceId;
     }
 
+    public static String getFoiURI( String platformId, String foi ) {
+        return getPlatformGraphURI(platformId) + "/foi/" + foi;
+    }
+
+    public static String getLocationURI( String platformId, String location ) {
+        return getPlatformGraphURI(platformId) + "/location/" + location;
+    }
+
+    public static String getBIMPropertyURI( String property ) {
+        return BIM_URI + "/" + property;
+    }
+
 //    public static String getMappingGraphURI(BigInteger mappingId) {
 //        return MAPPING_GRAPH + "/" + mappingId;
 //    }

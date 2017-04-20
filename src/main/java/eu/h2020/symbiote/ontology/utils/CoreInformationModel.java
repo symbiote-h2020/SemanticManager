@@ -27,6 +27,8 @@ public class CoreInformationModel {
 
     public static final Property RDF_TYPE;
 
+    public static final Property RDF_VALUE;
+
     public static final Property RDFS_LABEL;
 
     public static final Property RDFS_COMMENT;
@@ -36,6 +38,32 @@ public class CoreInformationModel {
     public static final Property CIM_ID;
 
     public static final Property CIM_LOCATED_AT;
+
+    public static final Property CIM_FOI;
+
+    public static final Property CIM_HAS_OUTPUT;
+
+    public static final Property CIM_HAS_INPUT;
+
+    public static final Property CIM_HAS_CAPABILITY;
+
+    public static final Property CIM_NAME;
+
+    public static final Property CIM_AFFECTS;
+
+    public static final Property CIM_ACTS_ON;
+
+    public static final Property CIM_DATATYPE;
+
+    public static final Property CIM_IS_ARRAY;
+
+    public static final Property CIM_MANDATORY;
+
+    public static final Property CIM_HAS_RESTRICTION;
+
+    public static final Property CIM_MIN;
+
+    public static final Property CIM_MAX;
 
     public static final Property GEO_LAT;
 
@@ -48,11 +76,25 @@ public class CoreInformationModel {
     static {
         Model m = ModelFactory.createDefaultModel();
         RDF_TYPE = m.createProperty( RDF_PREFIX + "type" );
+        RDF_VALUE = m.createProperty( RDF_PREFIX + "value" );
         RDFS_LABEL = m.createProperty(RDFS_PREFIX + "label");
         RDFS_COMMENT = m.createProperty(RDFS_PREFIX + "comment");
         CIM_SENSOR = m.createProperty(CIM_PREFIX + "Sensor");
         CIM_ID = m.createProperty(CIM_PREFIX + "id");
         CIM_LOCATED_AT = m.createProperty(CIM_PREFIX + "locatedAt");
+        CIM_FOI = m.createProperty(CIM_PREFIX + "hasFeatureOfInterest");
+        CIM_NAME = m.createProperty(CIM_PREFIX + "name");
+        CIM_ACTS_ON = m.createProperty(CIM_PREFIX + "actsOn");
+        CIM_AFFECTS = m.createProperty(CIM_PREFIX + "affects");
+        CIM_HAS_INPUT = m.createProperty(CIM_PREFIX + "hasInputParameter");
+        CIM_HAS_OUTPUT = m.createProperty(CIM_PREFIX + "hasOutputParameter");
+        CIM_HAS_CAPABILITY = m.createProperty(CIM_PREFIX + "hasCapability");
+        CIM_DATATYPE = m.createProperty(CIM_PREFIX + "datatype");
+        CIM_IS_ARRAY = m.createProperty(CIM_PREFIX + "isArray");
+        CIM_MANDATORY = m.createProperty(CIM_PREFIX + "mandatory");
+        CIM_HAS_RESTRICTION = m.createProperty(CIM_PREFIX + "hasRestriction");
+        CIM_MIN = m.createProperty(CIM_PREFIX + "min");
+        CIM_MAX = m.createProperty(CIM_PREFIX + "max");
         GEO_LAT = m.createProperty(GEO_PREFIX + "lat");
         GEO_LONG = m.createProperty(GEO_PREFIX + "long");
         GEO_ALT = m.createProperty(GEO_PREFIX + "alt");

@@ -64,7 +64,7 @@ public class TestSetupConfig {
     public static final List<String> ACTUATOR1_COMMENTS = Arrays.asList("This is actuator 1");
     public static final String ACTUATOR1_URL = GENERAL_INTERWORKING_URL;
     public static final String ACTUATOR1_LOCATION = GENERAL_LOCATION;
-    public static final List<String> ACTUATOR1_CAPABILITIES = Arrays.asList(ACTUATING_SERVICE1_NAME);
+    public static final List<String> ACTUATOR1_CAPABILITIES = Arrays.asList(ACTUATING_SERVICE1_ID);
 
 
 }

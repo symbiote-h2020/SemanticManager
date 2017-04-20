@@ -6,6 +6,9 @@ import eu.h2020.symbiote.core.model.InterworkingService;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.core.model.internal.CoreResource;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,14 +45,16 @@ public class RDFReader {
      * @param rdfInfo RDF containing resources information.
      * @return Information about resources read from RDF.
      */
-    public static List<CoreResource> readResourceInstances( RDFInfo rdfInfo ) {
+    public static List<CoreResource> readResourceInstances( RDFInfo rdfInfo, String platformId ) {
         List<CoreResource> resources = new ArrayList<>();
+        //TODO proper parsing of the resources from rdf
+        Model model = ModelFactory.createDefaultModel();
         CoreResource resource1 = new CoreResource();
-        resource1.setId(null);
+        resource1.setId(String.valueOf(ObjectId.get()));
         resource1.setLabels(Arrays.asList("Resource1"));
         resource1.setComments(Arrays.asList("This is resource 1"));
         resource1.setInterworkingServiceURL("http://platforma.myhost.eu/myservice");
-        resource1.setRdf("<>"); //Set RDF representing only this particular resource
+        resource1.setRdf(rdfInfo.getRdf()); //Set RDF representing only this particular resource
         resource1.setRdfFormat(RDFFormat.JSONLD);
 
         resources.add(resource1);
