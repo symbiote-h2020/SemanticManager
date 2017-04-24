@@ -35,7 +35,7 @@ public class RDFGenerator {
 
         //Add general resource properties
         org.apache.jena.rdf.model.Resource modelResource = model.createResource(OntologyHelper.getResourceGraphURI(resource.getId()));
-        //modelResource.addProperty(CoreInformationModel.RDF_TYPE,CoreInformationModel.CIM_RESOURCE)
+        modelResource.addProperty(CoreInformationModel.RDF_TYPE,CoreInformationModel.CIM_RESOURCE);
         modelResource.addProperty(CoreInformationModel.CIM_ID,resource.getId()); //TODO this needs to be changed to cim:ID type
         for( String label: resource.getLabels() ) {
             modelResource.addProperty(CoreInformationModel.RDFS_LABEL,label);
@@ -44,6 +44,7 @@ public class RDFGenerator {
             modelResource.addProperty(CoreInformationModel.RDFS_COMMENT,comment);
         }
         if( resource instanceof MobileSensor) {
+            modelResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_MOBILE);
             //Add observed properties and location
             List<String> observesProperty = ((MobileSensor) resource).getObservesProperty();
             String locatedAt = ((MobileSensor) resource).getLocatedAt();
@@ -54,6 +55,7 @@ public class RDFGenerator {
             modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT,OntologyHelper.getLocationURI(platformId,locatedAt));
         }
         if( resource instanceof StationarySensor) {
+            modelResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_STATIONARY);
             //Add foi, observed properties and location
             String featureOfInterest = ((StationarySensor) resource).getFeatureOfInterest();
             List<String> observesProperty = ((StationarySensor) resource).getObservesProperty();
@@ -66,6 +68,7 @@ public class RDFGenerator {
             modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT,OntologyHelper.getLocationURI(platformId,locatedAt));
         }
         if( resource instanceof Service) {
+            modelResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_SERVICE);
             //Add name, output parameter and input parameters
             String name = ((Service) resource).getName();
             Parameter outputParameter = ((Service) resource).getOutputParameter();
@@ -73,12 +76,14 @@ public class RDFGenerator {
 
             modelResource.addProperty(CoreInformationModel.CIM_NAME, name );
             modelResource.addProperty(CoreInformationModel.CIM_HAS_OUTPUT,
-                    model.createResource().addProperty(CoreInformationModel.CIM_IS_ARRAY, String.valueOf(outputParameter.isArray()))
+                    model.createResource().addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_PARAMETER)
+                            .addProperty(CoreInformationModel.CIM_IS_ARRAY, String.valueOf(outputParameter.isArray()))
                             .addProperty(CoreInformationModel.CIM_DATATYPE,outputParameter.getDatatype()));
             addInputParametersToModelResource(model,modelResource,inputParameters);
 
         }
         if( resource instanceof ActuatingService) {
+            modelResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_ACTUATING_SERVICE);
             //Add name, output parameter, input parameters, foi it acts on as well as properties it affects
             String name = ((ActuatingService) resource).getName();
             Parameter outputParameter = ((ActuatingService) resource).getOutputParameter();
@@ -89,7 +94,8 @@ public class RDFGenerator {
 
             modelResource.addProperty(CoreInformationModel.CIM_NAME, name );
             modelResource.addProperty(CoreInformationModel.CIM_HAS_OUTPUT,
-                    model.createResource().addProperty(CoreInformationModel.CIM_IS_ARRAY, String.valueOf(outputParameter.isArray()))
+                    model.createResource().addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_PARAMETER)
+                            .addProperty(CoreInformationModel.CIM_IS_ARRAY, String.valueOf(outputParameter.isArray()))
                             .addProperty(CoreInformationModel.CIM_DATATYPE,outputParameter.getDatatype()));
             addInputParametersToModelResource(model,modelResource,inputParameters);
             modelResource.addProperty(CoreInformationModel.CIM_ACTS_ON,OntologyHelper.getFoiURI(platformId,actsOn));
@@ -98,6 +104,7 @@ public class RDFGenerator {
             }
         }
         if( resource instanceof Actuator ) {
+            modelResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_ACTUATOR);
             //Add location and capabilities, ie actuating services connected with this actuator
             String locatedAt = ((Actuator) resource).getLocatedAt();
             List<String> capabilities = ((Actuator) resource).getCapabilities();
@@ -123,14 +130,17 @@ public class RDFGenerator {
             for( Restriction restriction: input.getRestrictions() ) {
                 org.apache.jena.rdf.model.Resource restrictionResource = model.createResource();
                 if( restriction instanceof RangeRestriction ) {
-                    restrictionResource.addProperty(CoreInformationModel.CIM_MIN, String.valueOf(((RangeRestriction) restriction).getMin()))
+                    restrictionResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_RANGE_RESTRICTION)
+                            .addProperty(CoreInformationModel.CIM_MIN, String.valueOf(((RangeRestriction) restriction).getMin()))
                             .addProperty(CoreInformationModel.CIM_MAX, String.valueOf(((RangeRestriction) restriction).getMax()));
                 }
                 if( restriction instanceof LengthRestriction ) {
-                    restrictionResource.addProperty(CoreInformationModel.CIM_MIN, String.valueOf((( LengthRestriction) restriction).getMin()))
+                    restrictionResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_LENGTH_RESTRICTION)
+                            .addProperty(CoreInformationModel.CIM_MIN, String.valueOf((( LengthRestriction) restriction).getMin()))
                             .addProperty(CoreInformationModel.CIM_MAX, String.valueOf(((LengthRestriction) restriction).getMax()));
                 }
                 if( restriction instanceof EnumRestriction ) {
+                    restrictionResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_ENUM_RESTRICTION);
                     for( String enumValue: ((EnumRestriction) restriction).getValues()) {
                         restrictionResource.addProperty(CoreInformationModel.RDF_VALUE, enumValue);
                     }
@@ -138,7 +148,8 @@ public class RDFGenerator {
                 restrictionResources.add(restrictionResource);
             }
 
-            org.apache.jena.rdf.model.Resource inputResource = model.createResource().addProperty(CoreInformationModel.CIM_IS_ARRAY, String.valueOf(input.isArray()))
+            org.apache.jena.rdf.model.Resource inputResource = model.createResource().addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_INPUT_PARAMETER)
+                    .addProperty(CoreInformationModel.CIM_IS_ARRAY, String.valueOf(input.isArray()))
                     .addProperty(CoreInformationModel.CIM_DATATYPE, input.getDatatype())
                     .addProperty(CoreInformationModel.CIM_NAME, input.getName())
                     .addProperty(CoreInformationModel.CIM_MANDATORY, String.valueOf(input.isMandatory()));
