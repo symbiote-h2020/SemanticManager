@@ -174,6 +174,11 @@ public class SemanticManagerTests {
         assertEquals("Interworking service URL of the result must be the same", resource.getInterworkingServiceURL(),resultResource.getInterworkingServiceURL());
         assertNotNull("Created RDF must not be null", resultResource.getRdf());
         assertFalse("Created RDF must not be empty", resultResource.getRdf().isEmpty());
+
+
+        System.out.println(" >>>> Received RDF: ");
+        System.out.println(resultResource.getRdf() );
+        System.out.println(" <<<<<<<<<<<<<<<<<< ");
     }
 
 }
