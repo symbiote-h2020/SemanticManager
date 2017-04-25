@@ -68,6 +68,8 @@ public class RegisterPIMMetaModelConsumer extends DefaultConsumer {
             log.error("Error occurred when registering new PIM meta model: " + msg, e);
         } catch( IOException e ) {
             log.error("I/O Exception occurred when parsing PIM meta model object" , e);
+        } catch( Exception e ) {
+            log.error("Generic error ocurred when handling delivery" , e);
         }
     }
 }

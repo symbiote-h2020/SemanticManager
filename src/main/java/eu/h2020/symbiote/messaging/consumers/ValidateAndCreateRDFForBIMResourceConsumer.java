@@ -85,6 +85,8 @@ public class ValidateAndCreateRDFForBIMResourceConsumer extends DefaultConsumer 
             log.error("Error occurred when parsing Resource object JSON: " + msg, e);
         } catch( IOException e ) {
             log.error("I/O Exception occurred when parsing Resource object" , e);
+        } catch( Exception e ) {
+            log.error("Generic error ocurred when handling delivery" , e);
         }
     }
 }

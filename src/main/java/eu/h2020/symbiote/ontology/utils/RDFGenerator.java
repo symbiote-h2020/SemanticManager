@@ -48,9 +48,10 @@ public class RDFGenerator {
             //Add observed properties and location
             List<String> observesProperty = ((MobileSensor) resource).getObservesProperty();
             String locatedAt = ((MobileSensor) resource).getLocatedAt();
-
-            for(String property: observesProperty ) {
-                modelResource.addProperty(CoreInformationModel.CIM_OBSERVES,OntologyHelper.getBIMPropertyURI(property));
+            if( observesProperty != null ) {
+                for (String property : observesProperty) {
+                    modelResource.addProperty(CoreInformationModel.CIM_OBSERVES, OntologyHelper.getBIMPropertyURI(property));
+                }
             }
             modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT,OntologyHelper.getLocationURI(platformId,locatedAt));
         }
@@ -62,8 +63,10 @@ public class RDFGenerator {
             String locatedAt = ((StationarySensor) resource).getLocatedAt();
 
             modelResource.addProperty(CoreInformationModel.CIM_FOI, OntologyHelper.getFoiURI(platformId,featureOfInterest));
-            for(String property: observesProperty ) {
-                modelResource.addProperty(CoreInformationModel.CIM_OBSERVES,OntologyHelper.getBIMPropertyURI(property));
+            if( observesProperty != null ) {
+                for (String property : observesProperty) {
+                    modelResource.addProperty(CoreInformationModel.CIM_OBSERVES, OntologyHelper.getBIMPropertyURI(property));
+                }
             }
             modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT,OntologyHelper.getLocationURI(platformId,locatedAt));
         }
@@ -125,38 +128,40 @@ public class RDFGenerator {
     }
 
     private static void addInputParametersToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, List<InputParameter> inputParameters ) {
-        for( InputParameter input: inputParameters ) {
-            List<org.apache.jena.rdf.model.Resource> restrictionResources = new ArrayList<>();
-            for( Restriction restriction: input.getRestrictions() ) {
-                org.apache.jena.rdf.model.Resource restrictionResource = model.createResource();
-                if( restriction instanceof RangeRestriction ) {
-                    restrictionResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_RANGE_RESTRICTION)
-                            .addProperty(CoreInformationModel.CIM_MIN, String.valueOf(((RangeRestriction) restriction).getMin()))
-                            .addProperty(CoreInformationModel.CIM_MAX, String.valueOf(((RangeRestriction) restriction).getMax()));
-                }
-                if( restriction instanceof LengthRestriction ) {
-                    restrictionResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_LENGTH_RESTRICTION)
-                            .addProperty(CoreInformationModel.CIM_MIN, String.valueOf((( LengthRestriction) restriction).getMin()))
-                            .addProperty(CoreInformationModel.CIM_MAX, String.valueOf(((LengthRestriction) restriction).getMax()));
-                }
-                if( restriction instanceof EnumRestriction ) {
-                    restrictionResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_ENUM_RESTRICTION);
-                    for( String enumValue: ((EnumRestriction) restriction).getValues()) {
-                        restrictionResource.addProperty(CoreInformationModel.RDF_VALUE, enumValue);
+        if( inputParameters != null ) {
+            for (InputParameter input : inputParameters) {
+                List<org.apache.jena.rdf.model.Resource> restrictionResources = new ArrayList<>();
+                for (Restriction restriction : input.getRestrictions()) {
+                    org.apache.jena.rdf.model.Resource restrictionResource = model.createResource();
+                    if (restriction instanceof RangeRestriction) {
+                        restrictionResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_RANGE_RESTRICTION)
+                                .addProperty(CoreInformationModel.CIM_MIN, String.valueOf(((RangeRestriction) restriction).getMin()))
+                                .addProperty(CoreInformationModel.CIM_MAX, String.valueOf(((RangeRestriction) restriction).getMax()));
                     }
+                    if (restriction instanceof LengthRestriction) {
+                        restrictionResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_LENGTH_RESTRICTION)
+                                .addProperty(CoreInformationModel.CIM_MIN, String.valueOf(((LengthRestriction) restriction).getMin()))
+                                .addProperty(CoreInformationModel.CIM_MAX, String.valueOf(((LengthRestriction) restriction).getMax()));
+                    }
+                    if (restriction instanceof EnumRestriction) {
+                        restrictionResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_ENUM_RESTRICTION);
+                        for (String enumValue : ((EnumRestriction) restriction).getValues()) {
+                            restrictionResource.addProperty(CoreInformationModel.RDF_VALUE, enumValue);
+                        }
+                    }
+                    restrictionResources.add(restrictionResource);
                 }
-                restrictionResources.add(restrictionResource);
-            }
 
-            org.apache.jena.rdf.model.Resource inputResource = model.createResource().addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_INPUT_PARAMETER)
-                    .addProperty(CoreInformationModel.CIM_IS_ARRAY, String.valueOf(input.isArray()))
-                    .addProperty(CoreInformationModel.CIM_DATATYPE, input.getDatatype())
-                    .addProperty(CoreInformationModel.CIM_NAME, input.getName())
-                    .addProperty(CoreInformationModel.CIM_MANDATORY, String.valueOf(input.isMandatory()));
-            for(org.apache.jena.rdf.model.Resource restriction: restrictionResources) {
-                inputResource.addProperty(CoreInformationModel.CIM_HAS_RESTRICTION,restriction);
+                org.apache.jena.rdf.model.Resource inputResource = model.createResource().addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_INPUT_PARAMETER)
+                        .addProperty(CoreInformationModel.CIM_IS_ARRAY, String.valueOf(input.isArray()))
+                        .addProperty(CoreInformationModel.CIM_DATATYPE, input.getDatatype())
+                        .addProperty(CoreInformationModel.CIM_NAME, input.getName())
+                        .addProperty(CoreInformationModel.CIM_MANDATORY, String.valueOf(input.isMandatory()));
+                for (org.apache.jena.rdf.model.Resource restriction : restrictionResources) {
+                    inputResource.addProperty(CoreInformationModel.CIM_HAS_RESTRICTION, restriction);
+                }
+                modelResource.addProperty(CoreInformationModel.CIM_HAS_INPUT, inputResource);
             }
-            modelResource.addProperty(CoreInformationModel.CIM_HAS_INPUT, inputResource);
         }
     }
 
