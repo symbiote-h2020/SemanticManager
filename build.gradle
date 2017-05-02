@@ -70,6 +70,7 @@ dependencies {
 
     compile('eu.symbiote-h2020:MediationFramework:1.0')
 
+
     /* SymbIoTeLibraries manual:
         One can use the library from jitpack by default with the notation:
             compile('com.github.symbiote-h2020:SymbIoTeLibraries:develop-SNAPSHOT') {changing = true }
@@ -87,7 +88,6 @@ dependencies {
     //Just to generate object ids
 //    compile('org.springframework.boot:spring-boot-starter-data-mongodb')
     compile('org.mongodb:bson:3.4.2')
-
 
     // Spring
     compile('org.springframework.cloud:spring-cloud-starter')

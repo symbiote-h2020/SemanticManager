@@ -126,6 +126,35 @@ public class SemanticManagerTests {
         resourceValidateAndTranslate(actuator);
     }
 
+    @Test
+    public void testMobileDeviceValdiateAndCreate() {
+        MobileDevice mobileDevice = new MobileDevice();
+        mobileDevice.setId(MOBILEDEVICE1_ID);
+        mobileDevice.setLabels(MOBILEDEVICE1_LABELS);
+        mobileDevice.setComments(MOBILEDEVICE1_COMMENTS);
+        mobileDevice.setLocatedAt(MOBILEDEVICE1_LOCATION);
+        mobileDevice.setInterworkingServiceURL(MOBILEDEVICE1_URL);
+        mobileDevice.setObservesProperty(MOBILEDEVICE1_PROPERTIES);
+        mobileDevice.setCapabilities(MOBILEDEVICE1_CAPABILITIES);
+
+        resourceValidateAndTranslate(mobileDevice);
+    }
+
+    @Test
+    public void testStationryDeviceValidateAndCreate() {
+        StationaryDevice stationaryDevice = new StationaryDevice();
+        stationaryDevice.setId(STATIONARYDEVICE1_ID);
+        stationaryDevice.setLabels(STATIONARYDEVICE1_LABELS);
+        stationaryDevice.setComments(STATIONARYDEVICE1_COMMENTS);
+        stationaryDevice.setLocatedAt(STATIONARYDEVICE1_LOCATION);
+        stationaryDevice.setInterworkingServiceURL(STATIONARYDEVICE1_URL);
+        stationaryDevice.setFeatureOfInterest(STATIONARYDEVICE1_FOI);
+        stationaryDevice.setObservesProperty(STATIONARYDEVICE1_PROPERTIES);
+        stationaryDevice.setCapabilities(STATIONARYDEVICE1_CAPABILITIES);
+
+        resourceValidateAndTranslate(stationaryDevice);
+    }
+
 
     private void resourceValidateAndTranslate( Resource resource ) {
         ObjectMapper mapper = new ObjectMapper();

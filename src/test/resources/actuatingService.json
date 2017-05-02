@@ -1,0 +1,48 @@
+{
+  "@c": ".ActuatingService",
+  "id": "actuatingService1",
+  "labels": [
+    "Actuating Service 1"
+  ],
+  "comments": [
+    "This is actuating service 1"
+  ],
+  "interworkingServiceURL": "http:\/\/symbiote-h2020.eu\/example\/interworkingService",
+  "name": "actuatingService1Name",
+  "outputParameter": {
+    "array": false,
+    "isArray": false,
+    "datatype": "xsd:string"
+  },
+  "inputParameter": [
+    {
+      "array": false,
+      "isArray": false,
+      "datatype": "xsd:string",
+      "name": "inputParam1",
+      "mandatory": true,
+      "restrictions": [
+        {
+          "@c": ".RangeRestriction",
+          "min": 2,
+          "max": 10
+        }
+      ]
+    }
+  ],
+  "actsOn": {
+    "labels": [
+      "Room1"
+    ],
+    "comments": [
+      "This is room 1"
+    ],
+    "hasProperty": [
+      "Temperature",
+      "Humidity"
+    ]
+  },
+  "affects": [
+    "Temperature"
+  ]
+}

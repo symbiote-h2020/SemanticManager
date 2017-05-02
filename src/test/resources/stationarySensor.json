@@ -1,0 +1,35 @@
+{
+  "@c": ".StationarySensor",
+  "id": "stationary1",
+  "labels": [
+    "Stationary 1"
+  ],
+  "comments": [
+    "This is stationary 1"
+  ],
+  "interworkingServiceURL": "http:\/\/symbiote-h2020.eu\/example\/interworkingService",
+  "locatedAt": {
+    "@c": ".WGS84Location",
+    "longitude": 2.349014,
+    "latitude": 48.864716,
+    "altitude": 15,
+    "name": "Paris",
+    "description": "This is paris"
+  },
+  "featureOfInterest": {
+    "labels": [
+      "Room1"
+    ],
+    "comments": [
+      "This is room 1"
+    ],
+    "hasProperty": [
+      "Temperature",
+      "Humidity"
+    ]
+  },
+  "observesProperty": [
+    "Temperature",
+    "Humidity"
+  ]
+}

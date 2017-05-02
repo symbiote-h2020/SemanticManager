@@ -1,0 +1,37 @@
+{
+
+  "name": "Sensor1",
+
+  "owner": "PlatformAOwner",
+
+  "description": "This is a test sensor",
+
+  "resourceURL" : "http://myplatform.eu:8101/",
+
+  "internalId": "1234",
+
+  "location":
+
+  {
+
+    "name": "Poznan",
+
+    "description": "Poznan - malta",
+
+    "longitude": 16.940144,
+
+    "latitude": 52.421790,
+
+    "altitude": 100.0
+
+  },
+
+  "observedProperties":
+
+  [
+
+    "Temperature"
+
+  ]
+
+}

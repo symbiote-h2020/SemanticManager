@@ -45,6 +45,14 @@ public class CoreInformationModel {
 
     public static final Property CIM_ACTUATING_SERVICE;
 
+    public static final Property CIM_LOCATION;
+
+    public static final Property CIM_WKT_LOCATION;
+
+    public static final Property CIM_SYMBOLIC_LOCATION;
+
+    public static final Property CIM_WGS84_LOCATION;
+
     public static final Property CIM_PARAMETER;
 
     public static final Property CIM_INPUT_PARAMETER;
@@ -60,6 +68,10 @@ public class CoreInformationModel {
     public static final Property CIM_LOCATED_AT;
 
     public static final Property CIM_FOI;
+
+    public static final Property CIM_HAS_FOI;
+
+    public static final Property CIM_HAS_PROPERTY;
 
     public static final Property CIM_HAS_OUTPUT;
 
@@ -105,6 +117,10 @@ public class CoreInformationModel {
         CIM_SERVICE = m.createProperty(CIM_PREFIX + "Service");
         CIM_ACTUATOR = m.createProperty(CIM_PREFIX + "Actuator");
         CIM_ACTUATING_SERVICE =  m.createProperty(CIM_PREFIX + "ActuatingService");
+        CIM_LOCATION = m.createProperty(CIM_PREFIX + "Location");
+        CIM_WKT_LOCATION = m.createProperty(CIM_PREFIX + "WKTLocation");
+        CIM_SYMBOLIC_LOCATION = m.createProperty(CIM_PREFIX + "SymbolicLocation");
+        CIM_WGS84_LOCATION = m.createProperty(CIM_PREFIX + "WGS84Location");
         CIM_PARAMETER = m.createProperty(CIM_PREFIX + "Parameter");
         CIM_INPUT_PARAMETER = m.createProperty(CIM_PREFIX + "InputParameter");
         CIM_RANGE_RESTRICTION = m.createProperty(CIM_PREFIX + "RangeRestriction");
@@ -112,7 +128,9 @@ public class CoreInformationModel {
         CIM_ENUM_RESTRICTION = m.createProperty(CIM_PREFIX + "EnumRestriction");
         CIM_ID = m.createProperty(CIM_PREFIX + "id");
         CIM_LOCATED_AT = m.createProperty(CIM_PREFIX + "locatedAt");
-        CIM_FOI = m.createProperty(CIM_PREFIX + "hasFeatureOfInterest");
+        CIM_FOI = m.createProperty(CIM_PREFIX + "FeatureOfInterest");
+        CIM_HAS_FOI = m.createProperty(CIM_PREFIX + "hasFeatureOfInterest");
+        CIM_HAS_PROPERTY = m.createProperty(CIM_PREFIX + "hasProperty");
         CIM_NAME = m.createProperty(CIM_PREFIX + "name");
         CIM_ACTS_ON = m.createProperty(CIM_PREFIX + "actsOn");
         CIM_AFFECTS = m.createProperty(CIM_PREFIX + "affects");

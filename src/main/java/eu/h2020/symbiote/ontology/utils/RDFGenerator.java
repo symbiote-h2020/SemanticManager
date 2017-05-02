@@ -1,12 +1,12 @@
 package eu.h2020.symbiote.ontology.utils;
 
-import eu.h2020.symbiote.core.model.Platform;
-import eu.h2020.symbiote.core.model.RDFFormat;
+import eu.h2020.symbiote.core.model.*;
 import eu.h2020.symbiote.core.model.resources.*;
+import eu.h2020.symbiote.core.model.resources.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.*;
+import org.bson.types.ObjectId;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -47,28 +47,31 @@ public class RDFGenerator {
             modelResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_MOBILE);
             //Add observed properties and location
             List<String> observesProperty = ((MobileSensor) resource).getObservesProperty();
-            String locatedAt = ((MobileSensor) resource).getLocatedAt();
+            Location locatedAt = ((MobileSensor) resource).getLocatedAt();
             if( observesProperty != null ) {
                 for (String property : observesProperty) {
                     modelResource.addProperty(CoreInformationModel.CIM_OBSERVES, OntologyHelper.getBIMPropertyURI(property));
                 }
             }
-            modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT,OntologyHelper.getLocationURI(platformId,locatedAt));
+//            modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT,OntologyHelper.getLocationURI(platformId,locatedAt));
+            addLocationToModelResource(model,modelResource,locatedAt);
         }
         if( resource instanceof StationarySensor) {
             modelResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_STATIONARY);
             //Add foi, observed properties and location
-            String featureOfInterest = ((StationarySensor) resource).getFeatureOfInterest();
+            FeatureOfInterest featureOfInterest = ((StationarySensor) resource).getFeatureOfInterest();
             List<String> observesProperty = ((StationarySensor) resource).getObservesProperty();
-            String locatedAt = ((StationarySensor) resource).getLocatedAt();
+            Location locatedAt = ((StationarySensor) resource).getLocatedAt();
 
-            modelResource.addProperty(CoreInformationModel.CIM_FOI, OntologyHelper.getFoiURI(platformId,featureOfInterest));
             if( observesProperty != null ) {
                 for (String property : observesProperty) {
                     modelResource.addProperty(CoreInformationModel.CIM_OBSERVES, OntologyHelper.getBIMPropertyURI(property));
                 }
             }
-            modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT,OntologyHelper.getLocationURI(platformId,locatedAt));
+//            modelResource.addProperty(CoreInformationModel.CIM_HAS_FOI, OntologyHelper.getFoiURI(platformId,featureOfInterest));
+//            modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT,OntologyHelper.getLocationURI(platformId,locatedAt));
+            addLocationToModelResource(model,modelResource,locatedAt);
+            addFoiToModelResource(model,modelResource,featureOfInterest);
         }
         if( resource instanceof Service) {
             modelResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_SERVICE);
@@ -86,37 +89,57 @@ public class RDFGenerator {
 
         }
         if( resource instanceof ActuatingService) {
-            modelResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_ACTUATING_SERVICE);
-            //Add name, output parameter, input parameters, foi it acts on as well as properties it affects
-            String name = ((ActuatingService) resource).getName();
-            Parameter outputParameter = ((ActuatingService) resource).getOutputParameter();
-            List<InputParameter> inputParameters = ((ActuatingService) resource).getInputParameter();
-            String actsOn = ((ActuatingService) resource).getActsOn();
-            List<String> affects = ((ActuatingService) resource).getAffects();
-
-
-            modelResource.addProperty(CoreInformationModel.CIM_NAME, name );
-            modelResource.addProperty(CoreInformationModel.CIM_HAS_OUTPUT,
-                    model.createResource().addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_PARAMETER)
-                            .addProperty(CoreInformationModel.CIM_IS_ARRAY, String.valueOf(outputParameter.isArray()))
-                            .addProperty(CoreInformationModel.CIM_DATATYPE,outputParameter.getDatatype()));
-            addInputParametersToModelResource(model,modelResource,inputParameters);
-            modelResource.addProperty(CoreInformationModel.CIM_ACTS_ON,OntologyHelper.getFoiURI(platformId,actsOn));
-            for( String affectedProperty: affects ) {
-                modelResource.addProperty(CoreInformationModel.CIM_AFFECTS,OntologyHelper.getBIMPropertyURI(affectedProperty));
-            }
+            addActuatingServiceToModelResource(model,modelResource,(ActuatingService)resource);
         }
         if( resource instanceof Actuator ) {
             modelResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_ACTUATOR);
             //Add location and capabilities, ie actuating services connected with this actuator
-            String locatedAt = ((Actuator) resource).getLocatedAt();
-            List<String> capabilities = ((Actuator) resource).getCapabilities();
+            Location locatedAt = ((Actuator) resource).getLocatedAt();
+            List<ActuatingService> capabilities = ((Actuator) resource).getCapabilities();
 
-            modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT,OntologyHelper.getLocationURI(platformId,locatedAt));
-            for(String capability: capabilities) {
-                //TODO to be eventually changed if capability should be referenced in actuator by "name" field instead of "id"
-                modelResource.addProperty(CoreInformationModel.CIM_HAS_CAPABILITY,OntologyHelper.getResourceGraphURI(capability));
+//            modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT,OntologyHelper.getLocationURI(platformId,locatedAt));
+            addLocationToModelResource(model,modelResource,locatedAt);
+            addCapabilitiesToModelResource(model,modelResource,capabilities);
+        }
+        if( resource instanceof MobileDevice ) {
+            modelResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_ACTUATOR);
+            modelResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_MOBILE);
+            Location locatedAt = ((MobileDevice) resource).getLocatedAt();
+            List<ActuatingService> capabilities = ((Actuator) resource).getCapabilities();
+
+            addLocationToModelResource(model,modelResource,locatedAt);
+            addCapabilitiesToModelResource(model,modelResource,capabilities);
+
+            //Add observed properties and location
+            List<String> observesProperty = ((MobileSensor) resource).getObservesProperty();
+
+            if( observesProperty != null ) {
+                for (String property : observesProperty) {
+                    modelResource.addProperty(CoreInformationModel.CIM_OBSERVES, OntologyHelper.getBIMPropertyURI(property));
+                }
             }
+        }
+        if( resource instanceof StationaryDevice ) {
+            modelResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_ACTUATOR);
+            modelResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_STATIONARY);
+            //Add location and capabilities, ie actuating services connected with this actuator
+            Location locatedAt = ((Actuator) resource).getLocatedAt();
+            List<ActuatingService> capabilities = ((Actuator) resource).getCapabilities();
+
+            addLocationToModelResource(model,modelResource,locatedAt);
+            addCapabilitiesToModelResource(model,modelResource,capabilities);
+
+            //Add foi, observed properties and location
+            FeatureOfInterest featureOfInterest = ((StationarySensor) resource).getFeatureOfInterest();
+            List<String> observesProperty = ((StationarySensor) resource).getObservesProperty();
+
+
+            if( observesProperty != null ) {
+                for (String property : observesProperty) {
+                    modelResource.addProperty(CoreInformationModel.CIM_OBSERVES, OntologyHelper.getBIMPropertyURI(property));
+                }
+            }
+            addFoiToModelResource(model,modelResource,featureOfInterest);
         }
 
         StringWriter writer = new StringWriter();
@@ -162,6 +185,108 @@ public class RDFGenerator {
                 }
                 modelResource.addProperty(CoreInformationModel.CIM_HAS_INPUT, inputResource);
             }
+        }
+    }
+
+    private static void addLocationToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, Location location ) {
+        if( location != null ) {
+                org.apache.jena.rdf.model.Resource locationResource = model.createResource();
+                locationResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_LOCATION)
+                        .addProperty(CoreInformationModel.RDFS_LABEL,location.getLabel())
+                        .addProperty(CoreInformationModel.RDFS_COMMENT,location.getComment());
+                    if (location instanceof WGS84Location) {
+                        locationResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_WGS84_LOCATION)
+                                .addProperty(CoreInformationModel.GEO_LAT, Double.valueOf(((WGS84Location) location).getLatitude()).toString())
+                                .addProperty(CoreInformationModel.GEO_LONG, Double.valueOf(((WGS84Location) location).getLongitude()).toString())
+                                .addProperty(CoreInformationModel.GEO_ALT, Double.valueOf(((WGS84Location) location).getAltitude()).toString());
+                    }
+                    if (location instanceof SymbolicLocation) {
+                        locationResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_SYMBOLIC_LOCATION);
+                    }
+                    if (location instanceof WKTLocation) {
+                        locationResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_WKT_LOCATION)
+                                .addProperty(CoreInformationModel.RDF_VALUE,((WKTLocation) location).getValue());
+                    }
+
+                modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT, locationResource);
+            }
+    }
+
+    private static void addFoiToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, FeatureOfInterest featureOfInterest) {
+        if( featureOfInterest != null ) {
+            org.apache.jena.rdf.model.Resource foiResource = model.createResource();
+            foiResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_FOI);
+
+            if( featureOfInterest.getLabels() != null && featureOfInterest.getLabels().size() > 0 ) {
+            for( String foiLabel: featureOfInterest.getLabels() ) {
+                foiResource.addProperty(CoreInformationModel.RDFS_LABEL,foiLabel);
+            }} else {
+                throw new IllegalArgumentException(featureOfInterest.getLabels()==null?"Feature of interest must have not null labels!":"Feature of interest must have at least one label!");
+            }
+            if( featureOfInterest.getComments() != null ) {
+                for (String foiComment : featureOfInterest.getComments()) {
+                    foiResource.addProperty(CoreInformationModel.RDFS_COMMENT, foiComment);
+                }
+            }
+
+            if( featureOfInterest.getHasProperty() != null ) {
+                for (String foiProperty : featureOfInterest.getHasProperty()) {
+                    foiResource.addProperty(CoreInformationModel.CIM_HAS_PROPERTY, OntologyHelper.getBIMPropertyURI(foiProperty) );
+                }
+            }
+
+            modelResource.addProperty(CoreInformationModel.CIM_HAS_FOI, foiResource);
+        }
+    }
+
+    private static void addCapabilitiesToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, List<ActuatingService> actuatingServices ) {
+        if( actuatingServices != null ) {
+            for (ActuatingService capability : actuatingServices) {
+
+
+                org.apache.jena.rdf.model.Resource capabilityResource = model.createResource(OntologyHelper.getResourceGraphURI(capability.getId()));
+
+                capabilityResource.addProperty(CoreInformationModel.RDF_TYPE,CoreInformationModel.CIM_RESOURCE);
+                for( String label: capability.getLabels() ) {
+                    capabilityResource.addProperty(CoreInformationModel.RDFS_LABEL,label);
+                }
+                for( String comment: capability.getComments() ) {
+                    capabilityResource.addProperty(CoreInformationModel.RDFS_COMMENT,comment);
+                }
+
+                if( capability.getId() == null || capability.getId().isEmpty()) {
+                    capability.setId(String.valueOf(ObjectId.get()));
+                }
+
+                capabilityResource.addProperty(CoreInformationModel.CIM_ID,capability.getId());
+
+                addActuatingServiceToModelResource(model,capabilityResource,capability);
+                modelResource.addProperty(CoreInformationModel.CIM_HAS_CAPABILITY, capabilityResource);
+            }
+        }
+    }
+
+
+    private static void addActuatingServiceToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, ActuatingService service ) {
+        modelResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_ACTUATING_SERVICE);
+        //Add name, output parameter, input parameters, foi it acts on as well as properties it affects
+        String name = service.getName();
+        Parameter outputParameter = service.getOutputParameter();
+        List<InputParameter> inputParameters = service.getInputParameter();
+        FeatureOfInterest actsOn = service.getActsOn();
+        List<String> affects = service.getAffects();
+
+
+        modelResource.addProperty(CoreInformationModel.CIM_NAME, name );
+        modelResource.addProperty(CoreInformationModel.CIM_HAS_OUTPUT,
+                model.createResource().addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_PARAMETER)
+                        .addProperty(CoreInformationModel.CIM_IS_ARRAY, String.valueOf(outputParameter.isArray()))
+                        .addProperty(CoreInformationModel.CIM_DATATYPE,outputParameter.getDatatype()));
+        addInputParametersToModelResource(model,modelResource,inputParameters);
+//            modelResource.addProperty(CoreInformationModel.CIM_ACTS_ON,OntologyHelper.getFoiURI(platformId,actsOn));
+        addFoiToModelResource(model,modelResource,actsOn);
+        for( String affectedProperty: affects ) {
+            modelResource.addProperty(CoreInformationModel.CIM_AFFECTS,OntologyHelper.getBIMPropertyURI(affectedProperty));
         }
     }
 
