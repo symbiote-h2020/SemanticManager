@@ -259,9 +259,10 @@ public class RabbitManager {
      * Registers a Validate PIM Meta Model consumer
      */
     private void registerValidatePIMMetaModelConsumer() throws IOException {
+        String queueName = "symbIoTe-SemanticManager-validate-PIM-MetaModel";
 
         Channel channel = connection.createChannel();
-        String queueName = channel.queueDeclare().getQueue();
+        channel.queueDeclare(queueName, true, false, false, null);
         channel.queueBind(queueName, platformExchangeName, platformModelValidationRequestedRoutingKey);
         ValidatePIMMetaModelConsumer consumer = new ValidatePIMMetaModelConsumer(channel, this);
 
@@ -273,9 +274,10 @@ public class RabbitManager {
      * Registers a Validate PIM Instance consumer
      */
     private void registerValidatePIMInstanceConsumer() throws IOException {
+        String queueName = "symbIoTe-SemanticManager-validate-PIM-Instance";
 
         Channel channel = connection.createChannel();
-        String queueName = channel.queueDeclare().getQueue();
+        channel.queueDeclare(queueName, true, false, false, null);
         channel.queueBind(queueName, platformExchangeName, platformInstanceValidationRequestedRoutingKey);
         ValidatePIMInstancelConsumer consumer = new ValidatePIMInstancelConsumer(channel, this);
 
@@ -287,9 +289,10 @@ public class RabbitManager {
      * Registers a Validate Resource Instance consumer
      */
     private void registerValidateResourceInstanceConsumer() throws IOException {
+        String queueName = "symbIoTe-SemanticManager-validate-Resource-Instance";
 
         Channel channel = connection.createChannel();
-        String queueName = channel.queueDeclare().getQueue();
+        channel.queueDeclare(queueName, true, false, false, null);
         channel.queueBind(queueName, resourceExchangeName, resourceInstanceValidationRequestedRoutingKey);
         ValidateResourcesInstanceConsumer consumer = new ValidateResourcesInstanceConsumer(channel, this);
 
@@ -301,9 +304,10 @@ public class RabbitManager {
      * Registers a Validate and Create BIM platform consumer
      */
     private void registerValidateAndCreateBIMPlatform() throws IOException {
+        String queueName = "symbIoTe-SemanticManager-validate-and-create-BIM-Platform";
 
         Channel channel = connection.createChannel();
-        String queueName = channel.queueDeclare().getQueue();
+        channel.queueDeclare(queueName, true, false, false, null);
         channel.queueBind(queueName, platformExchangeName, platformInstanceTranslationRequestedRoutingKey);
         ValidateAndCreateRDFForBIMPlatformConsumer consumer = new ValidateAndCreateRDFForBIMPlatformConsumer(channel, this);
 
@@ -315,9 +319,10 @@ public class RabbitManager {
      * Registers a Validate and Create BIM resource consumer
      */
     private void registerValidateAndCreateBIMResource() throws IOException {
+        String queueName = "symbIoTe-SemanticManager-validate-and-create-BIM-Resource";
 
         Channel channel = connection.createChannel();
-        String queueName = channel.queueDeclare().getQueue();
+        channel.queueDeclare(queueName, true, false, false, null);
         channel.queueBind(queueName, resourceExchangeName, resourceInstanceTranslationRequestedRoutingKey);
         ValidateAndCreateRDFForBIMResourceConsumer consumer = new ValidateAndCreateRDFForBIMResourceConsumer(channel, this);
 
@@ -329,9 +334,10 @@ public class RabbitManager {
      * Registers a platform instance creation consumer
      */
     private void registerPIMInstanceCreationConsumer() throws IOException {
+        String queueName = "symbIoTe-SemanticManager-PIM-Instance-creation";
 
         Channel channel = connection.createChannel();
-        String queueName = channel.queueDeclare().getQueue();
+        channel.queueDeclare(queueName, true, false, false, null);
         channel.queueBind(queueName, platformExchangeName, platformCreatedRoutingKey);
         RegisterPIMInstanceConsumer consumer = new RegisterPIMInstanceConsumer(channel, this);
 
@@ -343,9 +349,10 @@ public class RabbitManager {
      * Registers a platform model creation consumer
      */
     private void registerPIMMetaModelCreationConsumer() throws IOException {
+        String queueName = "symbIoTe-SemanticManager-PIM-MetaModel-creation";
 
         Channel channel = connection.createChannel();
-        String queueName = channel.queueDeclare().getQueue();
+        channel.queueDeclare(queueName, true, false, false, null);
         channel.queueBind(queueName, platformExchangeName, platformModelCreatedRoutingKey);
         RegisterPIMMetaModelConsumer consumer = new RegisterPIMMetaModelConsumer(channel, this);
 
