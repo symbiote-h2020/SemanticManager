@@ -1,5 +1,6 @@
 package eu.h2020.symbiote;
 
+import eu.h2020.symbiote.core.model.InterworkingService;
 import eu.h2020.symbiote.core.model.Location;
 import eu.h2020.symbiote.core.model.WGS84Location;
 import eu.h2020.symbiote.core.model.resources.*;
@@ -16,6 +17,8 @@ import java.util.List;
 public class TestSetupConfig {
 
     public static final String PLATFORM_ID = "Platform1";
+    public static final String PLATFORM_NAME = "Platform 1";
+    public static final String PLATFORM_COMMENT = "This is platform 1";
 
     public static final String GENERAL_INTERWORKING_URL = "http://symbiote-h2020.eu/example/interworkingService";
     public static final String GENERAL_FOI_NAME = "Room1";
@@ -33,6 +36,17 @@ public class TestSetupConfig {
     public static final double GENERAL_LOCATION_LONG = 2.349014d;
     public static final double GENERAL_LOCATION_ALT = 15d;
     public static final Location GENERAL_LOCATION = new WGS84Location( GENERAL_LOCATION_LONG,GENERAL_LOCATION_LAT,GENERAL_LOCATION_ALT,GENERAL_LOCATION_NAME,GENERAL_LOCATION_DESCRIPTION );
+
+    public static final String INTERWORKING1_INFORMATION_MODEL_ID = "BIM";
+
+    public static final List<InterworkingService> PLATFORM_INTERWORKING_SERVICES;
+
+    static {
+        InterworkingService service1 = new InterworkingService();
+        service1.setInformationModelId(INTERWORKING1_INFORMATION_MODEL_ID);
+        service1.setUrl(GENERAL_INTERWORKING_URL);
+        PLATFORM_INTERWORKING_SERVICES = Arrays.asList(service1);
+    }
 
     public static final String STATIONARY1_ID = "stationary1";
     public static final List<String> STATIONARY1_LABELS = Arrays.asList("Stationary 1");
@@ -102,6 +116,7 @@ public class TestSetupConfig {
     public static final FeatureOfInterest STATIONARYDEVICE1_FOI = GENERAL_FOI;
     public static final List<String> STATIONARYDEVICE1_PROPERTIES = Arrays.asList("Temperature","Humidity");
     public static final List<ActuatingService> STATIONARYDEVICE1_CAPABILITIES = new ArrayList<>();
+
 
 
     static {

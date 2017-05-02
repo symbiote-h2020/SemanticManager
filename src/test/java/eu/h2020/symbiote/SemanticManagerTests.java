@@ -6,9 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.h2020.symbiote.core.internal.CoreResourceRegisteredOrModifiedEventPayload;
 import eu.h2020.symbiote.core.internal.CoreResourceRegistryRequest;
 import eu.h2020.symbiote.core.internal.DescriptionType;
+import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
 import eu.h2020.symbiote.core.model.internal.CoreResource;
 import eu.h2020.symbiote.core.model.resources.*;
 import eu.h2020.symbiote.ontology.SemanticManager;
+import eu.h2020.symbiote.ontology.validation.PIMInstanceValidationResult;
 import eu.h2020.symbiote.ontology.validation.ResourceInstanceValidationResult;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -155,6 +157,26 @@ public class SemanticManagerTests {
         resourceValidateAndTranslate(stationaryDevice);
     }
 
+    @Test
+    public void testPlatformValidateAndCreate() {
+        PIMInstanceDescription pimInstance = new PIMInstanceDescription();
+        pimInstance.setId(PLATFORM_ID);
+        pimInstance.setComments(Arrays.asList(PLATFORM_COMMENT));
+        pimInstance.setLabels(Arrays.asList(PLATFORM_NAME));
+        pimInstance.setInterworkingServices(PLATFORM_INTERWORKING_SERVICES);
+
+        SemanticManager manager = SemanticManager.getManager();
+        PIMInstanceValidationResult pimInstanceValidationResult = manager.validateAndCreateBIMPlatformToRDF(pimInstance);
+        assertNotNull("Result must not be null", pimInstanceValidationResult );
+        assertNotNull("Object description of returned result must not be null", pimInstanceValidationResult.getObjectDescription());
+        String rdf = pimInstanceValidationResult.getObjectDescription().getRdf();
+        assertNotNull("RDF returned must not be null", rdf);
+
+        System.out.println("Generated rdf: ");
+        System.out.println(rdf);
+        assertFalse(rdf.isEmpty());
+
+    }
 
     private void resourceValidateAndTranslate( Resource resource ) {
         ObjectMapper mapper = new ObjectMapper();

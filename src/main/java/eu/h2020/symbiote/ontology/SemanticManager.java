@@ -183,8 +183,13 @@ public class SemanticManager {
 
         //Create RDF from meta-information about the platform
         //TODO create RDF representing BIM compliant platform
-        translatedDescription.setRdf("{}");
-        translatedDescription.setRdfFormat(RDFFormat.JSONLD);
+        Model rdf = RDFGenerator.generateRDFForPlatform(pimInstanceDescription);
+
+        StringWriter stringWriter = new StringWriter();
+        rdf.write(stringWriter, DEFAULT_RDF_FORMAT.toString());
+
+        translatedDescription.setRdf(stringWriter.toString());
+        translatedDescription.setRdfFormat(DEFAULT_RDF_FORMAT);
 
         result.setSuccess(true);
         result.setMessage("Validation and translation successful");

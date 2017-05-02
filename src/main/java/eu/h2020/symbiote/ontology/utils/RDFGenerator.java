@@ -1,5 +1,6 @@
 package eu.h2020.symbiote.ontology.utils;
 
+import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
 import eu.h2020.symbiote.core.model.*;
 import eu.h2020.symbiote.core.model.resources.*;
 import eu.h2020.symbiote.core.model.resources.Resource;
@@ -290,9 +291,47 @@ public class RDFGenerator {
         }
     }
 
-    public static Model generateRDFForPlatform( Platform platform ) {
+    public static Model generateRDFForPlatform( PIMInstanceDescription platform ) {
+        log.debug("Generating model from platform");
         Model model = ModelFactory.createDefaultModel();
+        // construct proper Platform entry
+        org.apache.jena.rdf.model.Resource platformRes = model.createResource(OntologyHelper.getPlatformGraphURI(platform.getId()))
+                .addProperty(MetaInformationModel.RDF_TYPE, MetaInformationModel.OWL_ONTOLOGY)
+                .addProperty(MetaInformationModel.CIM_HASID, platform.getId());
+
+        for (String comment : platform.getComments()) {
+            platformRes.addProperty(CoreInformationModel.RDFS_COMMENT, comment);
+        }
+        for( String name: platform.getLabels() ) {
+            platformRes.addProperty(CoreInformationModel.RDFS_LABEL, name);
+        }
+
+        for( InterworkingService service: platform.getInterworkingServices() ) {
+            Model serviceModel = ModelFactory.createDefaultModel();
+            String serviceUri = generateInterworkingServiceUri(OntologyHelper.getPlatformGraphURI(platform.getId()), service.getUrl());
+
+            serviceModel.createResource(serviceUri)
+                    .addProperty(MetaInformationModel.RDF_TYPE, MetaInformationModel.MIM_INTERWORKINGSERVICE)
+                    .addProperty(MetaInformationModel.MIM_HASURL, service.getUrl())
+                    .addProperty(MetaInformationModel.MIM_HASINFORMATIONMODEL, model.createResource()
+                            .addProperty(MetaInformationModel.CIM_HASID, service.getInformationModelId()));
+            platformRes.addProperty(MetaInformationModel.MIM_HASSERVICE, model.createResource(serviceUri));
+            model.add(serviceModel);
+        }
+
+        model.write(System.out,"TURTLE");
         return model;
+    }
+
+
+    public static String generateInterworkingServiceUri( String platformUri, String serviceUrl ) {
+        String cutServiceUrl = "";
+        if( serviceUrl.startsWith( "http://" ) ) {
+            cutServiceUrl = serviceUrl.substring(7);
+        } else if ( serviceUrl.startsWith("https://")) {
+            cutServiceUrl = serviceUrl.substring(8);
+        }
+        return platformUri + "/service/" + cutServiceUrl;
     }
 
 

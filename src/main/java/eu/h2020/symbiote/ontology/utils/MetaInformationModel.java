@@ -45,7 +45,7 @@ public class MetaInformationModel {
         MIM_HASNAME = m.createProperty( MIM_PREFIX + "hasName");
         MIM_HASSERVICE = m.createProperty( MIM_PREFIX + "hasService");
         MIM_HASINFORMATIONMODEL = m.createProperty( MIM_PREFIX + "hasInformationModel");
-        CIM_HASID = m.createProperty( CIM_PREFIX + "hasID");
+        CIM_HASID = m.createProperty( CIM_PREFIX + "id");
         MIM_HASURL = m.createProperty( MIM_PREFIX + "hasURL");
         MIM_INTERWORKINGSERVICE = m.createProperty( MIM_PREFIX + "InterworkingService");
     }
