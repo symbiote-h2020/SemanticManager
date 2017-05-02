@@ -105,13 +105,13 @@ public class RDFGenerator {
             modelResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_ACTUATOR);
             modelResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_MOBILE);
             Location locatedAt = ((MobileDevice) resource).getLocatedAt();
-            List<ActuatingService> capabilities = ((Actuator) resource).getCapabilities();
+            List<ActuatingService> capabilities = ((MobileDevice) resource).getCapabilities();
 
             addLocationToModelResource(model,modelResource,locatedAt);
             addCapabilitiesToModelResource(model,modelResource,capabilities);
 
             //Add observed properties and location
-            List<String> observesProperty = ((MobileSensor) resource).getObservesProperty();
+            List<String> observesProperty = ((MobileDevice) resource).getObservesProperty();
 
             if( observesProperty != null ) {
                 for (String property : observesProperty) {
@@ -123,15 +123,15 @@ public class RDFGenerator {
             modelResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_ACTUATOR);
             modelResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_STATIONARY);
             //Add location and capabilities, ie actuating services connected with this actuator
-            Location locatedAt = ((Actuator) resource).getLocatedAt();
-            List<ActuatingService> capabilities = ((Actuator) resource).getCapabilities();
+            Location locatedAt = ((StationaryDevice) resource).getLocatedAt();
+            List<ActuatingService> capabilities = ((StationaryDevice) resource).getCapabilities();
 
             addLocationToModelResource(model,modelResource,locatedAt);
             addCapabilitiesToModelResource(model,modelResource,capabilities);
 
             //Add foi, observed properties and location
-            FeatureOfInterest featureOfInterest = ((StationarySensor) resource).getFeatureOfInterest();
-            List<String> observesProperty = ((StationarySensor) resource).getObservesProperty();
+            FeatureOfInterest featureOfInterest = ((StationaryDevice) resource).getFeatureOfInterest();
+            List<String> observesProperty = ((StationaryDevice) resource).getObservesProperty();
 
 
             if( observesProperty != null ) {
