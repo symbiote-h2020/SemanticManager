@@ -1,15 +1,11 @@
 package eu.h2020.symbiote.messaging.consumers;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 import eu.h2020.symbiote.core.internal.CoreResourceRegistryRequest;
-import eu.h2020.symbiote.core.model.resources.Resource;
 import eu.h2020.symbiote.messaging.RabbitManager;
 import eu.h2020.symbiote.ontology.SemanticManager;
 import eu.h2020.symbiote.ontology.validation.ResourceInstanceValidationResult;
@@ -17,7 +13,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * RabbitMQ Consumer implementation used for Placeholder actions
@@ -58,35 +53,48 @@ public class ValidateAndCreateRDFForBIMResourceConsumer extends DefaultConsumer 
             throws IOException {
         String msg = new String(body);
         log.debug( "Consume validate and create RDF for resource " + msg );
-
+        ObjectMapper mapper = new ObjectMapper();
+        ResourceInstanceValidationResult response = null;
         //Try to parse the message
         try {
-            ObjectMapper mapper = new ObjectMapper();
 //            List<Resource> validateAndTranslateRequest = mapper.readValue(msg, new TypeReference<List<Resource>>(){});
 
             CoreResourceRegistryRequest coreResourceRegistryRequest = mapper.readValue(msg, CoreResourceRegistryRequest.class);
 
-            ResourceInstanceValidationResult response = SemanticManager.getManager().validateAndCreateBIMResourceToRDF(coreResourceRegistryRequest);
+            response = SemanticManager.getManager().validateAndCreateBIMResourceToRDF(coreResourceRegistryRequest);
             //Send the response back to the client
             log.debug( "Validation status: " + response.isSuccess() + ", message: " + response.getMessage());
 
-            byte[] responseBytes = mapper.writeValueAsBytes(response!=null?response:"[]");
-
-            AMQP.BasicProperties replyProps = new AMQP.BasicProperties
-                    .Builder()
-                    .correlationId(properties.getCorrelationId())
-                    .build();
-            this.getChannel().basicPublish("", properties.getReplyTo(), replyProps, responseBytes);
-            log.debug("-> Message was sent back");
-
-            this.getChannel().basicAck(envelope.getDeliveryTag(), false);
-
-        } catch( JsonParseException | JsonMappingException e ) {
-            log.error("Error occurred when parsing Resource object JSON: " + msg, e);
-        } catch( IOException e ) {
-            log.error("I/O Exception occurred when parsing Resource object" , e);
+//        } catch( JsonParseException | JsonMappingException e ) {
+//            log.error("Error occurred when parsing Resource object JSON: " + msg, e);
+//        } catch( IOException e ) {
+//            log.error("I/O Exception occurred when parsing Resource object" , e);
+//        } catch( PropertyNotFoundException e) {
+//            log.error("Could not find property: " + e.getMessage() , e);
         } catch( Exception e ) {
-            log.error("Generic error ocurred when handling delivery" , e);
+            response = createResponseForError(e);
+            log.error("Generic error occurred when handling delivery" , e);
         }
+        byte[] responseBytes = mapper.writeValueAsBytes(response!=null?response:"[]");
+
+        AMQP.BasicProperties replyProps = new AMQP.BasicProperties
+                .Builder()
+                .correlationId(properties.getCorrelationId())
+                .build();
+        this.getChannel().basicPublish("", properties.getReplyTo(), replyProps, responseBytes);
+        log.debug("-> Message was sent back");
+
+        this.getChannel().basicAck(envelope.getDeliveryTag(), false);
     }
+
+    private ResourceInstanceValidationResult createResponseForError( Exception error ) {
+        ResourceInstanceValidationResult response = new ResourceInstanceValidationResult();
+        response.setMessage(error.getMessage());
+        response.setModelValidated("");
+        response.setModelValidatedAgainst("");
+        response.setObjectDescription(null);
+        response.setSuccess(false);
+        return response;
+    }
+
 }

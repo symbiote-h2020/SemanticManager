@@ -5,11 +5,16 @@
  */
 package eu.h2020.symbiote.ontology.utils;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  *
  * @author jab
  */
 public class OntologyHelper {
+
+    private static final Log log = LogFactory.getLog(OntologyHelper.class);
 
     public static final String ROOT_URI = "http://www.symbiote-h2020.eu/ontology/";
 
@@ -70,9 +75,13 @@ public class OntologyHelper {
         return getPlatformGraphURI(platformId) + "/location/" + location;
     }
 
-    public static String getBIMPropertyURI( String property ) {
-        return BIM_URI + "/" + property;
+    public static String findBIMPlatformPropertyUri( String property ) throws PropertyNotFoundException {
+        String uri = SymbioteModelsUtil.findInSymbioteModels(property);
+        log.debug("Found property in symbIoTe models: " + uri);
+        return uri;
     }
+
+
 
 //    public static String getMappingGraphURI(BigInteger mappingId) {
 //        return MAPPING_GRAPH + "/" + mappingId;

@@ -27,7 +27,7 @@ public class TestSetupConfig {
     static {
         GENERAL_FOI.setLabels(Arrays.asList(GENERAL_FOI_NAME));
         GENERAL_FOI.setComments(Arrays.asList(GENERAL_FOI_DESC));
-        GENERAL_FOI.setHasProperty(Arrays.asList("Temperature","Humidity"));
+        GENERAL_FOI.setHasProperty(Arrays.asList("temperature"));
     }
 
     public static final String GENERAL_LOCATION_NAME = "Paris";
@@ -54,14 +54,14 @@ public class TestSetupConfig {
     public static final String STATIONARY1_URL = GENERAL_INTERWORKING_URL;
     public static final Location STATIONARY1_LOCATION = GENERAL_LOCATION;
     public static final FeatureOfInterest STATIONARY1_FOI = GENERAL_FOI;
-    public static final List<String> STATIONARY1_PROPERTIES = Arrays.asList("Temperature","Humidity");
+    public static final List<String> STATIONARY1_PROPERTIES = Arrays.asList("temperature","humidity");
 
     public static final String MOBILE1_ID = "mobile1";
     public static final List<String> MOBILE1_LABELS = Arrays.asList("Mobile 1");
     public static final List<String> MOBILE1_COMMENTS = Arrays.asList("This is mobile 1");
     public static final String MOBILE1_URL = GENERAL_INTERWORKING_URL;
     public static final Location MOBILE1_LOCATION = GENERAL_LOCATION;
-    public static final List<String> MOBILE1_PROPERTIES = Arrays.asList("Temperature");
+    public static final List<String> MOBILE1_PROPERTIES = Arrays.asList("temperature");
 
     public static final String SERVICE1_ID = "service1";
     public static final List<String> SERVICE1_LABELS = Arrays.asList("Service 1");
@@ -83,7 +83,7 @@ public class TestSetupConfig {
     public static final String ACTUATING_SERVICE1_URL = GENERAL_INTERWORKING_URL;
     public static final String ACTUATING_SERVICE1_NAME = "actuatingService1Name";
     public static final FeatureOfInterest ACTUATING_SERVICE1_ACTSON = GENERAL_FOI;
-    public static final List<String> ACTUATING_SERVICE1_AFFECTS = Arrays.asList("Temperature");
+    public static final List<String> ACTUATING_SERVICE1_AFFECTS = Arrays.asList("temperature");
     public static final String ACTUATING_SERVICE1_INPUT_NAME = "inputParam1";
     public static final boolean ACTUATING_SERVICE1_INPUT_MANDATORY = true;
     public static final boolean ACTUATING_SERVICE1_INPUT_ARRAY = false;
@@ -105,7 +105,7 @@ public class TestSetupConfig {
     public static final List<String> MOBILEDEVICE1_COMMENTS = Arrays.asList("This is mobile device 1");
     public static final String MOBILEDEVICE1_URL = GENERAL_INTERWORKING_URL;
     public static final Location MOBILEDEVICE1_LOCATION = GENERAL_LOCATION;
-    public static final List<String> MOBILEDEVICE1_PROPERTIES = Arrays.asList("Temperature");
+    public static final List<String> MOBILEDEVICE1_PROPERTIES = Arrays.asList("temperature");
     public static final List<ActuatingService> MOBILEDEVICE1_CAPABILITIES = new ArrayList<>();
 
     public static final String STATIONARYDEVICE1_ID = "stationardevice1";
@@ -114,7 +114,7 @@ public class TestSetupConfig {
     public static final String STATIONARYDEVICE1_URL = GENERAL_INTERWORKING_URL;
     public static final Location STATIONARYDEVICE1_LOCATION = GENERAL_LOCATION;
     public static final FeatureOfInterest STATIONARYDEVICE1_FOI = GENERAL_FOI;
-    public static final List<String> STATIONARYDEVICE1_PROPERTIES = Arrays.asList("Temperature","Humidity");
+    public static final List<String> STATIONARYDEVICE1_PROPERTIES = Arrays.asList("temperature");
     public static final List<ActuatingService> STATIONARYDEVICE1_CAPABILITIES = new ArrayList<>();
 
 

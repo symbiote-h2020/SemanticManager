@@ -17,6 +17,6 @@
     "description": "This is paris"
   },
   "observesProperty": [
-    "Temperature"
+    "temperature"
   ]
 }

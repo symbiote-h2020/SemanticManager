@@ -38,11 +38,10 @@
       "This is room 1"
     ],
     "hasProperty": [
-      "Temperature",
-      "Humidity"
+      "temperature"
     ]
   },
   "affects": [
-    "Temperature"
+    "temperature"
   ]
 }

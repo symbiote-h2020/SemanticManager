@@ -24,12 +24,11 @@
       "This is room 1"
     ],
     "hasProperty": [
-      "Temperature",
-      "Humidity"
+      "temperature"
     ]
   },
   "observesProperty": [
-    "Temperature",
-    "Humidity"
+    "temperature",
+    "humidity"
   ]
 }

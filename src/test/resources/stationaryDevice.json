@@ -1,5 +1,3 @@
-
-
 {
   "@c": ".StationaryDevice",
   "id": "stationardevice1",
@@ -59,12 +57,11 @@
           "This is room 1"
         ],
         "hasProperty": [
-          "Temperature",
-          "Humidity"
+          "temperature"
         ]
       },
       "affects": [
-        "Temperature"
+        "temperature"
       ]
     }
   ],
@@ -76,12 +73,10 @@
       "This is room 1"
     ],
     "hasProperty": [
-      "Temperature",
-      "Humidity"
+      "temperature"
     ]
   },
   "observesProperty": [
-    "Temperature",
-    "Humidity"
+    "temperature"
   ]
 }

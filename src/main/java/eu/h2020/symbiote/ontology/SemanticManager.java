@@ -11,6 +11,7 @@ import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.core.model.internal.CoreResource;
 import eu.h2020.symbiote.core.model.resources.Resource;
+import eu.h2020.symbiote.ontology.utils.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.utils.RDFGenerator;
 import eu.h2020.symbiote.ontology.utils.RDFReader;
 import eu.h2020.symbiote.ontology.validation.PIMInstanceValidationResult;
@@ -225,7 +226,7 @@ public class SemanticManager {
         //TODO change with proper implementation
         result.setSuccess(true);
         result.setMessage("Validation successful");
-        result.setModelValidatedAgainst("http://www.symbiote-h2020.eu/ontology/platforms/1111"); //Set URI of the platform instance this resources are being registered to
+        result.setModelValidatedAgainst("http://www.symbiote-h2020.eu/ontology/platforms/1111"); //TODO Set URI of the platform instance this resources are being registered to
 
         List<CoreResource> resources = RDFReader.readResourceInstances(rdfInfo, request.getPlatformId());
 
@@ -240,7 +241,7 @@ public class SemanticManager {
      * @param request Request containing list of resources, for which RDF will be created.
      * @return Validation result, containing information about the resources and created RDF.
      */
-    public ResourceInstanceValidationResult validateAndCreateBIMResourceToRDF(CoreResourceRegistryRequest request) throws IOException {
+    public ResourceInstanceValidationResult validateAndCreateBIMResourceToRDF(CoreResourceRegistryRequest request) throws IOException, PropertyNotFoundException {
         ResourceInstanceValidationResult result = new ResourceInstanceValidationResult();
         if (request != null) {
             log.info("Validating and creating RDF for platform " + request.getPlatformId());

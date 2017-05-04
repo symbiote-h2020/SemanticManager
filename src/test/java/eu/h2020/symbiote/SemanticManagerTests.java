@@ -209,7 +209,7 @@ public class SemanticManagerTests {
         ResourceInstanceValidationResult validationResult = null;
         try {
             validationResult = manager.validateAndCreateBIMResourceToRDF(request);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail("Error during handling of the validate and create resource request");
         }

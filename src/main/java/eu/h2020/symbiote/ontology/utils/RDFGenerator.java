@@ -29,7 +29,7 @@ public class RDFGenerator {
      * @param platformId
      * @return String containing resource description in RDF.
      */
-    public static Model generateRDFForResource(Resource resource, String platformId) {
+    public static Model generateRDFForResource(Resource resource, String platformId) throws PropertyNotFoundException {
         log.debug("Generating model for resource " + resource.getId());
         // create an empty Model
         Model model = ModelFactory.createDefaultModel();
@@ -51,7 +51,7 @@ public class RDFGenerator {
             Location locatedAt = ((MobileSensor) resource).getLocatedAt();
             if( observesProperty != null ) {
                 for (String property : observesProperty) {
-                    modelResource.addProperty(CoreInformationModel.CIM_OBSERVES, OntologyHelper.getBIMPropertyURI(property));
+                    modelResource.addProperty(CoreInformationModel.CIM_OBSERVES, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
                 }
             }
 //            modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT,OntologyHelper.getLocationURI(platformId,locatedAt));
@@ -66,7 +66,7 @@ public class RDFGenerator {
 
             if( observesProperty != null ) {
                 for (String property : observesProperty) {
-                    modelResource.addProperty(CoreInformationModel.CIM_OBSERVES, OntologyHelper.getBIMPropertyURI(property));
+                    modelResource.addProperty(CoreInformationModel.CIM_OBSERVES, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
                 }
             }
 //            modelResource.addProperty(CoreInformationModel.CIM_HAS_FOI, OntologyHelper.getFoiURI(platformId,featureOfInterest));
@@ -116,7 +116,7 @@ public class RDFGenerator {
 
             if( observesProperty != null ) {
                 for (String property : observesProperty) {
-                    modelResource.addProperty(CoreInformationModel.CIM_OBSERVES, OntologyHelper.getBIMPropertyURI(property));
+                    modelResource.addProperty(CoreInformationModel.CIM_OBSERVES, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
                 }
             }
         }
@@ -137,7 +137,7 @@ public class RDFGenerator {
 
             if( observesProperty != null ) {
                 for (String property : observesProperty) {
-                    modelResource.addProperty(CoreInformationModel.CIM_OBSERVES, OntologyHelper.getBIMPropertyURI(property));
+                    modelResource.addProperty(CoreInformationModel.CIM_OBSERVES, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
                 }
             }
             addFoiToModelResource(model,modelResource,featureOfInterest);
@@ -213,7 +213,7 @@ public class RDFGenerator {
             }
     }
 
-    private static void addFoiToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, FeatureOfInterest featureOfInterest) {
+    private static void addFoiToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, FeatureOfInterest featureOfInterest) throws PropertyNotFoundException {
         if( featureOfInterest != null ) {
             org.apache.jena.rdf.model.Resource foiResource = model.createResource();
             foiResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_FOI);
@@ -232,7 +232,7 @@ public class RDFGenerator {
 
             if( featureOfInterest.getHasProperty() != null ) {
                 for (String foiProperty : featureOfInterest.getHasProperty()) {
-                    foiResource.addProperty(CoreInformationModel.CIM_HAS_PROPERTY, OntologyHelper.getBIMPropertyURI(foiProperty) );
+                    foiResource.addProperty(CoreInformationModel.CIM_HAS_PROPERTY, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(foiProperty)));
                 }
             }
 
@@ -240,7 +240,7 @@ public class RDFGenerator {
         }
     }
 
-    private static void addCapabilitiesToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, List<ActuatingService> actuatingServices ) {
+    private static void addCapabilitiesToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, List<ActuatingService> actuatingServices ) throws PropertyNotFoundException {
         if( actuatingServices != null ) {
             for (ActuatingService capability : actuatingServices) {
 
@@ -268,7 +268,7 @@ public class RDFGenerator {
     }
 
 
-    private static void addActuatingServiceToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, ActuatingService service ) {
+    private static void addActuatingServiceToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, ActuatingService service ) throws PropertyNotFoundException {
         modelResource.addProperty(MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_ACTUATING_SERVICE);
         //Add name, output parameter, input parameters, foi it acts on as well as properties it affects
         String name = service.getName();
@@ -287,7 +287,7 @@ public class RDFGenerator {
 //            modelResource.addProperty(CoreInformationModel.CIM_ACTS_ON,OntologyHelper.getFoiURI(platformId,actsOn));
         addFoiToModelResource(model,modelResource,actsOn);
         for( String affectedProperty: affects ) {
-            modelResource.addProperty(CoreInformationModel.CIM_AFFECTS,OntologyHelper.getBIMPropertyURI(affectedProperty));
+            modelResource.addProperty(CoreInformationModel.CIM_AFFECTS,model.createResource(OntologyHelper.findBIMPlatformPropertyUri(affectedProperty)));
         }
     }
 
