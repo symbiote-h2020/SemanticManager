@@ -11,7 +11,8 @@ import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.core.model.internal.CoreResource;
 import eu.h2020.symbiote.core.model.resources.Resource;
-import eu.h2020.symbiote.ontology.utils.PropertyNotFoundException;
+import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
+import eu.h2020.symbiote.ontology.errors.RDFGenerationError;
 import eu.h2020.symbiote.ontology.utils.RDFGenerator;
 import eu.h2020.symbiote.ontology.utils.RDFReader;
 import eu.h2020.symbiote.ontology.validation.PIMInstanceValidationResult;
@@ -290,7 +291,11 @@ public class SemanticManager {
 
                     resourceList.add(translatedResource);
                 } catch ( IllegalArgumentException e ) {
-                    log.error("Error occurred during verifying resource " + resource.getLabels(), e);
+                    log.error("Error occurred during verifying resource: " + resource.getLabels(), e);
+                    success = false;
+                    errorMessage.append(e.getMessage()+"\n");
+                } catch( RDFGenerationError e ) {
+                    log.error("Error occurred during rdf generation: " + resource.getLabels(), e);
                     success = false;
                     errorMessage.append(e.getMessage()+"\n");
                 }

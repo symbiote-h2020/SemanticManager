@@ -1,7 +1,5 @@
 package eu.h2020.symbiote.ontology.utils;
 
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
-import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -13,7 +11,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
-import org.apache.jena.shared.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -80,14 +77,14 @@ public class SymbioteModelsUtil {
      * @param name Name to search for
      * @return URI of the resource or <code>null</code> in case it couldn't be found in any of the models.
      */
-    public static String findInSymbioteModels( String name ) throws PropertyNotFoundException {
+    public static String findInSymbioteModels( String name ) throws eu.h2020.symbiote.ontology.errors.PropertyNotFoundException {
         String uri = null;
-        List<PropertyNotFoundException> propertyNotFoundExceptions = new ArrayList<>();
+        List<eu.h2020.symbiote.ontology.errors.PropertyNotFoundException> propertyNotFoundExceptions = new ArrayList<>();
         log.debug("Checking for " + name + " in symbIoTe models");
         //Check in BIM
         try {
             uri = findUriForNameInModel(name, bimDataset, BIM_BASE_NAME);
-        } catch (PropertyNotFoundException e ) {
+        } catch (eu.h2020.symbiote.ontology.errors.PropertyNotFoundException e ) {
             log.error(e);
             propertyNotFoundExceptions.add(e);
         }
@@ -95,7 +92,7 @@ public class SymbioteModelsUtil {
         if( uri == null ) {
             try {
                 uri = findUriForNameInModel(name, quRecDataset, QU_DIM_BASE_NAME);
-            } catch (PropertyNotFoundException e ) {
+            } catch (eu.h2020.symbiote.ontology.errors.PropertyNotFoundException e ) {
                 log.error(e);
                 propertyNotFoundExceptions.add(e);
             }
@@ -105,23 +102,23 @@ public class SymbioteModelsUtil {
             //Could not find it in any models, creating and returning aggregated error
             StringBuilder sb = new StringBuilder();
             int i = 0;
-            for( PropertyNotFoundException exc: propertyNotFoundExceptions) {
+            for( eu.h2020.symbiote.ontology.errors.PropertyNotFoundException exc: propertyNotFoundExceptions) {
                 sb.append( "["+i++ + " " + exc.getSearchedModel() + "] ");
             }
-            throw new PropertyNotFoundException(name, sb.toString());
+            throw new eu.h2020.symbiote.ontology.errors.PropertyNotFoundException(name, sb.toString());
         }
 
         return uri;
     }
 
-    private static String findUriForNameInModel( String name, Dataset modelDataset, String modelBasename ) throws PropertyNotFoundException {
+    private static String findUriForNameInModel( String name, Dataset modelDataset, String modelBasename ) throws eu.h2020.symbiote.ontology.errors.PropertyNotFoundException {
         String uri = null;
 
         Resource resourceToSearch = ResourceFactory.createResource(modelBasename + name);
         if( modelDataset.getDefaultModel().containsResource(resourceToSearch) ) {
             uri = modelBasename + name;
         } else {
-            throw new PropertyNotFoundException(name,modelBasename);
+            throw new eu.h2020.symbiote.ontology.errors.PropertyNotFoundException(name,modelBasename);
         }
 
         return uri;

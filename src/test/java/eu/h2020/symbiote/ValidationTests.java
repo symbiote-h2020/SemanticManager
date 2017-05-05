@@ -1,6 +1,6 @@
 package eu.h2020.symbiote;
 
-import eu.h2020.symbiote.ontology.utils.PropertyNotFoundException;
+import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;

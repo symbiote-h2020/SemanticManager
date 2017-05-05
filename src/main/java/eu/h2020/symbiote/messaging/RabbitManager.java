@@ -2,6 +2,7 @@ package eu.h2020.symbiote.messaging;
 
 import com.rabbitmq.client.*;
 import eu.h2020.symbiote.messaging.consumers.*;
+import eu.h2020.symbiote.ontology.utils.LocationFinder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,6 +93,11 @@ public class RabbitManager {
     @Value("${rabbit.exchange.resource.internal}")
     private boolean resourceExchangeInternal;
 
+
+    @Value("${rabbit.routingKey.resource.sparqlSearchRequested}")
+    private String resourceSparqlSearchRequestedRoutingKey;
+
+
     private Connection connection;
 
     @Autowired
@@ -147,6 +153,7 @@ public class RabbitManager {
                     this.resourceExchangeInternal,
                     null);
 
+            LocationFinder.getSingleton(this.resourceExchangeName, this.resourceSparqlSearchRequestedRoutingKey, channel);
 
             startConsumers();
             //message retrieval

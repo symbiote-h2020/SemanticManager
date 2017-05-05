@@ -1,4 +1,4 @@
-package eu.h2020.symbiote.ontology.utils;
+package eu.h2020.symbiote.ontology.errors;
 
 import java.util.List;
 

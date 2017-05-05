@@ -5,6 +5,7 @@
  */
 package eu.h2020.symbiote.ontology.utils;
 
+import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
