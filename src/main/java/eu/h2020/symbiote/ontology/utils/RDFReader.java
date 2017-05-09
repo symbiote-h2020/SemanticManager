@@ -1,18 +1,19 @@
 package eu.h2020.symbiote.ontology.utils;
 
 import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
-import eu.h2020.symbiote.core.internal.PIMMetaModelDescription;
 import eu.h2020.symbiote.core.model.InterworkingService;
-import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.core.model.internal.CoreResource;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
+import eu.h2020.symbiote.ontology.errors.RDFParsingError;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.shared.JenaException;
+import org.apache.jena.vocabulary.RDF;
 import org.bson.types.ObjectId;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.StringReader;
+import java.util.*;
 
 /**
  * Helper class used to read generic information for symbIoTe objects: resource and platform from the RDF.
@@ -21,45 +22,224 @@ import java.util.List;
  */
 public class RDFReader {
 
+    private static final Log log = LogFactory.getLog(RDFReader.class);
+
     /**
      * Reads the information about the platform from the specified RDF.
      * @param rdfInfo RDF containing platform information.
      * @return Platform meta-information read from RDF.
      */
-    public static PIMInstanceDescription readPlatformInstance(RDFInfo rdfInfo ) {
-        PIMInstanceDescription pimInstance = new PIMInstanceDescription();
-        pimInstance.setId("1111");
-        pimInstance.setLabels(Arrays.asList("PlatformA"));
-        pimInstance.setComments(Arrays.asList("This is platform A"));
-        InterworkingService interworkingService = new InterworkingService();
-        interworkingService.setInformationModelId("http://www.symbiote-h2020.eu/ontology/platformA"); //Same as a model it is validated agains
-        interworkingService.setUrl("http://platforma.myhost.eu/myservice");
+    public static PIMInstanceDescription readPlatformInstance(RDFInfo rdfInfo ) throws RDFParsingError, JenaException {
+        PIMInstanceDescription pimInstance = null;
+        Model model = ModelFactory.createDefaultModel();
+        try( StringReader reader = new StringReader( rdfInfo.getRdf() ) ) {
+            model.read(reader, null, rdfInfo.getRdfFormat().toString());
+        }
 
-        pimInstance.setInterworkingServices(Arrays.asList(interworkingService));
+        StmtIterator platformsIterator = model.listStatements(null,MetaInformationModel.RDF_TYPE,MetaInformationModel.MIM_PLATFORM);
+        if( platformsIterator.hasNext() ) {
+            Resource platformRes = platformsIterator.next().getSubject();
+            if( platformsIterator.hasNext() ) {
+                throw new RDFParsingError("Found too many platforms in the RDF. It is possible to only register one platform during single registration." );
+            }
+            StmtIterator idIterator = model.listStatements(platformRes, MetaInformationModel.CIM_HASID, (RDFNode)null);
+            String platformId = ensureSingleStatement(idIterator).getObject().asLiteral().toString();
+            StmtIterator labelIterator = model.listStatements(platformRes, CoreInformationModel.RDFS_LABEL, (RDFNode) null);
+            List<String> labelsList = new ArrayList<>();
+            while( labelIterator.hasNext() ) {
+                Statement labelStmt = labelIterator.next();
+                labelsList.add(labelStmt.getObject().asLiteral().toString());
+            }
+
+            StmtIterator commentsIterator = model.listStatements(platformRes, CoreInformationModel.RDFS_COMMENT, (RDFNode) null);
+            List<String> commentList = new ArrayList<>();
+            while( commentsIterator.hasNext() ) {
+                String comment = commentsIterator.next().getObject().asLiteral().toString();
+                log.debug("Found comment of the resource: " + comment);
+                commentList.add(comment);
+            }
+
+            StmtIterator interworkingInterfaceIterator = model.listStatements(null,MetaInformationModel.RDF_TYPE,MetaInformationModel.MIM_INTERWORKINGSERVICE);
+            List<InterworkingService> services = new ArrayList<>();
+            while(interworkingInterfaceIterator.hasNext()) {
+                Resource serviceRes = interworkingInterfaceIterator.next().getSubject();
+                StmtIterator urlIterator = model.listStatements(serviceRes, MetaInformationModel.MIM_HASURL, (RDFNode) null);
+                String url = ensureSingleStatement(urlIterator).getObject().asLiteral().toString();
+
+                StmtIterator informationModelIterator = model.listStatements(serviceRes, MetaInformationModel.MIM_HASINFORMATIONMODEL, (RDFNode) null);
+                RDFNode informationModelRDFNode = ensureSingleStatement(informationModelIterator).getObject();
+                if( informationModelRDFNode instanceof Resource ) {
+                    Resource informationModelResource = informationModelRDFNode.asResource();
+                    AnonId id = informationModelResource.getId();
+                    RDFNode infModelIdRDFNode = ensureSingleStatement(model.listStatements(model.createResource(id), MetaInformationModel.CIM_HASID, (RDFNode) null)).getObject();
+                    if( infModelIdRDFNode instanceof Literal ) {
+                        String infModelId = infModelIdRDFNode.asLiteral().toString();
+                        InterworkingService service = new InterworkingService();
+                        service.setInformationModelId( infModelId);
+                        service.setUrl( url );
+                        services.add(service);
+                    } else {
+                        throw new RDFParsingError( "Could not find information model id in the RDF");
+                    }
+                } else if ( informationModelRDFNode instanceof  Literal ) {
+                    Literal literal = informationModelRDFNode.asLiteral();
+                    //TODO decide if information model can be passed as Literal
+                    String message = "Information model passed as a literal is not handled yet. Literal: " + literal.toString();
+                    log.info(message);
+                    throw new RDFParsingError("Could not read information model property. Internal error: " + message);
+                }
+            }
+
+            pimInstance = new PIMInstanceDescription();
+            pimInstance.setId(platformId);
+            pimInstance.setLabels(labelsList);
+            pimInstance.setComments(commentList);
+            pimInstance.setInterworkingServices(services);
+            pimInstance.setRdf(rdfInfo.getRdf());
+            pimInstance.setRdfFormat(rdfInfo.getRdfFormat());
+        }
+
         return pimInstance;
     }
-
 
     /**
      * Reads the information about the resources from the specified RDF.
      * @param rdfInfo RDF containing resources information.
      * @return Information about resources read from RDF.
      */
-    public static List<CoreResource> readResourceInstances( RDFInfo rdfInfo, String platformId ) {
+    public static List<CoreResource> readResourceInstances( RDFInfo rdfInfo, String platformId ) throws RDFParsingError, JenaException {
         List<CoreResource> resources = new ArrayList<>();
-        //TODO proper parsing of the resources from rdf
+        //TODO check if rdf is not null/empty
+        if( rdfInfo == null || rdfInfo.getRdf() == null || rdfInfo.getRdfFormat() == null) {
+            throw new RDFParsingError( "" );
+        }
         Model model = ModelFactory.createDefaultModel();
-        CoreResource resource1 = new CoreResource();
-        resource1.setId(String.valueOf(ObjectId.get()));
-        resource1.setLabels(Arrays.asList("Resource1"));
-        resource1.setComments(Arrays.asList("This is resource 1"));
-        resource1.setInterworkingServiceURL("http://platforma.myhost.eu/myservice");
-        resource1.setRdf(rdfInfo.getRdf()); //Set RDF representing only this particular resource
-        resource1.setRdfFormat(RDFFormat.JSONLD);
+        try( StringReader reader = new StringReader( rdfInfo.getRdf() ) ) {
+            model.read(reader, null, rdfInfo.getRdfFormat().toString());
+        }
 
-        resources.add(resource1);
+//        InputStream stream = new ByteArrayInputStream(rdfInfo.getRdf().getBytes(StandardCharsets.UTF_8));
+//        model.read(stream,null,rdfInfo.getRdfFormat().toString());
+
+        StmtIterator resourceIterator = model.listStatements(null,MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_RESOURCE);
+//        StmtIterator stmtIterator = model.listStatements();
+        log.debug("Resources: ");
+        List<Resource> rdfResources = new ArrayList<>();
+        while( resourceIterator.hasNext()) {
+            Statement next = resourceIterator.next();
+            log.debug(next);
+            rdfResources.add(next.getSubject());
+//            log.debug( " Got URI: <" + next.getSubject().getURI() + ">");
+        }
+
+        StmtIterator interworkingInterfaceIterator = model.listStatements(null,MetaInformationModel.RDF_TYPE,MetaInformationModel.MIM_INTERWORKINGSERVICE);
+
+        log.debug("Interworking services: ");
+        Map<String,String> interworkingServices = new HashMap<>();
+        while( interworkingInterfaceIterator.hasNext() ) {
+            Statement next = interworkingInterfaceIterator.next();
+            log.debug(next);
+            Resource subject = next.getSubject();
+            StmtIterator urls = model.listStatements(subject, MetaInformationModel.MIM_HASURL, (RDFNode) null);
+            if( urls.hasNext() ) {
+                String url = urls.next().getObject().toString();
+                log.debug(" Found <" + subject.getURI()+"> with uri " + url );
+                interworkingServices.put(subject.getURI(),url);
+            }
+        }
+
+        log.debug("Searching and parsing features");
+
+        for( Resource res: rdfResources ) {
+            log.debug("Searching mapping for " + res.getURI());
+            StmtIterator searchForResourcesInServices = model.listStatements(null, MetaInformationModel.MIM_HASRESOURCE, res );
+            if( !searchForResourcesInServices.hasNext() ) {
+                //Just for logging
+                log.debug("Could not find interworking service that has resource: " + res.getURI() );
+            }
+            while( searchForResourcesInServices.hasNext() ) {
+
+                Statement next = searchForResourcesInServices.next();
+                log.debug(next);
+                Resource foundService = next.getSubject();
+                //Check if it is really a service
+                if( interworkingServices.containsKey(foundService.getURI()) ) {
+                    log.debug("Found interworking service, creating a resource... ");
+                    CoreResource coreResource = createCoreResource(rdfInfo, model, res, interworkingServices.get(foundService.getURI()));
+                    resources.add(coreResource);
+
+                } else {
+                    log.warn("Subject is not an interworking service: " + foundService.getURI());
+                }
+            }
+        }
+
         return resources;
     }
 
+    private static CoreResource createCoreResource( RDFInfo rdfInfo, Model model, Resource resourceRes, String serviceURL) throws RDFParsingError {
+        CoreResource resource = new CoreResource();
+        StmtIterator idIterator = model.listStatements(resourceRes, MetaInformationModel.CIM_HASID, (RDFNode) null);
+        String resourceId;
+        if( idIterator.hasNext() ) {
+            Statement next = idIterator.next();
+            resourceId = next.getObject().asLiteral().toString();
+            log.debug("Found id of the resource: " + resourceId);
+        } else {
+            resourceId = String.valueOf(ObjectId.get());
+            log.debug("Created id of the resource: " + resourceId);
+        }
+        resource.setId(resourceId);
+
+        //Labels
+        StmtIterator labelIterator = model.listStatements(resourceRes, CoreInformationModel.RDFS_LABEL, (RDFNode) null);
+        List<String> labelList = new ArrayList<>();
+        while( labelIterator.hasNext() ) {
+            String label = labelIterator.next().getObject().asLiteral().toString();
+            log.debug("Found label of the resource: " + label);
+            labelList.add(label);
+        }
+        if( labelList.size() == 0 ) {
+            //Throws error because no existing labels
+            throw new RDFParsingError("Must define at least one label for resource " + resourceRes.getURI());
+        }
+        resource.setLabels(labelList);
+
+        //Comments
+        StmtIterator commentsIterator = model.listStatements(resourceRes, CoreInformationModel.RDFS_COMMENT, (RDFNode) null);
+        List<String> commentList = new ArrayList<>();
+        while( commentsIterator.hasNext() ) {
+            String comment = commentsIterator.next().getObject().asLiteral().toString();
+            log.debug("Found comment of the resource: " + comment);
+            commentList.add(comment);
+        }
+        resource.setComments(commentList);
+
+        if( serviceURL == null || serviceURL.isEmpty() ) {
+            throw new RDFParsingError("Could not create Core Resource for null or empty service URL");
+        }
+        resource.setInterworkingServiceURL(serviceURL);
+        resource.setRdf(rdfInfo.getRdf());
+        resource.setRdfFormat(rdfInfo.getRdfFormat());
+        return resource;
+    }
+
+    /**
+     * Traverses the iterator and ensures it contains exactly one statement, which is returned. In other cases error is thrown.
+     *
+     * @return The only statement of the iterator.
+     * @throws RDFParsingError thrown in case statement contains 0 or more than 1 statements.
+     */
+    private static Statement ensureSingleStatement( StmtIterator iterator ) throws RDFParsingError {
+        if( iterator.hasNext() ) {
+            Statement next = iterator.next();
+            if( iterator.hasNext() ) {
+                throw new RDFParsingError("Iterator has more than one statement");
+            }
+            return next;
+        } else {
+            throw new RDFParsingError("Iterator contains no statements");
+        }
+    }
 
 }

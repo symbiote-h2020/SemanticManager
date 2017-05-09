@@ -13,6 +13,7 @@ import eu.h2020.symbiote.core.model.internal.CoreResource;
 import eu.h2020.symbiote.core.model.resources.Resource;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.errors.RDFGenerationError;
+import eu.h2020.symbiote.ontology.errors.RDFParsingError;
 import eu.h2020.symbiote.ontology.utils.RDFGenerator;
 import eu.h2020.symbiote.ontology.utils.RDFReader;
 import eu.h2020.symbiote.ontology.validation.PIMInstanceValidationResult;
@@ -128,12 +129,17 @@ public class SemanticManager {
 
         result.setModelValidated(request.getRdf());
 
-        //TODO change with proper implementation
-        result.setSuccess(true);
-        result.setMessage("Validation successful");
-        result.setModelValidatedAgainst("http://www.symbiote-h2020.eu/ontology/platformA"); //Read from RDF what kind of model is being used, insert it here
-        PIMInstanceDescription pimInstance = RDFReader.readPlatformInstance(request);
-        result.setObjectDescription(pimInstance);
+
+        try {
+            PIMInstanceDescription pimInstance = RDFReader.readPlatformInstance(request);
+            result.setSuccess(true);
+            result.setMessage("Validation successful");
+            result.setModelValidatedAgainst(""); //Read from RDF what kind of model is being used, insert it here
+            result.setObjectDescription(pimInstance);
+        } catch (RDFParsingError rdfParsingError) {
+            rdfParsingError.printStackTrace();
+        }
+
 
         return result;
     }
@@ -224,12 +230,19 @@ public class SemanticManager {
         ResourceInstanceValidationResult result = new ResourceInstanceValidationResult();
         result.setModelValidated(rdfInfo.getRdf());
 
-        //TODO change with proper implementation
-        result.setSuccess(true);
-        result.setMessage("Validation successful");
-        result.setModelValidatedAgainst("http://www.symbiote-h2020.eu/ontology/platforms/1111"); //TODO Set URI of the platform instance this resources are being registered to
 
-        List<CoreResource> resources = RDFReader.readResourceInstances(rdfInfo, request.getPlatformId());
+        List<CoreResource> resources = null;
+        try {
+            resources = RDFReader.readResourceInstances(rdfInfo, request.getPlatformId());
+            result.setSuccess(true);
+            result.setMessage("Validation successful");
+            result.setModelValidatedAgainst("");
+        } catch (RDFParsingError rdfParsingError) {
+            rdfParsingError.printStackTrace();
+            result.setSuccess(false);
+            result.setMessage("Validation failed: " + rdfParsingError.getMessage());
+            result.setModelValidatedAgainst("");
+        }
 
         result.setObjectDescription(resources);
 

@@ -1,0 +1,40 @@
+{
+  "@graph" : [ {
+    "@id" : "_:b0",
+    "id" : "BIM"
+  }, {
+    "@id" : "http://www.symbiote-h2020.eu/ontology/platforms/Platform1",
+    "@type" : "http://www.w3.org/2002/07/owl#OntologyHelper",
+    "id" : "Platform1",
+    "hasService" : "http://www.symbiote-h2020.eu/ontology/platforms/Platform1/service/symbiote-h2020.eu/example/interworkingService",
+    "comment" : "This is platform 1",
+    "label" : "Platform 1"
+  }, {
+    "@id" : "http://www.symbiote-h2020.eu/ontology/platforms/Platform1/service/symbiote-h2020.eu/example/interworkingService",
+    "@type" : "http://www.symbiote-h2020.eu/ontology/meta#InterworkingService",
+    "hasInformationModel" : "_:b0",
+    "hasURL" : "http://symbiote-h2020.eu/example/interworkingService"
+  } ],
+  "@context" : {
+    "hasURL" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/meta#hasURL"
+    },
+    "hasInformationModel" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/meta#hasInformationModel",
+      "@type" : "@id"
+    },
+    "hasService" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/meta#hasService",
+      "@type" : "@id"
+    },
+    "label" : {
+      "@id" : "http://www.w3.org/2000/01/rdf-schema#label"
+    },
+    "comment" : {
+      "@id" : "http://www.w3.org/2000/01/rdf-schema#comment"
+    },
+    "id" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#id"
+    }
+  }
+}

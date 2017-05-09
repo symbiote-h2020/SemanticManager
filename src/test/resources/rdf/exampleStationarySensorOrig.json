@@ -1,0 +1,62 @@
+{
+  "@graph" : [ {
+    "@id" : "_:b0",
+    "@type" : "http://www.symbiote-h2020.eu/ontology/core#FeatureOfInterest",
+    "hasProperty" : "http://purl.oclc.org/NET/ssnx/qu/quantity#temperature",
+    "comment" : "This is room 1",
+    "label" : "Room1"
+  }, {
+    "@id" : "_:b1",
+    "@type" : [ "http://www.symbiote-h2020.eu/ontology/core#WGS84Location", "http://www.symbiote-h2020.eu/ontology/core#Location" ],
+    "comment" : "This is paris",
+    "label" : "Paris",
+    "alt" : "15.0",
+    "lat" : "48.864716",
+    "long" : "2.349014"
+  }, {
+    "@id" : "http://www.symbiote-h2020.eu/ontology/resources/stationary1",
+    "@type" : [ "http://www.symbiote-h2020.eu/ontology/core#StationarySensor", "http://www.symbiote-h2020.eu/ontology/core#Resource" ],
+    "hasFeatureOfInterest" : "_:b0",
+    "id" : "stationary1",
+    "locatedAt" : "_:b1",
+    "observes" : [ "http://purl.oclc.org/NET/ssnx/qu/quantity#humidity", "http://purl.oclc.org/NET/ssnx/qu/quantity#temperature" ],
+    "comment" : "This is stationary 1",
+    "label" : "Stationary 1"
+  } ],
+  "@context" : {
+    "hasProperty" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#hasProperty",
+      "@type" : "@id"
+    },
+    "comment" : {
+      "@id" : "http://www.w3.org/2000/01/rdf-schema#comment"
+    },
+    "label" : {
+      "@id" : "http://www.w3.org/2000/01/rdf-schema#label"
+    },
+    "hasFeatureOfInterest" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#hasFeatureOfInterest",
+      "@type" : "@id"
+    },
+    "locatedAt" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#locatedAt",
+      "@type" : "@id"
+    },
+    "observes" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#observes",
+      "@type" : "@id"
+    },
+    "id" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#id"
+    },
+    "alt" : {
+      "@id" : "http://www.w3.org/2003/01/geo/wgs84_pos#alt"
+    },
+    "long" : {
+      "@id" : "http://www.w3.org/2003/01/geo/wgs84_pos#long"
+    },
+    "lat" : {
+      "@id" : "http://www.w3.org/2003/01/geo/wgs84_pos#lat"
+    }
+  }
+}

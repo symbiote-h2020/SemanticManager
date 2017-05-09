@@ -31,6 +31,10 @@ public class MetaInformationModel {
 
     public static final Property MIM_HASINFORMATIONMODEL;
 
+    public static final Property MIM_HASRESOURCE;
+
+    public static final Property MIM_PLATFORM;
+
     public static final Property CIM_HASID;
 
     public static final Property MIM_HASURL;
@@ -45,6 +49,8 @@ public class MetaInformationModel {
         MIM_HASNAME = m.createProperty( MIM_PREFIX + "hasName");
         MIM_HASSERVICE = m.createProperty( MIM_PREFIX + "hasService");
         MIM_HASINFORMATIONMODEL = m.createProperty( MIM_PREFIX + "hasInformationModel");
+        MIM_HASRESOURCE = m.createProperty( MIM_PREFIX + "hasResource");
+        MIM_PLATFORM = m.createProperty( MIM_PREFIX + "Platform");
         CIM_HASID = m.createProperty( CIM_PREFIX + "id");
         MIM_HASURL = m.createProperty( MIM_PREFIX + "hasURL");
         MIM_INTERWORKINGSERVICE = m.createProperty( MIM_PREFIX + "InterworkingService");

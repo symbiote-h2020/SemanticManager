@@ -1,0 +1,28 @@
+@prefix : <http://www.symbiote-h2020.eu/ontology/resources/stationary1#> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix cim: <http://www.symbiote-h2020.eu/ontology/core#> .
+@prefix mim: <http://www.symbiote-h2020.eu/ontology/meta#> .
+
+<http://www.symbiote-h2020.eu/ontology/platforms/1>
+        a       <http://www.symbiote-h2020.eu/ontology/meta#Platform> , <http://www.w3.org/2002/07/owl#Ontology> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "Platform A" ;
+        <http://www.symbiote-h2020.eu/ontology/core#id>
+                "1" ;
+        <http://www.symbiote-h2020.eu/ontology/meta#hasDescription>
+                "Test platform A" ;
+        <http://www.symbiote-h2020.eu/ontology/meta#hasService>
+                <http://www.symbiote-h2020.eu/ontology/platforms/1/service/somehost1.com/resourceAccessProxy> .
+
+<http://www.symbiote-h2020.eu/ontology/platforms/1/service/somehost1.com/resourceAccessProxy>
+        a       <http://www.symbiote-h2020.eu/ontology/meta#InterworkingService> ;
+        <http://www.symbiote-h2020.eu/ontology/meta#hasInformationModel>
+                [ <http://www.symbiote-h2020.eu/ontology/core#id>
+                          "11" ] ;
+        <http://www.symbiote-h2020.eu/ontology/meta#hasURL>
+                "http://somehost1.com/resourceAccessProxy" .
