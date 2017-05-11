@@ -3,6 +3,7 @@ package eu.h2020.symbiote.ontology.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.QueueingConsumer;
 import eu.h2020.symbiote.core.ci.SparqlQueryOutputFormat;
 import eu.h2020.symbiote.core.internal.CoreSparqlQueryRequest;
@@ -33,18 +34,23 @@ public class LocationFinder {
 
     private final String sparqlBindingKey;
 
-    private final Channel channel;
+    private Channel channel;
 
-    public LocationFinder(String resourceExchange, String sparqlBindingKey, Channel channel ) {
+    public LocationFinder(String resourceExchange, String sparqlBindingKey, Connection connection ) {
         this.resourceExchange = resourceExchange;
         this.sparqlBindingKey = sparqlBindingKey;
-        this.channel = channel;
+        try {
+            channel = connection.createChannel();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
-    public static LocationFinder getSingleton(String resourceExchange, String sparqlBindingKey, Channel channel) {
+    public static LocationFinder getSingleton(String resourceExchange, String sparqlBindingKey, Connection connection) {
         synchronized( LocationFinder.class ) {
             if( singleton == null ) {
-                singleton = new LocationFinder(resourceExchange, sparqlBindingKey, channel);
+                singleton = new LocationFinder(resourceExchange, sparqlBindingKey, connection);
             }
             return singleton;
         }

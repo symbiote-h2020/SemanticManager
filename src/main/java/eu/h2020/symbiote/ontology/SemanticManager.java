@@ -129,7 +129,6 @@ public class SemanticManager {
 
         result.setModelValidated(request.getRdf());
 
-
         try {
             PIMInstanceDescription pimInstance = RDFReader.readPlatformInstance(request);
             result.setSuccess(true);
@@ -138,8 +137,11 @@ public class SemanticManager {
             result.setObjectDescription(pimInstance);
         } catch (RDFParsingError rdfParsingError) {
             rdfParsingError.printStackTrace();
+            result.setSuccess(false);
+            result.setMessage("Validation failed. Detailed message: " + rdfParsingError.getMessage());
+            result.setModelValidatedAgainst(""); //Read from RDF what kind of model is being used, insert it here
+            result.setObjectDescription(null);
         }
-
 
         return result;
     }

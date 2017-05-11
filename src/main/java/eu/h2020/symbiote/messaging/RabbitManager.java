@@ -153,7 +153,7 @@ public class RabbitManager {
                     this.resourceExchangeInternal,
                     null);
 
-            LocationFinder.getSingleton(this.resourceExchangeName, this.resourceSparqlSearchRequestedRoutingKey, channel);
+            LocationFinder.getSingleton(this.resourceExchangeName, this.resourceSparqlSearchRequestedRoutingKey, this.connection);
 
             startConsumers();
             //message retrieval
