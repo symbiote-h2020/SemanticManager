@@ -8,6 +8,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
+import eu.h2020.symbiote.core.model.Platform;
 import eu.h2020.symbiote.messaging.RabbitManager;
 import eu.h2020.symbiote.ontology.SemanticManager;
 import org.apache.commons.logging.Log;
@@ -56,9 +57,26 @@ public class RegisterPIMInstanceConsumer extends DefaultConsumer {
         log.debug( "Consume register PIM meta model message: " + msg );
 
         //Try to parse the message
+        //TODO move as a new code - for now it is back to old Platform description
+//        try {
+//            ObjectMapper mapper = new ObjectMapper();
+//            PIMInstanceDescription registerRequest = mapper.readValue(msg, PIMInstanceDescription.class);
+//
+//            SemanticManager.getManager().registerNewPIMInstanceModel(registerRequest);
+//
+//            getChannel().basicAck(envelope.getDeliveryTag(),false);
+//
+//        } catch( JsonParseException | JsonMappingException e ) {
+//            log.error("Error occurred when registering new PIM meta model: " + msg, e);
+//        } catch( IOException e ) {
+//            log.error("I/O Exception occurred when parsing PIM meta model object" , e);
+//        } catch( Exception e ) {
+//            log.error("Generic error ocurred when handling delivery" , e);
+//        }
+
         try {
             ObjectMapper mapper = new ObjectMapper();
-            PIMInstanceDescription registerRequest = mapper.readValue(msg, PIMInstanceDescription.class);
+            Platform registerRequest = mapper.readValue(msg, Platform.class);
 
             SemanticManager.getManager().registerNewPIMInstanceModel(registerRequest);
 

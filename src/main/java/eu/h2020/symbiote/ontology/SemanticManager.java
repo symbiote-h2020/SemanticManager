@@ -7,6 +7,7 @@ import eu.h2020.symbiote.core.internal.CoreResourceRegistryRequest;
 import eu.h2020.symbiote.core.internal.DescriptionType;
 import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
 import eu.h2020.symbiote.core.internal.PIMMetaModelDescription;
+import eu.h2020.symbiote.core.model.Platform;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.core.model.internal.CoreResource;
@@ -146,24 +147,48 @@ public class SemanticManager {
         return result;
     }
 
-    /**
-     * Registers new PIM instance model in rdf store of Semantic Manager.This model is gonna be used to validate resources being registered for the platform.
-     *
-     * @param pimInstanceModel Information about platform, including RDF representing the platform.
-     */
-    public void registerNewPIMInstanceModel(PIMInstanceDescription pimInstanceModel) {
+//    /**
+//     * Registers new PIM instance model in rdf store of Semantic Manager.This model is gonna be used to validate resources being registered for the platform.
+//     *
+//     * @param pimInstanceModel Information about platform, including RDF representing the platform.
+//     */
+//    public void registerNewPIMInstanceModel(PIMInstanceDescription pimInstanceModel) {
+//        log.info("Registering new PIM instance " + pimInstanceModel.toString());
+//        String pimLabel = pimInstanceModel.getLabels() != null && pimInstanceModel.getLabels().size() > 1 ? pimInstanceModel.getLabels().get(0) : null;
+//        if (pimLabel != null) {
+//            log.info("Registering new PIM instance " + pimLabel);
+//            if (pimInstanceModel.getRdf() != null && pimInstanceModel.getRdf().trim().length() > 0 && pimInstanceModel.getRdfFormat() != null) {
+//                Model model = ModelFactory.createDefaultModel();
+//                try( StringReader reader = new StringReader( pimInstanceModel.getRdf() ) ) {
+//                    model.read(reader, null, pimInstanceModel.getRdfFormat().toString());
+//                }
+//            } else {
+//                log.error("Could not register PIM instance with empty ");
+//            }
+//        } else {
+//            log.error("Could not find platform's label");
+//        }
+//    }
+
+
+     /** Registers new PIM instance model in rdf store of Semantic Manager.This model is gonna be used to validate resources being registered for the platform.
+            *
+            * @param pimInstanceModel Information about platform, including RDF representing the platform.
+            */
+    public void registerNewPIMInstanceModel(Platform pimInstanceModel) {
         log.info("Registering new PIM instance " + pimInstanceModel.toString());
-        String pimLabel = pimInstanceModel.getLabels() != null && pimInstanceModel.getLabels().size() > 1 ? pimInstanceModel.getLabels().get(0) : null;
+        String pimLabel = pimInstanceModel.getName();
         if (pimLabel != null) {
-            log.info("Registering new PIM instance " + pimLabel);
-            if (pimInstanceModel.getRdf() != null && pimInstanceModel.getRdf().trim().length() > 0 && pimInstanceModel.getRdfFormat() != null) {
-                Model model = ModelFactory.createDefaultModel();
-                try( StringReader reader = new StringReader( pimInstanceModel.getRdf() ) ) {
-                    model.read(reader, null, pimInstanceModel.getRdfFormat().toString());
-                }
-            } else {
-                log.error("Could not register PIM instance with empty ");
-            }
+            log.info("[NYI] Model for platform " + pimLabel + " will be implemented in R3");
+//            log.info("Registering new PIM instance " + pimLabel);
+//            if (pimInstanceModel.getRdf() != null && pimInstanceModel.getRdf().trim().length() > 0 && pimInstanceModel.getRdfFormat() != null) {
+//                Model model = ModelFactory.createDefaultModel();
+//                try( StringReader reader = new StringReader( pimInstanceModel.getRdf() ) ) {
+//                    model.read(reader, null, pimInstanceModel.getRdfFormat().toString());
+//                }
+//            } else {
+//                log.error("Could not register PIM instance with empty ");
+//            }
         } else {
             log.error("Could not find platform's label");
         }
