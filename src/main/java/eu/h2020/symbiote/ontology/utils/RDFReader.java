@@ -109,6 +109,9 @@ public class RDFReader {
      */
     public static List<CoreResource> readResourceInstances( RDFInfo rdfInfo, String platformId ) throws RDFParsingError, JenaException {
         List<CoreResource> resources = new ArrayList<>();
+
+        StringBuilder errorMessages = new StringBuilder();
+
         //TODO check if rdf is not null/empty
         if( rdfInfo == null || rdfInfo.getRdf() == null || rdfInfo.getRdfFormat() == null) {
             throw new RDFParsingError( "" );
@@ -155,7 +158,9 @@ public class RDFReader {
             StmtIterator searchForResourcesInServices = model.listStatements(null, MetaInformationModel.MIM_HASRESOURCE, res );
             if( !searchForResourcesInServices.hasNext() ) {
                 //Just for logging
-                log.debug("Could not find interworking service that has resource: " + res.getURI() );
+                String msg = "Could not find interworking service that has resource: " + res.getURI();
+                log.debug( msg );
+                errorMessages.append( msg );
             }
             while( searchForResourcesInServices.hasNext() ) {
 
@@ -173,6 +178,11 @@ public class RDFReader {
                 }
             }
         }
+        if( resources.size() == 0 ) {
+            String finalMessage = errorMessages.toString();
+            throw new RDFParsingError("RDF Parser read 0 resources from the specified RDF. " + (finalMessage.isEmpty()?"":"Additional info: " + finalMessage
+             ));
+        }
 
         return resources;
     }
@@ -188,6 +198,7 @@ public class RDFReader {
         } else {
             resourceId = String.valueOf(ObjectId.get());
             log.debug("Created id of the resource: " + resourceId);
+            model.add(resourceRes, MetaInformationModel.CIM_HASID, resourceId);
         }
         resource.setId(resourceId);
 

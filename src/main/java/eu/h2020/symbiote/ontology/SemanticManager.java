@@ -261,9 +261,15 @@ public class SemanticManager {
         List<CoreResource> resources = null;
         try {
             resources = RDFReader.readResourceInstances(rdfInfo, request.getPlatformId());
-            result.setSuccess(true);
-            result.setMessage("Validation successful");
-            result.setModelValidatedAgainst("");
+            if (resources != null && resources.size() > 0) {
+                result.setSuccess(true);
+                result.setMessage("Validation successful");
+                result.setModelValidatedAgainst("");
+            } else {
+                result.setSuccess(false);
+                result.setMessage("RDF does not contain any resource information");
+                result.setModelValidatedAgainst("");
+            }
         } catch (RDFParsingError rdfParsingError) {
             rdfParsingError.printStackTrace();
             result.setSuccess(false);

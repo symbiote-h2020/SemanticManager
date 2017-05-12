@@ -62,9 +62,17 @@ public class ValidateResourcesInstanceConsumer extends DefaultConsumer {
             ObjectMapper mapper = new ObjectMapper();
             CoreResourceRegistryRequest validateRequest = mapper.readValue(msg, CoreResourceRegistryRequest.class);
 
-            ResourceInstanceValidationResult response = SemanticManager.getManager().validateResourcesInstance(validateRequest);
-            //Send the response back to the client
-            log.debug( "Validation status: " + response.isSuccess() + ", message: " + response.getMessage());
+            ResourceInstanceValidationResult response = null;
+            try {
+                response = SemanticManager.getManager().validateResourcesInstance(validateRequest);
+                //Send the response back to the client
+                log.debug("Validation status: " + response.isSuccess() + ", message: " + response.getMessage());
+            } catch( Exception e ) {
+                log.error( "Error occurred during validating resources " + e.getMessage(), e );
+                response = new ResourceInstanceValidationResult();
+                response.setSuccess(false);
+                response.setMessage( "Error occurred during validating resources " + e.getMessage() );
+            }
 
             byte[] responseBytes = mapper.writeValueAsBytes(response!=null?response:"[]");
 

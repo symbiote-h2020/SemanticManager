@@ -36,7 +36,7 @@ public class LocationFinder {
 
     private Channel channel;
 
-    public LocationFinder(String resourceExchange, String sparqlBindingKey, Connection connection ) {
+    private LocationFinder(String resourceExchange, String sparqlBindingKey, Connection connection ) {
         this.resourceExchange = resourceExchange;
         this.sparqlBindingKey = sparqlBindingKey;
         try {
