@@ -35,11 +35,14 @@ public class LocationFinder {
 
     private Channel channel;
 
+    private String durableResponseQueueName;
+
     private LocationFinder(String resourceExchange, String sparqlBindingKey, Connection connection ) {
         this.resourceExchange = resourceExchange;
         this.sparqlBindingKey = sparqlBindingKey;
         try {
             channel = connection.createChannel();
+            this.durableResponseQueueName = this.channel.queueDeclare("symbIoTe-SemanticManager-searchLocationLookup",true,true,false,null).getQueue();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -170,8 +173,6 @@ public class LocationFinder {
         try {
             log.info("Sending RPC message: " + message);
 
-            String replyQueueName = this.channel.queueDeclare().getQueue();
-
             String correlationId = UUID.randomUUID().toString();
 
             Map<String, Object> headers = new HashMap<>();
@@ -181,7 +182,7 @@ public class LocationFinder {
             AMQP.BasicProperties props = new AMQP.BasicProperties()
                     .builder()
                     .correlationId(correlationId)
-                    .replyTo(replyQueueName)
+                    .replyTo(durableResponseQueueName)
                     .contentType("application/json")
                     .headers(headers)
                     .build();
@@ -204,9 +205,7 @@ public class LocationFinder {
                 }
             };
 
-            this.channel.basicConsume(replyQueueName, true, consumer);
-
-            String responseMsg = response.take();
+            this.channel.basicConsume(durableResponseQueueName, true, consumer);
 
             this.channel.basicPublish(exchangeName, routingKey, props, message.getBytes());
 //            while (true) {
@@ -223,6 +222,7 @@ public class LocationFinder {
 //                }
 //            }
 
+            String responseMsg = response.take();
             log.info("Response received: " + responseMsg);
             return responseMsg;
         } catch (IOException | InterruptedException e) {
