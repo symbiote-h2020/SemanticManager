@@ -2,6 +2,7 @@ package eu.h2020.symbiote.ontology.utils;
 
 import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
 import eu.h2020.symbiote.core.model.InterworkingService;
+import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.core.model.internal.CoreResource;
 import eu.h2020.symbiote.ontology.errors.RDFParsingError;
@@ -12,7 +13,9 @@ import org.apache.jena.shared.JenaException;
 import org.apache.jena.vocabulary.RDF;
 import org.bson.types.ObjectId;
 
+import java.io.IOException;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.*;
 
 /**
@@ -230,7 +233,13 @@ public class RDFReader {
             throw new RDFParsingError("Could not create Core Resource for null or empty service URL");
         }
         resource.setInterworkingServiceURL(serviceURL);
-        resource.setRdf(rdfInfo.getRdf());
+        try (StringWriter writer = new StringWriter() ) {
+            model.write(writer, rdfInfo.getRdfFormat().toString());
+            resource.setRdf(writer.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         resource.setRdfFormat(rdfInfo.getRdfFormat());
         return resource;
     }
