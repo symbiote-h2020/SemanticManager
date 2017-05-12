@@ -1,10 +1,7 @@
 package eu.h2020.symbiote.ontology.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rabbitmq.client.AMQP;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.QueueingConsumer;
+import com.rabbitmq.client.*;
 import eu.h2020.symbiote.core.ci.SparqlQueryOutputFormat;
 import eu.h2020.symbiote.core.internal.CoreSparqlQueryRequest;
 import eu.h2020.symbiote.core.model.Location;
@@ -18,6 +15,8 @@ import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * Utility class for finding existing locations to reuse the URIs
@@ -187,25 +186,42 @@ public class LocationFinder {
                     .headers(headers)
                     .build();
 
-            QueueingConsumer consumer = new QueueingConsumer(channel);
+            final BlockingQueue<String> response = new ArrayBlockingQueue<String>(1);
+
+            DefaultConsumer consumer = new DefaultConsumer(channel) {
+                @Override
+                public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
+                    if (properties.getCorrelationId().equals(correlationId)) {
+                        log.debug("Got reply with correlationId: " + correlationId);
+//                        responseMsg = new String(delivery.getBody());
+                        response.offer(new String(body, "UTF-8"));
+//                        getChannel().basicAck(envelope.getDeliveryTag(),false);
+                        getChannel().basicCancel(this.getConsumerTag());
+
+                    } else {
+                        log.debug("Got answer with wrong correlationId... should be " + correlationId + " but got " + properties.getCorrelationId() );
+                    }
+                }
+            };
+
             this.channel.basicConsume(replyQueueName, true, consumer);
 
-            String responseMsg = null;
+            String responseMsg = response.take();
 
             this.channel.basicPublish(exchangeName, routingKey, props, message.getBytes());
-            while (true) {
-                QueueingConsumer.Delivery delivery = consumer.nextDelivery(20000);
-                if (delivery == null) {
-                    log.info("Timeout in response retrieval");
-                    return null;
-                }
-
-                if (delivery.getProperties().getCorrelationId().equals(correlationId)) {
-                    log.info("Wrong correlationID in response message");
-                    responseMsg = new String(delivery.getBody());
-                    break;
-                }
-            }
+//            while (true) {
+//                QueueingConsumer.Delivery delivery = consumer.nextDelivery(20000);
+//                if (delivery == null) {
+//                    log.info("Timeout in response retrieval");
+//                    return null;
+//                }
+//
+//                if (delivery.getProperties().getCorrelationId().equals(correlationId)) {
+//                    log.info("Wrong correlationID in response message");
+//                    responseMsg = new String(delivery.getBody());
+//                    break;
+//                }
+//            }
 
             log.info("Response received: " + responseMsg);
             return responseMsg;
