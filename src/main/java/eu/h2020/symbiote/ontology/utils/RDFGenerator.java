@@ -78,7 +78,9 @@ public class RDFGenerator {
             addLocationToModelResource(model, modelResource, locatedAt,platformId);
             addFoiToModelResource(model, modelResource, featureOfInterest);
         }
-        if (resource instanceof Service) {
+        if (resource instanceof ActuatingService) {
+            addActuatingServiceToModelResource(model, modelResource, (ActuatingService) resource);
+        } else if (resource instanceof Service) {
             modelResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_SERVICE);
             //Add name, output parameter and input parameters
             String name = ((Service) resource).getName();
@@ -93,9 +95,7 @@ public class RDFGenerator {
             addInputParametersToModelResource(model, modelResource, inputParameters);
 
         }
-        if (resource instanceof ActuatingService) {
-            addActuatingServiceToModelResource(model, modelResource, (ActuatingService) resource);
-        }
+
         if (resource instanceof Actuator) {
             modelResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_ACTUATOR);
             //Add location and capabilities, ie actuating services connected with this actuator
