@@ -131,7 +131,7 @@ public class RabbitManager {
 
         try {
             ConnectionFactory factory = new ConnectionFactory();
-//            factory.setHost("127.0.0.1"); //todo value from properties
+
             factory.setHost(this.rabbitHost);
             factory.setUsername(this.rabbitUsername);
             factory.setPassword(this.rabbitPassword);
@@ -156,10 +156,6 @@ public class RabbitManager {
             LocationFinder.getSingleton(this.resourceExchangeName, this.resourceSparqlSearchRequestedRoutingKey, this.connection);
 
             startConsumers();
-            //message retrieval
-            //receiveMessages();
-
-            // message to Search Service
 
         } catch (IOException e) {
             e.printStackTrace();

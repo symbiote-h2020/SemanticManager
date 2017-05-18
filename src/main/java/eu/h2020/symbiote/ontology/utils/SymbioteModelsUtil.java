@@ -29,7 +29,7 @@ public class SymbioteModelsUtil {
     private static final String CIM_FILE = "/core-v0.6.owl";
     private static final String CIM_BASE_NAME = "http://www.symbiote-h2020.eu/ontology/core#";
     private static final String BIM_FILE = "/bim-0.3.owl";
-    private static final String BIM_BASE_NAME = "http://www.symbiote-h2020.eu/ontology/bim#";
+    private static final String BIM_BASE_NAME = "http://www.symbiote-h2020.eu/ontology/bim/property#";
     private static final String MIM_FILE = "/meta-v0.3.owl";
     private static final String MIM_BASE_NAME = "http://www.symbiote-h2020.eu/ontology/meta#";
     private static final String QU_FILE = "/qu-rec20.owl";

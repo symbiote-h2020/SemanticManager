@@ -67,7 +67,6 @@ public class SemanticManager {
      */
     private void init() {
         log.info("Initializing Semantic Manager");
-        //TODO initialize
     }
 
     /**
