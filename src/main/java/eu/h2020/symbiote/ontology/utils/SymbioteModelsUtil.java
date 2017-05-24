@@ -1,6 +1,8 @@
 package eu.h2020.symbiote.ontology.utils;
 
 import eu.h2020.symbiote.core.model.RDFFormat;
+import eu.h2020.symbiote.core.model.internal.CoreResourceType;
+import eu.h2020.symbiote.core.model.resources.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -141,6 +143,26 @@ public class SymbioteModelsUtil {
         dataset.getDefaultModel().add(model);
         dataset.commit();
         dataset.end();
+    }
+
+    public static CoreResourceType getTypeForResource(eu.h2020.symbiote.core.model.resources.Resource resource ) {
+        CoreResourceType type = null;
+        if( resource instanceof Actuator) {
+            type = CoreResourceType.ACTUATOR;
+        } else if( resource instanceof ActuatingService) {
+            type = CoreResourceType.ACTUATING_SERVICE;
+        } else if( resource instanceof Service) {
+            type = CoreResourceType.SERVICE;
+        } else if( resource instanceof MobileDevice) {
+            type = CoreResourceType.MOBILE_DEVICE;
+        } else if( resource instanceof MobileSensor) {
+            type = CoreResourceType.MOBILE_SENSOR;
+        } else if( resource instanceof StationaryDevice) {
+            type = CoreResourceType.STATIONARY_DEVICE;
+        } else if( resource instanceof StationarySensor) {
+            type = CoreResourceType.STATIONARY_SENSOR;
+        }
+        return type;
     }
 
 }

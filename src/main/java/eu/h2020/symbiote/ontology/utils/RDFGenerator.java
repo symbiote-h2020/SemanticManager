@@ -3,6 +3,8 @@ package eu.h2020.symbiote.ontology.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
 import eu.h2020.symbiote.core.model.*;
+import eu.h2020.symbiote.core.model.internal.CoreResource;
+import eu.h2020.symbiote.core.model.internal.CoreResourceType;
 import eu.h2020.symbiote.core.model.resources.*;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.errors.RDFGenerationError;
@@ -15,6 +17,7 @@ import org.bson.types.ObjectId;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,10 +36,11 @@ public class RDFGenerator {
      * @param platformId
      * @return String containing resource description in RDF.
      */
-    public static Model generateRDFForResource(Resource resource, String platformId) throws PropertyNotFoundException, RDFGenerationError {
+    public static GenerationResult generateRDFForResource(Resource resource, String platformId) throws PropertyNotFoundException, RDFGenerationError {
         log.debug("Generating model for resource " + resource.getId());
         // create an empty Model
         Model model = ModelFactory.createDefaultModel();
+        List<CoreResource> resources = new ArrayList<>();
 
         //Add general resource properties
         org.apache.jena.rdf.model.Resource modelResource = model.createResource(OntologyHelper.getResourceGraphURI(resource.getId()));
@@ -104,7 +108,10 @@ public class RDFGenerator {
 
 //            modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT,OntologyHelper.getLocationURI(platformId,locatedAt));
             addLocationToModelResource(model, modelResource, locatedAt,platformId);
-            addCapabilitiesToModelResource(model, modelResource, capabilities);
+            List<CoreResource> newRes = addCapabilitiesToModelResource(model, modelResource, capabilities);
+            log.debug("Found " + newRes.size() + " subresources (services) of actuator");
+            resources.addAll(newRes);
+
         }
         if (resource instanceof MobileDevice) {
             modelResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_ACTUATOR);
@@ -113,7 +120,9 @@ public class RDFGenerator {
             List<ActuatingService> capabilities = ((MobileDevice) resource).getCapabilities();
 
             addLocationToModelResource(model, modelResource, locatedAt,platformId);
-            addCapabilitiesToModelResource(model, modelResource, capabilities);
+            List<CoreResource> newRes = addCapabilitiesToModelResource(model, modelResource, capabilities);
+            log.debug("Found " + newRes.size() + " subresources (services) of actuator");
+            resources.addAll(newRes);
 
             //Add observed properties and location
             List<String> observesProperty = ((MobileDevice) resource).getObservesProperty();
@@ -132,7 +141,9 @@ public class RDFGenerator {
             List<ActuatingService> capabilities = ((StationaryDevice) resource).getCapabilities();
 
             addLocationToModelResource(model, modelResource, locatedAt,platformId);
-            addCapabilitiesToModelResource(model, modelResource, capabilities);
+            List<CoreResource> newRes = addCapabilitiesToModelResource(model, modelResource, capabilities);
+            log.debug("Found " + newRes.size() + " subresources (services) of actuator");
+            resources.addAll(newRes);
 
             //Add foi, observed properties and location
             FeatureOfInterest featureOfInterest = ((StationaryDevice) resource).getFeatureOfInterest();
@@ -149,10 +160,14 @@ public class RDFGenerator {
 
         StringWriter writer = new StringWriter();
         model.write(writer, RDFFormat.Turtle.toString());
-        String result = writer.toString();
-        log.debug("Generated following RDF: " + result);
+        String rdf = writer.toString();
+        log.debug("Generated following RDF: " + rdf);
 
-        return model;
+        GenerationResult result = new GenerationResult();
+        result.setModel(model);
+        result.setResources(resources);
+
+        return result;
     }
 
     private static void addInputParametersToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, List<InputParameter> inputParameters) {
@@ -263,7 +278,8 @@ public class RDFGenerator {
         }
     }
 
-    private static void addCapabilitiesToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, List<ActuatingService> actuatingServices) throws PropertyNotFoundException, RDFGenerationError {
+    private static List<CoreResource> addCapabilitiesToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, List<ActuatingService> actuatingServices) throws PropertyNotFoundException, RDFGenerationError {
+        List<CoreResource> services = new ArrayList<>();
         if (actuatingServices != null) {
             for (ActuatingService capability : actuatingServices) {
 
@@ -285,8 +301,17 @@ public class RDFGenerator {
 
                 addActuatingServiceToModelResource(model, capabilityResource, capability);
                 modelResource.addProperty(CoreInformationModel.CIM_HAS_CAPABILITY, capabilityResource);
+
+                CoreResource service = new CoreResource();
+                service.setType(CoreResourceType.ACTUATING_SERVICE);
+                service.setId(capability.getId());
+                service.setLabels(capability.getLabels());
+                service.setComments(capability.getComments());
+                service.setInterworkingServiceURL(capability.getInterworkingServiceURL());
+                services.add(service);
             }
         }
+        return services;
     }
 
 

@@ -11,12 +11,15 @@ import eu.h2020.symbiote.core.model.Platform;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.core.model.internal.CoreResource;
-import eu.h2020.symbiote.core.model.resources.Resource;
+import eu.h2020.symbiote.core.model.internal.CoreResourceType;
+import eu.h2020.symbiote.core.model.resources.*;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.errors.RDFGenerationError;
 import eu.h2020.symbiote.ontology.errors.RDFParsingError;
+import eu.h2020.symbiote.ontology.utils.GenerationResult;
 import eu.h2020.symbiote.ontology.utils.RDFGenerator;
 import eu.h2020.symbiote.ontology.utils.RDFReader;
+import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
 import eu.h2020.symbiote.ontology.validation.PIMInstanceValidationResult;
 import eu.h2020.symbiote.ontology.validation.PIMMetaModelValidationResult;
 import eu.h2020.symbiote.ontology.validation.ResourceInstanceValidationResult;
@@ -316,6 +319,7 @@ public class SemanticManager {
                     translatedResource.setLabels(resource.getLabels());
                     translatedResource.setComments(resource.getComments());
                     translatedResource.setInterworkingServiceURL(resource.getInterworkingServiceURL());
+                    translatedResource.setType(SymbioteModelsUtil.getTypeForResource(resource));
 
                     //TODO refactor generating IDs
                     if( resource.getId() == null || resource.getId().isEmpty() ) {
@@ -326,15 +330,22 @@ public class SemanticManager {
                     }
 
                     //Generate the rdf for the resource and save it into CoreResource
-                    Model rdf = RDFGenerator.generateRDFForResource(resource,request.getPlatformId());
-                    completeModel.add(rdf);
+                    GenerationResult generationResult = RDFGenerator.generateRDFForResource(resource,request.getPlatformId());
+                    completeModel.add(generationResult.getModel());
                     StringWriter stringWriter = new StringWriter();
-                    rdf.write(stringWriter, DEFAULT_RDF_FORMAT.toString());
+                    generationResult.getModel().write(stringWriter, DEFAULT_RDF_FORMAT.toString());
 
                     translatedResource.setRdf(stringWriter.toString());
                     translatedResource.setRdfFormat(DEFAULT_RDF_FORMAT);
 
+                    //Add rdfs to all subresources found during generation
+                    for( CoreResource subres: generationResult.getResources() ) {
+                        subres.setRdf(translatedResource.getRdf());
+                        subres.setRdfFormat(translatedResource.getRdfFormat());
+                    }
+
                     resourceList.add(translatedResource);
+                    resourceList.addAll(generationResult.getResources());
                 } catch ( IllegalArgumentException e ) {
                     log.error("Error occurred during verifying resource: " + resource.getLabels(), e);
                     success = false;

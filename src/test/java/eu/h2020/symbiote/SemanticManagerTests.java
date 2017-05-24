@@ -37,7 +37,7 @@ public class SemanticManagerTests {
         stationarySensor.setFeatureOfInterest(STATIONARY1_FOI);
         stationarySensor.setObservesProperty(STATIONARY1_PROPERTIES);
 
-        resourceValidateAndTranslate(stationarySensor);
+        resourceValidateAndTranslate(stationarySensor,1);
     }
 
     @Test
@@ -50,7 +50,7 @@ public class SemanticManagerTests {
         mobileSensor.setInterworkingServiceURL(MOBILE1_URL);
         mobileSensor.setObservesProperty(MOBILE1_PROPERTIES);
 
-        resourceValidateAndTranslate(mobileSensor);
+        resourceValidateAndTranslate(mobileSensor,1);
     }
 
     @Test
@@ -79,7 +79,7 @@ public class SemanticManagerTests {
         outputParameter.setArray(SERVICE1_OUTPUT_ARRAY);
         service.setOutputParameter(outputParameter);
 
-        resourceValidateAndTranslate(service);
+        resourceValidateAndTranslate(service,1);
     }
 
     @Test
@@ -110,7 +110,7 @@ public class SemanticManagerTests {
         outputParameter.setArray(ACTUATING_SERVICE1_OUTPUT_ARRAY);
         service.setOutputParameter(outputParameter);
 
-        resourceValidateAndTranslate(service);
+        resourceValidateAndTranslate(service,1);
     }
 
 
@@ -125,7 +125,7 @@ public class SemanticManagerTests {
 
         actuator.setCapabilities(ACTUATOR1_CAPABILITIES);
 
-        resourceValidateAndTranslate(actuator);
+        resourceValidateAndTranslate(actuator,2);
     }
 
     @Test
@@ -163,7 +163,7 @@ public class SemanticManagerTests {
 
         actuator.setCapabilities(Arrays.asList(service));
 
-        resourceValidateAndTranslate(actuator);
+        resourceValidateAndTranslate(actuator,2);
     }
 
     @Test
@@ -177,7 +177,7 @@ public class SemanticManagerTests {
         mobileDevice.setObservesProperty(MOBILEDEVICE1_PROPERTIES);
         mobileDevice.setCapabilities(MOBILEDEVICE1_CAPABILITIES);
 
-        resourceValidateAndTranslate(mobileDevice);
+        resourceValidateAndTranslate(mobileDevice,2);
     }
 
     @Test
@@ -192,7 +192,7 @@ public class SemanticManagerTests {
         stationaryDevice.setObservesProperty(STATIONARYDEVICE1_PROPERTIES);
         stationaryDevice.setCapabilities(STATIONARYDEVICE1_CAPABILITIES);
 
-        resourceValidateAndTranslate(stationaryDevice);
+        resourceValidateAndTranslate(stationaryDevice,2);
     }
 
     @Test
@@ -216,7 +216,7 @@ public class SemanticManagerTests {
 
     }
 
-    private void resourceValidateAndTranslate( Resource resource ) {
+    private void resourceValidateAndTranslate( Resource resource, int expectedSize ) {
         ObjectMapper mapper = new ObjectMapper();
         try {
             String resString = mapper.writeValueAsString(resource);
@@ -253,7 +253,7 @@ public class SemanticManagerTests {
 
         assertNotNull(validationResult);
         assertNotNull(validationResult.getObjectDescription());
-        assertEquals("Validation result should contain single resource", 1, validationResult.getObjectDescription().size());
+        assertEquals("Validation result should contain " + expectedSize + " resource", expectedSize, validationResult.getObjectDescription().size());
         CoreResource resultResource = validationResult.getObjectDescription().get(0);
         assertNotNull("Result should not be null", resultResource);
         if (resource.getId() != null) {

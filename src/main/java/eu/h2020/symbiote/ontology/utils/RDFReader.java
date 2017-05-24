@@ -192,6 +192,9 @@ public class RDFReader {
 
     private static CoreResource createCoreResource( RDFInfo rdfInfo, Model model, Resource resourceRes, String serviceURL) throws RDFParsingError {
         CoreResource resource = new CoreResource();
+
+        resource.setType(SymbioteModelsUtil.getTypeForResource(resource));
+
         StmtIterator idIterator = model.listStatements(resourceRes, MetaInformationModel.CIM_HASID, (RDFNode) null);
         String resourceId;
         if( idIterator.hasNext() ) {
