@@ -117,18 +117,19 @@ public class RDFReader {
 
         //TODO check if rdf is not null/empty
         if( rdfInfo == null || rdfInfo.getRdf() == null || rdfInfo.getRdfFormat() == null) {
-            throw new RDFParsingError( "" );
+            StringBuilder sb = new StringBuilder();
+            if (rdfInfo == null) sb.append("| rdfInfo is null |");
+            if (rdfInfo.getRdf() == null) sb.append("| rdf in rdfInfo is null |");
+            if (rdfInfo.getRdfFormat() == null ) sb.append( "| format of the rdf is null |");
+            throw new RDFParsingError( "Wrong rdf description was used: " + sb.toString() );
         }
         Model model = ModelFactory.createDefaultModel();
         try( StringReader reader = new StringReader( rdfInfo.getRdf() ) ) {
             model.read(reader, null, rdfInfo.getRdfFormat().toString());
         }
 
-//        InputStream stream = new ByteArrayInputStream(rdfInfo.getRdf().getBytes(StandardCharsets.UTF_8));
-//        model.read(stream,null,rdfInfo.getRdfFormat().toString());
 
         StmtIterator resourceIterator = model.listStatements(null,MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_RESOURCE);
-//        StmtIterator stmtIterator = model.listStatements();
         log.debug("Resources: ");
         List<Resource> rdfResources = new ArrayList<>();
         while( resourceIterator.hasNext()) {

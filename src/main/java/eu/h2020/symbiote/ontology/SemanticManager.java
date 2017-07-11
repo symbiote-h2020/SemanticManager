@@ -3,15 +3,11 @@ package eu.h2020.symbiote.ontology;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.h2020.symbiote.core.internal.CoreResourceRegistryRequest;
-import eu.h2020.symbiote.core.internal.DescriptionType;
-import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
-import eu.h2020.symbiote.core.internal.PIMMetaModelDescription;
+import eu.h2020.symbiote.core.internal.*;
 import eu.h2020.symbiote.core.model.Platform;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.core.model.internal.CoreResource;
-import eu.h2020.symbiote.core.model.internal.CoreResourceType;
 import eu.h2020.symbiote.core.model.resources.*;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.errors.RDFGenerationError;
@@ -20,9 +16,6 @@ import eu.h2020.symbiote.ontology.utils.GenerationResult;
 import eu.h2020.symbiote.ontology.utils.RDFGenerator;
 import eu.h2020.symbiote.ontology.utils.RDFReader;
 import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
-import eu.h2020.symbiote.ontology.validation.PIMInstanceValidationResult;
-import eu.h2020.symbiote.ontology.validation.PIMMetaModelValidationResult;
-import eu.h2020.symbiote.ontology.validation.ResourceInstanceValidationResult;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jena.rdf.model.Model;
@@ -75,7 +68,7 @@ public class SemanticManager {
     /**
      * Validates PIM meta model against symbIoTe core models: CIM & MIM.
      * <p>
-     * Returns object representing validation result as well as POJO representing basic PIM meta model information.
+     * Returns object representing validation result as well as POJO representing basic info about PIM meta model.
      *
      * @param request Request containing RDF.
      * @return result of the meta model validation.
@@ -84,15 +77,14 @@ public class SemanticManager {
         log.info("Validating PIM meta model " + request.getRdf().substring(0, 30) + " ... ");
         PIMMetaModelValidationResult result = new PIMMetaModelValidationResult();
 
-        result.setModelValidated(request.getRdf());
-
         //TODO change with proper implementation
         result.setSuccess(true);
         result.setMessage("Validation successful");
         result.setModelValidatedAgainst("http://www.symbiote-h2020.eu/ontology/core");
+        result.setModelValidated("http://www.symbiote-h2020.eu/ontology/myModel1"); //URI of the model validated
         PIMMetaModelDescription modelInfo = new PIMMetaModelDescription();
-        modelInfo.setUri("http://www.symbiote-h2020.eu/ontology/platforms/1111");
-        modelInfo.setRdf(request.getRdf());
+        modelInfo.setUri("http://www.symbiote-h2020.eu/ontology/myModel1");
+        modelInfo.setRdf(request.getRdf()); //Original one or modified one if there is some updates needed (unique id?)
         modelInfo.setRdfFormat(request.getRdfFormat());
 
         result.setObjectDescription(modelInfo);
@@ -114,7 +106,7 @@ public class SemanticManager {
         try( StringReader reader = new StringReader( pimMetaModel.getRdf() ) ) {
             model.read(reader, null, pimMetaModel.getRdfFormat().toString());
         }
-        //TODO save meta model in rdf store
+        //TODO save meta model in rdf store see jira SYM-339
 
     }
 
@@ -126,27 +118,31 @@ public class SemanticManager {
      * @param request Request containing RDF to be validated
      * @return Validation result as well as POJO representing the platform which was validated.
      */
+    @Deprecated
     public PIMInstanceValidationResult validatePIMInstance(RDFInfo request) {
-        log.info("Validating PIM instance " + request.getRdf().substring(0, 30) + " ... ");
-        PIMInstanceValidationResult result = new PIMInstanceValidationResult();
+        // NOT USED ANYMORE - just PIM meta model is validated (it contains also "PIM instance" part)
+        return null;
 
-        result.setModelValidated(request.getRdf());
-
-        try {
-            PIMInstanceDescription pimInstance = RDFReader.readPlatformInstance(request);
-            result.setSuccess(true);
-            result.setMessage("Validation successful");
-            result.setModelValidatedAgainst(""); //Read from RDF what kind of model is being used, insert it here
-            result.setObjectDescription(pimInstance);
-        } catch (RDFParsingError rdfParsingError) {
-            rdfParsingError.printStackTrace();
-            result.setSuccess(false);
-            result.setMessage("Validation failed. Detailed message: " + rdfParsingError.getMessage());
-            result.setModelValidatedAgainst(""); //Read from RDF what kind of model is being used, insert it here
-            result.setObjectDescription(null);
-        }
-
-        return result;
+//        log.info("Validating PIM instance " + request.getRdf().substring(0, 30) + " ... ");
+//        PIMInstanceValidationResult result = new PIMInstanceValidationResult();
+//
+//        result.setModelValidated(request.getRdf());
+//
+//        try {
+//            PIMInstanceDescription pimInstance = RDFReader.readPlatformInstance(request);
+//            result.setSuccess(true);
+//            result.setMessage("Validation successful");
+//            result.setModelValidatedAgainst(""); //Read from RDF what kind of model is being used, insert it here
+//            result.setObjectDescription(pimInstance);
+//        } catch (RDFParsingError rdfParsingError) {
+//            rdfParsingError.printStackTrace();
+//            result.setSuccess(false);
+//            result.setMessage("Validation failed. Detailed message: " + rdfParsingError.getMessage());
+//            result.setModelValidatedAgainst(""); //Read from RDF what kind of model is being used, insert it here
+//            result.setObjectDescription(null);
+//        }
+//
+//        return result;
     }
 
 //    /**
@@ -238,12 +234,12 @@ public class SemanticManager {
     }
 
     /**
-     * Validates if the RDF passed as a parameter in the request is valid RDF representing a resource of the platform.
+     * Validates if the RDF passed as a parameter in the request is valid RDF representing resources of the platform.
      * Algorithm checks which PIM instance is being used by the RDF and validates against that model.
-     * Validation status, as well as information about the platform being validated, is returned.
+     * Validation status, as well as information about the resources read from the model, is returned.
      *
      * @param request Request containing RDF to be validated
-     * @return Validation result as well as POJO representing the platform which was validated.
+     * @return Validation result as well as list of resources which were found in the rdf model.
      */
     public ResourceInstanceValidationResult validateResourcesInstance(CoreResourceRegistryRequest request) throws IOException {
         log.info("Validating Resource instance ... ");
@@ -259,6 +255,7 @@ public class SemanticManager {
         ResourceInstanceValidationResult result = new ResourceInstanceValidationResult();
         result.setModelValidated(rdfInfo.getRdf());
 
+        //TODO perform general validation of the RDF
 
         List<CoreResource> resources = null;
         try {
