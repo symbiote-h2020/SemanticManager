@@ -16,9 +16,7 @@ import org.bson.types.ObjectId;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Helper class for generating RDF models from BIM objects.
@@ -40,7 +38,7 @@ public class RDFGenerator {
         log.debug("Generating model for resource " + resource.getId());
         // create an empty Model
         Model model = ModelFactory.createDefaultModel();
-        List<CoreResource> resources = new ArrayList<>();
+        Map<String,CoreResource> resources = new HashMap<>();
 
         //Add general resource properties
         org.apache.jena.rdf.model.Resource modelResource = model.createResource(OntologyHelper.getResourceGraphURI(resource.getId()));
@@ -108,9 +106,9 @@ public class RDFGenerator {
 
 //            modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT,OntologyHelper.getLocationURI(platformId,locatedAt));
             addLocationToModelResource(model, modelResource, locatedAt,platformId);
-            List<CoreResource> newRes = addCapabilitiesToModelResource(model, modelResource, capabilities);
+            Map<String,CoreResource> newRes = addCapabilitiesToModelResource(model, modelResource, capabilities);
             log.debug("Found " + newRes.size() + " subresources (services) of actuator");
-            resources.addAll(newRes);
+            resources.putAll(newRes);
 
         }
         if (resource instanceof MobileDevice) {
@@ -120,9 +118,9 @@ public class RDFGenerator {
             List<ActuatingService> capabilities = ((MobileDevice) resource).getCapabilities();
 
             addLocationToModelResource(model, modelResource, locatedAt,platformId);
-            List<CoreResource> newRes = addCapabilitiesToModelResource(model, modelResource, capabilities);
+            Map<String,CoreResource> newRes = addCapabilitiesToModelResource(model, modelResource, capabilities);
             log.debug("Found " + newRes.size() + " subresources (services) of actuator");
-            resources.addAll(newRes);
+            resources.putAll(newRes);
 
             //Add observed properties and location
             List<String> observesProperty = ((MobileDevice) resource).getObservesProperty();
@@ -141,9 +139,9 @@ public class RDFGenerator {
             List<ActuatingService> capabilities = ((StationaryDevice) resource).getCapabilities();
 
             addLocationToModelResource(model, modelResource, locatedAt,platformId);
-            List<CoreResource> newRes = addCapabilitiesToModelResource(model, modelResource, capabilities);
+            Map<String,CoreResource> newRes = addCapabilitiesToModelResource(model, modelResource, capabilities);
             log.debug("Found " + newRes.size() + " subresources (services) of actuator");
-            resources.addAll(newRes);
+            resources.putAll(newRes);
 
             //Add foi, observed properties and location
             FeatureOfInterest featureOfInterest = ((StationaryDevice) resource).getFeatureOfInterest();
@@ -278,8 +276,8 @@ public class RDFGenerator {
         }
     }
 
-    private static List<CoreResource> addCapabilitiesToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, List<ActuatingService> actuatingServices) throws PropertyNotFoundException, RDFGenerationError {
-        List<CoreResource> services = new ArrayList<>();
+    private static Map<String,CoreResource> addCapabilitiesToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, List<ActuatingService> actuatingServices) throws PropertyNotFoundException, RDFGenerationError {
+        Map<String,CoreResource> services = new HashMap<>();
         if (actuatingServices != null) {
             for (ActuatingService capability : actuatingServices) {
 
@@ -308,7 +306,7 @@ public class RDFGenerator {
                 service.setLabels(capability.getLabels());
                 service.setComments(capability.getComments());
                 service.setInterworkingServiceURL(capability.getInterworkingServiceURL());
-                services.add(service);
+                services.put(capability.getId(),service);
             }
         }
         return services;

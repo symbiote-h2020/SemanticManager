@@ -110,8 +110,8 @@ public class RDFReader {
      * @param rdfInfo RDF containing resources information.
      * @return Information about resources read from RDF.
      */
-    public static List<CoreResource> readResourceInstances( RDFInfo rdfInfo, String platformId ) throws RDFParsingError, JenaException {
-        List<CoreResource> resources = new ArrayList<>();
+    public static Map<String,CoreResource> readResourceInstances( RDFInfo rdfInfo, String platformId ) throws RDFParsingError, JenaException {
+        Map<String,CoreResource> resources = new HashMap<>();
 
         StringBuilder errorMessages = new StringBuilder();
 
@@ -175,8 +175,7 @@ public class RDFReader {
                 if( interworkingServices.containsKey(foundService.getURI()) ) {
                     log.debug("Found interworking service, creating a resource... ");
                     CoreResource coreResource = createCoreResource(rdfInfo, model, res, interworkingServices.get(foundService.getURI()));
-                    resources.add(coreResource);
-
+                    resources.put(res.getURI(),coreResource);
                 } else {
                     log.warn("Subject is not an interworking service: " + foundService.getURI());
                 }

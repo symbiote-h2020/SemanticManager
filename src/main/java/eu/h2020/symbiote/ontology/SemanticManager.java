@@ -26,7 +26,9 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Main class for handling validation and translation. All RDF-related tasks are redirected to this class for
@@ -257,7 +259,7 @@ public class SemanticManager {
 
         //TODO perform general validation of the RDF
 
-        List<CoreResource> resources = null;
+        Map<String,CoreResource> resources = null;
         try {
             resources = RDFReader.readResourceInstances(rdfInfo, request.getPlatformId());
             if (resources != null && resources.size() > 0) {
@@ -297,16 +299,18 @@ public class SemanticManager {
             boolean success = true;
             StringBuilder errorMessage = new StringBuilder();
 
-            List<CoreResource> resourceList = new ArrayList<>();
+            Map<String,CoreResource> resourceList = new HashMap<>();
             if( !request.getDescriptionType().equals(DescriptionType.BASIC) ) {
                 log.fatal("Validate and create should only be used by BASIC (JSON) type of description");
                 throw new IllegalArgumentException("Validate and create should only be used by BASIC (JSON) type of description");
             }
 
             ObjectMapper mapper = new ObjectMapper();
-            List<Resource> resources = null;
-            resources = mapper.readValue(request.getBody(), new TypeReference<List<Resource>>(){});
-            for (Resource resource : resources) {
+            Map<String,Resource> resources = null;
+            resources = mapper.readValue(request.getBody(), new TypeReference<Map<String,Resource>>(){});
+            for (String resourcePairingId : resources.keySet()) {
+                Resource resource = resources.get(resourcePairingId);
+
                 //Verify that instance translatedDescription has all fields to create RDF
                 try {
                     verifyCompleteBIMResourceDescription(resource);
@@ -336,13 +340,15 @@ public class SemanticManager {
                     translatedResource.setRdfFormat(DEFAULT_RDF_FORMAT);
 
                     //Add rdfs to all subresources found during generation
-                    for( CoreResource subres: generationResult.getResources() ) {
+                    for( String subresPairingId: generationResult.getResources().keySet() ) {
+                        CoreResource subres = generationResult.getResources().get(subresPairingId);
                         subres.setRdf(translatedResource.getRdf());
                         subres.setRdfFormat(translatedResource.getRdfFormat());
+                        resourceList.put(subresPairingId, subres);
                     }
 
-                    resourceList.add(translatedResource);
-                    resourceList.addAll(generationResult.getResources());
+                    resourceList.put(resourcePairingId,translatedResource);
+
                 } catch ( IllegalArgumentException e ) {
                     log.error("Error occurred during verifying resource: " + resource.getLabels(), e);
                     success = false;

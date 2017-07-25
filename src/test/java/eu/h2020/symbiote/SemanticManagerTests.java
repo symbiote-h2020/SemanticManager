@@ -13,7 +13,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 import static eu.h2020.symbiote.TestSetupConfig.*;
@@ -212,6 +214,7 @@ public class SemanticManagerTests {
     }
 
     private void resourceValidateAndTranslate( Resource resource, int expectedSize ) {
+        String resourcePairingId = "111";
         ObjectMapper mapper = new ObjectMapper();
         try {
             String resString = mapper.writeValueAsString(resource);
@@ -228,8 +231,10 @@ public class SemanticManagerTests {
         CoreResourceRegistryRequest request = new CoreResourceRegistryRequest();
         request.setPlatformId(PLATFORM_ID);
         try {
-            String resourcesJson = mapper.writerFor(new TypeReference<List<Resource>>() {
-            }).writeValueAsString(Arrays.asList(resource));
+            Map<String,Resource> map = new HashMap<>();
+            map.put(resourcePairingId,resource);
+            String resourcesJson = mapper.writerFor(new TypeReference<Map<String,Resource>>() {
+            }).writeValueAsString(map);
             request.setBody(resourcesJson);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -249,7 +254,7 @@ public class SemanticManagerTests {
         assertNotNull(validationResult);
         assertNotNull(validationResult.getObjectDescription());
         assertEquals("Validation result should contain " + expectedSize + " resource", expectedSize, validationResult.getObjectDescription().size());
-        CoreResource resultResource = validationResult.getObjectDescription().get(0);
+        CoreResource resultResource = validationResult.getObjectDescription().get(resourcePairingId);
         assertNotNull("Result should not be null", resultResource);
         if (resource.getId() != null) {
             assertEquals("Id of the result must be the same", resource.getId(), resultResource.getId());
