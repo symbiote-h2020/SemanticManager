@@ -5,9 +5,12 @@
  */
 package eu.h2020.symbiote.ontology.utils;
 
+import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
+import java.io.StringWriter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.jena.rdf.model.Model;
 
 /**
  *
@@ -104,4 +107,10 @@ public class OntologyHelper {
 //                + "<" + getMappingGraphURI(mappingId) + "> <" + FROM + "> <" + getModelGraphURI(modelId1) + "> . \n"
 //                + "<" + getMappingGraphURI(mappingId) + "> <" + TO + "> <" + getModelGraphURI(modelId2) + "> .";
 //    }
+    
+    public static String modelAsString(Model model, RDFFormat format) {
+        StringWriter writer = new StringWriter();
+        model.write(writer, format.name());
+        return writer.toString();
+    }
 }

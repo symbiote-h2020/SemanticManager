@@ -7,14 +7,17 @@ import eu.h2020.symbiote.core.model.Platform;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.core.model.internal.CoreResource;
+import eu.h2020.symbiote.core.model.internal.CoreResourceType;
 import eu.h2020.symbiote.core.model.resources.*;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.errors.RDFGenerationError;
 import eu.h2020.symbiote.ontology.errors.RDFParsingError;
 import eu.h2020.symbiote.ontology.utils.CoreInformationModel;
 import eu.h2020.symbiote.ontology.utils.GenerationResult;
+import eu.h2020.symbiote.ontology.utils.OntologyHelper;
 import eu.h2020.symbiote.ontology.utils.RDFGenerator;
 import eu.h2020.symbiote.ontology.utils.RDFReader;
+import eu.h2020.symbiote.ontology.utils.StreamHelper;
 import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
 import eu.h2020.symbiote.ontology.validation.ValidationHelper;
 import org.apache.commons.logging.Log;
@@ -28,11 +31,20 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.OntModel;
+import org.apache.jena.query.ParameterizedSparqlString;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.reasoner.ValidityReport;
+import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
  * Main class for handling validation and translation. All RDF-related tasks are
@@ -115,12 +127,12 @@ public class SemanticManager {
         Set<String> resourcesDefinedInCIMNamespace = validationhelper.getDefinedResourcesInNamespace(pim, CoreInformationModel.CIM_PREFIX);
         if (!resourcesDefinedInCIMNamespace.isEmpty()) {
             result.setSuccess(false);
-            result.setMessage("PIM is not allowed to define Resources within the CIM namespace! Found resources: " 
-                    + System.lineSeparator() 
+            result.setMessage("PIM is not allowed to define Resources within the CIM namespace! Found resources: "
+                    + System.lineSeparator()
                     + StringUtils.join(resourcesDefinedInCIMNamespace, System.lineSeparator()));
             return result;
         }
-        
+
         // for all further steps we need inference and the imports to be loaded
         pim = validationhelper.withInf(pim);
         validationhelper.loadImports(pim);
@@ -138,11 +150,10 @@ public class SemanticManager {
         ValidityReport report = pim.validate();
         if (!report.isClean()) {
             result.setSuccess(false);
-            String conflicts = "";
-            for (Iterator i = report.getReports(); i.hasNext();) {
-                conflicts += i.next() + System.lineSeparator();
-            }
-            result.setMessage("PIM has OWL validation conflicts: " + conflicts);
+            result.setMessage("PIM has OWL validation conflicts: "
+                    + StreamHelper.stream(report.getReports())
+                            .map(x -> x.toString())
+                            .collect(Collectors.joining(System.lineSeparator())));
             return result;
         }
         System.out.println("---> PIM has no validation errors");
@@ -321,7 +332,7 @@ public class SemanticManager {
      * @return Validation result as well as list of resources which were found
      * in the rdf model.
      */
-    public ResourceInstanceValidationResult validateResourcesInstance(CoreResourceRegistryRequest request) throws IOException {
+    public ResourceInstanceValidationResult validateResourcesInstance(CoreResourceRegistryRequest request) {
         log.info("Validating Resource instance ... ");
 
         if (!request.getDescriptionType().equals(DescriptionType.RDF)) {
@@ -335,33 +346,163 @@ public class SemanticManager {
         3. check classes of instances are present
         4. check multiplicity constraints of core predicates
          */
-        ObjectMapper mapper = new ObjectMapper();
-        RDFInfo rdfInfo = mapper.readValue(request.getBody(), RDFInfo.class);
-
         ResourceInstanceValidationResult result = new ResourceInstanceValidationResult();
+        RDFInfo rdfInfo = null;
+        try {
+            new ObjectMapper().readValue(request.getBody(), RDFInfo.class);
+        } catch (IOException ex) {
+            result.setSuccess(false);
+            result.setMessage("request could not be parsed to RDFInfo class. Reason: " + ex.getMessage());
+            return result;
+        }
         result.setModelValidated(rdfInfo.getRdf());
 
-        //TODO perform general validation of the RDF
-        Map<String, CoreResource> resources = null;
+        OntModel instances = null;
         try {
-            resources = RDFReader.readResourceInstances(rdfInfo, request.getPlatformId());
-            if (resources != null && resources.size() > 0) {
-                result.setSuccess(true);
-                result.setMessage("Validation successful");
-                result.setModelValidatedAgainst("");
-            } else {
-                result.setSuccess(false);
-                result.setMessage("RDF does not contain any resource information");
-                result.setModelValidatedAgainst("");
-            }
-        } catch (RDFParsingError rdfParsingError) {
-            rdfParsingError.printStackTrace();
+            instances = validationhelper.read(rdfInfo, false, false);
+        } catch (IOException ex) {
             result.setSuccess(false);
-            result.setMessage("Validation failed: " + rdfParsingError.getMessage());
-            result.setModelValidatedAgainst("");
+            result.setMessage("instances could not be parsed! Reason: " + ex);
+            return result;
         }
 
+        // check contains classes
+        if (instances.listClasses().hasNext()) {
+            result.setSuccess(false);
+            result.setMessage("instance data is not allowed to contain class definitions!");
+            return result;
+        }
+        // check contains datatype properties
+        if (instances.listDatatypeProperties().hasNext()) {
+            result.setSuccess(false);
+            result.setMessage("instance data is not allowed to contain datatype properties!");
+            return result;
+        }
+        // check contains object properties
+        if (instances.listObjectProperties().hasNext()) {
+            result.setSuccess(false);
+            result.setMessage("instance data is not allowed to contain datatype properties!");
+            return result;
+        }
+
+        // check contains datatype properties
+        if (!instances.listImportedOntologyURIs().isEmpty()) {
+            result.setSuccess(false);
+            result.setMessage("instance data is not allowed to contain imports!");
+            return result;
+        }
+
+        // load PIM
+        RDFInfo pimInfo = new RDFInfo();
+        // TODO load PIM from storage
+        OntModel pim = null;
+        try {
+            pim = validationhelper.read(pimInfo, true, true);
+        } catch (IOException ex) {
+            log.error("error loading PIM from database", ex);
+            result.setSuccess(false);
+            result.setMessage("PIM could not be loaded. Reason: " + ex.getMessage());
+            return result;
+        }
+
+        // from now on we need inference
+        ParameterizedSparqlString getResourceQuery = new ParameterizedSparqlString();
+        getResourceQuery.setCommandText("CONSTRUCT {\n"
+                + "	?s ?p ?o.\n"
+                + "}\n"
+                + "{\n"
+                + "	SELECT DISTINCT ?s ?p ?o\n"
+                + "	{\n"
+                + "		{\n"
+                + "			SELECT *\n"
+                + "			{\n"
+                + "				?RESOURCE_URI ?p ?o.\n"
+                + "				BIND( ?RESOURCE_URI as ?s)\n"
+                + "			}\n"
+                + "		}\n"
+                + "		UNION\n"
+                + "		{\n"
+                + "			SELECT *\n"
+                + "			WHERE {\n"
+                + "				?RESOURCE_URI (a|!a)+ ?s . \n"
+                + "				?s ?p ?o.\n"
+                + "			}\n"
+                + "		}\n"
+                + "	}\n"
+                + "}");
+        instances = validationhelper.withInf(instances);
+
+        Set<Individual> resourceIndividuals = instances.listIndividuals(CoreInformationModel.CIM_RESOURCE).toSet();
+        if (resourceIndividuals.isEmpty()) {
+            result.setSuccess(false);
+            result.setMessage("provided RDF does not contain any resource information");
+            return result;
+        }
+        StringBuilder instanceResults = new StringBuilder();
+        Map<String, CoreResource> resources = new HashMap<>();
+        for (Individual resource : resourceIndividuals) {
+            StringBuilder instanceResult = new StringBuilder();
+            getResourceQuery.setIri("?RESOURCE_URI", resource.getURI());
+            try (QueryExecution qexec = QueryExecutionFactory.create(getResourceQuery.asQuery(), instances)) {
+                Model resourceClosure = qexec.execConstruct();
+                pim.addSubModel(resourceClosure);                
+                ValidityReport report = pim.validate();
+                if (!report.isClean()) {
+                    instanceResult.append("errors during owl validation" + System.lineSeparator());
+                    instanceResult.append(
+                            StreamHelper.stream(report.getReports())
+                                    .map(x -> x.toString())
+                                    .collect(Collectors.joining(System.lineSeparator())));                    
+                }
+                List<String> cardinalityViolations = validationhelper.checkCardinalityViolations(pim, resourceClosure);
+                if (!cardinalityViolations.isEmpty()) {
+                    instanceResult.append("errors during cardinality validation" + System.lineSeparator());
+                    instanceResult.append(String.join(System.lineSeparator(), cardinalityViolations));
+                    // we have cardinality violations and can't accept this resource - discard all or only this?
+                    
+                }
+                pim.removeSubModel(resourceClosure);  
+                CoreResource coreResource = new CoreResource();                
+                coreResource.setRdf(OntologyHelper.modelAsString(resourceClosure, rdfInfo.getRdfFormat()));
+                coreResource.setRdfFormat(rdfInfo.getRdfFormat());
+                // TODO how to find CIM type? Could be multiple e.g. Sensor and Actuator
+                //coreResource.setType(???);
+                resources.put(resource.getURI(), coreResource);
+            }
+            if (instanceResult.length() > 0) {
+                instanceResults.append(String.format("errors validating RDF for resource '%s':%s", resource.getURI(), System.lineSeparator()));
+                instanceResults.append(instanceResult.toString() + System.lineSeparator());
+            }
+        }
+        if (instanceResults.length() > 0) {
+            result.setSuccess(false);
+            result.setMessage("errors validating RDF for resources: " + System.lineSeparator());
+            return result;
+        }
+        result.setModelValidatedAgainst(OntologyHelper.modelAsString(pim, rdfInfo.getRdfFormat()));
+        result.setSuccess(true);
         result.setObjectDescription(resources);
+
+        //TODO perform general validation of the RDF
+//        try {
+//            resources = RDFReader.readResourceInstances(rdfInfo, request.getPlatformId());
+//            if (resources != null && resources.size() > 0) {
+//                result.setSuccess(true);
+//                result.setMessage("Validation successful");
+//                result.setModelValidatedAgainst("");
+//            } else {
+//                result.setSuccess(false);
+//                result.setMessage("RDF does not contain any resource information");
+//                result.setModelValidatedAgainst("");
+//            }
+//        } catch (RDFParsingError rdfParsingError) {
+//            rdfParsingError.printStackTrace();
+//            result.setSuccess(false);
+//            result.setMessage("Validation failed: " + rdfParsingError.getMessage());
+//            result.setModelValidatedAgainst("");
+//        }
+//
+//        result.setObjectDescription(resources);
 
         return result;
     }

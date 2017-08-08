@@ -8,19 +8,28 @@ package eu.h2020.symbiote.ontology.validation;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.ontology.utils.CoreInformationModel;
+import eu.h2020.symbiote.ontology.utils.StreamHelper;
 import java.io.ByteArrayInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jena.ontology.OntDocumentManager;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Statement;
@@ -37,6 +46,112 @@ public class ValidationHelper {
 
     private static final Log log = LogFactory.getLog(ValidationHelper.class);
     private static ValidationHelper instance;
+
+    private static final String QUERY_CARDINALITY_EXACTLY_OBJECT_PROPERTY = "SELECT \n"
+            + "?class ?property ?cardinality ?onType (COUNT(DISTINCT ?instance) AS ?presentCardinality)\n"
+            + "WHERE \n"
+            + "{ \n"
+            + "	?class rdfs:subClassOf [ \n"
+            + "		a owl:Restriction; \n"
+            + "		owl:onProperty ?property;\n"
+            + "		owl:qualifiedCardinality ?cardinality ;\n"
+            + "		owl:onClass ?onType ] .	\n"
+            + "	OPTIONAL {\n"
+            + "		?instance a ?class.\n"
+            + "		?instance ?property [ a ?onType] .\n"
+            + "	}\n"
+            + "}\n"
+            + "GROUP BY ?class ?property ?cardinality ?onType\n"
+            + "HAVING(?cardinality != ?presentCardinality)";
+
+    private static final String QUERY_CARDINALITY_EXACTLY_DATA_PROPERTY = "SELECT \n"
+            + "?class ?property ?cardinality ?onType (COUNT(DISTINCT ?instance) AS ?presentCardinality)\n"
+            + "WHERE \n"
+            + "{ \n"
+            + "	?class rdfs:subClassOf [ \n"
+            + "		a owl:Restriction; \n"
+            + "		owl:onProperty ?property;\n"
+            + "		owl:qualifiedCardinality ?cardinality ;\n"
+            + "		owl:onDataRange ?onType ] .	\n"
+            + "	OPTIONAL {\n"
+            + "		?instance a ?class.\n"
+            + "		?instance ?property ?p .\n"
+            + "		FILTER(DATATYPE(?p) = ?onType)\n"
+            + "	}\n"
+            + "}\n"
+            + "GROUP BY ?class ?property ?cardinality ?onType\n"
+            + "HAVING(?cardinality != ?presentCardinality)";
+
+    private static final String QUERY_CARDINALITY_MIN_OBJECT_PROPERTY = "SELECT \n"
+            + "?class ?property ?cardinality ?onType (COUNT(DISTINCT ?instance) AS ?presentCardinality)\n"
+            + "WHERE \n"
+            + "{ \n"
+            + "	?class rdfs:subClassOf [ \n"
+            + "		a owl:Restriction; \n"
+            + "		owl:onProperty ?property;\n"
+            + "		owl:minQualifiedCardinality ?cardinality ;\n"
+            + "		owl:onClass ?onType ] .	\n"
+            + "	OPTIONAL {\n"
+            + "		?instance a ?class.\n"
+            + "		?instance ?property [ a ?onType] .\n"
+            + "	}\n"
+            + "}\n"
+            + "GROUP BY ?class ?property ?cardinality ?onType\n"
+            + "HAVING(?cardinality > ?presentCardinality)";
+
+    private static final String QUERY_CARDINALITY_MIN_DATA_PROPERTY = "SELECT \n"
+            + "?class ?property ?cardinality ?onType (COUNT(DISTINCT ?instance) AS ?presentCardinality)\n"
+            + "WHERE \n"
+            + "{ \n"
+            + "	?class rdfs:subClassOf [ \n"
+            + "		a owl:Restriction; \n"
+            + "		owl:onProperty ?property;\n"
+            + "		owl:minQualifiedCardinality ?cardinality ;\n"
+            + "		owl:onDataRange ?onType ] .	\n"
+            + "	OPTIONAL {\n"
+            + "		?instance a ?class.\n"
+            + "		?instance ?property ?p .\n"
+            + "		FILTER(DATATYPE(?p) = ?onType)\n"
+            + "	}\n"
+            + "}\n"
+            + "GROUP BY ?class ?property ?cardinality ?onType\n"
+            + "HAVING(?cardinality > ?presentCardinality)";
+
+    private static final String QUERY_CARDINALITY_MAX_OBJECT_PROPERTY = "SELECT \n"
+            + "?class ?property ?cardinality ?onType (COUNT(DISTINCT ?instance) AS ?presentCardinality)\n"
+            + "WHERE \n"
+            + "{ \n"
+            + "	?class rdfs:subClassOf [ \n"
+            + "		a owl:Restriction; \n"
+            + "		owl:onProperty ?property;\n"
+            + "		owl:maxQualifiedCardinality ?cardinality ;\n"
+            + "		owl:onClass ?onType ] .	\n"
+            + "	OPTIONAL {\n"
+            + "		?instance a ?class.\n"
+            + "		?instance ?property [ a ?onType] .\n"
+            + "	}\n"
+            + "}\n"
+            + "GROUP BY ?class ?property ?cardinality ?onType\n"
+            + "HAVING(?cardinality < ?presentCardinality)";
+
+    private static final String QUERY_CARDINALITY_MAX_DATA_PROPERTY = "SELECT \n"
+            + "?class ?property ?cardinality ?onType (COUNT(DISTINCT ?instance) AS ?presentCardinality)\n"
+            + "WHERE \n"
+            + "{ \n"
+            + "	?class rdfs:subClassOf [ \n"
+            + "		a owl:Restriction; \n"
+            + "		owl:onProperty ?property;\n"
+            + "		owl:maxQualifiedCardinality ?cardinality ;\n"
+            + "		owl:onDataRange ?onType ] .	\n"
+            + "	OPTIONAL {\n"
+            + "		?instance a ?class.\n"
+            + "		?instance ?property ?p .\n"
+            + "		FILTER(DATATYPE(?p) = ?onType)\n"
+            + "	}\n"
+            + "}\n"
+            + "GROUP BY ?class ?property ?cardinality ?onType\n"
+            + "HAVING(?cardinality < ?presentCardinality)";
+
     private OntDocumentManager docManager;
     private OntModelSpec modelSpecOWL;
     private OntModelSpec modelSpecOWL_INF;
@@ -76,7 +191,7 @@ public class ValidationHelper {
         }
         return model;
     }
-    
+
     public OntModel withInf(OntModel model) {
         return ModelFactory.createOntologyModel(modelSpecOWL_INF, model);
     }
@@ -168,4 +283,30 @@ public class ValidationHelper {
                 .toSet());
         return result;
     }
+
+    public List<String> checkCardinalityViolations(OntModel pim, Model instance) {
+        List<String> result = new ArrayList<>();
+        pim.addSubModel(instance);
+        result.addAll(executeSelectWithResults(pim, QUERY_CARDINALITY_EXACTLY_DATA_PROPERTY, "exact cardinaility for data property violated - "));
+        result.addAll(executeSelectWithResults(pim, QUERY_CARDINALITY_EXACTLY_OBJECT_PROPERTY, "exact cardinaility for object property violated - "));
+        result.addAll(executeSelectWithResults(pim, QUERY_CARDINALITY_MIN_DATA_PROPERTY, "min cardinaility for data property violated - "));
+        result.addAll(executeSelectWithResults(pim, QUERY_CARDINALITY_MIN_OBJECT_PROPERTY, "min cardinaility for object property violated - "));
+        result.addAll(executeSelectWithResults(pim, QUERY_CARDINALITY_MAX_DATA_PROPERTY, "max cardinaility for data property violated - "));
+        result.addAll(executeSelectWithResults(pim, QUERY_CARDINALITY_MAX_OBJECT_PROPERTY, "max cardinaility for object property violated - "));
+        pim.removeSubModel(instance);
+        return result;
+    }
+    
+    private List<String> executeSelectWithResults(OntModel model, String query, String message) {
+        try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {            
+            return StreamHelper.stream(qexec.execSelect())
+                    .map(qs
+                            -> message + StreamHelper.stream(qs.varNames())
+                            .map(x -> x + ": " + qs.get(x))
+                            .collect(Collectors.joining(",")))
+                    .collect(Collectors.toList());
+        }
+    }
+
+
 }

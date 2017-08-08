@@ -3,6 +3,7 @@ package eu.h2020.symbiote.ontology.utils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
 
 /**
  * Contains list of predicates used by symbIoTe Core Information Model
@@ -35,41 +36,41 @@ public class CoreInformationModel {
 
     public static final Property RDFS_COMMENT;
 
-    public static final Property CIM_RESOURCE;
+    public static final Resource CIM_RESOURCE;
 
-    public static final Property CIM_STATIONARY;
+    public static final Resource CIM_STATIONARY;
 
-    public static final Property CIM_MOBILE;
+    public static final Resource CIM_MOBILE;
 
-    public static final Property CIM_ACTUATOR;
+    public static final Resource CIM_ACTUATOR;
 
-    public static final Property CIM_SERVICE;
+    public static final Resource CIM_SERVICE;
 
-    public static final Property CIM_ACTUATING_SERVICE;
+    public static final Resource CIM_ACTUATING_SERVICE;
 
-    public static final Property CIM_LOCATION;
+    public static final Resource CIM_LOCATION;
 
-    public static final Property CIM_WKT_LOCATION;
+    public static final Resource CIM_WKT_LOCATION;
 
-    public static final Property CIM_SYMBOLIC_LOCATION;
+    public static final Resource CIM_SYMBOLIC_LOCATION;
 
-    public static final Property CIM_WGS84_LOCATION;
+    public static final Resource CIM_WGS84_LOCATION;
 
-    public static final Property CIM_PARAMETER;
+    public static final Resource CIM_PARAMETER;
 
-    public static final Property CIM_INPUT_PARAMETER;
+    public static final Resource CIM_INPUT_PARAMETER;
 
-    public static final Property CIM_RANGE_RESTRICTION;
+    public static final Resource CIM_RANGE_RESTRICTION;
 
-    public static final Property CIM_LENGTH_RESTRICTION;
+    public static final Resource CIM_LENGTH_RESTRICTION;
 
-    public static final Property CIM_ENUM_RESTRICTION;
+    public static final Resource CIM_ENUM_RESTRICTION;
 
     public static final Property CIM_ID;
 
     public static final Property CIM_LOCATED_AT;
 
-    public static final Property CIM_FOI;
+    public static final Resource CIM_FOI;
 
     public static final Property CIM_HAS_FOI;
 
@@ -113,24 +114,24 @@ public class CoreInformationModel {
         RDF_VALUE = m.createProperty( RDF_PREFIX + "value" );
         RDFS_LABEL = m.createProperty(RDFS_PREFIX + "label");
         RDFS_COMMENT = m.createProperty(RDFS_PREFIX + "comment");
-        CIM_RESOURCE = m.createProperty(CIM_PREFIX + "Resource");
-        CIM_STATIONARY = m.createProperty(CIM_PREFIX + "StationarySensor");
-        CIM_MOBILE = m.createProperty(CIM_PREFIX + "MobileSensor");
-        CIM_SERVICE = m.createProperty(CIM_PREFIX + "Service");
-        CIM_ACTUATOR = m.createProperty(CIM_PREFIX + "Actuator");
-        CIM_ACTUATING_SERVICE =  m.createProperty(CIM_PREFIX + "ActuatingService");
-        CIM_LOCATION = m.createProperty(CIM_PREFIX + "Location");
-        CIM_WKT_LOCATION = m.createProperty(CIM_PREFIX + "WKTLocation");
-        CIM_SYMBOLIC_LOCATION = m.createProperty(CIM_PREFIX + "SymbolicLocation");
-        CIM_WGS84_LOCATION = m.createProperty(CIM_PREFIX + "WGS84Location");
-        CIM_PARAMETER = m.createProperty(CIM_PREFIX + "Parameter");
-        CIM_INPUT_PARAMETER = m.createProperty(CIM_PREFIX + "InputParameter");
-        CIM_RANGE_RESTRICTION = m.createProperty(CIM_PREFIX + "RangeRestriction");
-        CIM_LENGTH_RESTRICTION= m.createProperty(CIM_PREFIX + "LengthRestriction");
-        CIM_ENUM_RESTRICTION = m.createProperty(CIM_PREFIX + "EnumRestriction");
+        CIM_RESOURCE = m.createResource(CIM_PREFIX + "Resource");
+        CIM_STATIONARY = m.createResource(CIM_PREFIX + "StationarySensor");
+        CIM_MOBILE = m.createResource(CIM_PREFIX + "MobileSensor");
+        CIM_SERVICE = m.createResource(CIM_PREFIX + "Service");
+        CIM_ACTUATOR = m.createResource(CIM_PREFIX + "Actuator");
+        CIM_ACTUATING_SERVICE =  m.createResource(CIM_PREFIX + "ActuatingService");
+        CIM_LOCATION = m.createResource(CIM_PREFIX + "Location");
+        CIM_WKT_LOCATION = m.createResource(CIM_PREFIX + "WKTLocation");
+        CIM_SYMBOLIC_LOCATION = m.createResource(CIM_PREFIX + "SymbolicLocation");
+        CIM_WGS84_LOCATION = m.createResource(CIM_PREFIX + "WGS84Location");
+        CIM_PARAMETER = m.createResource(CIM_PREFIX + "Parameter");
+        CIM_INPUT_PARAMETER = m.createResource(CIM_PREFIX + "InputParameter");
+        CIM_RANGE_RESTRICTION = m.createResource(CIM_PREFIX + "RangeRestriction");
+        CIM_LENGTH_RESTRICTION= m.createResource(CIM_PREFIX + "LengthRestriction");
+        CIM_ENUM_RESTRICTION = m.createResource(CIM_PREFIX + "EnumRestriction");
         CIM_ID = m.createProperty(CIM_PREFIX + "id");
         CIM_LOCATED_AT = m.createProperty(CIM_PREFIX + "locatedAt");
-        CIM_FOI = m.createProperty(CIM_PREFIX + "FeatureOfInterest");
+        CIM_FOI = m.createResource(CIM_PREFIX + "FeatureOfInterest");
         CIM_HAS_FOI = m.createProperty(CIM_PREFIX + "hasFeatureOfInterest");
         CIM_HAS_PROPERTY = m.createProperty(CIM_PREFIX + "hasProperty");
         CIM_NAME = m.createProperty(CIM_PREFIX + "name");
