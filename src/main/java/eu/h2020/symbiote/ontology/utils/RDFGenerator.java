@@ -365,11 +365,9 @@ public class RDFGenerator {
                 org.apache.jena.rdf.model.Resource effectResource = model.createResource();
                 effectResource.addProperty(CoreInformationModel.RDF_TYPE, CoreInformationModel.CIM_EFFECT);
                 addFoiToModelResource(model,effectResource,effect.getActsOn());
-                for( Property property: effect.getAffects()) {
-                    org.apache.jena.rdf.model.Resource propertyResource = model.createResource();
-                    propertyResource.addProperty(CoreInformationModel.RDF_TYPE, CoreInformationModel.CIM_PROPERTY)
-                            .addProperty(CoreInformationModel.RDFS_LABEL, property.getComment())
-                            .addProperty(CoreInformationModel.RDFS_COMMENT, property.getComment());
+                for( String property: effect.getAffects()) {
+                    //TODO add logic for different Information Models
+                    effectResource.addProperty(CoreInformationModel.CIM_HAS_PROPERTY, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
                 }
             }
         }
