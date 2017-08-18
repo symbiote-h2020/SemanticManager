@@ -11,6 +11,8 @@ import org.apache.jena.rdf.model.Property;
  */
 public class CoreInformationModel {
 
+    public static final String CIM_1_0_2_FILE = "core-v1.0.2.owl";
+    
     public static final String CIM_PREFIX = "http://www.symbiote-h2020.eu/ontology/core#";
 
     public static final String MIM_PREFIX = "http://www.symbiote-h2020.eu/ontology/meta#";
