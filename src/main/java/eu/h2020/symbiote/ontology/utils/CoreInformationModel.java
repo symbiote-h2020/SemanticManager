@@ -33,7 +33,11 @@ public class CoreInformationModel {
 
     public static final Property RDFS_COMMENT;
 
+    public static final Property RDFS_DATATYPE;
+
     public static final Property CIM_RESOURCE;
+
+    public static final Property CIM_CAPABILITY;
 
     public static final Property CIM_STATIONARY;
 
@@ -43,7 +47,11 @@ public class CoreInformationModel {
 
     public static final Property CIM_SERVICE;
 
-    public static final Property CIM_ACTUATING_SERVICE;
+    public static final Property CIM_EFFECT;
+
+//    public static final Property CIM_ACTUATING_SERVICE;
+
+    public static final Property CIM_PROPERTY;
 
     public static final Property CIM_LOCATION;
 
@@ -55,13 +63,21 @@ public class CoreInformationModel {
 
     public static final Property CIM_PARAMETER;
 
-    public static final Property CIM_INPUT_PARAMETER;
-
     public static final Property CIM_RANGE_RESTRICTION;
 
     public static final Property CIM_LENGTH_RESTRICTION;
 
     public static final Property CIM_ENUM_RESTRICTION;
+
+    public static final Property CIM_REGEX_RESTRICTION;
+
+    public static final Property CIM_INSTANCE_OF_RESTRICTION;
+
+    public static final Property CIM_PATTERN;
+
+    public static final Property CIM_INSTANCE_OF_CLASS;
+
+    public static final Property CIM_VALUE_PROPERTY;
 
     public static final Property CIM_ID;
 
@@ -73,11 +89,15 @@ public class CoreInformationModel {
 
     public static final Property CIM_HAS_PROPERTY;
 
-    public static final Property CIM_HAS_OUTPUT;
+    public static final Property CIM_HAS_RESULT_TYPE;
 
     public static final Property CIM_HAS_INPUT;
 
     public static final Property CIM_HAS_CAPABILITY;
+
+    public static final Property CIM_HAS_DATATYPE;
+
+    public static final Property CIM_BASED_ON_PROPERTY;
 
     public static final Property CIM_NAME;
 
@@ -86,6 +106,14 @@ public class CoreInformationModel {
     public static final Property CIM_ACTS_ON;
 
     public static final Property CIM_DATATYPE;
+
+    public static final Property CIM_COMPLEX_DATATYPE;
+
+    public static final Property CIM_BASED_ON_CLASS;
+
+    public static final Property CIM_PRIMITIVE_PROPERTY;
+
+    public static final Property CIM_COMPLEX_PROPERTY;
 
     public static final Property CIM_IS_ARRAY;
 
@@ -111,21 +139,29 @@ public class CoreInformationModel {
         RDF_VALUE = m.createProperty( RDF_PREFIX + "value" );
         RDFS_LABEL = m.createProperty(RDFS_PREFIX + "label");
         RDFS_COMMENT = m.createProperty(RDFS_PREFIX + "comment");
+        RDFS_DATATYPE = m.createProperty(RDFS_PREFIX + "datatype");
         CIM_RESOURCE = m.createProperty(CIM_PREFIX + "Resource");
+        CIM_CAPABILITY = m.createProperty(CIM_PREFIX + "Capability");
         CIM_STATIONARY = m.createProperty(CIM_PREFIX + "StationarySensor");
         CIM_MOBILE = m.createProperty(CIM_PREFIX + "MobileSensor");
         CIM_SERVICE = m.createProperty(CIM_PREFIX + "Service");
+        CIM_EFFECT = m.createProperty(CIM_PREFIX + "Effect");
         CIM_ACTUATOR = m.createProperty(CIM_PREFIX + "Actuator");
-        CIM_ACTUATING_SERVICE =  m.createProperty(CIM_PREFIX + "ActuatingService");
+//        CIM_ACTUATING_SERVICE =  m.createProperty(CIM_PREFIX + "ActuatingService");
+        CIM_PROPERTY = m.createProperty(CIM_PREFIX + "ActuatingService");
         CIM_LOCATION = m.createProperty(CIM_PREFIX + "Location");
         CIM_WKT_LOCATION = m.createProperty(CIM_PREFIX + "WKTLocation");
         CIM_SYMBOLIC_LOCATION = m.createProperty(CIM_PREFIX + "SymbolicLocation");
         CIM_WGS84_LOCATION = m.createProperty(CIM_PREFIX + "WGS84Location");
         CIM_PARAMETER = m.createProperty(CIM_PREFIX + "Parameter");
-        CIM_INPUT_PARAMETER = m.createProperty(CIM_PREFIX + "InputParameter");
         CIM_RANGE_RESTRICTION = m.createProperty(CIM_PREFIX + "RangeRestriction");
         CIM_LENGTH_RESTRICTION= m.createProperty(CIM_PREFIX + "LengthRestriction");
         CIM_ENUM_RESTRICTION = m.createProperty(CIM_PREFIX + "EnumRestriction");
+        CIM_REGEX_RESTRICTION = m.createProperty(CIM_PREFIX + "RegExRestriction");
+        CIM_INSTANCE_OF_RESTRICTION = m.createProperty(CIM_PREFIX + "InstanceOfRestriction");
+        CIM_INSTANCE_OF_CLASS = m.createProperty(CIM_PREFIX + "instanceOfClass");
+        CIM_VALUE_PROPERTY = m.createProperty(CIM_PREFIX + "valueProperty");
+        CIM_PATTERN = m.createProperty(CIM_PREFIX + "pattern");
         CIM_ID = m.createProperty(CIM_PREFIX + "id");
         CIM_LOCATED_AT = m.createProperty(CIM_PREFIX + "locatedAt");
         CIM_FOI = m.createProperty(CIM_PREFIX + "FeatureOfInterest");
@@ -135,9 +171,15 @@ public class CoreInformationModel {
         CIM_ACTS_ON = m.createProperty(CIM_PREFIX + "actsOn");
         CIM_AFFECTS = m.createProperty(CIM_PREFIX + "affects");
         CIM_HAS_INPUT = m.createProperty(CIM_PREFIX + "hasInputParameter");
-        CIM_HAS_OUTPUT = m.createProperty(CIM_PREFIX + "hasOutputParameter");
+        CIM_HAS_RESULT_TYPE = m.createProperty(CIM_PREFIX + "hasResultType");
         CIM_HAS_CAPABILITY = m.createProperty(CIM_PREFIX + "hasCapability");
+        CIM_HAS_DATATYPE = m.createProperty(CIM_PREFIX + "hasDatatype");
+        CIM_BASED_ON_PROPERTY = m.createProperty(CIM_PREFIX + "basedOnProperty");
         CIM_DATATYPE = m.createProperty(CIM_PREFIX + "datatype");
+        CIM_COMPLEX_DATATYPE = m.createProperty(CIM_PREFIX + "ComplexDatatype");
+        CIM_BASED_ON_CLASS = m.createProperty(CIM_PREFIX + "basedOnClass");
+        CIM_PRIMITIVE_PROPERTY = m.createProperty(CIM_PREFIX + "PrimitiveProperty");
+        CIM_COMPLEX_PROPERTY = m.createProperty(CIM_PREFIX + "ComplexProperty");
         CIM_IS_ARRAY = m.createProperty(CIM_PREFIX + "isArray");
         CIM_MANDATORY = m.createProperty(CIM_PREFIX + "mandatory");
         CIM_HAS_RESTRICTION = m.createProperty(CIM_PREFIX + "hasRestriction");
@@ -146,7 +188,7 @@ public class CoreInformationModel {
         GEO_LAT = m.createProperty(GEO_PREFIX + "lat");
         GEO_LONG = m.createProperty(GEO_PREFIX + "long");
         GEO_ALT = m.createProperty(GEO_PREFIX + "alt");
-        CIM_OBSERVES = m.createProperty(CIM_PREFIX + "observes");
+        CIM_OBSERVES = m.createProperty(CIM_PREFIX + "observesProperty");
     }
 
 }

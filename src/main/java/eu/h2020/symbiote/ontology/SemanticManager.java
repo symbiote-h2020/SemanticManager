@@ -177,9 +177,9 @@ public class SemanticManager {
             */
     public void registerNewPIMInstanceModel(Platform pimInstanceModel) {
         log.info("Registering new PIM instance " + pimInstanceModel.toString());
-        String pimLabel = pimInstanceModel.getName();
-        if (pimLabel != null) {
-            log.info("[NYI] Model for platform " + pimLabel + " will be implemented in R3");
+        List<String> pimLabels = pimInstanceModel.getLabels();
+        if (pimLabels != null) {
+            log.info("[NYI] Model for platform " + pimLabels + " will be implemented in R3");
 //            log.info("Registering new PIM instance " + pimLabel);
 //            if (pimInstanceModel.getRdf() != null && pimInstanceModel.getRdf().trim().length() > 0 && pimInstanceModel.getRdfFormat() != null) {
 //                Model model = ModelFactory.createDefaultModel();

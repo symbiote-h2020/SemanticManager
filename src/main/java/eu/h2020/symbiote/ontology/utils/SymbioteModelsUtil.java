@@ -73,6 +73,10 @@ public class SymbioteModelsUtil {
         }
     }
 
+    public static void addModel(  ) {
+
+    }
+
     /**
      * Checks if specified name is used in one of the symbIoTe models.
      *

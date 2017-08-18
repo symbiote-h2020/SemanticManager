@@ -136,9 +136,14 @@ public class LocationFinder {
         //Location test //dziala ok
         query.append("SELECT ?location WHERE {\n" );
         query.append("\t?location a cim:Location ;\n");
-        query.append("\t\ta cim:WGS84Location ;\n");
-        query.append("\t\trdfs:label \""+ location.getLabel() + "\" ;\n");
-        query.append("\t\trdfs:comment \"" + location.getComment() + "\" .\n");
+        query.append("\t\ta cim:WGS84Location .\n");
+        //TODO locations are now array, need to ensure
+        for( String label: location.getLabels() ) {
+            query.append("\t?location rdfs:label \"" + label + "\" .\n");
+        }
+        for( String comment: location.getComments()) {
+            query.append("\t?location rdfs:comment \"" + location.getComments() + "\" .\n");
+        }
 
         //Ensure that location is defined for this platform...
         query.append("\t?platform a owl:Ontology ;\n");
