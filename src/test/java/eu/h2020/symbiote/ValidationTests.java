@@ -1,6 +1,5 @@
 package eu.h2020.symbiote;
 
-import static eu.h2020.symbiote.RDFReaderTests.PLATFORM_INSTANCE_TTL_FILE;
 import eu.h2020.symbiote.core.internal.PIMMetaModelValidationResult;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
@@ -8,7 +7,7 @@ import eu.h2020.symbiote.ontology.SemanticManager;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
 import java.io.IOException;
-import java.net.URL;
+
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +27,7 @@ public class ValidationTests {
     @Test
     public void testFindInSymbioteModels() {
         try {
-            String temperatureUri = SymbioteModelsUtil.findInSymbioteModels(TEMPERATURE_NAME);
+            String temperatureUri = SymbioteModelsUtil.findInSymbioteCoreModels(TEMPERATURE_NAME);
             assertNotNull(temperatureUri);
         } catch (PropertyNotFoundException e) {
             e.printStackTrace();
@@ -36,7 +35,7 @@ public class ValidationTests {
         }
 
         try {
-            SymbioteModelsUtil.findInSymbioteModels(NONEXISTENT_NAME);
+            SymbioteModelsUtil.findInSymbioteCoreModels(NONEXISTENT_NAME);
             fail();
         } catch (PropertyNotFoundException e) {
         }

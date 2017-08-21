@@ -334,15 +334,16 @@ public class SemanticManager {
         4. check multiplicity constraints of core predicates
          */
         ObjectMapper mapper = new ObjectMapper();
-        RDFInfo rdfInfo = mapper.readValue(request.getBody(), RDFInfo.class);
+        ResourceInstanceValidationRequest rdfResourceValidationRequest = mapper.readValue(request.getBody(), ResourceInstanceValidationRequest.class);
 
         ResourceInstanceValidationResult result = new ResourceInstanceValidationResult();
-        result.setModelValidated(rdfInfo.getRdf());
+        result.setModelValidated(rdfResourceValidationRequest.getRdf());
+
 
         //TODO perform general validation of the RDF
         Map<String, CoreResource> resources = null;
         try {
-            resources = RDFReader.readResourceInstances(rdfInfo, request.getPlatformId());
+            resources = RDFReader.readResourceInstances(rdfResourceValidationRequest, request.getPlatformId());
             if (resources != null && resources.size() > 0) {
                 result.setSuccess(true);
                 result.setMessage("Validation successful");

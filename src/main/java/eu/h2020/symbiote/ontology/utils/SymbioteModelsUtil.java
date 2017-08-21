@@ -78,12 +78,12 @@ public class SymbioteModelsUtil {
     }
 
     /**
-     * Checks if specified name is used in one of the symbIoTe models.
+     * Checks if specified name is used in one of the symbIoTe Core models: BIM and CIM.
      *
      * @param name Name to search for
      * @return URI of the resource or <code>null</code> in case it couldn't be found in any of the models.
      */
-    public static String findInSymbioteModels( String name ) throws eu.h2020.symbiote.ontology.errors.PropertyNotFoundException {
+    public static String findInSymbioteCoreModels(String name ) throws eu.h2020.symbiote.ontology.errors.PropertyNotFoundException {
         String uri = null;
         List<eu.h2020.symbiote.ontology.errors.PropertyNotFoundException> propertyNotFoundExceptions = new ArrayList<>();
         log.debug("Checking for " + name + " in symbIoTe models");

@@ -77,7 +77,7 @@ public class OntologyHelper {
     }
 
     public static String findBIMPlatformPropertyUri( String property ) throws PropertyNotFoundException {
-        String uri = SymbioteModelsUtil.findInSymbioteModels(property);
+        String uri = SymbioteModelsUtil.findInSymbioteCoreModels(property);
         log.debug("Found property in symbIoTe models: " + uri);
         return uri;
     }
