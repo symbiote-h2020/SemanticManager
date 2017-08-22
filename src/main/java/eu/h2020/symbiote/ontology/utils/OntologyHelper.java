@@ -30,6 +30,7 @@ public class OntologyHelper {
     public static final String CORE_GRAPH = ROOT_URI + "core";
     public static final String MAPPING_GRAPH = ROOT_URI + "mappings";
     public static final String PLATFORMS_GRAPH = ROOT_URI + "platforms";
+    public static final String INFORMATION_MODEL_GRAPH = ROOT_URI + "informationModel";
     public static final String RESOURCES_GRAPH = ROOT_URI + "resources";
 //    public static final String MODELS_GRAPH = ROOT_URI + "models";
 
@@ -68,6 +69,8 @@ public class OntologyHelper {
         return RESOURCES_GRAPH + "/" + resourceId;
     }
 
+    public static String getInformationModelUri( String modelId ) { return INFORMATION_MODEL_GRAPH + "/" + modelId; }
+
     public static String getFoiURI( String platformId, String foi ) {
         return getPlatformGraphURI(platformId) + "/foi/" + foi;
     }
@@ -81,8 +84,6 @@ public class OntologyHelper {
         log.debug("Found property in symbIoTe models: " + uri);
         return uri;
     }
-
-
 
 //    public static String getMappingGraphURI(BigInteger mappingId) {
 //        return MAPPING_GRAPH + "/" + mappingId;

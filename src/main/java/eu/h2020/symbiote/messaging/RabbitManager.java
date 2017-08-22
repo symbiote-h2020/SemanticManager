@@ -1,8 +1,12 @@
 package eu.h2020.symbiote.messaging;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.*;
+import eu.h2020.symbiote.core.internal.InformationModelListResponse;
+import eu.h2020.symbiote.core.model.InformationModel;
 import eu.h2020.symbiote.messaging.consumers.*;
 import eu.h2020.symbiote.ontology.utils.LocationFinder;
+import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +15,12 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
 import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeoutException;
+
+import static org.apache.jena.vocabulary.RSS.channel;
 
 /**
  * Bean used to manage internal communication using RabbitMQ.
@@ -50,6 +59,9 @@ public class RabbitManager {
     private String platformInstanceTranslationRequestedRoutingKey;
     @Value("${rabbit.routingKey.platform.instance.translationPerformed}")
     private String platformInstanceTranslationPerformedRoutingKey;
+
+    @Value("${rabbit.routingKey.platform.model.allInformationModelsRequested}")
+    private String platformInformationModelRequestedKey;
 
     //Resource ontology routing keys
     @Value("${rabbit.routingKey.resource.instance.validationRequested}")
@@ -153,9 +165,10 @@ public class RabbitManager {
                     this.resourceExchangeInternal,
                     null);
 
-            LocationFinder.getSingleton(this.resourceExchangeName, this.resourceSparqlSearchRequestedRoutingKey, this.connection);
+            LocationFinder.getSingleton(this.resourceExchangeName, this.resourceSparqlSearchRequestedRoutingKey, this.connection, this);
 
             startConsumers();
+            scheduleLoadingOfPIMs();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -211,6 +224,36 @@ public class RabbitManager {
         }
     }
 
+
+    private void scheduleLoadingOfPIMs() {
+        try {
+            Channel tempChannel = connection.createChannel();
+
+            String queueName = tempChannel.queueDeclare("symbIoTe-SemanticManager-pimsLookup", true, true, false, null).getQueue();
+
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    try {
+                        String response = sendRpcMessage(tempChannel, queueName, platformExchangeName, platformInformationModelRequestedKey, "", String.class.getCanonicalName());
+                        ObjectMapper mapper = new ObjectMapper();
+                        InformationModelListResponse informationModelsList = mapper.readValue(response, InformationModelListResponse.class);
+                        SymbioteModelsUtil.addModels(informationModelsList.getInformationModels());
+                    } catch (IOException e) {
+                        log.error("Error occurred when loading PIMs from registry");
+                    }
+                }
+            };
+            Timer timer = new Timer("pim download task",false);
+            timer.schedule(task,30000);
+
+
+        } catch (IOException e) {
+            log.error("Error occurred when loading PIMs from registry");
+        }
+
+    }
+
     public void sendCustomMessage(String exchange, String routingKey, String objectInJson) {
         sendMessage(exchange, routingKey, objectInJson);
         log.info("- Custom message sent");
@@ -240,6 +283,64 @@ public class RabbitManager {
         } finally {
             closeChannel(channel);
         }
+    }
+
+    /**
+     * Method used to send message via RPC (Remote Procedure Call) pattern.
+     * In this implementation it covers asynchronous Rabbit communication with synchronous one, as it is used by conventional REST facade.
+     * Before sending a message, a temporary response queue is declared and its name is passed along with the message.
+     * When a consumer handles the message, it returns the result via the response queue.
+     * Since this is a synchronous pattern, it uses timeout of 20 seconds. If the response doesn't come in that time, the method returns with null result.
+     *
+     * @param exchangeName name of the eschange to send message to
+     * @param routingKey   routing key to send message to
+     * @param message      message to be sent
+     * @return response from the consumer or null if timeout occurs
+     */
+    public String sendRpcMessage(Channel channel, String responseQueueName, String exchangeName, String routingKey, String message, String classType) {
+        try {
+            log.info("Sending RPC message: " + message);
+
+            String correlationId = UUID.randomUUID().toString();
+
+            Map<String, Object> headers = new HashMap<>();
+            headers.put("__TypeId__", classType);
+            headers.put("__ContentTypeId__", Object.class.getCanonicalName());
+//
+            AMQP.BasicProperties props = new AMQP.BasicProperties()
+                    .builder()
+                    .correlationId(correlationId)
+                    .replyTo(responseQueueName)
+                    .contentType("application/json")
+                    .headers(headers)
+                    .build();
+
+            final BlockingQueue<String> response = new ArrayBlockingQueue<String>(1);
+
+            DefaultConsumer consumer = new DefaultConsumer(channel) {
+                @Override
+                public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
+                    if (properties.getCorrelationId().equals(correlationId)) {
+                        log.debug("Got reply with correlationId: " + correlationId);
+                        response.offer(new String(body, "UTF-8"));
+                        getChannel().basicCancel(this.getConsumerTag());
+                    } else {
+                        log.debug("Got answer with wrong correlationId... should be " + correlationId + " but got " + properties.getCorrelationId());
+                    }
+                }
+            };
+
+            channel.basicConsume(responseQueueName, true, consumer);
+
+            channel.basicPublish(exchangeName, routingKey, props, message.getBytes());
+
+            String responseMsg = response.take();
+            log.info("Response received: " + responseMsg);
+            return responseMsg;
+        } catch (IOException | InterruptedException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
     }
 
     /**

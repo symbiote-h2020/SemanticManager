@@ -1,8 +1,10 @@
 package eu.h2020.symbiote.ontology.utils;
 
+import eu.h2020.symbiote.core.model.InformationModel;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.internal.CoreResourceType;
 import eu.h2020.symbiote.core.model.resources.*;
+import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,6 +44,11 @@ public class SymbioteModelsUtil {
     private static Dataset bimDataset;
     private static Dataset mimDataset;
     private static Dataset quRecDataset;
+    private static Dataset pimDataset;
+
+    private SymbioteModelsUtil() {
+
+    }
 
     static {
         //Loads models
@@ -62,6 +69,7 @@ public class SymbioteModelsUtil {
             bimDataset = DatasetFactory.create();
             mimDataset = DatasetFactory.create();
             quRecDataset = DatasetFactory.create();
+            pimDataset = DatasetFactory.create();
 
             insertGraph(cimDataset, "", cimRdf, RDFFormat.Turtle);
             insertGraph(bimDataset, "", bimRdf, RDFFormat.Turtle);
@@ -69,12 +77,19 @@ public class SymbioteModelsUtil {
             insertGraph(quRecDataset, "", quRecRdf, RDFFormat.RDFXML);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.fatal("Error creating basic meta models");
         }
     }
 
-    public static void addModel(  ) {
-
+    public static void addModels(List<InformationModel> informationModels) {
+        if( informationModels != null ) {
+            log.info("Adding " + informationModels.size() + " information models to Semantic Manager cache");
+            for (InformationModel model : informationModels) {
+                insertGraph(pimDataset, OntologyHelper.getInformationModelUri( model.getId() ) , model.getRdf(), model.getRdfFormat());
+            }
+        } else {
+            log.fatal("Information models scheduled to be added, but received null information models");
+        }
     }
 
     /**
@@ -108,28 +123,30 @@ public class SymbioteModelsUtil {
             //Could not find it in any models, creating and returning aggregated error
             StringBuilder sb = new StringBuilder();
             int i = 0;
-            for( eu.h2020.symbiote.ontology.errors.PropertyNotFoundException exc: propertyNotFoundExceptions) {
+            for( PropertyNotFoundException exc: propertyNotFoundExceptions) {
                 sb.append( "["+i++ + " " + exc.getSearchedModel() + "] ");
             }
-            throw new eu.h2020.symbiote.ontology.errors.PropertyNotFoundException(name, sb.toString());
+            throw new PropertyNotFoundException(name, sb.toString());
         }
 
         return uri;
     }
 
     private static String findUriForNameInModel( String name, Dataset modelDataset, String modelBasename ) throws eu.h2020.symbiote.ontology.errors.PropertyNotFoundException {
-        String uri = null;
+        String uri;
 
         Resource resourceToSearch = ResourceFactory.createResource(modelBasename + name);
         if( modelDataset.getDefaultModel().containsResource(resourceToSearch) ) {
             uri = modelBasename + name;
         } else {
-            throw new eu.h2020.symbiote.ontology.errors.PropertyNotFoundException(name,modelBasename);
+            throw new PropertyNotFoundException(name,modelBasename);
         }
-
         return uri;
     }
 
+    public static Model findInformationModelById( String id ) {
+        return pimDataset.getNamedModel(OntologyHelper.getInformationModelUri(id));
+    }
 
     private static void insertGraph(Dataset dataset, String uri, String rdf, RDFFormat format) {
         Model model = ModelFactory.createDefaultModel();
@@ -144,7 +161,7 @@ public class SymbioteModelsUtil {
 //        }
 //        dataset.getNamedModel(uri).add(model);
         dataset.begin(ReadWrite.WRITE);
-        dataset.getDefaultModel().add(model);
+        dataset.getNamedModel(uri).add(model);
         dataset.commit();
         dataset.end();
     }

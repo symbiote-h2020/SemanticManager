@@ -2,7 +2,9 @@ package eu.h2020.symbiote.ontology;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import eu.h2020.symbiote.core.internal.*;
+import eu.h2020.symbiote.core.model.InformationModel;
 import eu.h2020.symbiote.core.model.Platform;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
@@ -168,14 +170,14 @@ public class SemanticManager {
      * @param pimMetaModel Information about the PIM meta model, including model
      * containing RDF
      */
-    public void registerNewPIMMetaModel(PIMMetaModelDescription pimMetaModel) {
+    public void registerNewPIMMetaModel(InformationModel pimMetaModel) {
         log.info("Registering new PIM meta model " + pimMetaModel.getUri());
 
-        Model model = ModelFactory.createDefaultModel();
-        try (StringReader reader = new StringReader(pimMetaModel.getRdf())) {
-            model.read(reader, null, pimMetaModel.getRdfFormat().toString());
-        }
-        //TODO save meta model in rdf store see jira SYM-339
+//        Model model = ModelFactory.createDefaultModel();
+//        try (StringReader reader = new StringReader(pimMetaModel.getRdf())) {
+//            model.read(reader, null, pimMetaModel.getRdfFormat().toString());
+//        }
+        SymbioteModelsUtil.addModels(Arrays.asList(pimMetaModel));
 
     }
 
