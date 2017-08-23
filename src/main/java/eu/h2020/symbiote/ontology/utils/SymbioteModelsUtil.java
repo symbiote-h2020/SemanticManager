@@ -32,13 +32,17 @@ public class SymbioteModelsUtil {
 
     private static final String CIM_FILE = "/core-v0.6.owl";
     private static final String CIM_BASE_NAME = "http://www.symbiote-h2020.eu/ontology/core#";
+    private static final String CIM_ID = "CIM1";
     private static final String BIM_FILE = "/bim-0.3.owl";
     private static final String BIM_BASE_NAME = "http://www.symbiote-h2020.eu/ontology/bim/property#";
+    private static final String BIM_ID = "BIM1";
     private static final String MIM_FILE = "/meta-v0.3.owl";
     private static final String MIM_BASE_NAME = "http://www.symbiote-h2020.eu/ontology/meta#";
+    private static final String MIM_ID = "MIM1";
     private static final String QU_FILE = "/qu-rec20.owl";
 //    private static final String QU_DIM_BASE_NAME = "http://purl.oclc.org/NET/ssnx/qu/dim#";
     private static final String QU_DIM_BASE_NAME = "http://purl.oclc.org/NET/ssnx/qu/quantity#";
+    private static final String QU_ID = "QU1";
 
     private static Dataset cimDataset;
     private static Dataset bimDataset;
@@ -71,10 +75,10 @@ public class SymbioteModelsUtil {
             quRecDataset = DatasetFactory.create();
             pimDataset = DatasetFactory.create();
 
-            insertGraph(cimDataset, "", cimRdf, RDFFormat.Turtle);
-            insertGraph(bimDataset, "", bimRdf, RDFFormat.Turtle);
-            insertGraph(mimDataset, "", mimRdf, RDFFormat.Turtle);
-            insertGraph(quRecDataset, "", quRecRdf, RDFFormat.RDFXML);
+            insertGraph(cimDataset, OntologyHelper.getInformationModelUri(CIM_ID), cimRdf, RDFFormat.Turtle);
+            insertGraph(bimDataset,OntologyHelper.getInformationModelUri(BIM_ID), bimRdf, RDFFormat.Turtle);
+            insertGraph(mimDataset, OntologyHelper.getInformationModelUri(MIM_ID), mimRdf, RDFFormat.Turtle);
+            insertGraph(quRecDataset, OntologyHelper.getInformationModelUri(QU_ID), quRecRdf, RDFFormat.RDFXML);
 
         } catch (IOException e) {
             log.fatal("Error creating basic meta models");
@@ -104,7 +108,7 @@ public class SymbioteModelsUtil {
         log.debug("Checking for " + name + " in symbIoTe models");
         //Check in BIM
         try {
-            uri = findUriForNameInModel(name, bimDataset, BIM_BASE_NAME);
+            uri = findUriForNameInModel(name, OntologyHelper.getInformationModelUri(BIM_ID), bimDataset, BIM_BASE_NAME);
         } catch (eu.h2020.symbiote.ontology.errors.PropertyNotFoundException e ) {
             log.error(e);
             propertyNotFoundExceptions.add(e);
@@ -112,7 +116,7 @@ public class SymbioteModelsUtil {
 
         if( uri == null ) {
             try {
-                uri = findUriForNameInModel(name, quRecDataset, QU_DIM_BASE_NAME);
+                uri = findUriForNameInModel(name,OntologyHelper.getInformationModelUri(QU_ID), quRecDataset, QU_DIM_BASE_NAME);
             } catch (eu.h2020.symbiote.ontology.errors.PropertyNotFoundException e ) {
                 log.error(e);
                 propertyNotFoundExceptions.add(e);
@@ -132,11 +136,11 @@ public class SymbioteModelsUtil {
         return uri;
     }
 
-    private static String findUriForNameInModel( String name, Dataset modelDataset, String modelBasename ) throws eu.h2020.symbiote.ontology.errors.PropertyNotFoundException {
+    private static String findUriForNameInModel( String name, String modelUri, Dataset modelDataset, String modelBasename ) throws eu.h2020.symbiote.ontology.errors.PropertyNotFoundException {
         String uri;
 
         Resource resourceToSearch = ResourceFactory.createResource(modelBasename + name);
-        if( modelDataset.getDefaultModel().containsResource(resourceToSearch) ) {
+        if( modelDataset.getNamedModel(modelUri).containsResource(resourceToSearch) ) {
             uri = modelBasename + name;
         } else {
             throw new PropertyNotFoundException(name,modelBasename);
