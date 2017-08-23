@@ -67,6 +67,9 @@ configurations.all {
 dependencies {
     compile('org.apache.jena:jena-core:3.1.0')
     compile('org.apache.jena:jena-querybuilder:3.1.0')
+	compile('org.apache.jena:jena-cmds:3.1.0') {
+        exclude group: 'org.slf4j'
+    }
 
     compile('eu.symbiote-h2020:MediationFramework:1.0')
 
@@ -135,3 +138,33 @@ check.dependsOn(jacocoTestReport, 'dependencyCheck')
 tasks.withType(Test) {
     systemProperty 'eureka.client.enabled', 'false'
 }
+
+// automatically create ontology classes
+def generatedSourcesFolder = "generated-src";
+def ontologyDir = "src/main/resources/ontologies"
+def ontologyPackage = "eu.h2020.symbIoTe.ontology"
+def ontologyFileExtensions= ["**/*.rdf", "**/*.owl", "**/*.ttl", "**/*.n3"]
+
+task generateOntologies {
+    description = 'Generate Ontology Classes'
+    fileTree(dir: ontologyDir, include: ontologyFileExtensions).each { file ->
+        doLast {
+            javaexec {
+                classpath sourceSets.main.runtimeClasspath
+                main = 'jena.schemagen'
+                args = ["-i", "$ontologyDir/$file.name", "-o", generatedSourcesFolder, "--package", ontologyPackage, "--nocomments", "--ontology", "--nostrict", "--declarations", "\tpublic static final String SOURCE_PATH = \"\"$ontologyDir/$file.name\"\";"]
+            }
+        }
+    }
+    sourceSets {
+        main {
+            java.srcDirs generatedSourcesFolder
+        }
+    }
+}
+
+clean {
+    delete generatedSourcesFolder
+}
+
+build.dependsOn generateOntologies
