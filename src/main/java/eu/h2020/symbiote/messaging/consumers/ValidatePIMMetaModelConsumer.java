@@ -7,10 +7,10 @@ import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
+import eu.h2020.symbiote.core.internal.PIMMetaModelValidationResult;
 import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.messaging.RabbitManager;
 import eu.h2020.symbiote.ontology.SemanticManager;
-import eu.h2020.symbiote.ontology.validation.PIMMetaModelValidationResult;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

@@ -8,10 +8,9 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 import eu.h2020.symbiote.core.internal.CoreResourceRegistryRequest;
-import eu.h2020.symbiote.core.model.RDFInfo;
+import eu.h2020.symbiote.core.internal.ResourceInstanceValidationResult;
 import eu.h2020.symbiote.messaging.RabbitManager;
 import eu.h2020.symbiote.ontology.SemanticManager;
-import eu.h2020.symbiote.ontology.validation.ResourceInstanceValidationResult;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -55,7 +54,7 @@ public class ValidateResourcesInstanceConsumer extends DefaultConsumer {
                                AMQP.BasicProperties properties, byte[] body)
             throws IOException {
         String msg = new String(body);
-        log.debug( "Consume validate PIM meta model message: " + msg );
+        log.debug( "Consume validate resource instance message: " + msg );
 
         //Try to parse the message
         try {

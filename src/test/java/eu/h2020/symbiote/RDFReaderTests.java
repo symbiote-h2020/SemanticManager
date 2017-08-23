@@ -17,6 +17,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 import static eu.h2020.symbiote.TestSetupConfig.*;
@@ -28,6 +29,7 @@ import static eu.h2020.symbiote.TestSetupConfig.*;
 public class RDFReaderTests {
 
     public static final String STATIONARY_SENSOR_TTL_FILE = "/rdf/stationary1.ttl";
+    public static final String STATIONARY_SENSOR_TTL_URI = "http://www.symbiote-h2020.eu/ontology/resources/stationary1";
     public static final String STATIONARY_SENSOR_TTL_FILE2 = "/rdf/stationary2.ttl";
     public static final String GROUP_REGISTER_TTL_FILE = "/rdf/groupRegister.ttl";
     public static final String PLATFORM_INSTANCE_TTL_FILE = "/rdf/platformInstance.ttl";
@@ -47,7 +49,7 @@ public class RDFReaderTests {
 
         rdfInfo.setRdf(stationarySensorRdf);
         rdfInfo.setRdfFormat(RDFFormat.Turtle);
-        List<CoreResource> coreResources = null;
+        Map<String,CoreResource> coreResources = null;
         try {
             coreResources = RDFReader.readResourceInstances(rdfInfo, platformId);
         } catch (RDFParsingError rdfParsingError) {
@@ -55,7 +57,8 @@ public class RDFReaderTests {
         }
         assertNotNull(coreResources);
         assertEquals("Rdf contains 1 resource", 1, coreResources.size());
-        CoreResource coreResource = coreResources.get(0);
+        CoreResource coreResource = coreResources.get(STATIONARY_SENSOR_TTL_URI);
+        assertNotNull(coreResource);
         assertNotNull(coreResource.getId());
         assertNotNull(coreResource.getInterworkingServiceURL());
         assertNotNull(coreResource.getLabels());
@@ -79,7 +82,7 @@ public class RDFReaderTests {
 
         rdfInfo.setRdf(stationarySensorRdf);
         rdfInfo.setRdfFormat(RDFFormat.Turtle);
-        List<CoreResource> coreResources = null;
+        Map<String,CoreResource> coreResources = null;
         try {
             coreResources = RDFReader.readResourceInstances(rdfInfo, platformId);
         } catch (RDFParsingError rdfParsingError) {
@@ -87,7 +90,8 @@ public class RDFReaderTests {
         }
         assertNotNull(coreResources);
         assertEquals("Rdf contains 3 resources", 3, coreResources.size());
-        for( CoreResource coreRes: coreResources ) {
+        for( String coreResPairingId : coreResources.keySet() ) {
+            CoreResource coreRes = coreResources.get(coreResPairingId);
             assertNotNull(coreRes.getId());
             assertNotNull(coreRes.getInterworkingServiceURL());
             assertNotNull(coreRes.getLabels());

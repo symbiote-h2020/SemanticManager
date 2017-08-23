@@ -6,17 +6,13 @@ import eu.h2020.symbiote.core.ci.SparqlQueryOutputFormat;
 import eu.h2020.symbiote.core.internal.CoreSparqlQueryRequest;
 import eu.h2020.symbiote.core.model.Location;
 import eu.h2020.symbiote.core.model.WGS84Location;
+import eu.h2020.symbiote.messaging.RabbitManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 
 /**
  * Utility class for finding existing locations to reuse the URIs
@@ -37,9 +33,12 @@ public class LocationFinder {
 
     private String durableResponseQueueName;
 
-    private LocationFinder(String resourceExchange, String sparqlBindingKey, Connection connection ) {
+    private RabbitManager rabbitManager;
+
+    private LocationFinder(String resourceExchange, String sparqlBindingKey, Connection connection, RabbitManager rabbitManager ) {
         this.resourceExchange = resourceExchange;
         this.sparqlBindingKey = sparqlBindingKey;
+        this.rabbitManager = rabbitManager;
         try {
             channel = connection.createChannel();
             this.durableResponseQueueName = this.channel.queueDeclare("symbIoTe-SemanticManager-searchLocationLookup",true,true,false,null).getQueue();
@@ -49,10 +48,10 @@ public class LocationFinder {
 
     }
 
-    public static LocationFinder getSingleton(String resourceExchange, String sparqlBindingKey, Connection connection) {
+    public static LocationFinder getSingleton(String resourceExchange, String sparqlBindingKey, Connection connection, RabbitManager rabbitManager) {
         synchronized( LocationFinder.class ) {
             if( singleton == null ) {
-                singleton = new LocationFinder(resourceExchange, sparqlBindingKey, connection);
+                singleton = new LocationFinder(resourceExchange, sparqlBindingKey, connection, rabbitManager);
             }
             return singleton;
         }
@@ -112,7 +111,7 @@ public class LocationFinder {
             request.setOutputFormat(SparqlQueryOutputFormat.CSV);
 
             String message = mapper.writeValueAsString(request);
-            String response = sendRpcMessage(this.resourceExchange, this.sparqlBindingKey, message, request.getClass().getCanonicalName());
+            String response = rabbitManager.sendRpcMessage(this.channel, this.durableResponseQueueName,this.resourceExchange, this.sparqlBindingKey, message, request.getClass().getCanonicalName());
             if (response == null)
                 return null;
             return mapper.readValue(response, String.class);
@@ -136,9 +135,14 @@ public class LocationFinder {
         //Location test //dziala ok
         query.append("SELECT ?location WHERE {\n" );
         query.append("\t?location a cim:Location ;\n");
-        query.append("\t\ta cim:WGS84Location ;\n");
-        query.append("\t\trdfs:label \""+ location.getLabel() + "\" ;\n");
-        query.append("\t\trdfs:comment \"" + location.getComment() + "\" .\n");
+        query.append("\t\ta cim:WGS84Location .\n");
+        //TODO locations are now array, need to ensure
+        for( String label: location.getLabels() ) {
+            query.append("\t?location rdfs:label \"" + label + "\" .\n");
+        }
+        for( String comment: location.getComments()) {
+            query.append("\t?location rdfs:comment \"" + location.getComments() + "\" .\n");
+        }
 
         //Ensure that location is defined for this platform...
         query.append("\t?platform a owl:Ontology ;\n");
@@ -157,78 +161,65 @@ public class LocationFinder {
         return query.toString();
     }
 
-    /**
-     * Method used to send message via RPC (Remote Procedure Call) pattern.
-     * In this implementation it covers asynchronous Rabbit communication with synchronous one, as it is used by conventional REST facade.
-     * Before sending a message, a temporary response queue is declared and its name is passed along with the message.
-     * When a consumer handles the message, it returns the result via the response queue.
-     * Since this is a synchronous pattern, it uses timeout of 20 seconds. If the response doesn't come in that time, the method returns with null result.
-     *
-     * @param exchangeName name of the eschange to send message to
-     * @param routingKey   routing key to send message to
-     * @param message      message to be sent
-     * @return response from the consumer or null if timeout occurs
-     */
-    public String sendRpcMessage(String exchangeName, String routingKey, String message, String classType) {
-        try {
-            log.info("Sending RPC message: " + message);
-
-            String correlationId = UUID.randomUUID().toString();
-
-            Map<String, Object> headers = new HashMap<>();
-            headers.put("__TypeId__", classType);
-            headers.put("__ContentTypeId__", Object.class.getCanonicalName());
-
-            AMQP.BasicProperties props = new AMQP.BasicProperties()
-                    .builder()
-                    .correlationId(correlationId)
-                    .replyTo(durableResponseQueueName)
-                    .contentType("application/json")
-                    .headers(headers)
-                    .build();
-
-            final BlockingQueue<String> response = new ArrayBlockingQueue<String>(1);
-
-            DefaultConsumer consumer = new DefaultConsumer(channel) {
-                @Override
-                public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-                    if (properties.getCorrelationId().equals(correlationId)) {
-                        log.debug("Got reply with correlationId: " + correlationId);
-//                        responseMsg = new String(delivery.getBody());
-                        response.offer(new String(body, "UTF-8"));
-//                        getChannel().basicAck(envelope.getDeliveryTag(),false);
-                        getChannel().basicCancel(this.getConsumerTag());
-
-                    } else {
-                        log.debug("Got answer with wrong correlationId... should be " + correlationId + " but got " + properties.getCorrelationId() );
-                    }
-                }
-            };
-
-            this.channel.basicConsume(durableResponseQueueName, true, consumer);
-
-            this.channel.basicPublish(exchangeName, routingKey, props, message.getBytes());
-//            while (true) {
-//                QueueingConsumer.Delivery delivery = consumer.nextDelivery(20000);
-//                if (delivery == null) {
-//                    log.info("Timeout in response retrieval");
-//                    return null;
-//                }
+//    /**
+//     * Method used to send message via RPC (Remote Procedure Call) pattern.
+//     * In this implementation it covers asynchronous Rabbit communication with synchronous one, as it is used by conventional REST facade.
+//     * Before sending a message, a temporary response queue is declared and its name is passed along with the message.
+//     * When a consumer handles the message, it returns the result via the response queue.
+//     * Since this is a synchronous pattern, it uses timeout of 20 seconds. If the response doesn't come in that time, the method returns with null result.
+//     *
+//     * @param exchangeName name of the eschange to send message to
+//     * @param routingKey   routing key to send message to
+//     * @param message      message to be sent
+//     * @return response from the consumer or null if timeout occurs
+//     */
+//    public String sendRpcMessage(String exchangeName, String routingKey, String message, String classType) {
+//        try {
+//            log.info("Sending RPC message: " + message);
 //
-//                if (delivery.getProperties().getCorrelationId().equals(correlationId)) {
-//                    log.info("Wrong correlationID in response message");
-//                    responseMsg = new String(delivery.getBody());
-//                    break;
+//            String correlationId = UUID.randomUUID().toString();
+//
+//            Map<String, Object> headers = new HashMap<>();
+//            headers.put("__TypeId__", classType);
+//            headers.put("__ContentTypeId__", Object.class.getCanonicalName());
+//
+//            AMQP.BasicProperties props = new AMQP.BasicProperties()
+//                    .builder()
+//                    .correlationId(correlationId)
+//                    .replyTo(durableResponseQueueName)
+//                    .contentType("application/json")
+//                    .headers(headers)
+//                    .build();
+//
+//            final BlockingQueue<String> response = new ArrayBlockingQueue<String>(1);
+//
+//            DefaultConsumer consumer = new DefaultConsumer(channel) {
+//                @Override
+//                public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
+//                    if (properties.getCorrelationId().equals(correlationId)) {
+//                        log.debug("Got reply with correlationId: " + correlationId);
+////                        responseMsg = new String(delivery.getBody());
+//                        response.offer(new String(body, "UTF-8"));
+////                        getChannel().basicAck(envelope.getDeliveryTag(),false);
+//                        getChannel().basicCancel(this.getConsumerTag());
+//
+//                    } else {
+//                        log.debug("Got answer with wrong correlationId... should be " + correlationId + " but got " + properties.getCorrelationId() );
+//                    }
 //                }
-//            }
-
-            String responseMsg = response.take();
-            log.info("Response received: " + responseMsg);
-            return responseMsg;
-        } catch (IOException | InterruptedException e) {
-            log.error(e.getMessage(), e);
-        }
-        return null;
-    }
+//            };
+//
+//            this.channel.basicConsume(durableResponseQueueName, true, consumer);
+//
+//            this.channel.basicPublish(exchangeName, routingKey, props, message.getBytes());
+//
+//            String responseMsg = response.take();
+//            log.info("Response received: " + responseMsg);
+//            return responseMsg;
+//        } catch (IOException | InterruptedException e) {
+//            log.error(e.getMessage(), e);
+//        }
+//        return null;
+//    }
 
 }

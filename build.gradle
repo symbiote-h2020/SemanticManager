@@ -85,8 +85,9 @@ dependencies {
             3) project dependency requires changes in settings.gradle file in this project
             4) never commit build.gradle which has project dependencies active as it will break CI builds
     */
-    //compile('com.github.symbiote-h2020:SymbIoTeLibraries:develop-SNAPSHOT') { changing=true }
-    compile('com.github.symbiote-h2020:SymbIoTeLibraries:0.2.1') { changing=true }
+
+    //compile project(':SymbIoTeLibraries')
+    compile('com.github.symbiote-h2020:SymbIoTeLibraries:r3_model_changes-SNAPSHOT') { changing=true }
 
     //Just to generate object ids
 //    compile('org.springframework.boot:spring-boot-starter-data-mongodb')

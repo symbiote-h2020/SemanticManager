@@ -8,6 +8,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 import eu.h2020.symbiote.core.internal.PIMMetaModelDescription;
+import eu.h2020.symbiote.core.model.InformationModel;
 import eu.h2020.symbiote.messaging.RabbitManager;
 import eu.h2020.symbiote.ontology.SemanticManager;
 import org.apache.commons.logging.Log;
@@ -58,7 +59,7 @@ public class RegisterPIMMetaModelConsumer extends DefaultConsumer {
         //Try to parse the message
         try {
             ObjectMapper mapper = new ObjectMapper();
-            PIMMetaModelDescription  registerRequest = mapper.readValue(msg, PIMMetaModelDescription.class);
+            InformationModel registerRequest = mapper.readValue(msg, InformationModel.class);
 
             SemanticManager.getManager().registerNewPIMMetaModel(registerRequest);
 

@@ -35,7 +35,7 @@ public class TestSetupConfig {
     public static final double GENERAL_LOCATION_LAT = 48.864716d;
     public static final double GENERAL_LOCATION_LONG = 2.349014d;
     public static final double GENERAL_LOCATION_ALT = 15d;
-    public static final Location GENERAL_LOCATION = new WGS84Location( GENERAL_LOCATION_LONG,GENERAL_LOCATION_LAT,GENERAL_LOCATION_ALT,GENERAL_LOCATION_NAME,GENERAL_LOCATION_DESCRIPTION );
+    public static final Location GENERAL_LOCATION = new WGS84Location( GENERAL_LOCATION_LONG,GENERAL_LOCATION_LAT,GENERAL_LOCATION_ALT,Arrays.asList(GENERAL_LOCATION_NAME),Arrays.asList(GENERAL_LOCATION_DESCRIPTION ));
 
     public static final String INTERWORKING1_INFORMATION_MODEL_ID = "BIM";
 
@@ -98,6 +98,7 @@ public class TestSetupConfig {
     public static final List<String> ACTUATOR1_COMMENTS = Arrays.asList("This is actuator 1");
     public static final String ACTUATOR1_URL = GENERAL_INTERWORKING_URL;
     public static final Location ACTUATOR1_LOCATION = GENERAL_LOCATION;
+    public static final String ACTUATOR1_INPUT_PARAM_NAME = "param1";
     public static final List<ActuatingService> ACTUATOR1_CAPABILITIES = new ArrayList<>();
 
     public static final String MOBILEDEVICE1_ID = "mobiledevice1";
@@ -129,25 +130,33 @@ public class TestSetupConfig {
         service.setActsOn(ACTUATING_SERVICE1_ACTSON);
         service.setAffects(ACTUATING_SERVICE1_AFFECTS);
 
-        InputParameter inParam = new InputParameter();
-        inParam.setName(ACTUATING_SERVICE1_INPUT_NAME);
-        inParam.setMandatory(ACTUATING_SERVICE1_INPUT_MANDATORY);
-        inParam.setArray(ACTUATING_SERVICE1_INPUT_ARRAY);
-        inParam.setDatatype(ACTUATING_SERVICE1_INPUT_DATATYPE);
-
-        RangeRestriction restriction1 = new RangeRestriction();
-        restriction1.setMin(ACTUATING_SERVICE1_INPUT_RESTRICTION_MIN);
-        restriction1.setMax(ACTUATING_SERVICE1_INPUT_RESTRICTION_MAX);
-        inParam.setRestrictions(Arrays.asList(restriction1));
-        service.setInputParameter(Arrays.asList(inParam));
-
-        Parameter outputParameter = new Parameter();
-        outputParameter.setDatatype(ACTUATING_SERVICE1_OUTPUT_DATATYPE);
-        outputParameter.setArray(ACTUATING_SERVICE1_OUTPUT_ARRAY);
-        service.setOutputParameter(outputParameter);
+        service.setParameters(Arrays.asList(createService1Param()));
+        service.setResultType(createDatatypeString());
         ACTUATOR1_CAPABILITIES.add(service);
         MOBILEDEVICE1_CAPABILITIES.add(service);
         STATIONARYDEVICE1_CAPABILITIES.add(service);
     }
+
+
+    public static Parameter createService1Param() {
+        Parameter param = new Parameter();
+        param.setName(SERVICE1_INPUT_NAME);
+        param.setMandatory(SERVICE1_INPUT_MANDATORY);
+        RangeRestriction restriction1 = new RangeRestriction();
+        restriction1.setMin(SERVICE1_INPUT_RESTRICTION_MIN);
+        restriction1.setMax(SERVICE1_INPUT_RESTRICTION_MAX);
+        param.setRestrictions(Arrays.asList(restriction1));
+
+        param.setDatatype(createDatatypeString());
+        return param;
+    }
+
+    public static RdfsDatatype createDatatypeString() {
+        RdfsDatatype type = new RdfsDatatype();
+        type.setArray(SERVICE1_OUTPUT_ARRAY);
+        type.setDatatypeName("http://www.w3.org/2001/XMLSchema#string");
+        return type;
+    }
+
 
 }
