@@ -67,6 +67,9 @@ configurations.all {
 dependencies {
     compile('org.apache.jena:jena-core:3.1.0')
     compile('org.apache.jena:jena-querybuilder:3.1.0')
+	compile('org.apache.jena:jena-cmds:3.1.0') {
+        exclude group: 'org.slf4j'
+    }
 
     compile('eu.symbiote-h2020:MediationFramework:1.0')
 
@@ -82,8 +85,9 @@ dependencies {
             3) project dependency requires changes in settings.gradle file in this project
             4) never commit build.gradle which has project dependencies active as it will break CI builds
     */
+
     //compile project(':SymbIoTeLibraries')
-    compile('com.github.symbiote-h2020:SymbIoTeLibraries:develop-SNAPSHOT') { changing=true }
+    compile('com.github.symbiote-h2020:SymbIoTeLibraries:r3_model_changes-SNAPSHOT') { changing=true }
 
     //Just to generate object ids
 //    compile('org.springframework.boot:spring-boot-starter-data-mongodb')
@@ -135,3 +139,39 @@ check.dependsOn(jacocoTestReport, 'dependencyCheck')
 tasks.withType(Test) {
     systemProperty 'eureka.client.enabled', 'false'
 }
+
+// automatically create ontology classes
+def generatedSourcesFolder = "generated-src";
+def ontologyDir = "src/main/resources/ontologies"
+def ontologyPackage = "eu.h2020.symbIoTe.ontology"
+def ontologyFileExtensions= ["**/*.rdf", "**/*.owl", "**/*.ttl", "**/*.n3"]
+
+import static org.apache.tools.ant.taskdefs.condition.Os.*
+
+task generateOntologies {
+    description = 'Generate Ontology Classes'
+    fileTree(dir: ontologyDir, include: ontologyFileExtensions).each { file ->
+        doLast {
+            javaexec {
+                classpath sourceSets.main.runtimeClasspath
+                main = 'jena.schemagen'
+                if( isFamily(FAMILY_WINDOWS) ) {
+                    args = ["-i", "$ontologyDir/$file.name", "-o", generatedSourcesFolder, "--package", ontologyPackage, "--nocomments", "--ontology", "--nostrict", "--declarations", "\tpublic static final String SOURCE_PATH = \"\"$ontologyDir/$file.name\"\";"]
+                } else if( isFamily(FAMILY_UNIX) || isFamily(FAMILY_MAC) ) {
+                    args = ["-i", "$ontologyDir/$file.name", "-o", generatedSourcesFolder, "--package", ontologyPackage, "--nocomments", "--ontology", "--nostrict", "--declarations", "\tpublic static final String SOURCE_PATH = \"$ontologyDir/$file.name\";"]
+                }
+            }
+        }
+    }
+    sourceSets {
+        main {
+            java.srcDirs generatedSourcesFolder
+        }
+    }
+}
+
+clean {
+    delete generatedSourcesFolder
+}
+
+compileJava.dependsOn generateOntologies

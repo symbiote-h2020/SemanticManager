@@ -39,7 +39,7 @@ public class TestSymbioteModelsUtil {
 
     private void findExistingProperty( String propertyName) {
         try {
-            String property = SymbioteModelsUtil.findInSymbioteModels(propertyName);
+            String property = SymbioteModelsUtil.findInSymbioteCoreModels(propertyName);
             assertNotNull("Found property should not be null",property);
             assertFalse("Found property should not be empty",property.isEmpty());
         } catch (PropertyNotFoundException e) {
@@ -50,7 +50,7 @@ public class TestSymbioteModelsUtil {
 
     private void findNonExistingProperty( String propertyName) {
         try {
-            String property = SymbioteModelsUtil.findInSymbioteModels(propertyName);
+            String property = SymbioteModelsUtil.findInSymbioteCoreModels(propertyName);
             fail("For nonexisting property error should be thrown");
         } catch (PropertyNotFoundException e) {
             e.printStackTrace();

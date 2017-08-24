@@ -5,9 +5,9 @@
  */
 package eu.h2020.symbiote.ontology.validation;
 
+import eu.h2020.symbIoTe.ontology.CoreInformationModel;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
-import eu.h2020.symbiote.ontology.utils.CoreInformationModel;
 import eu.h2020.symbiote.ontology.utils.StreamHelper;
 import java.io.ByteArrayInputStream;
 import java.io.FileWriter;
@@ -43,6 +43,8 @@ import org.apache.jena.vocabulary.RDFS;
  * @author jab
  */
 public class ValidationHelper {
+
+    public static final String CIM_1_0_2_FILE = "core-v1.0.2.owl";
 
     private static final Log log = LogFactory.getLog(ValidationHelper.class);
     private static ValidationHelper instance;
@@ -170,7 +172,7 @@ public class ValidationHelper {
     private void init() {
         docManager = new OntDocumentManager();
         docManager.setProcessImports(false);
-        docManager.addAltEntry(CoreInformationModel.CIM_PREFIX, CoreInformationModel.CIM_1_0_2_FILE);
+        docManager.addAltEntry(CoreInformationModel.NS, CIM_1_0_2_FILE);
         modelSpecOWL_INF = OntModelSpec.OWL_DL_MEM_RDFS_INF;
         modelSpecOWL = OntModelSpec.OWL_DL_MEM;
         modelSpecOWL_INF.setDocumentManager(docManager);
@@ -212,7 +214,7 @@ public class ValidationHelper {
     }
 
     public boolean checkImportsCIM(OntModel model) {
-        return model.listImportedOntologyURIs().contains(CoreInformationModel.CIM_PREFIX);
+        return model.listImportedOntologyURIs().contains(CoreInformationModel.NS);
     }
 
     public Set<String> getDefinedClasses(OntModel model) {

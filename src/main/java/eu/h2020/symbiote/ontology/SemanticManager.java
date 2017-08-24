@@ -2,7 +2,9 @@ package eu.h2020.symbiote.ontology;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import eu.h2020.symbIoTe.ontology.CoreInformationModel;
 import eu.h2020.symbiote.core.internal.*;
+import eu.h2020.symbiote.core.model.InformationModel;
 import eu.h2020.symbiote.core.model.Platform;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
@@ -12,7 +14,6 @@ import eu.h2020.symbiote.core.model.resources.*;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.errors.RDFGenerationError;
 import eu.h2020.symbiote.ontology.errors.RDFParsingError;
-import eu.h2020.symbiote.ontology.utils.CoreInformationModel;
 import eu.h2020.symbiote.ontology.utils.GenerationResult;
 import eu.h2020.symbiote.ontology.utils.OntologyHelper;
 import eu.h2020.symbiote.ontology.utils.RDFGenerator;
@@ -124,7 +125,7 @@ public class SemanticManager {
             return result;
         }
         // 4. check if any definitions were made in CIM namespace
-        Set<String> resourcesDefinedInCIMNamespace = validationhelper.getDefinedResourcesInNamespace(pim, CoreInformationModel.CIM_PREFIX);
+        Set<String> resourcesDefinedInCIMNamespace = validationhelper.getDefinedResourcesInNamespace(pim, CoreInformationModel.NS);
         if (!resourcesDefinedInCIMNamespace.isEmpty()) {
             result.setSuccess(false);
             result.setMessage("PIM is not allowed to define Resources within the CIM namespace! Found resources: "
@@ -181,14 +182,14 @@ public class SemanticManager {
      * @param pimMetaModel Information about the PIM meta model, including model
      * containing RDF
      */
-    public void registerNewPIMMetaModel(PIMMetaModelDescription pimMetaModel) {
+    public void registerNewPIMMetaModel(InformationModel pimMetaModel) {
         log.info("Registering new PIM meta model " + pimMetaModel.getUri());
 
-        Model model = ModelFactory.createDefaultModel();
-        try (StringReader reader = new StringReader(pimMetaModel.getRdf())) {
-            model.read(reader, null, pimMetaModel.getRdfFormat().toString());
-        }
-        //TODO save meta model in rdf store see jira SYM-339
+//        Model model = ModelFactory.createDefaultModel();
+//        try (StringReader reader = new StringReader(pimMetaModel.getRdf())) {
+//            model.read(reader, null, pimMetaModel.getRdfFormat().toString());
+//        }
+        SymbioteModelsUtil.addModels(Arrays.asList(pimMetaModel));
 
     }
 
@@ -261,9 +262,9 @@ public class SemanticManager {
      */
     public void registerNewPIMInstanceModel(Platform pimInstanceModel) {
         log.info("Registering new PIM instance " + pimInstanceModel.toString());
-        String pimLabel = pimInstanceModel.getName();
-        if (pimLabel != null) {
-            log.info("[NYI] Model for platform " + pimLabel + " will be implemented in R3");
+        List<String> pimLabels = pimInstanceModel.getLabels();
+        if (pimLabels != null) {
+            log.info("[NYI] Model for platform " + pimLabels + " will be implemented in R3");
 //            log.info("Registering new PIM instance " + pimLabel);
 //            if (pimInstanceModel.getRdf() != null && pimInstanceModel.getRdf().trim().length() > 0 && pimInstanceModel.getRdfFormat() != null) {
 //                Model model = ModelFactory.createDefaultModel();
@@ -346,16 +347,11 @@ public class SemanticManager {
         3. check classes of instances are present
         4. check multiplicity constraints of core predicates
          */
+        ObjectMapper mapper = new ObjectMapper();
+        ResourceInstanceValidationRequest rdfResourceValidationRequest = mapper.readValue(request.getBody(), ResourceInstanceValidationRequest.class);
+
         ResourceInstanceValidationResult result = new ResourceInstanceValidationResult();
-        RDFInfo rdfInfo = null;
-        try {
-            new ObjectMapper().readValue(request.getBody(), RDFInfo.class);
-        } catch (IOException ex) {
-            result.setSuccess(false);
-            result.setMessage("request could not be parsed to RDFInfo class. Reason: " + ex.getMessage());
-            return result;
-        }
-        result.setModelValidated(rdfInfo.getRdf());
+        result.setModelValidated(rdfResourceValidationRequest.getRdf());
 
         OntModel instances = null;
         try {

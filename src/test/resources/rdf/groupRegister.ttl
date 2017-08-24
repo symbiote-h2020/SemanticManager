@@ -117,5 +117,5 @@
                           "11" ] ;
         <http://www.symbiote-h2020.eu/ontology/meta#hasResource>
                 <http://www.testcompany.eu/customPlatform/actuator1> , <http://www.testcompany.eu/customPlatform/sensor1>, <http://www.testcompany.eu/customPlatform/service1234> ;
-        <http://www.symbiote-h2020.eu/ontology/meta#hasURL>
+        <http://www.symbiote-h2020.eu/ontology/meta#url>
                 "http://www.testcompany.eu:8888/interworkingInterface" .

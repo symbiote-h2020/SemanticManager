@@ -21,8 +21,8 @@
 
 <http://www.symbiote-h2020.eu/ontology/platforms/1/service/somehost1.com/resourceAccessProxy>
         a       <http://www.symbiote-h2020.eu/ontology/meta#InterworkingService> ;
-        <http://www.symbiote-h2020.eu/ontology/meta#hasInformationModel>
+        <http://www.symbiote-h2020.eu/ontology/meta#usesInformationModel>
                 [ <http://www.symbiote-h2020.eu/ontology/core#id>
                           "11" ] ;
-        <http://www.symbiote-h2020.eu/ontology/meta#hasURL>
+        <http://www.symbiote-h2020.eu/ontology/meta#url>
                 "http://somehost1.com/resourceAccessProxy" .
