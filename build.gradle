@@ -168,4 +168,4 @@ clean {
     delete generatedSourcesFolder
 }
 
-build.dependsOn generateOntologies
+compileJava.dependsOn generateOntologies

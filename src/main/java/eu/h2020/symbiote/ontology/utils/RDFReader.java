@@ -1,5 +1,7 @@
 package eu.h2020.symbiote.ontology.utils;
 
+import eu.h2020.symbIoTe.ontology.CoreInformationModel;
+import eu.h2020.symbIoTe.ontology.MetaInformationModel;
 import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
 import eu.h2020.symbiote.core.model.InterworkingService;
 import eu.h2020.symbiote.core.model.RDFFormat;
@@ -11,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.shared.JenaException;
 import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.RDFS;
 import org.bson.types.ObjectId;
 
 import java.io.IOException;
@@ -39,22 +42,22 @@ public class RDFReader {
             model.read(reader, null, rdfInfo.getRdfFormat().toString());
         }
 
-        StmtIterator platformsIterator = model.listStatements(null,MetaInformationModel.RDF_TYPE,MetaInformationModel.MIM_PLATFORM);
+        StmtIterator platformsIterator = model.listStatements(null,RDF.type, MetaInformationModel.Platform);
         if( platformsIterator.hasNext() ) {
             Resource platformRes = platformsIterator.next().getSubject();
             if( platformsIterator.hasNext() ) {
                 throw new RDFParsingError("Found too many platforms in the RDF. It is possible to only register one platform during single registration." );
             }
-            StmtIterator idIterator = model.listStatements(platformRes, MetaInformationModel.CIM_HASID, (RDFNode)null);
+            StmtIterator idIterator = model.listStatements(platformRes, CoreInformationModel.id, (RDFNode)null);
             String platformId = ensureSingleStatement(idIterator).getObject().asLiteral().toString();
-            StmtIterator labelIterator = model.listStatements(platformRes, CoreInformationModel.RDFS_LABEL, (RDFNode) null);
+            StmtIterator labelIterator = model.listStatements(platformRes, RDFS.label, (RDFNode) null);
             List<String> labelsList = new ArrayList<>();
             while( labelIterator.hasNext() ) {
                 Statement labelStmt = labelIterator.next();
                 labelsList.add(labelStmt.getObject().asLiteral().toString());
             }
 
-            StmtIterator commentsIterator = model.listStatements(platformRes, CoreInformationModel.RDFS_COMMENT, (RDFNode) null);
+            StmtIterator commentsIterator = model.listStatements(platformRes, RDFS.comment, (RDFNode) null);
             List<String> commentList = new ArrayList<>();
             while( commentsIterator.hasNext() ) {
                 String comment = commentsIterator.next().getObject().asLiteral().toString();
@@ -62,19 +65,19 @@ public class RDFReader {
                 commentList.add(comment);
             }
 
-            StmtIterator interworkingInterfaceIterator = model.listStatements(null,MetaInformationModel.RDF_TYPE,MetaInformationModel.MIM_INTERWORKINGSERVICE);
+            StmtIterator interworkingInterfaceIterator = model.listStatements(null,RDF.type,MetaInformationModel.InterworkingService);
             List<InterworkingService> services = new ArrayList<>();
             while(interworkingInterfaceIterator.hasNext()) {
                 Resource serviceRes = interworkingInterfaceIterator.next().getSubject();
-                StmtIterator urlIterator = model.listStatements(serviceRes, MetaInformationModel.MIM_HASURL, (RDFNode) null);
+                StmtIterator urlIterator = model.listStatements(serviceRes, MetaInformationModel.url, (RDFNode) null);
                 String url = ensureSingleStatement(urlIterator).getObject().asLiteral().toString();
 
-                StmtIterator informationModelIterator = model.listStatements(serviceRes, MetaInformationModel.MIM_HASINFORMATIONMODEL, (RDFNode) null);
+                StmtIterator informationModelIterator = model.listStatements(serviceRes, MetaInformationModel.usesInformationModel, (RDFNode) null);
                 RDFNode informationModelRDFNode = ensureSingleStatement(informationModelIterator).getObject();
                 if( informationModelRDFNode instanceof Resource ) {
                     Resource informationModelResource = informationModelRDFNode.asResource();
                     AnonId id = informationModelResource.getId();
-                    RDFNode infModelIdRDFNode = ensureSingleStatement(model.listStatements(model.createResource(id), MetaInformationModel.CIM_HASID, (RDFNode) null)).getObject();
+                    RDFNode infModelIdRDFNode = ensureSingleStatement(model.listStatements(model.createResource(id), CoreInformationModel.id, (RDFNode) null)).getObject();
                     if( infModelIdRDFNode instanceof Literal ) {
                         String infModelId = infModelIdRDFNode.asLiteral().toString();
                         InterworkingService service = new InterworkingService();
@@ -129,7 +132,7 @@ public class RDFReader {
         }
 
 
-        StmtIterator resourceIterator = model.listStatements(null,MetaInformationModel.RDF_TYPE,CoreInformationModel.CIM_RESOURCE);
+        StmtIterator resourceIterator = model.listStatements(null,RDF.type,CoreInformationModel.Resource);
         log.debug("Resources: ");
         List<Resource> rdfResources = new ArrayList<>();
         while( resourceIterator.hasNext()) {
@@ -139,7 +142,7 @@ public class RDFReader {
 //            log.debug( " Got URI: <" + next.getSubject().getURI() + ">");
         }
 
-        StmtIterator interworkingInterfaceIterator = model.listStatements(null,MetaInformationModel.RDF_TYPE,MetaInformationModel.MIM_INTERWORKINGSERVICE);
+        StmtIterator interworkingInterfaceIterator = model.listStatements(null,RDF.type,MetaInformationModel.InterworkingService);
 
         log.debug("Interworking services: ");
         Map<String,String> interworkingServices = new HashMap<>();
@@ -147,7 +150,7 @@ public class RDFReader {
             Statement next = interworkingInterfaceIterator.next();
             log.debug(next);
             Resource subject = next.getSubject();
-            StmtIterator urls = model.listStatements(subject, MetaInformationModel.MIM_HASURL, (RDFNode) null);
+            StmtIterator urls = model.listStatements(subject, MetaInformationModel.url, (RDFNode) null);
             if( urls.hasNext() ) {
                 String url = urls.next().getObject().toString();
                 log.debug(" Found <" + subject.getURI()+"> with uri " + url );
@@ -159,7 +162,7 @@ public class RDFReader {
 
         for( Resource res: rdfResources ) {
             log.debug("Searching mapping for " + res.getURI());
-            StmtIterator searchForResourcesInServices = model.listStatements(null, MetaInformationModel.MIM_HASRESOURCE, res );
+            StmtIterator searchForResourcesInServices = model.listStatements(null, MetaInformationModel.hasResource, res );
             if( !searchForResourcesInServices.hasNext() ) {
                 //Just for logging
                 String msg = "Could not find interworking service that has resource: " + res.getURI();
@@ -195,7 +198,7 @@ public class RDFReader {
 
         resource.setType(SymbioteModelsUtil.getTypeForResource(resource));
 
-        StmtIterator idIterator = model.listStatements(resourceRes, MetaInformationModel.CIM_HASID, (RDFNode) null);
+        StmtIterator idIterator = model.listStatements(resourceRes, CoreInformationModel.id, (RDFNode) null);
         String resourceId;
         if( idIterator.hasNext() ) {
             Statement next = idIterator.next();
@@ -204,12 +207,12 @@ public class RDFReader {
         } else {
             resourceId = String.valueOf(ObjectId.get());
             log.debug("Created id of the resource: " + resourceId);
-            model.add(resourceRes, MetaInformationModel.CIM_HASID, resourceId);
+            model.add(resourceRes, CoreInformationModel.id, resourceId);
         }
         resource.setId(resourceId);
 
         //Labels
-        StmtIterator labelIterator = model.listStatements(resourceRes, CoreInformationModel.RDFS_LABEL, (RDFNode) null);
+        StmtIterator labelIterator = model.listStatements(resourceRes, RDFS.label, (RDFNode) null);
         List<String> labelList = new ArrayList<>();
         while( labelIterator.hasNext() ) {
             String label = labelIterator.next().getObject().asLiteral().toString();
@@ -223,7 +226,7 @@ public class RDFReader {
         resource.setLabels(labelList);
 
         //Comments
-        StmtIterator commentsIterator = model.listStatements(resourceRes, CoreInformationModel.RDFS_COMMENT, (RDFNode) null);
+        StmtIterator commentsIterator = model.listStatements(resourceRes, RDFS.comment, (RDFNode) null);
         List<String> commentList = new ArrayList<>();
         while( commentsIterator.hasNext() ) {
             String comment = commentsIterator.next().getObject().asLiteral().toString();

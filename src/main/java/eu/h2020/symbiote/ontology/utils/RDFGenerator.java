@@ -1,5 +1,8 @@
 package eu.h2020.symbiote.ontology.utils;
 
+import eu.h2020.symbIoTe.ontology.CoreInformationModel;
+import eu.h2020.symbIoTe.ontology.MetaInformationModel;
+import eu.h2020.symbIoTe.ontology.WGS84;
 import eu.h2020.symbiote.cloud.model.data.parameter.InputParameter;
 import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
 import eu.h2020.symbiote.core.model.*;
@@ -12,6 +15,9 @@ import eu.h2020.symbiote.ontology.errors.RDFGenerationError;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jena.rdf.model.*;
+import org.apache.jena.vocabulary.OWL;
+import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.RDFS;
 import org.bson.types.ObjectId;
 
 import java.io.StringWriter;
@@ -44,29 +50,29 @@ public class RDFGenerator {
 
         //Add general resource properties
         org.apache.jena.rdf.model.Resource modelResource = model.createResource(OntologyHelper.getResourceGraphURI(resource.getId()));
-        modelResource.addProperty(CoreInformationModel.RDF_TYPE, CoreInformationModel.CIM_RESOURCE);
-        modelResource.addProperty(CoreInformationModel.CIM_ID, resource.getId()); //TODO this needs to be changed to cim:ID type
+        modelResource.addProperty(RDF.type, CoreInformationModel.Resource);
+        modelResource.addProperty(CoreInformationModel.id, resource.getId()); //TODO this needs to be changed to cim:ID type
         for (String label : resource.getLabels()) {
-            modelResource.addProperty(CoreInformationModel.RDFS_LABEL, label);
+            modelResource.addProperty(RDFS.label, label);
         }
         for (String comment : resource.getComments()) {
-            modelResource.addProperty(CoreInformationModel.RDFS_COMMENT, comment);
+            modelResource.addProperty(RDFS.comment, comment);
         }
         if (resource instanceof MobileSensor) {
-            modelResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_MOBILE);
+            modelResource.addProperty(RDF.type, CoreInformationModel.MobileSensor);
             //Add observed properties and location
             List<String> observesProperty = ((MobileSensor) resource).getObservesProperty();
             Location locatedAt = ((MobileSensor) resource).getLocatedAt();
             if (observesProperty != null) {
                 for (String property : observesProperty) {
-                    modelResource.addProperty(CoreInformationModel.CIM_OBSERVES, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
+                    modelResource.addProperty(CoreInformationModel.observesProperty, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
                 }
             }
 //            modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT,OntologyHelper.getLocationURI(platformId,locatedAt));
             addLocationToModelResource(model, modelResource, locatedAt,platformId);
         }
         if (resource instanceof StationarySensor) {
-            modelResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_STATIONARY);
+            modelResource.addProperty(RDF.type, CoreInformationModel.StationarySensor);
             //Add foi, observed properties and location
             FeatureOfInterest featureOfInterest = ((StationarySensor) resource).getFeatureOfInterest();
             List<String> observesProperty = ((StationarySensor) resource).getObservesProperty();
@@ -74,7 +80,7 @@ public class RDFGenerator {
 
             if (observesProperty != null) {
                 for (String property : observesProperty) {
-                    modelResource.addProperty(CoreInformationModel.CIM_OBSERVES, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
+                    modelResource.addProperty(CoreInformationModel.observesProperty, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
                 }
             }
 //            modelResource.addProperty(CoreInformationModel.CIM_HAS_FOI, OntologyHelper.getFoiURI(platformId,featureOfInterest));
@@ -85,26 +91,26 @@ public class RDFGenerator {
 //        if (resource instanceof ActuatingService) {
 //            addActuatingServiceToModelResource(model, modelResource, (ActuatingService) resource);
         if (resource instanceof Service) {
-            modelResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_SERVICE);
+            modelResource.addProperty(RDF.type, CoreInformationModel.Service);
             //Add name, output parameter and input parameters
             String name = ((Service) resource).getName();
             Datatype resultType = ((Service) resource).getResultType();
             List<Parameter> parameters = ((Service) resource).getParameters();
 
-            modelResource.addProperty(CoreInformationModel.CIM_NAME, name);
+            modelResource.addProperty(CoreInformationModel.name, name);
             addParametersToModelResource(model,modelResource,parameters);
             org.apache.jena.rdf.model.Resource resultTypeResource = createDatatypeModelResource(model, resultType);
 
 //            modelResource.addProperty(CoreInformationModel.CIM_HAS_RESULT_TYPE, resultTypeResource)
 //                    .addProperty()
-//                    model.createResource().addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_PARAMETER)
+//                    model.createResource().addProperty(RDF.type, CoreInformationModel.CIM_PARAMETER)
 //                            .addProperty(CoreInformationModel.CIM_IS_ARRAY, String.valueOf(outputParameter.isArray()))
 //                            .addProperty(CoreInformationModel.CIM_DATATYPE, outputParameter.getDatatype()));
 //            addInputParametersToModelResource(model, modelResource, inputParameters);
         }
 
         if (resource instanceof Actuator) {
-            modelResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_ACTUATOR);
+            modelResource.addProperty(RDF.type, CoreInformationModel.Actuator);
             //Add location and capabilities, ie actuating services connected with this actuator
             Location locatedAt = ((Actuator) resource).getLocatedAt();
             List<Capability> capabilities = ((Actuator) resource).getCapabilities();
@@ -116,8 +122,8 @@ public class RDFGenerator {
 //            resources.putAll(newRes);
         }
 //        if (resource instanceof MobileDevice) {
-//            modelResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_ACTUATOR);
-//            modelResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_MOBILE);
+//            modelResource.addProperty(RDF.type, CoreInformationModel.CIM_ACTUATOR);
+//            modelResource.addProperty(RDF.type, CoreInformationModel.CIM_MOBILE);
 //            Location locatedAt = ((MobileDevice) resource).getLocatedAt();
 //            List<ActuatingService> capabilities = ((MobileDevice) resource).getCapabilities();
 //
@@ -131,13 +137,13 @@ public class RDFGenerator {
 //
 //            if (observesProperty != null) {
 //                for (String property : observesProperty) {
-//                    modelResource.addProperty(CoreInformationModel.CIM_OBSERVES, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
+//                    modelResource.addProperty(CoreInformationModel.observesProperty, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
 //                }
 //            }
 //        }
 //        if (resource instanceof StationaryDevice) {
-//            modelResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_ACTUATOR);
-//            modelResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_STATIONARY);
+//            modelResource.addProperty(RDF.type, CoreInformationModel.CIM_ACTUATOR);
+//            modelResource.addProperty(RDF.type, CoreInformationModel.CIM_STATIONARY);
 //            //Add location and capabilities, ie actuating services connected with this actuator
 //            Location locatedAt = ((StationaryDevice) resource).getLocatedAt();
 //            List<ActuatingService> capabilities = ((StationaryDevice) resource).getCapabilities();
@@ -154,7 +160,7 @@ public class RDFGenerator {
 //
 //            if (observesProperty != null) {
 //                for (String property : observesProperty) {
-//                    modelResource.addProperty(CoreInformationModel.CIM_OBSERVES, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
+//                    modelResource.addProperty(CoreInformationModel.observesProperty, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
 //                }
 //            }
 //            addFoiToModelResource(model, modelResource, featureOfInterest);
@@ -179,41 +185,41 @@ public class RDFGenerator {
                 for (Restriction restriction : parameter.getRestrictions()) {
                     org.apache.jena.rdf.model.Resource restrictionResource = model.createResource();
                     if (restriction instanceof RangeRestriction) {
-                        restrictionResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_RANGE_RESTRICTION)
-                                .addProperty(CoreInformationModel.CIM_MIN, String.valueOf(((RangeRestriction) restriction).getMin()))
-                                .addProperty(CoreInformationModel.CIM_MAX, String.valueOf(((RangeRestriction) restriction).getMax()));
+                        restrictionResource.addProperty(RDF.type, CoreInformationModel.RangeRestriction)
+                                .addProperty(CoreInformationModel.min, String.valueOf(((RangeRestriction) restriction).getMin()))
+                                .addProperty(CoreInformationModel.max, String.valueOf(((RangeRestriction) restriction).getMax()));
                     }
                     if (restriction instanceof LengthRestriction) {
-                        restrictionResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_LENGTH_RESTRICTION)
-                                .addProperty(CoreInformationModel.CIM_MIN, String.valueOf(((LengthRestriction) restriction).getMin()))
-                                .addProperty(CoreInformationModel.CIM_MAX, String.valueOf(((LengthRestriction) restriction).getMax()));
+                        restrictionResource.addProperty(RDF.type, CoreInformationModel.LengthRestriction)
+                                .addProperty(CoreInformationModel.min, String.valueOf(((LengthRestriction) restriction).getMin()))
+                                .addProperty(CoreInformationModel.max, String.valueOf(((LengthRestriction) restriction).getMax()));
                     }
                     if (restriction instanceof EnumRestriction) {
-                        restrictionResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_ENUM_RESTRICTION);
+                        restrictionResource.addProperty(RDF.type, CoreInformationModel.EnumRestriction);
                         for (String enumValue : ((EnumRestriction) restriction).getValues()) {
-                            restrictionResource.addProperty(CoreInformationModel.RDF_VALUE, enumValue);
+                            restrictionResource.addProperty(RDF.value, enumValue);
                         }
                     }
                     if (restriction instanceof RegExRestriction) {
-                        restrictionResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_REGEX_RESTRICTION)
-                                .addProperty(CoreInformationModel.CIM_PATTERN,String.valueOf(((RegExRestriction) restriction).getPattern()));
+                        restrictionResource.addProperty(RDF.type, CoreInformationModel.RegExRestriction)
+                                .addProperty(CoreInformationModel.pattern,String.valueOf(((RegExRestriction) restriction).getPattern()));
                     }
                     if (restriction instanceof InstanceOfRestriction) {
-                        restrictionResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_INSTANCE_OF_RESTRICTION)
-                                .addProperty(CoreInformationModel.CIM_INSTANCE_OF_CLASS,String.valueOf(((InstanceOfRestriction) restriction).getInstanceOfClass()))
-                                .addProperty(CoreInformationModel.CIM_VALUE_PROPERTY,String.valueOf(((InstanceOfRestriction) restriction).getValueProperty()));
+                        restrictionResource.addProperty(RDF.type, CoreInformationModel.InstanceOfRestriction)
+                                .addProperty(CoreInformationModel.onlyInstancesOfClass,String.valueOf(((InstanceOfRestriction) restriction).getInstanceOfClass()))
+                                .addProperty(CoreInformationModel.valueProperty,String.valueOf(((InstanceOfRestriction) restriction).getValueProperty()));
                     }
                     restrictionResources.add(restrictionResource);
                 }
 
-                org.apache.jena.rdf.model.Resource inputResource = model.createResource().addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_PARAMETER)
-                        .addProperty(CoreInformationModel.CIM_DATATYPE, createDatatypeModelResource(model,parameter.getDatatype()))
-                        .addProperty(CoreInformationModel.CIM_NAME, parameter.getName())
-                        .addProperty(CoreInformationModel.CIM_MANDATORY, String.valueOf(parameter.isMandatory()));
+                org.apache.jena.rdf.model.Resource inputResource = model.createResource().addProperty(RDF.type, eu.h2020.symbIoTe.ontology.CoreInformationModel.Parameter)
+                        .addProperty(CoreInformationModel.hasDatatype, createDatatypeModelResource(model,parameter.getDatatype()))
+                        .addProperty(CoreInformationModel.name, parameter.getName())
+                        .addProperty(CoreInformationModel.mandatory, String.valueOf(parameter.isMandatory()));
                 for (org.apache.jena.rdf.model.Resource restriction : restrictionResources) {
-                    inputResource.addProperty(CoreInformationModel.CIM_HAS_RESTRICTION, restriction);
+                    inputResource.addProperty(CoreInformationModel.hasRestriction, restriction);
                 }
-                modelResource.addProperty(CoreInformationModel.CIM_HAS_INPUT, inputResource);
+                modelResource.addProperty(CoreInformationModel.hasParameter, inputResource);
             }
         }
     }
@@ -222,17 +228,17 @@ public class RDFGenerator {
         org.apache.jena.rdf.model.Resource datatypeResource = model.createResource();
 
         if( datatype instanceof ComplexDatatype ) {
-            datatypeResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_COMPLEX_DATATYPE)
-                    .addProperty(CoreInformationModel.CIM_IS_ARRAY, String.valueOf(datatype.isArray()))
-                    .addProperty(CoreInformationModel.CIM_BASED_ON_CLASS, ((ComplexDatatype) datatype).getBasedOnClass() );
+            datatypeResource.addProperty(RDF.type, CoreInformationModel.ComplexDatatype)
+                    .addProperty(CoreInformationModel.isArray, String.valueOf(datatype.isArray()))
+                    .addProperty(CoreInformationModel.basedOnClass, ((ComplexDatatype) datatype).getBasedOnClass() );
             for( DataProperty dataProperty: ((ComplexDatatype) datatype).getDataProperties() ) {
                 org.apache.jena.rdf.model.Resource dataPropertyResource = createDataPropertyModelResource(model, datatypeResource, dataProperty);
-                datatypeResource.addProperty(CoreInformationModel.CIM_HAS_DATATYPE, dataPropertyResource);
+                datatypeResource.addProperty(CoreInformationModel.hasDatatype, dataPropertyResource);
             }
         }
         if( datatype instanceof RdfsDatatype ) {
             datatypeResource = model.createResource(((RdfsDatatype) datatype).getDatatypeName());
-            datatypeResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.RDFS_DATATYPE);
+            datatypeResource.addProperty(RDF.type, RDFS.Datatype);
         }
         return datatypeResource;
     }
@@ -247,9 +253,9 @@ public class RDFGenerator {
         } else if ( dataProperty instanceof ComplexProperty ) {
             basedOn = ((ComplexProperty) dataProperty).getBasedOnProperty();
         }
-            dataPropertyResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_PRIMITIVE_PROPERTY)
-                    .addProperty(CoreInformationModel.CIM_HAS_DATATYPE, datatypeResource)
-                    .addProperty(CoreInformationModel.CIM_BASED_ON_PROPERTY, basedOn);
+            dataPropertyResource.addProperty(RDF.type, CoreInformationModel.PrimitiveProperty)
+                    .addProperty(CoreInformationModel.hasDatatype, datatypeResource)
+                    .addProperty(CoreInformationModel.basedOnProperty, basedOn);
 
         return dataPropertyResource;
     }
@@ -275,56 +281,56 @@ public class RDFGenerator {
                 log.info("No existing locations have been found fulfilling criteria, created new location with ID: " + locationId + " and URI: <" + locationURI + ">" );
             }
             org.apache.jena.rdf.model.Resource locationResource = model.createResource(locationURI);
-            locationResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_LOCATION);
+            locationResource.addProperty(RDF.type, CoreInformationModel.Location);
             for( String label: location.getLabels() ) {
-                locationResource.addProperty(CoreInformationModel.RDFS_LABEL, label);
+                locationResource.addProperty(RDFS.label, label);
             }
             for( String comment: location.getComments() ) {
-                locationResource.addProperty(CoreInformationModel.RDFS_COMMENT, comment);
+                locationResource.addProperty(RDFS.comment, comment);
             }
             if (location instanceof WGS84Location) {
-                locationResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_WGS84_LOCATION)
-                        .addProperty(CoreInformationModel.GEO_LAT, Double.valueOf(((WGS84Location) location).getLatitude()).toString())
-                        .addProperty(CoreInformationModel.GEO_LONG, Double.valueOf(((WGS84Location) location).getLongitude()).toString())
-                        .addProperty(CoreInformationModel.GEO_ALT, Double.valueOf(((WGS84Location) location).getAltitude()).toString());
+                locationResource.addProperty(RDF.type, CoreInformationModel.WGS84Location)
+                        .addProperty(WGS84.lat, Double.valueOf(((WGS84Location) location).getLatitude()).toString())
+                        .addProperty(WGS84.long_, Double.valueOf(((WGS84Location) location).getLongitude()).toString())
+                        .addProperty(WGS84.alt, Double.valueOf(((WGS84Location) location).getAltitude()).toString());
             }
             if (location instanceof SymbolicLocation) {
-                locationResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_SYMBOLIC_LOCATION);
+                locationResource.addProperty(RDF.type, CoreInformationModel.SymbolicLocation);
             }
             if (location instanceof WKTLocation) {
-                locationResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_WKT_LOCATION)
-                        .addProperty(CoreInformationModel.RDF_VALUE, ((WKTLocation) location).getValue());
+                locationResource.addProperty(RDF.type, CoreInformationModel.WKTLocation)
+                        .addProperty(RDF.value, ((WKTLocation) location).getValue());
             }
 
-            modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT, locationResource);
+            modelResource.addProperty(CoreInformationModel.locatedAt, locationResource);
         }
     }
 
     private static void addFoiToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, FeatureOfInterest featureOfInterest) throws PropertyNotFoundException {
         if (featureOfInterest != null) {
             org.apache.jena.rdf.model.Resource foiResource = model.createResource();
-            foiResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_FOI);
+            foiResource.addProperty(RDF.type, CoreInformationModel.FeatureOfInterest);
 
             if (featureOfInterest.getLabels() != null && featureOfInterest.getLabels().size() > 0) {
                 for (String foiLabel : featureOfInterest.getLabels()) {
-                    foiResource.addProperty(CoreInformationModel.RDFS_LABEL, foiLabel);
+                    foiResource.addProperty(RDFS.label, foiLabel);
                 }
             } else {
                 throw new IllegalArgumentException(featureOfInterest.getLabels() == null ? "Feature of interest must have not null labels!" : "Feature of interest must have at least one label!");
             }
             if (featureOfInterest.getComments() != null) {
                 for (String foiComment : featureOfInterest.getComments()) {
-                    foiResource.addProperty(CoreInformationModel.RDFS_COMMENT, foiComment);
+                    foiResource.addProperty(RDFS.comment, foiComment);
                 }
             }
 
             if (featureOfInterest.getHasProperty() != null) {
                 for (String foiProperty : featureOfInterest.getHasProperty()) {
-                    foiResource.addProperty(CoreInformationModel.CIM_HAS_PROPERTY, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(foiProperty)));
+                    foiResource.addProperty(CoreInformationModel.hasProperty, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(foiProperty)));
                 }
             }
 
-            modelResource.addProperty(CoreInformationModel.CIM_HAS_FOI, foiResource);
+            modelResource.addProperty(CoreInformationModel.hasFeatureOfInterest, foiResource);
         }
     }
 
@@ -340,11 +346,11 @@ public class RDFGenerator {
 
                 org.apache.jena.rdf.model.Resource capabilityResource = model.createResource();
 
-                capabilityResource.addProperty(CoreInformationModel.RDF_TYPE, CoreInformationModel.CIM_CAPABILITY);
+                capabilityResource.addProperty(RDF.type, CoreInformationModel.Capability);
                 addParametersToModelResource(model, capabilityResource,capability.getParameters());
                 addEffectToModelResource(model,capabilityResource,capability.getEffects());
 
-                modelResource.addProperty(CoreInformationModel.CIM_HAS_CAPABILITY, capabilityResource);
+                modelResource.addProperty(CoreInformationModel.hasCapability, capabilityResource);
 
                 //Additional, inner service with id - should be moved to handling device
 //                CoreResource service = new CoreResource();
@@ -363,11 +369,11 @@ public class RDFGenerator {
         if( effects != null ) {
             for( Effect effect: effects ) {
                 org.apache.jena.rdf.model.Resource effectResource = model.createResource();
-                effectResource.addProperty(CoreInformationModel.RDF_TYPE, CoreInformationModel.CIM_EFFECT);
+                effectResource.addProperty(RDF.type, CoreInformationModel.Effect);
                 addFoiToModelResource(model,effectResource,effect.getActsOn());
                 for( String property: effect.getAffects()) {
                     //TODO add logic for different Information Models
-                    effectResource.addProperty(CoreInformationModel.CIM_HAS_PROPERTY, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
+                    effectResource.addProperty(CoreInformationModel.hasProperty, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
                 }
             }
         }
@@ -383,7 +389,7 @@ public class RDFGenerator {
 //                    service.setId(String.valueOf(ObjectId.get()));
 //                }
 //                org.apache.jena.rdf.model.Resource serviceResource = model.createResource(OntologyHelper.getResourceGraphURI(service.getId()));
-//                serviceResource.addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_SERVICE)
+//                serviceResource.addProperty(RDF.type, CoreInformationModel.CIM_SERVICE)
 //                        .addProperty(CoreInformationModel.CIM_NAME, service.getName())
 //                        .addProperty(CoreInformationModel.CIM_ID, service.getId())
 //
@@ -400,7 +406,7 @@ public class RDFGenerator {
 //
 //                modelResource.addProperty(CoreInformationModel.CIM_NAME, name);
 //                modelResource.addProperty(CoreInformationModel.CIM_HAS_OUTPUT,
-//                        model.createResource().addProperty(MetaInformationModel.RDF_TYPE, CoreInformationModel.CIM_PARAMETER)
+//                        model.createResource().addProperty(RDF.type, CoreInformationModel.CIM_PARAMETER)
 //                                .addProperty(CoreInformationModel.CIM_IS_ARRAY, String.valueOf(outputParameter.isArray()))
 //                                .addProperty(CoreInformationModel.CIM_DATATYPE, outputParameter.getDatatype()));
 //                addInputParametersToModelResource(model, modelResource, inputParameters);
@@ -420,14 +426,14 @@ public class RDFGenerator {
         Model model = ModelFactory.createDefaultModel();
         // construct proper Platform entry
         org.apache.jena.rdf.model.Resource platformRes = model.createResource(OntologyHelper.getPlatformGraphURI(platform.getId()))
-                .addProperty(MetaInformationModel.RDF_TYPE, MetaInformationModel.OWL_ONTOLOGY)
-                .addProperty(MetaInformationModel.CIM_HASID, platform.getId());
+                .addProperty(RDF.type, OWL.Ontology)
+                .addProperty(CoreInformationModel.id, platform.getId());
 
         for (String comment : platform.getComments()) {
-            platformRes.addProperty(CoreInformationModel.RDFS_COMMENT, comment);
+            platformRes.addProperty(RDFS.comment, comment);
         }
         for (String name : platform.getLabels()) {
-            platformRes.addProperty(CoreInformationModel.RDFS_LABEL, name);
+            platformRes.addProperty(RDFS.label, name);
         }
 
         for (InterworkingService service : platform.getInterworkingServices()) {
@@ -435,11 +441,11 @@ public class RDFGenerator {
             String serviceUri = generateInterworkingServiceUri(OntologyHelper.getPlatformGraphURI(platform.getId()), service.getUrl());
 
             serviceModel.createResource(serviceUri)
-                    .addProperty(MetaInformationModel.RDF_TYPE, MetaInformationModel.MIM_INTERWORKINGSERVICE)
-                    .addProperty(MetaInformationModel.MIM_HASURL, service.getUrl())
-                    .addProperty(MetaInformationModel.MIM_HASINFORMATIONMODEL, model.createResource()
-                            .addProperty(MetaInformationModel.CIM_HASID, service.getInformationModelId()));
-            platformRes.addProperty(MetaInformationModel.MIM_HASSERVICE, model.createResource(serviceUri));
+                    .addProperty(RDF.type, MetaInformationModel.InterworkingService)
+                    .addProperty(MetaInformationModel.url, service.getUrl())
+                    .addProperty(MetaInformationModel.usesInformationModel, model.createResource()
+                            .addProperty(CoreInformationModel.id, service.getInformationModelId()));
+            platformRes.addProperty(MetaInformationModel.hasService, model.createResource(serviceUri));
             model.add(serviceModel);
         }
 

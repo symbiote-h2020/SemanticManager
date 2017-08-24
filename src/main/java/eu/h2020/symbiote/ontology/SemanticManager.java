@@ -2,7 +2,7 @@ package eu.h2020.symbiote.ontology;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Lists;
+import eu.h2020.symbIoTe.ontology.CoreInformationModel;
 import eu.h2020.symbiote.core.internal.*;
 import eu.h2020.symbiote.core.model.InformationModel;
 import eu.h2020.symbiote.core.model.Platform;
@@ -13,7 +13,6 @@ import eu.h2020.symbiote.core.model.resources.*;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.errors.RDFGenerationError;
 import eu.h2020.symbiote.ontology.errors.RDFParsingError;
-import eu.h2020.symbiote.ontology.utils.CoreInformationModel;
 import eu.h2020.symbiote.ontology.utils.GenerationResult;
 import eu.h2020.symbiote.ontology.utils.RDFGenerator;
 import eu.h2020.symbiote.ontology.utils.RDFReader;
@@ -112,7 +111,7 @@ public class SemanticManager {
             return result;
         }
         // 4. check if any definitions were made in CIM namespace
-        Set<String> resourcesDefinedInCIMNamespace = validationhelper.getDefinedResourcesInNamespace(pim, CoreInformationModel.CIM_PREFIX);
+        Set<String> resourcesDefinedInCIMNamespace = validationhelper.getDefinedResourcesInNamespace(pim, CoreInformationModel.NS);
         if (!resourcesDefinedInCIMNamespace.isEmpty()) {
             result.setSuccess(false);
             result.setMessage("PIM is not allowed to define Resources within the CIM namespace! Found resources: " 

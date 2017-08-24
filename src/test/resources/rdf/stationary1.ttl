@@ -38,5 +38,5 @@
                           "11" ] ;
         <http://www.symbiote-h2020.eu/ontology/meta#hasResource>
                 <http://www.symbiote-h2020.eu/ontology/resources/stationary1> ;
-        <http://www.symbiote-h2020.eu/ontology/meta#hasURL>
+        <http://www.symbiote-h2020.eu/ontology/meta#url>
                 "http://somehost1.com/resourceAccessProxy" .
