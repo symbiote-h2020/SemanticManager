@@ -129,7 +129,7 @@ jacocoTestReport {
 
 // owasp config
 dependencyCheck {
-    outputDirectory = "build/reports/security"
+    outputDirectory = "$project.buildDir/reports/security"
 }
 
 // including code quality extensions into the build
