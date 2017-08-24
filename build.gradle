@@ -146,6 +146,8 @@ def ontologyDir = "src/main/resources/ontologies"
 def ontologyPackage = "eu.h2020.symbIoTe.ontology"
 def ontologyFileExtensions= ["**/*.rdf", "**/*.owl", "**/*.ttl", "**/*.n3"]
 
+import static org.apache.tools.ant.taskdefs.condition.Os.*
+
 task generateOntologies {
     description = 'Generate Ontology Classes'
     fileTree(dir: ontologyDir, include: ontologyFileExtensions).each { file ->
@@ -153,7 +155,11 @@ task generateOntologies {
             javaexec {
                 classpath sourceSets.main.runtimeClasspath
                 main = 'jena.schemagen'
-                args = ["-i", "$ontologyDir/$file.name", "-o", generatedSourcesFolder, "--package", ontologyPackage, "--nocomments", "--ontology", "--nostrict", "--declarations", "\tpublic static final String SOURCE_PATH = \"\"$ontologyDir/$file.name\"\";"]
+                if( isFamily(FAMILY_WINDOWS) ) {
+                    args = ["-i", "$ontologyDir/$file.name", "-o", generatedSourcesFolder, "--package", ontologyPackage, "--nocomments", "--ontology", "--nostrict", "--declarations", "\tpublic static final String SOURCE_PATH = \"\"$ontologyDir/$file.name\"\";"]
+                } else if( isFamily(FAMILY_UNIX) || isFamily(FAMILY_MAC) ) {
+                    args = ["-i", "$ontologyDir/$file.name", "-o", generatedSourcesFolder, "--package", ontologyPackage, "--nocomments", "--ontology", "--nostrict", "--declarations", "\tpublic static final String SOURCE_PATH = \"$ontologyDir/$file.name\";"]
+                }
             }
         }
     }
