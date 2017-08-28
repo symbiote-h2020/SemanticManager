@@ -12,11 +12,11 @@
                                              
                                              rdfs:label "symbIoTe Core Information Model"@en ;
                                              
-                                             owl:versionInfo "v 1.0.2 2017/08/03 12:00:00"^^xsd:string ;
+                                             owl:versionInfo "v 1.0.1 2017/08/25 12:00:00"^^xsd:string ;
                                              
                                              rdfs:comment "Core Information Model of the symbIoTe project."@en ;
                                              
-                                             owl:versionIRI <http://www.symbiote-h2020.eu/ontology/core/1.0.1> ;
+                                             owl:versionIRI <http://www.symbiote-h2020.eu/ontology/core/1.0.1#> ;
                                              
                                              owl:imports rdf: ,
                                                          rdfs: ,
@@ -48,40 +48,6 @@
 
 
 
-###  http://www.w3.org/2003/01/geo/wgs84_pos#alt
-
-geo:alt rdf:type owl:AnnotationProperty ;
-        
-        rdfs:label "altitude" ;
-        
-        rdfs:comment """The WGS84 altitude of a SpatialThing (decimal meters 
-above the local reference ellipsoid).""" ;
-        
-        rdfs:domain geo:SpatialThing .
-
-
-
-###  http://www.w3.org/2003/01/geo/wgs84_pos#lat
-
-geo:lat rdf:type owl:AnnotationProperty ;
-        
-        rdfs:label "latitude" ;
-        
-        rdfs:comment "The WGS84 latitude of a SpatialThing (decimal degrees)." ;
-        
-        rdfs:domain geo:SpatialThing .
-
-
-
-###  http://www.w3.org/2003/01/geo/wgs84_pos#long
-
-geo:long rdf:type owl:AnnotationProperty ;
-         
-         rdfs:label "longitude" ;
-         
-         rdfs:comment "The WGS84 longitude of a SpatialThing (decimal degrees)." ;
-         
-         rdfs:domain geo:SpatialThing .
 
 
 
@@ -96,7 +62,9 @@ geo:long rdf:type owl:AnnotationProperty ;
 
 ###  http://www.symbiote-h2020.eu/ontology/core#ID
 
-:ID rdf:type rdfs:Datatype ; rdf:type owl:Class.
+:ID rdf:type rdfs:Datatype ;
+    
+    owl:equivalentClass :ID .
 
 
 
@@ -363,9 +331,9 @@ geo:long rdf:type owl:AnnotationProperty ;
 
 
 
+###  http://www.w3.org/2000/01/rdf-schema#comment
 
-:comment rdf:type owl:DatatypeProperty ;
-			rdfs:subPropertyOf rdfs:comment ;
+rdfs:comment rdf:type owl:ObjectProperty ;
              
              rdfs:range rdf:langString .
 
@@ -373,22 +341,9 @@ geo:long rdf:type owl:AnnotationProperty ;
 
 ###  http://www.w3.org/2000/01/rdf-schema#label
 
-:label rdf:type owl:DatatypeProperty ;
-	rdfs:subPropertyOf rdfs:label ;
+rdfs:label rdf:type owl:ObjectProperty ;
            
            rdfs:range rdf:langString .
-
-
-
-###  http://www.w3.org/2006/time#hasBeginning
-
-time:hasBeginning rdf:type owl:ObjectProperty .
-
-
-
-###  http://www.w3.org/2006/time#hasEnd
-
-time:hasEnd rdf:type owl:ObjectProperty .
 
 
 
@@ -489,6 +444,15 @@ time:hasEnd rdf:type owl:ObjectProperty .
 
 
 
+###  http://www.w3.org/2000/01/rdf-schema#comment
+
+rdfs:comment rdf:type owl:DatatypeProperty .
+
+
+
+###  http://www.w3.org/2000/01/rdf-schema#label
+
+rdfs:label rdf:type owl:DatatypeProperty .
 
 
 ###  http://www.w3.org/2003/01/geo/wgs84_pos#alt
@@ -518,12 +482,6 @@ geo:Point rdf:type owl:Class .
 geo:SpatialThing rdf:type owl:Class .
 
 
-###  http://www.w3.org/2006/time#inXSDDateTimeStamp
-
-time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
-
-
-
 
 
 #################################################################
@@ -551,14 +509,14 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
 :Capability rdf:type owl:Class ;
             
             rdfs:subClassOf [ rdf:type owl:Restriction ;
-                              owl:onProperty :hasEffect ;
-                              owl:onClass :Effect ;
-                              owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
-                            ] ,
-                            [ rdf:type owl:Restriction ;
                               owl:onProperty :hasParameter ;
                               owl:onClass :Parameter ;
                               owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
+                            ] ,
+                            [ rdf:type owl:Restriction ;
+                              owl:onProperty :hasEffect ;
+                              owl:onClass :Effect ;
+                              owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
                             ] .
 
 
@@ -569,14 +527,14 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
                  
                  rdfs:subClassOf :Datatype ,
                                  [ rdf:type owl:Restriction ;
-                                   owl:onProperty :basedOnClass ;
-                                   owl:onClass owl:Class ;
-                                   owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
-                                 ] ,
-                                 [ rdf:type owl:Restriction ;
                                    owl:onProperty :hasProperty ;
                                    owl:onClass :DataProperty ;
                                    owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                 ] ,
+                                 [ rdf:type owl:Restriction ;
+                                   owl:onProperty :basedOnClass ;
+                                   owl:onClass owl:Class ;
+                                   owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                                  ] .
 
 
@@ -642,14 +600,14 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
 :Effect rdf:type owl:Class ;
         
         rdfs:subClassOf [ rdf:type owl:Restriction ;
-                          owl:onProperty :affects ;
-                          owl:onClass :Property ;
-                          owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
-                        ] ,
-                        [ rdf:type owl:Restriction ;
                           owl:onProperty :actsOn ;
                           owl:onClass :FeatureOfInterest ;
                           owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :affects ;
+                          owl:onClass :Property ;
+                          owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
                         ] .
 
 
@@ -672,19 +630,19 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
 :FeatureOfInterest rdf:type owl:Class ;
                    
                    rdfs:subClassOf [ rdf:type owl:Restriction ;
-                                     owl:onProperty rdfs:comment ;
-                                     owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                     owl:onDataRange rdf:langString
-                                   ] ,
-                                   [ rdf:type owl:Restriction ;
                                      owl:onProperty :hasProperty ;
                                      owl:onClass :Property ;
                                      owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
                                    ] ,
                                    [ rdf:type owl:Restriction ;
                                      owl:onProperty rdfs:label ;
-                                     owl:onDataRange rdf:langString ;
+                                     owl:onClass rdf:langString ;
                                      owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                   ] ,
+                                   [ rdf:type owl:Restriction ;
+                                     owl:onProperty rdfs:comment ;
+                                     owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                     owl:onDataRange rdf:langString
                                    ] .
 
 
@@ -695,13 +653,13 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
                        
                        rdfs:subClassOf :Restriction ,
                                        [ rdf:type owl:Restriction ;
-                                         owl:onProperty :valueProperty ;
-                                         owl:onClass owl:DatatypeProperty ;
+                                         owl:onProperty :onlyInstancesOfClass ;
+                                         owl:onClass owl:Class ;
                                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                                        ] ,
                                        [ rdf:type owl:Restriction ;
-                                         owl:onProperty :onlyInstancesOfClass ;
-                                         owl:onClass owl:Class ;
+                                         owl:onProperty :valueProperty ;
+                                         owl:onClass owl:DatatypeProperty ;
                                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                                        ] .
 
@@ -713,12 +671,12 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
                    
                    rdfs:subClassOf :Restriction ,
                                    [ rdf:type owl:Restriction ;
-                                     owl:onProperty :max ;
+                                     owl:onProperty :min ;
                                      owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
                                      owl:onDataRange xsd:integer
                                    ] ,
                                    [ rdf:type owl:Restriction ;
-                                     owl:onProperty :min ;
+                                     owl:onProperty :max ;
                                      owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
                                      owl:onDataRange xsd:integer
                                    ] .
@@ -730,14 +688,14 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
 :Location rdf:type owl:Class ;
           
           rdfs:subClassOf [ rdf:type owl:Restriction ;
-                            owl:onProperty rdfs:label ;
-                            owl:onDataRange rdf:langString ;
-                            owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
-                          ] ,
-                          [ rdf:type owl:Restriction ;
                             owl:onProperty rdfs:comment ;
                             owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
                             owl:onDataRange rdf:langString
+                          ] ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty rdfs:label ;
+                            owl:onClass rdf:langString ;
+                            owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
                           ] .
 
 
@@ -757,18 +715,13 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
 :Observation rdf:type owl:Class ;
              
              rdfs:subClassOf [ rdf:type owl:Restriction ;
-                               owl:onProperty :madeFrom ;
-                               owl:onClass :Location ;
+                               owl:onProperty :resultTime ;
+                               owl:onClass time:Instant ;
                                owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                              ] ,
                              [ rdf:type owl:Restriction ;
                                owl:onProperty :observedBy ;
                                owl:onClass :Sensor ;
-                               owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
-                             ] ,
-                             [ rdf:type owl:Restriction ;
-                               owl:onProperty :resultTime ;
-                               owl:onClass time:Instant ;
                                owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                              ] ,
                              [ rdf:type owl:Restriction ;
@@ -780,6 +733,11 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
                                owl:onProperty :hasObservationValue ;
                                owl:onClass :ObservationValue ;
                                owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :madeFrom ;
+                               owl:onClass :Location ;
+                               owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                              ] .
 
 
@@ -789,8 +747,9 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
 :ObservationValue rdf:type owl:Class ;
                   
                   rdfs:subClassOf [ rdf:type owl:Restriction ;
-                                    owl:onProperty :value ;
-                                    owl:cardinality "1"^^xsd:nonNegativeInteger
+                                    owl:onProperty :hasObservedProperty ;
+                                    owl:onClass :Property ;
+                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                                   ] ,
                                   [ rdf:type owl:Restriction ;
                                     owl:onProperty :hasFeatureOfInterest ;
@@ -798,13 +757,12 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
                                     owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                                   ] ,
                                   [ rdf:type owl:Restriction ;
-                                    owl:onProperty :hasUnitOfMeasurement ;
-                                    owl:onClass :UnitOfMeasurement ;
-                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                    owl:onProperty :value ;
+                                    owl:cardinality "1"^^xsd:nonNegativeInteger
                                   ] ,
                                   [ rdf:type owl:Restriction ;
-                                    owl:onProperty :hasObservedProperty ;
-                                    owl:onClass :Property ;
+                                    owl:onProperty :hasUnitOfMeasurement ;
+                                    owl:onClass :UnitOfMeasurement ;
                                     owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                                   ] .
 
@@ -815,9 +773,9 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
 :Parameter rdf:type owl:Class ;
            
            rdfs:subClassOf [ rdf:type owl:Restriction ;
-                             owl:onProperty :hasRestriction ;
-                             owl:onClass :Restriction ;
-                             owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
+                             owl:onProperty :name ;
+                             owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                             owl:onDataRange xsd:string
                            ] ,
                            [ rdf:type owl:Restriction ;
                              owl:onProperty :mandatory ;
@@ -825,14 +783,14 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
                              owl:onDataRange xsd:boolean
                            ] ,
                            [ rdf:type owl:Restriction ;
+                             owl:onProperty :hasRestriction ;
+                             owl:onClass :Restriction ;
+                             owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
+                           ] ,
+                           [ rdf:type owl:Restriction ;
                              owl:onProperty :hasDatatype ;
                              owl:onClass :Datatype ;
                              owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
-                           ] ,
-                           [ rdf:type owl:Restriction ;
-                             owl:onProperty :name ;
-                             owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                             owl:onDataRange xsd:string
                            ] .
 
 
@@ -843,6 +801,11 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
                    
                    rdfs:subClassOf :DataProperty ,
                                    [ rdf:type owl:Restriction ;
+                                     owl:onProperty :hasRestriction ;
+                                     owl:onClass :Restriction ;
+                                     owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
+                                   ] ,
+                                   [ rdf:type owl:Restriction ;
                                      owl:onProperty :hasDatatype ;
                                      owl:onClass rdfs:Datatype ;
                                      owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
@@ -851,11 +814,6 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
                                      owl:onProperty :basedOnProperty ;
                                      owl:onClass owl:DatatypeProperty ;
                                      owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
-                                   ] ,
-                                   [ rdf:type owl:Restriction ;
-                                     owl:onProperty :hasRestriction ;
-                                     owl:onClass :Restriction ;
-                                     owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
                                    ] .
 
 
@@ -866,7 +824,7 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
           
           rdfs:subClassOf [ rdf:type owl:Restriction ;
                             owl:onProperty rdfs:label ;
-                            owl:onDataRange rdf:langString ;
+                            owl:onClass rdf:langString ;
                             owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
                           ] .
 
@@ -878,12 +836,12 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
                   
                   rdfs:subClassOf :Restriction ,
                                   [ rdf:type owl:Restriction ;
-                                    owl:onProperty :min ;
+                                    owl:onProperty :max ;
                                     owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
                                     owl:onDataRange xsd:double
                                   ] ,
                                   [ rdf:type owl:Restriction ;
-                                    owl:onProperty :max ;
+                                    owl:onProperty :min ;
                                     owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
                                     owl:onDataRange xsd:double
                                   ] .
@@ -908,19 +866,19 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
 :Resource rdf:type owl:Class ;
           
           rdfs:subClassOf [ rdf:type owl:Restriction ;
-                            owl:onProperty :id ;
-                            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                            owl:onDataRange :ID
-                          ] ,
-                          [ rdf:type owl:Restriction ;
                             owl:onProperty rdfs:label ;
-                            owl:onDataRange rdf:langString ;
+                            owl:onClass rdf:langString ;
                             owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
                           ] ,
                           [ rdf:type owl:Restriction ;
                             owl:onProperty rdfs:comment ;
                             owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
                             owl:onDataRange rdf:langString
+                          ] ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :id ;
+                            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                            owl:onDataRange :ID
                           ] .
 
 
@@ -960,14 +918,14 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
                            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                          ] ,
                          [ rdf:type owl:Restriction ;
-                           owl:onProperty :hasParameter ;
-                           owl:onClass :Parameter ;
-                           owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
-                         ] ,
-                         [ rdf:type owl:Restriction ;
                            owl:onProperty :name ;
                            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
                            owl:onDataRange xsd:string
+                         ] ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasParameter ;
+                           owl:onClass :Parameter ;
+                           owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
                          ] .
 
 
@@ -1012,7 +970,7 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
                    
                    rdfs:subClassOf [ rdf:type owl:Restriction ;
                                      owl:onProperty rdfs:label ;
-                                     owl:onDataRange rdf:langString ;
+                                     owl:onClass rdf:langString ;
                                      owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
                                    ] ,
                                    [ rdf:type owl:Restriction ;
@@ -1028,17 +986,17 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
                
                rdfs:subClassOf :Location ,
                                [ rdf:type owl:Restriction ;
-                                 owl:onProperty geo:long ;
-                                 owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                 owl:onDataRange xsd:double
-                               ] ,
-                               [ rdf:type owl:Restriction ;
                                  owl:onProperty geo:alt ;
                                  owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
                                  owl:onDataRange xsd:double
                                ] ,
                                [ rdf:type owl:Restriction ;
                                  owl:onProperty geo:lat ;
+                                 owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                 owl:onDataRange xsd:double
+                               ] ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty geo:long ;
                                  owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
                                  owl:onDataRange xsd:double
                                ] .
@@ -1060,87 +1018,7 @@ time:inXSDDateTimeStamp rdf:type owl:DatatypeProperty .
 
 ###  http://www.w3.org/2000/01/rdf-schema#Datatype
 
-rdfs:Datatype rdf:type owl:Class;
-rdfs:subClassOf :Datatype .
-
-
-
-###  http://www.w3.org/2002/07/owl#Class
-
-owl:Class rdf:type owl:Class ;
-          
-          rdfs:label "Class" ;
-          
-          rdfs:subClassOf rdfs:Class ;
-          
-          rdfs:comment "The class of OWL classes." ;
-          
-          rdfs:isDefinedBy owl: .
-
-
-
-###  http://www.w3.org/2002/07/owl#DatatypeProperty
-
-owl:DatatypeProperty rdf:type owl:Class ;
-                     
-                     rdfs:label "DatatypeProperty" ;
-                     
-                     rdfs:subClassOf rdf:Property ;
-                     
-                     rdfs:comment "The class of data properties." ;
-                     
-                     rdfs:isDefinedBy owl: .
-
-
-
-###  http://www.w3.org/2002/07/owl#ObjectProperty
-
-owl:ObjectProperty rdf:type owl:Class ;
-                   
-                   rdfs:label "ObjectProperty" ;
-                   
-                   rdfs:subClassOf rdf:Property ;
-                   
-                   rdfs:comment "The class of object properties." ;
-                   
-                   rdfs:isDefinedBy owl: .
-
-
-
-###  http://www.w3.org/2006/time#Instant
-
-time:Instant rdf:type owl:Class ;
-             
-             rdfs:subClassOf [ rdf:type owl:Restriction ;
-                               owl:onProperty time:inXSDDateTimeStamp ;
-                               owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                               owl:onDataRange xsd:dateTimeStamp
-                             ] .
-
-
-
-###  http://www.w3.org/2006/time#Interval
-
-time:Interval rdf:type owl:Class ;
-              
-              rdfs:subClassOf time:TemporalEntity ,
-                              [ rdf:type owl:Restriction ;
-                                owl:onProperty time:hasEnd ;
-                                owl:onClass time:Instant ;
-                                owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
-                              ] ,
-                              [ rdf:type owl:Restriction ;
-                                owl:onProperty time:hasBeginning ;
-                                owl:onClass time:Instant ;
-                                owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
-                              ] .
-
-
-
-###  http://www.w3.org/2006/time#TemporalEntity
-
-time:TemporalEntity rdf:type owl:Class .
-
+rdfs:Datatype rdfs:subClassOf :Datatype .
 
 
 
