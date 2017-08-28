@@ -174,16 +174,10 @@ public class SymbioteModelsUtil {
         CoreResourceType type = null;
         if( resource instanceof Actuator) {
             type = CoreResourceType.ACTUATOR;
-        } else if( resource instanceof ActuatingService) {
-            type = CoreResourceType.ACTUATING_SERVICE;
         } else if( resource instanceof Service) {
             type = CoreResourceType.SERVICE;
-        } else if( resource instanceof MobileDevice) {
-            type = CoreResourceType.MOBILE_DEVICE;
         } else if( resource instanceof MobileSensor) {
             type = CoreResourceType.MOBILE_SENSOR;
-        } else if( resource instanceof StationaryDevice) {
-            type = CoreResourceType.STATIONARY_DEVICE;
         } else if( resource instanceof StationarySensor) {
             type = CoreResourceType.STATIONARY_SENSOR;
         }
