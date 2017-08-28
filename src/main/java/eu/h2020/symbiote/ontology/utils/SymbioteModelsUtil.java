@@ -1,5 +1,6 @@
 package eu.h2020.symbiote.ontology.utils;
 
+import eu.h2020.symbIoTe.ontology.CoreInformationModel;
 import eu.h2020.symbiote.core.model.InformationModel;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.internal.CoreResourceType;
@@ -76,7 +77,7 @@ public class SymbioteModelsUtil {
             pimDataset = DatasetFactory.create();
 
             insertGraph(cimDataset, OntologyHelper.getInformationModelUri(CIM_ID), cimRdf, RDFFormat.Turtle);
-            insertGraph(bimDataset,OntologyHelper.getInformationModelUri(BIM_ID), bimRdf, RDFFormat.Turtle);
+            insertGraph(bimDataset, OntologyHelper.getInformationModelUri(BIM_ID), bimRdf, RDFFormat.Turtle);
             insertGraph(mimDataset, OntologyHelper.getInformationModelUri(MIM_ID), mimRdf, RDFFormat.Turtle);
             insertGraph(quRecDataset, OntologyHelper.getInformationModelUri(QU_ID), quRecRdf, RDFFormat.RDFXML);
 
@@ -86,10 +87,10 @@ public class SymbioteModelsUtil {
     }
 
     public static void addModels(List<InformationModel> informationModels) {
-        if( informationModels != null ) {
+        if (informationModels != null) {
             log.info("Adding " + informationModels.size() + " information models to Semantic Manager cache");
             for (InformationModel model : informationModels) {
-                insertGraph(pimDataset, OntologyHelper.getInformationModelUri( model.getId() ) , model.getRdf(), model.getRdfFormat());
+                insertGraph(pimDataset, OntologyHelper.getInformationModelUri(model.getId()), model.getRdf(), model.getRdfFormat());
             }
         } else {
             log.fatal("Information models scheduled to be added, but received null information models");
@@ -97,38 +98,40 @@ public class SymbioteModelsUtil {
     }
 
     /**
-     * Checks if specified name is used in one of the symbIoTe Core models: BIM and CIM.
+     * Checks if specified name is used in one of the symbIoTe Core models: BIM
+     * and CIM.
      *
      * @param name Name to search for
-     * @return URI of the resource or <code>null</code> in case it couldn't be found in any of the models.
+     * @return URI of the resource or <code>null</code> in case it couldn't be
+     * found in any of the models.
      */
-    public static String findInSymbioteCoreModels(String name ) throws eu.h2020.symbiote.ontology.errors.PropertyNotFoundException {
+    public static String findInSymbioteCoreModels(String name) throws eu.h2020.symbiote.ontology.errors.PropertyNotFoundException {
         String uri = null;
         List<eu.h2020.symbiote.ontology.errors.PropertyNotFoundException> propertyNotFoundExceptions = new ArrayList<>();
         log.debug("Checking for " + name + " in symbIoTe models");
         //Check in BIM
         try {
             uri = findUriForNameInModel(name, OntologyHelper.getInformationModelUri(BIM_ID), bimDataset, BIM_BASE_NAME);
-        } catch (eu.h2020.symbiote.ontology.errors.PropertyNotFoundException e ) {
+        } catch (eu.h2020.symbiote.ontology.errors.PropertyNotFoundException e) {
             log.error(e);
             propertyNotFoundExceptions.add(e);
         }
 
-        if( uri == null ) {
+        if (uri == null) {
             try {
-                uri = findUriForNameInModel(name,OntologyHelper.getInformationModelUri(QU_ID), quRecDataset, QU_DIM_BASE_NAME);
-            } catch (eu.h2020.symbiote.ontology.errors.PropertyNotFoundException e ) {
+                uri = findUriForNameInModel(name, OntologyHelper.getInformationModelUri(QU_ID), quRecDataset, QU_DIM_BASE_NAME);
+            } catch (eu.h2020.symbiote.ontology.errors.PropertyNotFoundException e) {
                 log.error(e);
                 propertyNotFoundExceptions.add(e);
             }
         }
 
-        if( uri == null ) {
+        if (uri == null) {
             //Could not find it in any models, creating and returning aggregated error
             StringBuilder sb = new StringBuilder();
             int i = 0;
-            for( PropertyNotFoundException exc: propertyNotFoundExceptions) {
-                sb.append( "["+i++ + " " + exc.getSearchedModel() + "] ");
+            for (PropertyNotFoundException exc : propertyNotFoundExceptions) {
+                sb.append("[" + i++ + " " + exc.getSearchedModel() + "] ");
             }
             throw new PropertyNotFoundException(name, sb.toString());
         }
@@ -136,19 +139,19 @@ public class SymbioteModelsUtil {
         return uri;
     }
 
-    private static String findUriForNameInModel( String name, String modelUri, Dataset modelDataset, String modelBasename ) throws eu.h2020.symbiote.ontology.errors.PropertyNotFoundException {
+    private static String findUriForNameInModel(String name, String modelUri, Dataset modelDataset, String modelBasename) throws eu.h2020.symbiote.ontology.errors.PropertyNotFoundException {
         String uri;
 
         Resource resourceToSearch = ResourceFactory.createResource(modelBasename + name);
-        if( modelDataset.getNamedModel(modelUri).containsResource(resourceToSearch) ) {
+        if (modelDataset.getNamedModel(modelUri).containsResource(resourceToSearch)) {
             uri = modelBasename + name;
         } else {
-            throw new PropertyNotFoundException(name,modelBasename);
+            throw new PropertyNotFoundException(name, modelBasename);
         }
         return uri;
     }
 
-    public static Model findInformationModelById( String id ) {
+    public static Model findInformationModelById(String id) {
         return pimDataset.getNamedModel(OntologyHelper.getInformationModelUri(id));
     }
 
@@ -170,16 +173,34 @@ public class SymbioteModelsUtil {
         dataset.end();
     }
 
-    public static CoreResourceType getTypeForResource(eu.h2020.symbiote.core.model.resources.Resource resource ) {
+    public static CoreResourceType getTypeForResource(eu.h2020.symbiote.core.model.resources.Resource resource) {
         CoreResourceType type = null;
-        if( resource instanceof Actuator) {
-            type = CoreResourceType.ACTUATOR;
-        } else if( resource instanceof Service) {
-            type = CoreResourceType.SERVICE;
-        } else if( resource instanceof MobileSensor) {
+        if (resource instanceof Device) {
+            type = CoreResourceType.DEVICE;
+        } else if (resource instanceof MobileSensor) {
             type = CoreResourceType.MOBILE_SENSOR;
-        } else if( resource instanceof StationarySensor) {
+        } else if (resource instanceof StationarySensor) {
             type = CoreResourceType.STATIONARY_SENSOR;
+        } else if (resource instanceof Actuator) {
+            type = CoreResourceType.ACTUATOR;
+        } else if (resource instanceof Service) {
+            type = CoreResourceType.SERVICE;
+        }
+        return type;
+    }
+
+    public static CoreResourceType getTypeForResource(Resource resource) {
+        CoreResourceType type = null;
+        if (resource.equals(CoreInformationModel.Device)) {
+            type = CoreResourceType.DEVICE;
+        } else if (resource.equals(CoreInformationModel.MobileSensor)) {
+            type = CoreResourceType.MOBILE_SENSOR;
+        } else if (resource.equals(CoreInformationModel.StationarySensor)) {
+            type = CoreResourceType.STATIONARY_SENSOR;
+        } else if (resource.equals(CoreInformationModel.Actuator)) {
+            type = CoreResourceType.ACTUATOR;
+        } else if (resource.equals(CoreInformationModel.Service)) {
+            type = CoreResourceType.SERVICE;
         }
         return type;
     }

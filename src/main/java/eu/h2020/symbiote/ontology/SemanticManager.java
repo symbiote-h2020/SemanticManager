@@ -9,7 +9,6 @@ import eu.h2020.symbiote.core.model.Platform;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.core.model.internal.CoreResource;
-import eu.h2020.symbiote.core.model.internal.CoreResourceType;
 import eu.h2020.symbiote.core.model.resources.*;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.errors.RDFGenerationError;
@@ -28,24 +27,16 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.bson.types.ObjectId;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.OntModel;
-import org.apache.jena.query.ParameterizedSparqlString;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.reasoner.ValidityReport;
-import org.apache.jena.util.iterator.ExtendedIterator;
 
 /**
  * Main class for handling validation and translation. All RDF-related tasks are
@@ -61,10 +52,8 @@ public class SemanticManager {
 
     private static SemanticManager manager = null;
 
-    private final ValidationHelper validationhelper;
-
     private SemanticManager() {
-        validationhelper = ValidationHelper.getInstance();
+
     }
 
     public static SemanticManager getManager() {
@@ -106,26 +95,26 @@ public class SemanticManager {
         // 1. check for valid RDF
         OntModel pim;
         try {
-            pim = validationhelper.read(request, false, false);
+            pim = OntologyHelper.read(request, false, false);
         } catch (IOException ex) {
             result.setSuccess(false);
             result.setMessage("PIM could not be parsed! Reason: " + ex);
             return result;
         }
         // 2. check exactly one owl:Ontology
-        if (validationhelper.getOntologyDefinitions(pim).size() != 1) {
+        if (OntologyHelper.getOntologyDefinitions(pim).size() != 1) {
             result.setSuccess(false);
             result.setMessage("PIM must contain exactly one owl:Ontology");
             return result;
         }
         // 3. check imports core
-        if (!validationhelper.checkImportsCIM(pim)) {
+        if (!ValidationHelper.checkImportsCIM(pim)) {
             result.setSuccess(false);
             result.setMessage("PIM must import CIM directly (using owl:imports)");
             return result;
         }
         // 4. check if any definitions were made in CIM namespace
-        Set<String> resourcesDefinedInCIMNamespace = validationhelper.getDefinedResourcesInNamespace(pim, CoreInformationModel.NS);
+        Set<String> resourcesDefinedInCIMNamespace = ValidationHelper.getDefinedResourcesInNamespace(pim, CoreInformationModel.NS);
         if (!resourcesDefinedInCIMNamespace.isEmpty()) {
             result.setSuccess(false);
             result.setMessage("PIM is not allowed to define Resources within the CIM namespace! Found resources: "
@@ -135,10 +124,10 @@ public class SemanticManager {
         }
 
         // for all further steps we need inference and the imports to be loaded
-        pim = validationhelper.withInf(pim);
-        validationhelper.loadImports(pim);
+        pim = OntologyHelper.withInf(pim);
+        OntologyHelper.loadImports(pim);
         // 5. check only declared classes used
-        Set<String> undefinedButUsedClasses = validationhelper.getUndefinedButUsedClasses(pim);
+        Set<String> undefinedButUsedClasses = ValidationHelper.getUndefinedButUsedClasses(pim);
         if (undefinedButUsedClasses.size() > 0) {
             result.setSuccess(false);
             result.setMessage(String.format("PIM uses %d undefined classes: %s%s",
@@ -348,14 +337,21 @@ public class SemanticManager {
         4. check multiplicity constraints of core predicates
          */
         ObjectMapper mapper = new ObjectMapper();
-        ResourceInstanceValidationRequest rdfResourceValidationRequest = mapper.readValue(request.getBody(), ResourceInstanceValidationRequest.class);
+        ResourceInstanceValidationRequest rdfRequest;
+        try {
+            rdfRequest = mapper.readValue(request.getBody(), ResourceInstanceValidationRequest.class);
+        } catch (IOException ex) {
+            String message = "error parsing request! Request body must contain object of type " + ResourceInstanceValidationRequest.class.getName();
+            log.fatal(message);
+            throw new IllegalArgumentException(message);
+        }
 
         ResourceInstanceValidationResult result = new ResourceInstanceValidationResult();
-        result.setModelValidated(rdfResourceValidationRequest.getRdf());
+        result.setModelValidated(rdfRequest.getRdf());
 
         OntModel instances = null;
         try {
-            instances = validationhelper.read(rdfInfo, false, false);
+            instances = OntologyHelper.read(rdfRequest, false, false);
         } catch (IOException ex) {
             result.setSuccess(false);
             result.setMessage("instances could not be parsed! Reason: " + ex);
@@ -389,85 +385,55 @@ public class SemanticManager {
         }
 
         // load PIM
-        RDFInfo pimInfo = new RDFInfo();
-        // TODO load PIM from storage
-        OntModel pim = null;
-        try {
-            pim = validationhelper.read(pimInfo, true, true);
-        } catch (IOException ex) {
-            log.error("error loading PIM from database", ex);
+        Model loadedPIM = SymbioteModelsUtil.findInformationModelById(rdfRequest.getInformationModelId());
+        if (loadedPIM == null || loadedPIM.isEmpty()) {
+            String message = "PIM with id '" + rdfRequest.getInformationModelId() + "' could not be loaded";
+            log.info(message);
             result.setSuccess(false);
-            result.setMessage("PIM could not be loaded. Reason: " + ex.getMessage());
+            result.setMessage(message);
             return result;
         }
-
         // from now on we need inference
-        ParameterizedSparqlString getResourceQuery = new ParameterizedSparqlString();
-        getResourceQuery.setCommandText("CONSTRUCT {\n"
-                + "	?s ?p ?o.\n"
-                + "}\n"
-                + "{\n"
-                + "	SELECT DISTINCT ?s ?p ?o\n"
-                + "	{\n"
-                + "		{\n"
-                + "			SELECT *\n"
-                + "			{\n"
-                + "				?RESOURCE_URI ?p ?o.\n"
-                + "				BIND( ?RESOURCE_URI as ?s)\n"
-                + "			}\n"
-                + "		}\n"
-                + "		UNION\n"
-                + "		{\n"
-                + "			SELECT *\n"
-                + "			WHERE {\n"
-                + "				?RESOURCE_URI (a|!a)+ ?s . \n"
-                + "				?s ?p ?o.\n"
-                + "			}\n"
-                + "		}\n"
-                + "	}\n"
-                + "}");
-        instances = validationhelper.withInf(instances);
+        OntModel pim = OntologyHelper.create(loadedPIM, true, true);
 
-        Set<Individual> resourceIndividuals = instances.listIndividuals(CoreInformationModel.CIM_RESOURCE).toSet();
-        if (resourceIndividuals.isEmpty()) {
+        instances = OntologyHelper.withInf(instances);
+
+        Map<org.apache.jena.rdf.model.Resource, Model> rdfResources = ValidationHelper.sepearteResources(instances);
+        if (rdfResources.isEmpty()) {
             result.setSuccess(false);
             result.setMessage("provided RDF does not contain any resource information");
             return result;
         }
-        StringBuilder instanceResults = new StringBuilder();
         Map<String, CoreResource> resources = new HashMap<>();
-        for (Individual resource : resourceIndividuals) {
+        StringBuilder instanceResults = new StringBuilder();
+        for (Map.Entry<org.apache.jena.rdf.model.Resource, Model> entry : rdfResources.entrySet()) {
             StringBuilder instanceResult = new StringBuilder();
-            getResourceQuery.setIri("?RESOURCE_URI", resource.getURI());
-            try (QueryExecution qexec = QueryExecutionFactory.create(getResourceQuery.asQuery(), instances)) {
-                Model resourceClosure = qexec.execConstruct();
-                pim.addSubModel(resourceClosure);                
-                ValidityReport report = pim.validate();
-                if (!report.isClean()) {
-                    instanceResult.append("errors during owl validation" + System.lineSeparator());
-                    instanceResult.append(
-                            StreamHelper.stream(report.getReports())
-                                    .map(x -> x.toString())
-                                    .collect(Collectors.joining(System.lineSeparator())));                    
+            pim.addSubModel(entry.getValue());
+            ValidityReport report = pim.validate();
+            if (!report.isClean()) {
+                instanceResult.append("errors during owl validation" + System.lineSeparator());
+                instanceResult.append(
+                        StreamHelper.stream(report.getReports())
+                                .map(x -> x.toString())
+                                .collect(Collectors.joining(System.lineSeparator())));
+            }
+            List<String> cardinalityViolations = ValidationHelper.checkCardinalityViolations(pim, entry.getValue());
+            if (!cardinalityViolations.isEmpty()) {
+                instanceResult.append("errors during cardinality validation").append(System.lineSeparator());
+                instanceResult.append(String.join(System.lineSeparator(), cardinalityViolations));
+            }
+            pim.removeSubModel(entry.getValue());
+            // if resource has no error - create java representation for it
+            if (instanceResult.length() == 0) {
+                try {
+                    resources.put(entry.getKey().getURI(), RDFReader.createCoreResource(entry.getKey(), entry.getValue(), rdfRequest.getRdfFormat()));
+                } catch (RDFParsingError ex) {
+                    instanceResult.append("error creating CoreResource: ").append(ex);
                 }
-                List<String> cardinalityViolations = validationhelper.checkCardinalityViolations(pim, resourceClosure);
-                if (!cardinalityViolations.isEmpty()) {
-                    instanceResult.append("errors during cardinality validation" + System.lineSeparator());
-                    instanceResult.append(String.join(System.lineSeparator(), cardinalityViolations));
-                    // we have cardinality violations and can't accept this resource - discard all or only this?
-                    
-                }
-                pim.removeSubModel(resourceClosure);  
-                CoreResource coreResource = new CoreResource();                
-                coreResource.setRdf(OntologyHelper.modelAsString(resourceClosure, rdfInfo.getRdfFormat()));
-                coreResource.setRdfFormat(rdfInfo.getRdfFormat());
-                // TODO how to find CIM type? Could be multiple e.g. Sensor and Actuator
-                //coreResource.setType(???);
-                resources.put(resource.getURI(), coreResource);
             }
             if (instanceResult.length() > 0) {
-                instanceResults.append(String.format("errors validating RDF for resource '%s':%s", resource.getURI(), System.lineSeparator()));
-                instanceResults.append(instanceResult.toString() + System.lineSeparator());
+                instanceResults.append(String.format("errors validating RDF for resource '%s':%s", entry.getKey().getURI(), System.lineSeparator()));
+                instanceResults.append(instanceResult.toString()).append(System.lineSeparator());
             }
         }
         if (instanceResults.length() > 0) {
@@ -475,31 +441,9 @@ public class SemanticManager {
             result.setMessage("errors validating RDF for resources: " + System.lineSeparator());
             return result;
         }
-        result.setModelValidatedAgainst(OntologyHelper.modelAsString(pim, rdfInfo.getRdfFormat()));
+        result.setModelValidatedAgainst(OntologyHelper.modelAsString(pim, rdfRequest.getRdfFormat()));
         result.setSuccess(true);
         result.setObjectDescription(resources);
-
-        //TODO perform general validation of the RDF
-//        try {
-//            resources = RDFReader.readResourceInstances(rdfInfo, request.getPlatformId());
-//            if (resources != null && resources.size() > 0) {
-//                result.setSuccess(true);
-//                result.setMessage("Validation successful");
-//                result.setModelValidatedAgainst("");
-//            } else {
-//                result.setSuccess(false);
-//                result.setMessage("RDF does not contain any resource information");
-//                result.setModelValidatedAgainst("");
-//            }
-//        } catch (RDFParsingError rdfParsingError) {
-//            rdfParsingError.printStackTrace();
-//            result.setSuccess(false);
-//            result.setMessage("Validation failed: " + rdfParsingError.getMessage());
-//            result.setModelValidatedAgainst("");
-//        }
-//
-//        result.setObjectDescription(resources);
-
         return result;
     }
 

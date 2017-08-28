@@ -10,17 +10,14 @@ import eu.h2020.symbiote.core.model.internal.CoreResource;
 import eu.h2020.symbiote.ontology.errors.RDFParsingError;
 import eu.h2020.symbiote.ontology.utils.RDFReader;
 import org.apache.commons.io.IOUtils;
-import org.apache.jena.atlas.json.JSON;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
-import static eu.h2020.symbiote.TestSetupConfig.*;
 
 /**
  * Created by Szymon Mueller on 07/05/2017.
@@ -51,7 +48,7 @@ public class RDFReaderTests {
         rdfInfo.setRdfFormat(RDFFormat.Turtle);
         Map<String,CoreResource> coreResources = null;
         try {
-            coreResources = RDFReader.readResourceInstances(rdfInfo, platformId);
+            coreResources = RDFReader.readResourceInstances(rdfInfo);
         } catch (RDFParsingError rdfParsingError) {
             rdfParsingError.printStackTrace();
         }
@@ -60,7 +57,8 @@ public class RDFReaderTests {
         CoreResource coreResource = coreResources.get(STATIONARY_SENSOR_TTL_URI);
         assertNotNull(coreResource);
         assertNotNull(coreResource.getId());
-        assertNotNull(coreResource.getInterworkingServiceURL());
+        // Removed becaue want said to get rid of this
+//        assertNotNull(coreResource.getInterworkingServiceURL());
         assertNotNull(coreResource.getLabels());
         assertNotNull(coreResource.getComments());
 //        assertEquals(coreResource.getRdf(),stationarySensorRdf);
@@ -84,7 +82,7 @@ public class RDFReaderTests {
         rdfInfo.setRdfFormat(RDFFormat.Turtle);
         Map<String,CoreResource> coreResources = null;
         try {
-            coreResources = RDFReader.readResourceInstances(rdfInfo, platformId);
+            coreResources = RDFReader.readResourceInstances(rdfInfo);
         } catch (RDFParsingError rdfParsingError) {
             rdfParsingError.printStackTrace();
         }
@@ -93,7 +91,8 @@ public class RDFReaderTests {
         for( String coreResPairingId : coreResources.keySet() ) {
             CoreResource coreRes = coreResources.get(coreResPairingId);
             assertNotNull(coreRes.getId());
-            assertNotNull(coreRes.getInterworkingServiceURL());
+            // Removed becaue want said to get rid of this
+//            assertNotNull(coreRes.getInterworkingServiceURL());
             assertNotNull(coreRes.getLabels());
             assertNotNull(coreRes.getComments());
 //            assertEquals(coreRes.getRdf(), stationarySensorRdf);
