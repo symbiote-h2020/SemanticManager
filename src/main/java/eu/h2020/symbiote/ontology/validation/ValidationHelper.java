@@ -233,14 +233,14 @@ public class ValidationHelper {
         }
     }
 
-    public static Map<Resource, Model> sepearteResources(OntModel model) {
+    public static Map<Resource, Model> sepearteResources(OntModel instances, Model pim) {
         Map<Resource, Model> result = new HashMap<>();
-
-        Set<Individual> resourceIndividuals = model.listIndividuals(CoreInformationModel.Resource).toSet();
+        instances.addSubModel(pim);
+        Set<Individual> resourceIndividuals = instances.listIndividuals(CoreInformationModel.Resource).toSet();
+        instances.removeSubModel(pim);
         for (Individual resource : resourceIndividuals) {
-            StringBuilder instanceResult = new StringBuilder();
             GET_RESOURCE_CLOSURE.setIri("?RESOURCE_URI", resource.getURI());
-            try (QueryExecution qexec = QueryExecutionFactory.create(GET_RESOURCE_CLOSURE.asQuery(), model)) {
+            try (QueryExecution qexec = QueryExecutionFactory.create(GET_RESOURCE_CLOSURE.asQuery(), instances.getRawModel())) {
                 Model resourceClosure = qexec.execConstruct();
                 result.put(resource, resourceClosure);
             }

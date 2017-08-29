@@ -116,8 +116,9 @@ public class RDFReader {
      *
      * @param rdfInfo RDF containing resources information.
      * @return Information about resources read from RDF.
+     * @throws eu.h2020.symbiote.ontology.errors.RDFParsingError
      */
-    public static Map<String, CoreResource> readResourceInstances(RDFInfo rdfInfo) throws RDFParsingError, JenaException {
+    public static Map<String, CoreResource> readResourceInstances(RDFInfo rdfInfo, Model pim) throws RDFParsingError, JenaException {
         Map<String, CoreResource> resources = new HashMap<>();
 
         StringBuilder errorMessages = new StringBuilder();
@@ -143,7 +144,7 @@ public class RDFReader {
         } catch (IOException ex) {
             throw new RDFParsingError("Could not parse RDF, reason: " + ex);
         }
-        Map<Resource, Model> instances = ValidationHelper.sepearteResources(inputModel);
+        Map<Resource, Model> instances = ValidationHelper.sepearteResources(inputModel, pim);
         for (Map.Entry<Resource, Model> entry : instances.entrySet()) {
             resources.put(
                     entry.getKey().getURI(),
@@ -157,21 +158,22 @@ public class RDFReader {
         return resources;
     }
 
+    private static String getResourceId(Resource resource) {
+        if (resource.hasProperty(CoreInformationModel.id)) {
+            RDFNode idNode = resource.getProperty(CoreInformationModel.id).getObject();
+            if (idNode.isLiteral()) {
+                return idNode.asLiteral().toString();
+            }
+        }
+        return String.valueOf(ObjectId.get());
+    }
+
     public static CoreResource createCoreResource(Resource rdfResource, Model model, RDFFormat rdfFormat) throws RDFParsingError {
         CoreResource resource = new CoreResource();
         // TODO implement correctly - needs list of CoreResourceType
         resource.setType(SymbioteModelsUtil.getTypeForResource(rdfResource));
-        // id        
-        RDFNode idNode = rdfResource.getPropertyResourceValue(CoreInformationModel.id);
-        String id;
-        if (idNode == null || !idNode.isLiteral()) {
-            id = String.valueOf(ObjectId.get());
-            log.debug("Created id of the resource: " + id);
-        } else {
-            id = idNode.asLiteral().getString();
-            log.debug("Found id of the resource: " + id);
-        }
-        resource.setId(id);
+        // id                
+        resource.setId(getResourceId(rdfResource));
         // labels                
         resource.setLabels(rdfResource.listProperties(RDFS.label).mapWith(x -> x.getObject().asLiteral().getString()).toList());
         if (resource.getLabels().isEmpty()) {

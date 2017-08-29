@@ -398,7 +398,7 @@ public class SemanticManager {
 
         instances = OntologyHelper.withInf(instances);
 
-        Map<org.apache.jena.rdf.model.Resource, Model> rdfResources = ValidationHelper.sepearteResources(instances);
+        Map<org.apache.jena.rdf.model.Resource, Model> rdfResources = ValidationHelper.sepearteResources(instances, pim);
         if (rdfResources.isEmpty()) {
             result.setSuccess(false);
             result.setMessage("provided RDF does not contain any resource information");

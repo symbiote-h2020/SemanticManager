@@ -1,121 +1,89 @@
-@prefix : <http://www.testcompany.eu/customPlatform#> .
+@prefix : <http://www.example.com/customPlatform#> .
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix cim: <http://www.symbiote-h2020.eu/ontology/core#> .
-@prefix mim: <http://www.symbiote-h2020.eu/ontology/meta#> .
+@prefix core: <http://www.symbiote-h2020.eu/ontology/core#> .
+@prefix meta: <http://www.symbiote-h2020.eu/ontology/meta#> .
+@prefix qu: <http://purl.oclc.org/NET/ssnx/qu/quantity#> .
 
-<http://www.testcompany.eu/customPlatform/service1234>
-        a       <http://www.symbiote-h2020.eu/ontology/core#Resource> , <http://www.symbiote-h2020.eu/ontology/core#ActuatingService> ;
-        <http://www.w3.org/2000/01/rdf-schema#comment>
-                "customPlatform service 1234" ;
-        <http://www.w3.org/2000/01/rdf-schema#label>
-                "service 1234" ;
-        <http://www.symbiote-h2020.eu/ontology/core#affects>
-                <http://purl.oclc.org/NET/ssnx/qu/quantity#temperature> ;
-        <http://www.symbiote-h2020.eu/ontology/core#hasFeatureOfInterest>
-                [ a       <http://www.symbiote-h2020.eu/ontology/core#FeatureOfInterest> ;
-                  <http://www.w3.org/2000/01/rdf-schema#comment>
-                          "custom platform room1" ;
-                  <http://www.w3.org/2000/01/rdf-schema#label>
-                          "customRoom1" ;
-                  <http://www.symbiote-h2020.eu/ontology/core#hasProperty>
-                          <http://purl.oclc.org/NET/ssnx/qu/quantity#temperature>
+:Sensor1
+        a core:StationarySensor ;
+        rdfs:comment "custom stationary 1" ;
+        rdfs:label "custom sensor 1" ;
+        core:hasFeatureOfInterest
+                [ a core:FeatureOfInterest ;
+                  rdfs:comment "custom platform room1" ;
+                  rdfs:label "customRoom1" ;
+                  core:hasProperty qu:temperature
                 ] ;
-        <http://www.symbiote-h2020.eu/ontology/core#hasInputParameter>
-                [ a       <http://www.symbiote-h2020.eu/ontology/core#InputParameter> ;
-                  <http://www.symbiote-h2020.eu/ontology/core#datatype>
-                          "xsd:string" ;
-                  <http://www.symbiote-h2020.eu/ontology/core#hasRestriction>
-                          [ a       <http://www.symbiote-h2020.eu/ontology/core#RangeRestriction> ;
-                            <http://www.symbiote-h2020.eu/ontology/core#max>
-                                    "10.0" ;
-                            <http://www.symbiote-h2020.eu/ontology/core#min>
-                                    "2.0"
+        core:locatedAt :Paris1 ;
+        core:observes qu:humidity , qu:temperature .
+
+:Actuator1
+	a core:Actuator ;
+	rdfs:comment "dummy actuator for custom platform" ;
+	rdfs:label "actuator 1" ;
+	core:hasCapability [
+		a core:Capability ;
+		core:hasParameter [ 
+			a core:Parameter ;
+                        core:datatype xsd:string ;
+			core:hasRestriction
+				  [ a core:RangeRestriction ;
+					core:min "2.0"^^xsd:double;
+					core:max "10.0"^^xsd:double                             
+				  ] ;
+			core:isArray "false"^^xsd:boolean ;
+			core:mandatory "true"^^xsd:boolean ;
+			core:name "inputParam1"
+		] ;
+		core:hasEffect [
+			core:actsOn [ 
+					a core:FeatureOfInterest ;
+					rdfs:comment "custom platform room1" ;
+					rdfs:label "customRoom1" ;
+					core:hasProperty qu:temperature
+				] ; 
+			core:affects qu:temperature
+		]
+	] ;
+	core:locatedAt :Paris2 .
+
+
+:Service1
+        a core:Service ;
+        rdfs:comment "customPlatform service 1" ;
+        rdfs:label "service 1" ;
+        core:hasParameter
+                [ a core:Parameter ;
+                  core:datatype xsd:string ;
+                  core:hasRestriction
+                          [ a core:RangeRestriction ;
+                            core:min "2.0"^^xsd:double ;
+                            core:max "10.0"^^xsd:double                             
                           ] ;
-                  <http://www.symbiote-h2020.eu/ontology/core#isArray>
-                          "false" ;
-                  <http://www.symbiote-h2020.eu/ontology/core#mandatory>
-                          "true" ;
-                  <http://www.symbiote-h2020.eu/ontology/core#name>
-                          "inputParam1"
+                  core:isArray "false"^^xsd:boolean ;
+                  core:mandatory "true"^^xsd:boolean ;
+                  core:name "inputParam1"
                 ] ;
-        <http://www.symbiote-h2020.eu/ontology/core#hasOutputParameter>
-                [ a       <http://www.symbiote-h2020.eu/ontology/core#Parameter> ;
-                  <http://www.symbiote-h2020.eu/ontology/core#datatype>
-                          "xsd:string" ;
-                  <http://www.symbiote-h2020.eu/ontology/core#isArray>
-                          "false"
-                ] ;
-        <http://www.symbiote-h2020.eu/ontology/core#name>
-                "actuatingService1Name" .
+        core:hasResultType xsd:string ;
+        core:name "service1" .
 
-<http://www.testcompany.eu/customPlatform/location2>
-        a       <http://www.symbiote-h2020.eu/ontology/core#WGS84Location> , <http://www.symbiote-h2020.eu/ontology/core#Location> ;
-        <http://www.w3.org/2000/01/rdf-schema#comment>
-                "This is paris" ;
-        <http://www.w3.org/2000/01/rdf-schema#label>
-                "Paris" ;
-        <http://www.w3.org/2003/01/geo/wgs84_pos#alt>
-                "15.0" ;
-        <http://www.w3.org/2003/01/geo/wgs84_pos#lat>
-                "48.864716" ;
-        <http://www.w3.org/2003/01/geo/wgs84_pos#long>
-                "2.349014" .
-
-<http://www.testcompany.eu/customPlatform/location1111>
-        a       <http://www.symbiote-h2020.eu/ontology/core#WGS84Location> , <http://www.symbiote-h2020.eu/ontology/core#Location> ;
-        <http://www.w3.org/2000/01/rdf-schema#comment>
-                "This is paris" ;
-        <http://www.w3.org/2000/01/rdf-schema#label>
-                "Paris" ;
-        <http://www.w3.org/2003/01/geo/wgs84_pos#alt>
-                "15.0" ;
-        <http://www.w3.org/2003/01/geo/wgs84_pos#lat>
-                "48.864716" ;
-        <http://www.w3.org/2003/01/geo/wgs84_pos#long>
-                "2.349014" .
-
-<http://www.testcompany.eu/customPlatform/sensor1>
-        a       <http://www.symbiote-h2020.eu/ontology/core#StationarySensor> , <http://www.symbiote-h2020.eu/ontology/core#Resource> ;
-        <http://www.w3.org/2000/01/rdf-schema#comment>
-                "custom stationary 1" ;
-        <http://www.w3.org/2000/01/rdf-schema#label>
-                "custom sensor 1" ;
-        <http://www.symbiote-h2020.eu/ontology/core#hasFeatureOfInterest>
-                [ a       <http://www.symbiote-h2020.eu/ontology/core#FeatureOfInterest> ;
-                  <http://www.w3.org/2000/01/rdf-schema#comment>
-                                            "custom platform room1" ;
-                                    <http://www.w3.org/2000/01/rdf-schema#label>
-                                            "customRoom1" ;
-                                    <http://www.symbiote-h2020.eu/ontology/core#hasProperty>
-                                            <http://purl.oclc.org/NET/ssnx/qu/quantity#temperature>
-                ] ;
-        <http://www.symbiote-h2020.eu/ontology/core#locatedAt>
-                <http://www.testcompany.eu/customPlatform/location1111> ;
-        <http://www.symbiote-h2020.eu/ontology/core#observes>
-                <http://purl.oclc.org/NET/ssnx/qu/quantity#humidity> , <http://purl.oclc.org/NET/ssnx/qu/quantity#temperature> .
-
-<http://www.testcompany.eu/customPlatform/actuator1>
-        a       <http://www.symbiote-h2020.eu/ontology/core#Actuator> , <http://www.symbiote-h2020.eu/ontology/core#Resource> ;
-        <http://www.w3.org/2000/01/rdf-schema#comment>
-                "custom actuator 1" ;
-        <http://www.w3.org/2000/01/rdf-schema#label>
-                "Actuator 1" ;
-        <http://www.symbiote-h2020.eu/ontology/core#hasCapability>
-                <http://www.testcompany.eu/customPlatform/service1234> ;
-        <http://www.symbiote-h2020.eu/ontology/core#locatedAt>
-                <http://www.testcompany.eu/customPlatform/location2> .
-
-<http://www.testcompany.eu/customPlatform/interworking>
-        a       <http://www.symbiote-h2020.eu/ontology/meta#InterworkingService> ;
-        <http://www.symbiote-h2020.eu/ontology/meta#hasInformationModel>
-                [ <http://www.symbiote-h2020.eu/ontology/core#id>
-                          "11" ] ;
-        <http://www.symbiote-h2020.eu/ontology/meta#hasResource>
-                <http://www.testcompany.eu/customPlatform/actuator1> , <http://www.testcompany.eu/customPlatform/sensor1>, <http://www.testcompany.eu/customPlatform/service1234> ;
-        <http://www.symbiote-h2020.eu/ontology/meta#url>
-                "http://www.testcompany.eu:8888/interworkingInterface" .
+:Paris1
+        a core:WGS84Location ;
+        rdfs:comment "This is paris" ;
+        rdfs:label "Paris" ;
+        geo:alt "15.0"^^xsd:double ;
+        geo:lat "48.864716"^^xsd:double ;
+        geo:long "2.349014"^^xsd:double .		
+		
+:Paris2
+        a core:WGS84Location ;
+        rdfs:comment "This is paris" ;
+        rdfs:label "Paris" ;
+        geo:alt "15.0"^^xsd:double ;
+        geo:lat "48.864716"^^xsd:double ;
+        geo:long "2.349014"^^xsd:double .

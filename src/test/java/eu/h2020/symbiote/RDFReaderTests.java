@@ -2,22 +2,29 @@ package eu.h2020.symbiote;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import eu.h2020.symbIoTe.ontology.CoreInformationModel;
 import eu.h2020.symbiote.core.cci.RDFResourceRegistryRequest;
 import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.core.model.internal.CoreResource;
 import eu.h2020.symbiote.ontology.errors.RDFParsingError;
+import eu.h2020.symbiote.ontology.utils.OntologyHelper;
 import eu.h2020.symbiote.ontology.utils.RDFReader;
+import java.io.FileReader;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.Map;
+import org.apache.jena.rdf.model.Model;
 
 import static org.junit.Assert.*;
+import org.junit.Before;
 
 /**
  * Created by Szymon Mueller on 07/05/2017.
@@ -26,31 +33,34 @@ import static org.junit.Assert.*;
 public class RDFReaderTests {
 
     public static final String STATIONARY_SENSOR_TTL_FILE = "/rdf/stationary1.ttl";
-    public static final String STATIONARY_SENSOR_TTL_URI = "http://www.symbiote-h2020.eu/ontology/resources/stationary1";
+    public static final String STATIONARY_SENSOR_TTL_URI = "http://www.example.com/platformA#StationarySensor1";
     public static final String STATIONARY_SENSOR_TTL_FILE2 = "/rdf/stationary2.ttl";
     public static final String GROUP_REGISTER_TTL_FILE = "/rdf/groupRegister.ttl";
     public static final String PLATFORM_INSTANCE_TTL_FILE = "/rdf/platformInstance.ttl";
+    public static Model CIM;
+
+    @Before
+    public void init() throws MalformedURLException, IOException, URISyntaxException {
+        RDFInfo rdfInfoCIM = new RDFInfo();
+        rdfInfoCIM.setRdfFormat(RDFFormat.Turtle);
+        rdfInfoCIM.setRdf(IOUtils.toString(new FileReader(CoreInformationModel.SOURCE_PATH)));
+        CIM = OntologyHelper.read(rdfInfoCIM, true, true);
+    }
 
     @Test
     public void testResourceRDFReader() {
-        String platformId = "Platform1";
-        RDFInfo rdfInfo = new RDFInfo();
-
-        String stationarySensorRdf = null;
+        RDFInfo rdfInfoPlatform1 = new RDFInfo();
         try {
-            stationarySensorRdf = IOUtils.toString(this.getClass()
-                    .getResource(STATIONARY_SENSOR_TTL_FILE));
+            rdfInfoPlatform1.setRdf(IOUtils.toString(this.getClass().getResource(STATIONARY_SENSOR_TTL_FILE)));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        rdfInfo.setRdf(stationarySensorRdf);
-        rdfInfo.setRdfFormat(RDFFormat.Turtle);
-        Map<String,CoreResource> coreResources = null;
+        rdfInfoPlatform1.setRdfFormat(RDFFormat.Turtle);
+        Map<String, CoreResource> coreResources = null;
         try {
-            coreResources = RDFReader.readResourceInstances(rdfInfo);
-        } catch (RDFParsingError rdfParsingError) {
-            rdfParsingError.printStackTrace();
+            coreResources = RDFReader.readResourceInstances(rdfInfoPlatform1, CIM);
+        } catch (RDFParsingError ex) {
+            ex.printStackTrace();        
         }
         assertNotNull(coreResources);
         assertEquals("Rdf contains 1 resource", 1, coreResources.size());
@@ -62,7 +72,7 @@ public class RDFReaderTests {
         assertNotNull(coreResource.getLabels());
         assertNotNull(coreResource.getComments());
 //        assertEquals(coreResource.getRdf(),stationarySensorRdf);
-        assertEquals(coreResource.getRdfFormat(),RDFFormat.Turtle);
+        assertEquals(coreResource.getRdfFormat(), RDFFormat.Turtle);
     }
 
     @Test
@@ -80,15 +90,15 @@ public class RDFReaderTests {
 
         rdfInfo.setRdf(stationarySensorRdf);
         rdfInfo.setRdfFormat(RDFFormat.Turtle);
-        Map<String,CoreResource> coreResources = null;
+        Map<String, CoreResource> coreResources = null;
         try {
-            coreResources = RDFReader.readResourceInstances(rdfInfo);
+            coreResources = RDFReader.readResourceInstances(rdfInfo, CIM);
         } catch (RDFParsingError rdfParsingError) {
             rdfParsingError.printStackTrace();
         }
         assertNotNull(coreResources);
         assertEquals("Rdf contains 3 resources", 3, coreResources.size());
-        for( String coreResPairingId : coreResources.keySet() ) {
+        for (String coreResPairingId : coreResources.keySet()) {
             CoreResource coreRes = coreResources.get(coreResPairingId);
             assertNotNull(coreRes.getId());
             // Removed becaue want said to get rid of this
@@ -104,65 +114,64 @@ public class RDFReaderTests {
         try {
             String rdf = IOUtils.toString(this.getClass()
                     .getResource(STATIONARY_SENSOR_TTL_FILE2));
-            generateRDFRegistrationReq(rdf,RDFFormat.Turtle);
+            generateRDFRegistrationReq(rdf, RDFFormat.Turtle);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-            }
-
+    }
 
     public void generateJSONLDRDFRegistratioNReq() {
-        String rdf = "{\n" +
-                "  \"@graph\" : [ {\n" +
-                "    \"@id\" : \"http://www.testPlatform1.eu/example/ontology/mobile1/location\",\n" +
-                "    \"@type\" : [ \"http://www.symbiote-h2020.eu/ontology/core#WGS84Location\", \"http://www.symbiote-h2020.eu/ontology/core#Location\" ],\n" +
-                "    \"comment\" : \"This is paris\",\n" +
-                "    \"label\" : \"Paris\",\n" +
-                "    \"alt\" : \"15.0\",\n" +
-                "    \"lat\" : \"48.864716\",\n" +
-                "    \"long\" : \"2.349014\"\n" +
-                "  }, {\n" +
-                "    \"@id\" : \"http://www.testPlatform1.eu/example/ontology/mobile1\",\n" +
-                "    \"@type\" : [ \"http://www.symbiote-h2020.eu/ontology/core#MobileSensor\", \"http://www.symbiote-h2020.eu/ontology/core#Resource\" ],\n" +
-                "    \"locatedAt\" : \"http://www.testPlatform1.eu/example/ontology/mobile1/location\",\n" +
-                "    \"observes\" : \"http://purl.oclc.org/NET/ssnx/qu/quantity#temperature\",\n" +
-                "    \"comment\" : \"RDF mobile sensor 1\",\n" +
-                "    \"label\" : \"RDFMobile1\"\n" +
-                "  } ],\n" +
-                "  \"@context\" : {\n" +
-                "    \"locatedAt\" : {\n" +
-                "      \"@id\" : \"http://www.symbiote-h2020.eu/ontology/core#locatedAt\",\n" +
-                "      \"@type\" : \"@id\"\n" +
-                "    },\n" +
-                "    \"observes\" : {\n" +
-                "      \"@id\" : \"http://www.symbiote-h2020.eu/ontology/core#observes\",\n" +
-                "      \"@type\" : \"@id\"\n" +
-                "    },\n" +
-                "    \"comment\" : {\n" +
-                "      \"@id\" : \"http://www.w3.org/2000/01/rdf-schema#comment\"\n" +
-                "    },\n" +
-                "    \"label\" : {\n" +
-                "      \"@id\" : \"http://www.w3.org/2000/01/rdf-schema#label\"\n" +
-                "    },\n" +
-                "    \"id\" : {\n" +
-                "      \"@id\" : \"http://www.symbiote-h2020.eu/ontology/core#id\"\n" +
-                "    },\n" +
-                "    \"alt\" : {\n" +
-                "      \"@id\" : \"http://www.w3.org/2003/01/geo/wgs84_pos#alt\"\n" +
-                "    },\n" +
-                "    \"long\" : {\n" +
-                "      \"@id\" : \"http://www.w3.org/2003/01/geo/wgs84_pos#long\"\n" +
-                "    },\n" +
-                "    \"lat\" : {\n" +
-                "      \"@id\" : \"http://www.w3.org/2003/01/geo/wgs84_pos#lat\"\n" +
-                "    }\n" +
-                "  }\n" +
-                "}";
+        String rdf = "{\n"
+                + "  \"@graph\" : [ {\n"
+                + "    \"@id\" : \"http://www.testPlatform1.eu/example/ontology/mobile1/location\",\n"
+                + "    \"@type\" : [ \"http://www.symbiote-h2020.eu/ontology/core#WGS84Location\", \"http://www.symbiote-h2020.eu/ontology/core#Location\" ],\n"
+                + "    \"comment\" : \"This is paris\",\n"
+                + "    \"label\" : \"Paris\",\n"
+                + "    \"alt\" : \"15.0\",\n"
+                + "    \"lat\" : \"48.864716\",\n"
+                + "    \"long\" : \"2.349014\"\n"
+                + "  }, {\n"
+                + "    \"@id\" : \"http://www.testPlatform1.eu/example/ontology/mobile1\",\n"
+                + "    \"@type\" : [ \"http://www.symbiote-h2020.eu/ontology/core#MobileSensor\", \"http://www.symbiote-h2020.eu/ontology/core#Resource\" ],\n"
+                + "    \"locatedAt\" : \"http://www.testPlatform1.eu/example/ontology/mobile1/location\",\n"
+                + "    \"observes\" : \"http://purl.oclc.org/NET/ssnx/qu/quantity#temperature\",\n"
+                + "    \"comment\" : \"RDF mobile sensor 1\",\n"
+                + "    \"label\" : \"RDFMobile1\"\n"
+                + "  } ],\n"
+                + "  \"@context\" : {\n"
+                + "    \"locatedAt\" : {\n"
+                + "      \"@id\" : \"http://www.symbiote-h2020.eu/ontology/core#locatedAt\",\n"
+                + "      \"@type\" : \"@id\"\n"
+                + "    },\n"
+                + "    \"observes\" : {\n"
+                + "      \"@id\" : \"http://www.symbiote-h2020.eu/ontology/core#observes\",\n"
+                + "      \"@type\" : \"@id\"\n"
+                + "    },\n"
+                + "    \"comment\" : {\n"
+                + "      \"@id\" : \"http://www.w3.org/2000/01/rdf-schema#comment\"\n"
+                + "    },\n"
+                + "    \"label\" : {\n"
+                + "      \"@id\" : \"http://www.w3.org/2000/01/rdf-schema#label\"\n"
+                + "    },\n"
+                + "    \"id\" : {\n"
+                + "      \"@id\" : \"http://www.symbiote-h2020.eu/ontology/core#id\"\n"
+                + "    },\n"
+                + "    \"alt\" : {\n"
+                + "      \"@id\" : \"http://www.w3.org/2003/01/geo/wgs84_pos#alt\"\n"
+                + "    },\n"
+                + "    \"long\" : {\n"
+                + "      \"@id\" : \"http://www.w3.org/2003/01/geo/wgs84_pos#long\"\n"
+                + "    },\n"
+                + "    \"lat\" : {\n"
+                + "      \"@id\" : \"http://www.w3.org/2003/01/geo/wgs84_pos#lat\"\n"
+                + "    }\n"
+                + "  }\n"
+                + "}";
         generateRDFRegistrationReq(rdf, RDFFormat.JSONLD);
     }
 
-    private void generateRDFRegistrationReq( String rdf, RDFFormat format ) {
+    private void generateRDFRegistrationReq(String rdf, RDFFormat format) {
         RDFResourceRegistryRequest req = new RDFResourceRegistryRequest();
         RDFInfo rdfInfo = new RDFInfo();
         rdfInfo.setRdfFormat(format);

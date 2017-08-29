@@ -163,7 +163,14 @@ public class OntologyHelper {
         return model;
     }
 
-    public static OntModel withInf(OntModel model) {
+    public static OntModel withInf(Model model) {
+        if (model instanceof OntModel) {
+            OntModel ontModel;
+            ontModel = (OntModel) model;
+            if (ontModel.getSpecification().equals(MODEL_SPEC_OWL_INF)) {
+                return ontModel;
+            }
+        }
         return ModelFactory.createOntologyModel(MODEL_SPEC_OWL_INF, model);
     }
 

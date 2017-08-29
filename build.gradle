@@ -165,6 +165,9 @@ task generateOntologies {
         main {
             java.srcDirs generatedSourcesFolder
         }
+        test {
+            java.srcDirs generatedSourcesFolder
+        }
     }
 }
 
@@ -172,4 +175,5 @@ clean {
     delete generatedSourcesFolder
 }
 
+compileTestJava.dependsOn generateOntologies
 compileJava.dependsOn generateOntologies

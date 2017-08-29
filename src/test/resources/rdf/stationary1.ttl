@@ -1,42 +1,30 @@
-@prefix : <http://www.symbiote-h2020.eu/ontology/resources/stationary1#> .
-@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
-@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix : <http://www.example.com/platformA#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix xml: <http://www.w3.org/XML/1998/namespace> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix cim: <http://www.symbiote-h2020.eu/ontology/core#> .
-@prefix mim: <http://www.symbiote-h2020.eu/ontology/meta#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix core: <http://www.symbiote-h2020.eu/ontology/core#> .
+@prefix meta: <http://www.symbiote-h2020.eu/ontology/meta#> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix qu:   <http://purl.oclc.org/NET/ssnx/qu/quantity#> .
 
-<http://www.symbiote-h2020.eu/ontology/resources/stationary1>
-        a       <http://www.symbiote-h2020.eu/ontology/core#StationarySensor> , <http://www.symbiote-h2020.eu/ontology/core#Resource> ;
-        <http://www.w3.org/2000/01/rdf-schema#comment>
-                "This is stationary 1" ;
-        <http://www.w3.org/2000/01/rdf-schema#label>
-                "Stationary 1" ;
-        <http://www.symbiote-h2020.eu/ontology/core#hasFeatureOfInterest>
-                [ a       <http://www.symbiote-h2020.eu/ontology/core#FeatureOfInterest> ;
-                  <http://www.w3.org/2000/01/rdf-schema#comment>
-                          "This is room 1" ;
-                  <http://www.w3.org/2000/01/rdf-schema#label>
-                          "Room1" ;
-                  <http://www.symbiote-h2020.eu/ontology/core#hasProperty>
-                          <http://purl.oclc.org/NET/ssnx/qu/quantity#temperature>
+:StationarySensor1
+        a core:StationarySensor ;
+        rdfs:comment "This is stationary sensor 1" ;
+        rdfs:label "Stationary 1" ;
+        core:hasFeatureOfInterest
+                [ a core:FeatureOfInterest ;
+                  rdfs:comment "This is room 1" ;
+                  rdfs:label "Room1" ;
+                  core:hasProperty qu:temperature
                 ] ;
-        <http://www.symbiote-h2020.eu/ontology/core#id>
-                "stationary1" ;
-        <http://www.symbiote-h2020.eu/ontology/core#locatedAt>
-                <http://www.symbiote-h2020.eu/ontology/resources/stationary1/location1111> ;
-        <http://www.symbiote-h2020.eu/ontology/core#observes>
-                <http://purl.oclc.org/NET/ssnx/qu/quantity#humidity> , <http://purl.oclc.org/NET/ssnx/qu/quantity#temperature> .
-
-
-<http://www.symbiote-h2020.eu/ontology/platforms/1/service/somehost1.com/resourceAccessProxy>
-        a       <http://www.symbiote-h2020.eu/ontology/meta#InterworkingService> ;
-        <http://www.symbiote-h2020.eu/ontology/meta#hasInformationModel>
-                [ <http://www.symbiote-h2020.eu/ontology/core#id>
-                          "11" ] ;
-        <http://www.symbiote-h2020.eu/ontology/meta#hasResource>
-                <http://www.symbiote-h2020.eu/ontology/resources/stationary1> ;
-        <http://www.symbiote-h2020.eu/ontology/meta#url>
-                "http://somehost1.com/resourceAccessProxy" .
+        core:id "stationary1" ;
+        core:locatedAt :Paris1 ;
+        core:observes qu:humidity , qu:temperature .
+		
+:Paris1 a core:WGS84Location;
+        rdfs:comment "This is paris" ;
+        rdfs:label "Paris" ;
+        geo:alt "15.0"^^xsd:double ;
+        geo:lat "48.864716"^^xsd:double ;
+        geo:long "2.349014"^^xsd:double .
