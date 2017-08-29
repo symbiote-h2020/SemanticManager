@@ -77,9 +77,9 @@
 #################################################################
 
 
-###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#providesService
+###  http://www.symbiote-h2020.eu/ontology/core#providesService
 
-<http://www.symbiote-h2020.eu/ontology/bim/smartresidence#providesService> rdf:type owl:ObjectProperty ;
+:providesService rdf:type owl:ObjectProperty ;
                                                                            
                                                                            rdfs:domain :Device ;
                                                                            
@@ -583,7 +583,7 @@ geo:SpatialThing rdf:type owl:Class .
         
         rdfs:subClassOf :Resource ,
                         [ rdf:type owl:Restriction ;
-                          owl:onProperty <http://www.symbiote-h2020.eu/ontology/bim/smartresidence#providesService> ;
+                          owl:onProperty :providesService ;
                           owl:onClass :Service ;
                           owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
                         ] ,
