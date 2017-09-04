@@ -1,0 +1,122 @@
+{
+  "@graph" : [ {
+    "@id" : "_:b0",
+    "@type" : "core:Capability",
+    "hasEffect" : "_:b1",
+    "hasParameter" : "_:b2"
+  }, {
+    "@id" : "_:b1",
+    "@type" : "core:Effect",
+    "hasFeatureOfInterest" : "_:b3",
+    "hasProperty" : [ "qu:humidity", "qu:temperature" ]
+  }, {
+    "@id" : "_:b2",
+    "@type" : "core:Parameter",
+    "hasDatatype" : "xsd:string",
+    "hasRestriction" : "_:b4",
+    "mandatory" : "true",
+    "name" : "inputParam1"
+  }, {
+    "@id" : "_:b3",
+    "@type" : "core:FeatureOfInterest",
+    "hasProperty" : "qu:temperature",
+    "comment" : "This is room 1",
+    "label" : "Room1"
+  }, {
+    "@id" : "_:b4",
+    "@type" : "core:RangeRestriction",
+    "max" : "10.0",
+    "min" : "2.0"
+  }, {
+    "@id" : "http://www.symbiote-h2020.eu/ontology/platforms/Platform1/location/59ad0b5f8d116620906557f2",
+    "@type" : "core:WGS84Location",
+    "comment" : "This is paris",
+    "label" : "Paris",
+    "alt" : "15.0",
+    "lat" : "48.864716",
+    "long" : "2.349014"
+  }, {
+    "@id" : "http://www.symbiote-h2020.eu/ontology/resources/actuator1",
+    "@type" : "core:Actuator",
+    "hasCapability" : "_:b0",
+    "id" : "actuator1",
+    "locatedAt" : "http://www.symbiote-h2020.eu/ontology/platforms/Platform1/location/59ad0b5f8d116620906557f2",
+    "comment" : "This is actuator 1",
+    "label" : "Actuator 1"
+  }, {
+    "@id" : "xsd:string",
+    "@type" : "rdfs:Datatype"
+  } ],
+  "@context" : {
+    "hasCapability" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#hasCapability",
+      "@type" : "@id"
+    },
+    "locatedAt" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#locatedAt",
+      "@type" : "@id"
+    },
+    "comment" : {
+      "@id" : "http://www.w3.org/2000/01/rdf-schema#comment"
+    },
+    "label" : {
+      "@id" : "http://www.w3.org/2000/01/rdf-schema#label"
+    },
+    "id" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#id"
+    },
+    "hasEffect" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#hasEffect",
+      "@type" : "@id"
+    },
+    "hasParameter" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#hasParameter",
+      "@type" : "@id"
+    },
+    "alt" : {
+      "@id" : "http://www.w3.org/2003/01/geo/wgs84_pos#alt"
+    },
+    "long" : {
+      "@id" : "http://www.w3.org/2003/01/geo/wgs84_pos#long"
+    },
+    "lat" : {
+      "@id" : "http://www.w3.org/2003/01/geo/wgs84_pos#lat"
+    },
+    "hasProperty" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#hasProperty",
+      "@type" : "@id"
+    },
+    "max" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#max"
+    },
+    "min" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#min"
+    },
+    "hasFeatureOfInterest" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#hasFeatureOfInterest",
+      "@type" : "@id"
+    },
+    "hasRestriction" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#hasRestriction",
+      "@type" : "@id"
+    },
+    "mandatory" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#mandatory"
+    },
+    "name" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#name"
+    },
+    "hasDatatype" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#hasDatatype",
+      "@type" : "@id"
+    },
+    "geo" : "http://www.w3.org/2003/01/geo/wgs84_pos#",
+    "core" : "http://www.symbiote-h2020.eu/ontology/core#",
+    "qu" : "http://purl.oclc.org/NET/ssnx/qu/quantity#",
+    "rdf" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "owl" : "http://www.w3.org/2002/07/owl#",
+    "meta" : "http://www.symbiote-h2020.eu/ontology/meta#",
+    "xsd" : "http://www.w3.org/2001/XMLSchema#",
+    "rdfs" : "http://www.w3.org/2000/01/rdf-schema#"
+  }
+}

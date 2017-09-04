@@ -4,6 +4,7 @@ import eu.h2020.symbIoTe.ontology.CoreInformationModel;
 import eu.h2020.symbIoTe.ontology.MetaInformationModel;
 import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
 import eu.h2020.symbiote.core.model.InterworkingService;
+import eu.h2020.symbiote.core.model.Platform;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.core.model.internal.CoreResource;
@@ -20,12 +21,13 @@ import org.bson.types.ObjectId;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.*;
+
 import org.apache.jena.ontology.OntModel;
 
 /**
  * Helper class used to read generic information for symbIoTe objects: resource
  * and platform from the RDF.
- *
+ * <p>
  * Created by Szymon Mueller on 12/04/2017.
  */
 public class RDFReader {
@@ -38,9 +40,12 @@ public class RDFReader {
      * @param rdfInfo RDF containing platform information.
      * @return Platform meta-information read from RDF.
      */
-    public static PIMInstanceDescription readPlatformInstance(RDFInfo rdfInfo) throws RDFParsingError, JenaException {
-        PIMInstanceDescription pimInstance = null;
+    public static Platform readPlatformInstance(RDFInfo rdfInfo) throws RDFParsingError, JenaException {
+//        PIMInstanceDescription pimInstance = null;
+        Platform platform = null;
         Model model = ModelFactory.createDefaultModel();
+
+
         try (StringReader reader = new StringReader(rdfInfo.getRdf())) {
             model.read(reader, null, rdfInfo.getRdfFormat().toString());
         }
@@ -79,17 +84,11 @@ public class RDFReader {
                 RDFNode informationModelRDFNode = ensureSingleStatement(informationModelIterator).getObject();
                 if (informationModelRDFNode instanceof Resource) {
                     Resource informationModelResource = informationModelRDFNode.asResource();
-                    AnonId id = informationModelResource.getId();
-                    RDFNode infModelIdRDFNode = ensureSingleStatement(model.listStatements(model.createResource(id), CoreInformationModel.id, (RDFNode) null)).getObject();
-                    if (infModelIdRDFNode instanceof Literal) {
-                        String infModelId = infModelIdRDFNode.asLiteral().toString();
-                        InterworkingService service = new InterworkingService();
-                        service.setInformationModelId(infModelId);
-                        service.setUrl(url);
-                        services.add(service);
-                    } else {
-                        throw new RDFParsingError("Could not find information model id in the RDF");
-                    }
+                    String informationModelId = getInformatiomModelIdFromUri(informationModelResource.getURI());
+                    InterworkingService service = new InterworkingService();
+                    service.setInformationModelId(informationModelId);
+                    service.setUrl(url);
+                    services.add(service);
                 } else if (informationModelRDFNode instanceof Literal) {
                     Literal literal = informationModelRDFNode.asLiteral();
                     //TODO decide if information model can be passed as Literal
@@ -99,16 +98,20 @@ public class RDFReader {
                 }
             }
 
-            pimInstance = new PIMInstanceDescription();
-            pimInstance.setId(platformId);
-            pimInstance.setLabels(labelsList);
-            pimInstance.setComments(commentList);
-            pimInstance.setInterworkingServices(services);
-            pimInstance.setRdf(rdfInfo.getRdf());
-            pimInstance.setRdfFormat(rdfInfo.getRdfFormat());
+            platform = new Platform();
+            platform.setId(platformId);
+            platform.setLabels(labelsList);
+            platform.setComments(commentList);
+            platform.setInterworkingServices(services);
+            platform.setRdf(rdfInfo.getRdf());
+            platform.setRdfFormat(rdfInfo.getRdfFormat());
         }
 
-        return pimInstance;
+        return platform;
+    }
+
+    private static String getInformatiomModelIdFromUri(String uri) {
+        return uri.substring(SymbioteModelsUtil.MODEL_BASE_NAME.length());
     }
 
     /**
@@ -196,7 +199,7 @@ public class RDFReader {
      *
      * @return The only statement of the iterator.
      * @throws RDFParsingError thrown in case statement contains 0 or more than
-     * 1 statements.
+     *                         1 statements.
      */
     private static Statement ensureSingleStatement(StmtIterator iterator) throws RDFParsingError {
         if (iterator.hasNext()) {

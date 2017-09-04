@@ -1,0 +1,55 @@
+{
+  "@graph" : [ {
+    "@id" : "http://www.symbiote-h2020.eu/ontology/platforms/Platform1/location/59ad0b5f8d116620906557f1",
+    "@type" : "core:WGS84Location",
+    "comment" : "This is paris",
+    "label" : "Paris",
+    "alt" : "15.0",
+    "lat" : "48.864716",
+    "long" : "2.349014"
+  }, {
+    "@id" : "http://www.symbiote-h2020.eu/ontology/resources/mobile1",
+    "@type" : "core:MobileSensor",
+    "id" : "mobile1",
+    "locatedAt" : "http://www.symbiote-h2020.eu/ontology/platforms/Platform1/location/59ad0b5f8d116620906557f1",
+    "observesProperty" : "qu:temperature",
+    "comment" : "This is mobile 1",
+    "label" : "Mobile 1"
+  } ],
+  "@context" : {
+    "alt" : {
+      "@id" : "http://www.w3.org/2003/01/geo/wgs84_pos#alt"
+    },
+    "long" : {
+      "@id" : "http://www.w3.org/2003/01/geo/wgs84_pos#long"
+    },
+    "lat" : {
+      "@id" : "http://www.w3.org/2003/01/geo/wgs84_pos#lat"
+    },
+    "comment" : {
+      "@id" : "http://www.w3.org/2000/01/rdf-schema#comment"
+    },
+    "label" : {
+      "@id" : "http://www.w3.org/2000/01/rdf-schema#label"
+    },
+    "locatedAt" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#locatedAt",
+      "@type" : "@id"
+    },
+    "observesProperty" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#observesProperty",
+      "@type" : "@id"
+    },
+    "id" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#id"
+    },
+    "geo" : "http://www.w3.org/2003/01/geo/wgs84_pos#",
+    "core" : "http://www.symbiote-h2020.eu/ontology/core#",
+    "qu" : "http://purl.oclc.org/NET/ssnx/qu/quantity#",
+    "rdf" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "owl" : "http://www.w3.org/2002/07/owl#",
+    "meta" : "http://www.symbiote-h2020.eu/ontology/meta#",
+    "xsd" : "http://www.w3.org/2001/XMLSchema#",
+    "rdfs" : "http://www.w3.org/2000/01/rdf-schema#"
+  }
+}

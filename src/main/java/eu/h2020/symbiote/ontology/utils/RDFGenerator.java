@@ -46,11 +46,19 @@ public class RDFGenerator {
         log.debug("Generating model for resource " + resource.getId());
         // create an empty Model
         Model model = ModelFactory.createDefaultModel();
+        model.setNsPrefix("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+        model.setNsPrefix("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
+        model.setNsPrefix("owl", "http://www.w3.org/2002/07/owl#");
+        model.setNsPrefix("xsd", "http://www.w3.org/2001/XMLSchema#");
+        model.setNsPrefix("core", "http://www.symbiote-h2020.eu/ontology/core#");
+        model.setNsPrefix("meta", "http://www.symbiote-h2020.eu/ontology/meta#");
+        model.setNsPrefix("geo", "http://www.w3.org/2003/01/geo/wgs84_pos#");
+        model.setNsPrefix("qu", "http://purl.oclc.org/NET/ssnx/qu/quantity#");
         Map<String,CoreResource> resources = new HashMap<>();
 
         //Add general resource properties
         org.apache.jena.rdf.model.Resource modelResource = model.createResource(OntologyHelper.getResourceGraphURI(resource.getId()));
-        modelResource.addProperty(RDF.type, CoreInformationModel.Resource);
+//        modelResource.addProperty(RDF.type, CoreInformationModel.Resource);
         modelResource.addProperty(CoreInformationModel.id, resource.getId()); //TODO this needs to be changed to cim:ID type
         for (String label : resource.getLabels()) {
             modelResource.addProperty(RDFS.label, label);
@@ -100,6 +108,7 @@ public class RDFGenerator {
             modelResource.addProperty(CoreInformationModel.name, name);
             addParametersToModelResource(model,modelResource,parameters);
             org.apache.jena.rdf.model.Resource resultTypeResource = createDatatypeModelResource(model, resultType);
+            modelResource.addProperty(CoreInformationModel.hasResultType,resultTypeResource);
 
 //            modelResource.addProperty(CoreInformationModel.CIM_HAS_RESULT_TYPE, resultTypeResource)
 //                    .addProperty()
@@ -281,7 +290,7 @@ public class RDFGenerator {
                 log.info("No existing locations have been found fulfilling criteria, created new location with ID: " + locationId + " and URI: <" + locationURI + ">" );
             }
             org.apache.jena.rdf.model.Resource locationResource = model.createResource(locationURI);
-            locationResource.addProperty(RDF.type, CoreInformationModel.Location);
+//            locationResource.addProperty(RDF.type, CoreInformationModel.Location);
             for( String label: location.getLabels() ) {
                 locationResource.addProperty(RDFS.label, label);
             }
@@ -375,6 +384,7 @@ public class RDFGenerator {
                     //TODO add logic for different Information Models
                     effectResource.addProperty(CoreInformationModel.hasProperty, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
                 }
+                capabilityResource.addProperty(CoreInformationModel.hasEffect,effectResource);
             }
         }
     }
@@ -424,6 +434,14 @@ public class RDFGenerator {
     public static Model generateRDFForPlatform(PIMInstanceDescription platform) {
         log.debug("Generating model from platform");
         Model model = ModelFactory.createDefaultModel();
+        model.setNsPrefix("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+        model.setNsPrefix("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
+        model.setNsPrefix("owl", "http://www.w3.org/2002/07/owl#");
+        model.setNsPrefix("xsd", "http://www.w3.org/2001/XMLSchema#");
+        model.setNsPrefix("core", "http://www.symbiote-h2020.eu/ontology/core#");
+        model.setNsPrefix("meta", "http://www.symbiote-h2020.eu/ontology/meta#");
+        model.setNsPrefix("geo", "http://www.w3.org/2003/01/geo/wgs84_pos#");
+        model.setNsPrefix("qu", "http://purl.oclc.org/NET/ssnx/qu/quantity#");
         // construct proper Platform entry
         org.apache.jena.rdf.model.Resource platformRes = model.createResource(OntologyHelper.getPlatformGraphURI(platform.getId()))
                 .addProperty(RDF.type, OWL.Ontology)

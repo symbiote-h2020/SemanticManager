@@ -6,15 +6,15 @@
 @prefix core: <http://www.symbiote-h2020.eu/ontology/core#> .
 @prefix meta: <http://www.symbiote-h2020.eu/ontology/meta#> .
 @prefix qu:	  <http://purl.oclc.org/NET/ssnx/qu/quantity#> .
+@prefix symbModel:	  <http://www.symbiote-h2020.eu/ontology/model#> .
 
 :platformA
         a meta:Platform , owl:Ontology ;
         rdfs:label "Platform A" ;
         core:id "1" ;
-        meta:hasDescription "Test platform A" ;
+        rdfs:comment "Test platform A" ;
         meta:hasService :platformA_RAP .
 
 :platformA_RAP a meta:InterworkingService ;
-        meta:usesInformationModel
-                [ core:id "11" ] ;
+        meta:usesInformationModel symbModel:BIM ;
         meta:url "http://somehost1.com/resourceAccessProxy" .

@@ -20,7 +20,7 @@
                   core:hasProperty qu:temperature
                 ] ;
         core:locatedAt :Paris1 ;
-        core:observes qu:humidity , qu:temperature .
+        core:observesProperty qu:humidity , qu:temperature .
 
 :Actuator1
 	a core:Actuator ;

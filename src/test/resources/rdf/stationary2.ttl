@@ -20,7 +20,7 @@
                   core:hasProperty qu:temperature
                 ] ;
         core:locatedAt :Paris2 ;
-        core:observes qu:humidity, qu:temperature .
+        core:observesProperty qu:humidity, qu:temperature .
 
 
 :Paris2 a core:WGS84Location;

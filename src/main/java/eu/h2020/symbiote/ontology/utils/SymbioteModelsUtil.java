@@ -41,6 +41,7 @@ public class SymbioteModelsUtil {
     private static final String BIM_ID = "BIM1";
     private static final String MIM_FILE = "/meta-v0.3.owl";
     private static final String MIM_BASE_NAME = "http://www.symbiote-h2020.eu/ontology/meta#";
+    public static final String MODEL_BASE_NAME = "http://www.symbiote-h2020.eu/ontology/model#";
     private static final String MIM_ID = "MIM1";
     private static final String QU_FILE = "/qu-rec20.owl";
 //    private static final String QU_DIM_BASE_NAME = "http://purl.oclc.org/NET/ssnx/qu/dim#";

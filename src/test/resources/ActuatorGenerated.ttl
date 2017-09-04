@@ -1,0 +1,44 @@
+@prefix geo:   <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix core:  <http://www.symbiote-h2020.eu/ontology/core#> .
+@prefix qu:    <http://purl.oclc.org/NET/ssnx/qu/quantity#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix meta:  <http://www.symbiote-h2020.eu/ontology/meta#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://www.symbiote-h2020.eu/ontology/resources/actuator1>
+        a                   core:Actuator ;
+        rdfs:comment        "This is actuator 1" ;
+        rdfs:label          "Actuator 1" ;
+        core:hasCapability  [ a                  core:Capability ;
+                              core:hasEffect     [ a                          core:Effect ;
+                                                   core:hasFeatureOfInterest  [ a                 core:FeatureOfInterest ;
+                                                                                rdfs:comment      "This is room 1" ;
+                                                                                rdfs:label        "Room1" ;
+                                                                                core:hasProperty  qu:temperature
+                                                                              ] ;
+                                                   core:hasProperty           qu:humidity , qu:temperature
+                                                 ] ;
+                              core:hasParameter  [ a                    core:Parameter ;
+                                                   core:hasDatatype     xsd:string ;
+                                                   core:hasRestriction  [ a         core:RangeRestriction ;
+                                                                          core:max  "10.0" ;
+                                                                          core:min  "2.0"
+                                                                        ] ;
+                                                   core:mandatory       "true" ;
+                                                   core:name            "inputParam1"
+                                                 ]
+                            ] ;
+        core:id             "actuator1" ;
+        core:locatedAt      <http://www.symbiote-h2020.eu/ontology/platforms/Platform1/location/59ad0b5f8d116620906557f2> .
+
+<http://www.symbiote-h2020.eu/ontology/platforms/Platform1/location/59ad0b5f8d116620906557f2>
+        a             core:WGS84Location ;
+        rdfs:comment  "This is paris" ;
+        rdfs:label    "Paris" ;
+        geo:alt       "15.0" ;
+        geo:lat       "48.864716" ;
+        geo:long      "2.349014" .
+
+xsd:string  a   rdfs:Datatype .

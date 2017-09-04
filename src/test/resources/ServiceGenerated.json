@@ -1,0 +1,74 @@
+{
+  "@graph" : [ {
+    "@id" : "_:b0",
+    "@type" : "core:RangeRestriction",
+    "max" : "10.0",
+    "min" : "2.0"
+  }, {
+    "@id" : "_:b1",
+    "@type" : "core:Parameter",
+    "hasDatatype" : "xsd:string",
+    "hasRestriction" : "_:b0",
+    "mandatory" : "true",
+    "name" : "inputParam1"
+  }, {
+    "@id" : "http://www.symbiote-h2020.eu/ontology/resources/service1",
+    "@type" : "core:Service",
+    "hasParameter" : "_:b1",
+    "hasResultType" : "xsd:string",
+    "id" : "service1",
+    "name" : "service1Name",
+    "comment" : "This is service 1",
+    "label" : "Service 1"
+  }, {
+    "@id" : "xsd:string",
+    "@type" : "rdfs:Datatype"
+  } ],
+  "@context" : {
+    "max" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#max"
+    },
+    "min" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#min"
+    },
+    "hasResultType" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#hasResultType",
+      "@type" : "@id"
+    },
+    "hasParameter" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#hasParameter",
+      "@type" : "@id"
+    },
+    "name" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#name"
+    },
+    "comment" : {
+      "@id" : "http://www.w3.org/2000/01/rdf-schema#comment"
+    },
+    "label" : {
+      "@id" : "http://www.w3.org/2000/01/rdf-schema#label"
+    },
+    "id" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#id"
+    },
+    "hasRestriction" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#hasRestriction",
+      "@type" : "@id"
+    },
+    "mandatory" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#mandatory"
+    },
+    "hasDatatype" : {
+      "@id" : "http://www.symbiote-h2020.eu/ontology/core#hasDatatype",
+      "@type" : "@id"
+    },
+    "geo" : "http://www.w3.org/2003/01/geo/wgs84_pos#",
+    "core" : "http://www.symbiote-h2020.eu/ontology/core#",
+    "qu" : "http://purl.oclc.org/NET/ssnx/qu/quantity#",
+    "rdf" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "owl" : "http://www.w3.org/2002/07/owl#",
+    "meta" : "http://www.symbiote-h2020.eu/ontology/meta#",
+    "xsd" : "http://www.w3.org/2001/XMLSchema#",
+    "rdfs" : "http://www.w3.org/2000/01/rdf-schema#"
+  }
+}
