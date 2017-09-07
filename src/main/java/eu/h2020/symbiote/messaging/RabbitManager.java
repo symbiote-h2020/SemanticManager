@@ -335,7 +335,7 @@ public class RabbitManager {
             channel.basicPublish(exchangeName, routingKey, props, message.getBytes());
 
             String responseMsg = response.take();
-            log.info("Response received: " + responseMsg);
+            log.info("Response received: " + (responseMsg.length() > 200 ? responseMsg.substring(0,200) + (" ..."): responseMsg ) );
             return responseMsg;
         } catch (IOException | InterruptedException e) {
             log.error(e.getMessage(), e);

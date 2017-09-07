@@ -251,7 +251,7 @@ public class SemanticManagerTests {
             fail("Error occured when using Json mapper" + e.getMessage());
         }
         request.setDescriptionType(DescriptionType.BASIC);
-        request.setToken("Token");
+        request.setSecurityRequest(null);
 
         ResourceInstanceValidationResult validationResult = null;
         try {

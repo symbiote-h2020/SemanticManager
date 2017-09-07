@@ -107,7 +107,7 @@ public class LocationFinder {
             CoreSparqlQueryRequest request = new CoreSparqlQueryRequest();
             request.setQuery(query);
             //TODO set proper token
-            request.setToken("Jakistoken");
+            request.setSecurityRequest(null);
             request.setOutputFormat(SparqlQueryOutputFormat.CSV);
 
             String message = mapper.writeValueAsString(request);
