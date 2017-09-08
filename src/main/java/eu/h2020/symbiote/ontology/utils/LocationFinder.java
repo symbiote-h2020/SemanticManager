@@ -105,7 +105,7 @@ public class LocationFinder {
             log.info("Creating location sparql query");
             ObjectMapper mapper = new ObjectMapper();
             CoreSparqlQueryRequest request = new CoreSparqlQueryRequest();
-            request.setQuery(query);
+            request.setBody(query);
             //TODO set proper token
             request.setSecurityRequest(null);
             request.setOutputFormat(SparqlQueryOutputFormat.CSV);

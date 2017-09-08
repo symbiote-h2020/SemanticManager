@@ -71,9 +71,7 @@ dependencies {
         exclude group: 'org.slf4j'
     }
 
-
     compile('eu.symbiote-h2020:MediationFramework:1.0')
-
 
     /* SymbIoTeLibraries manual:
         One can use the library from jitpack by default with the notation:

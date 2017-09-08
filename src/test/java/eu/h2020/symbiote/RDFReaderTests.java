@@ -177,7 +177,7 @@ public class RDFReaderTests {
         RDFInfo rdfInfo = new RDFInfo();
         rdfInfo.setRdfFormat(format);
         rdfInfo.setRdf(rdf);
-        req.setRdfInfo(rdfInfo);
+        req.setBody(rdfInfo);
 
         ObjectMapper mapper = new ObjectMapper();
         try {

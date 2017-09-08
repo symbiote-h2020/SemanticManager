@@ -238,7 +238,7 @@ public class RabbitManager {
                         String response = sendRpcMessage(tempChannel, queueName, platformExchangeName, platformInformationModelRequestedKey, "", String.class.getCanonicalName());
                         ObjectMapper mapper = new ObjectMapper();
                         InformationModelListResponse informationModelsList = mapper.readValue(response, InformationModelListResponse.class);
-                        SymbioteModelsUtil.addModels(informationModelsList.getInformationModels());
+                        SymbioteModelsUtil.addModels(informationModelsList.getBody());
                     } catch (IOException e) {
                         log.error("Error occurred when loading PIMs from registry");
                     }
