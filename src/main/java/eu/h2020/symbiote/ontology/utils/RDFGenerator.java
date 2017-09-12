@@ -233,6 +233,7 @@ public class RDFGenerator {
         }
     }
 
+    //TODO add a lot of nullchecks - probably as seperate method
     private static org.apache.jena.rdf.model.Resource createDatatypeModelResource( Model model, Datatype datatype ) {
         org.apache.jena.rdf.model.Resource datatypeResource = model.createResource();
 
@@ -382,7 +383,7 @@ public class RDFGenerator {
                 addFoiToModelResource(model,effectResource,effect.getActsOn());
                 for( String property: effect.getAffects()) {
                     //TODO add logic for different Information Models
-                    effectResource.addProperty(CoreInformationModel.hasProperty, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
+                    effectResource.addProperty(CoreInformationModel.affects, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
                 }
                 capabilityResource.addProperty(CoreInformationModel.hasEffect,effectResource);
             }

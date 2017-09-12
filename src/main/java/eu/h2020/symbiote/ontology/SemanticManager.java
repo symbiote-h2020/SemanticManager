@@ -84,9 +84,9 @@ public class SemanticManager {
      * @param request Request containing RDF.
      * @return result of the meta model validation.
      */
-    public PIMMetaModelValidationResult validatePIMMetaModel(RDFInfo request) {
+    public InformationModelValidationResult validatePIMMetaModel(InformationModel request) {
         log.info("Validating PIM meta model " + request.getRdf().substring(0, 30) + " ... ");
-        PIMMetaModelValidationResult result = new PIMMetaModelValidationResult();
+        InformationModelValidationResult result = new InformationModelValidationResult();
 
         /*                                    
             - check namespace not already in use? --> can not be done yet because no access to model storage
@@ -152,10 +152,16 @@ public class SemanticManager {
         result.setMessage("Validation successful");
         result.setModelValidatedAgainst("http://www.symbiote-h2020.eu/ontology/core");
         result.setModelValidated("http://www.symbiote-h2020.eu/ontology/myModel1"); //URI of the model validated
-        PIMMetaModelDescription modelInfo = new PIMMetaModelDescription();
-        modelInfo.setUri("http://www.symbiote-h2020.eu/ontology/myModel1");
+        InformationModel modelInfo = new InformationModel();
+
         modelInfo.setRdf(request.getRdf()); //Original one or modified one if there is some updates needed (unique id?)
         modelInfo.setRdfFormat(request.getRdfFormat());
+        String modelId = String.valueOf(ObjectId.get());
+        log.debug("Generating id for the ontology model: " + modelId);
+        modelInfo.setUri("http://www.symbiote-h2020.eu/ontology/pim/"+modelId);
+        modelInfo.setId(modelId);
+        modelInfo.setOwner(request.getOwner());
+        modelInfo.setName(request.getName());
 
         result.setObjectDescription(modelInfo);
 

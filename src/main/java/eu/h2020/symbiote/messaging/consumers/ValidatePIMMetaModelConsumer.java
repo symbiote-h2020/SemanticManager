@@ -7,7 +7,9 @@ import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
+import eu.h2020.symbiote.core.internal.InformationModelValidationResult;
 import eu.h2020.symbiote.core.internal.PIMMetaModelValidationResult;
+import eu.h2020.symbiote.core.model.InformationModel;
 import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.messaging.RabbitManager;
 import eu.h2020.symbiote.ontology.SemanticManager;
@@ -59,9 +61,9 @@ public class ValidatePIMMetaModelConsumer extends DefaultConsumer {
         //Try to parse the message
         try {
             ObjectMapper mapper = new ObjectMapper();
-            RDFInfo validateRequest = mapper.readValue(msg, RDFInfo.class);
+            InformationModel validateRequest = mapper.readValue(msg, InformationModel.class);
 
-            PIMMetaModelValidationResult response = SemanticManager.getManager().validatePIMMetaModel(validateRequest);
+            InformationModelValidationResult response = SemanticManager.getManager().validatePIMMetaModel(validateRequest);
             //Send the response back to the client
             log.debug( "Validation status: " + response.isSuccess() + ", message: " + response.getMessage());
 

@@ -73,6 +73,34 @@ public class SemanticManagerTests {
 
         resourceValidateAndTranslate(service,1);
     }
+
+    @Test
+    public void testServiceWithComplexDatatypeValidateAndCreate() {
+        Service service = new Service();
+        service.setId(SERVICE1_ID);
+        service.setLabels(SERVICE1_LABELS);
+        service.setComments(SERVICE1_COMMENTS);
+        service.setInterworkingServiceURL(SERVICE1_URL);
+        service.setName(SERVICE1_NAME);
+
+        service.setParameters(Arrays.asList(createService1Param()));
+
+        ComplexDatatype complexDatatype = new ComplexDatatype();
+        complexDatatype.setArray(false);
+        complexDatatype.setBasedOnClass("bim:Light");
+        PrimitiveProperty dp = new PrimitiveProperty();
+        RdfsDatatype propertyDatatype = new RdfsDatatype();
+        propertyDatatype.setDatatypeName("xsd:string");
+        propertyDatatype.setArray(false);
+        dp.setRdfsDatatype( propertyDatatype );
+        dp.setBasedOnProperty("owl:property");
+        complexDatatype.setDataProperties(Arrays.asList(dp));
+        service.setResultType(complexDatatype);
+
+
+        resourceValidateAndTranslate(service,1);
+    }
+
 //
 //    @Test
 //    public void testServiceValidateAndCreate() {
