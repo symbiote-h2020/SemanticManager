@@ -8,6 +8,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 import eu.h2020.symbiote.core.internal.CoreResourceRegistryRequest;
+import eu.h2020.symbiote.core.internal.ResourceInstanceValidationRequest;
 import eu.h2020.symbiote.core.internal.ResourceInstanceValidationResult;
 import eu.h2020.symbiote.messaging.RabbitManager;
 import eu.h2020.symbiote.ontology.SemanticManager;
@@ -59,8 +60,9 @@ public class ValidateResourcesInstanceConsumer extends DefaultConsumer {
         //Try to parse the message
         try {
             ObjectMapper mapper = new ObjectMapper();
-            CoreResourceRegistryRequest validateRequest = mapper.readValue(msg, CoreResourceRegistryRequest.class);
+//            CoreResourceRegistryRequest validateRequest = mapper.readValue(msg, CoreResourceRegistryRequest.class);
 
+            ResourceInstanceValidationRequest validateRequest = mapper.readValue(msg, ResourceInstanceValidationRequest.class);
             ResourceInstanceValidationResult response = null;
             try {
                 response = SemanticManager.getManager().validateResourcesInstance(validateRequest);

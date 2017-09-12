@@ -328,13 +328,13 @@ public class SemanticManager {
      * @return Validation result as well as list of resources which were found
      * in the rdf model.
      */
-    public ResourceInstanceValidationResult validateResourcesInstance(CoreResourceRegistryRequest request) {
+    public ResourceInstanceValidationResult validateResourcesInstance(ResourceInstanceValidationRequest request) {
         log.info("Validating Resource instance ... ");
 
-        if (!request.getDescriptionType().equals(DescriptionType.RDF)) {
-            log.fatal("Validate resource instance should only be used by RDF type of description");
-            throw new IllegalArgumentException("Validate resource instance should only be used by RDF type of description");
-        }
+//        if (!request.getDescriptionType().equals(DescriptionType.RDF)) {
+//            log.fatal("Validate resource instance should only be used by RDF type of description");
+//            throw new IllegalArgumentException("Validate resource instance should only be used by RDF type of description");
+//        }
         /*
          need PIM to validate against!
         1. check valid RDF
@@ -343,21 +343,21 @@ public class SemanticManager {
         4. check multiplicity constraints of core predicates
          */
         ObjectMapper mapper = new ObjectMapper();
-        ResourceInstanceValidationRequest rdfRequest;
-        try {
-            rdfRequest = mapper.readValue(request.getBody(), ResourceInstanceValidationRequest.class);
-        } catch (IOException ex) {
-            String message = "error parsing request! Request body must contain object of type " + ResourceInstanceValidationRequest.class.getName();
-            log.fatal(message);
-            throw new IllegalArgumentException(message);
-        }
+//        ResourceInstanceValidationRequest rdfRequest;
+//        try {
+//            rdfRequest = mapper.readValue(request.getBody(), ResourceInstanceValidationRequest.class);
+//        } catch (IOException ex) {
+//            String message = "error parsing request! Request body must contain object of type " + ResourceInstanceValidationRequest.class.getName();
+//            log.fatal(message);
+//            throw new IllegalArgumentException(message);
+//        }
 
         ResourceInstanceValidationResult result = new ResourceInstanceValidationResult();
-        result.setModelValidated(rdfRequest.getRdf());
+        result.setModelValidated(request.getRdf());
 
         OntModel instances = null;
         try {
-            instances = OntologyHelper.read(rdfRequest, false, false);
+            instances = OntologyHelper.read(request, false, false);
         } catch (IOException ex) {
             result.setSuccess(false);
             result.setMessage("instances could not be parsed! Reason: " + ex);
@@ -391,9 +391,9 @@ public class SemanticManager {
         }
 
         // load PIM
-        Model loadedPIM = SymbioteModelsUtil.findInformationModelById(rdfRequest.getInformationModelId());
+        Model loadedPIM = SymbioteModelsUtil.findInformationModelById(request.getInformationModelId());
         if (loadedPIM == null || loadedPIM.isEmpty()) {
-            String message = "PIM with id '" + rdfRequest.getInformationModelId() + "' could not be loaded";
+            String message = "PIM with id '" + request.getInformationModelId() + "' could not be loaded";
             log.info(message);
             result.setSuccess(false);
             result.setMessage(message);
@@ -432,7 +432,7 @@ public class SemanticManager {
             // if resource has no error - create java representation for it
             if (instanceResult.length() == 0) {
                 try {
-                    resources.put(entry.getKey().getURI(), RDFReader.createCoreResource(entry.getKey(), entry.getValue(), rdfRequest.getRdfFormat()));
+                    resources.put(entry.getKey().getURI(), RDFReader.createCoreResource(entry.getKey(), entry.getValue(), request.getRdfFormat()));
                 } catch (RDFParsingError ex) {
                     instanceResult.append("error creating CoreResource: ").append(ex);
                 }
@@ -447,7 +447,7 @@ public class SemanticManager {
             result.setMessage("errors validating RDF for resources: " + System.lineSeparator());
             return result;
         }
-        result.setModelValidatedAgainst(OntologyHelper.modelAsString(pim, rdfRequest.getRdfFormat()));
+        result.setModelValidatedAgainst(OntologyHelper.modelAsString(pim,request.getRdfFormat()));
         result.setSuccess(true);
         result.setObjectDescription(resources);
         return result;
