@@ -1,6 +1,9 @@
 package eu.h2020.symbiote;
 
+import eu.h2020.symbiote.core.cci.InformationModelRequest;
+import eu.h2020.symbiote.core.internal.InformationModelValidationResult;
 import eu.h2020.symbiote.core.internal.PIMMetaModelValidationResult;
+import eu.h2020.symbiote.core.model.InformationModel;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.ontology.SemanticManager;
@@ -44,7 +47,7 @@ public class ValidationTests {
 
     @Test
     public void testLoadBIMasPIM() {
-        RDFInfo rdfInfo = new RDFInfo();
+        InformationModel rdfInfo = new InformationModel();
         try {
             rdfInfo.setRdfFormat(RDFFormat.Turtle);            
             rdfInfo.setRdf(IOUtils.toString(this.getClass()
@@ -53,7 +56,7 @@ public class ValidationTests {
             e.printStackTrace();
             fail();
         }
-        PIMMetaModelValidationResult validationResult = SemanticManager.getManager().validatePIMMetaModel(rdfInfo);
+        InformationModelValidationResult validationResult = SemanticManager.getManager().validatePIMMetaModel(rdfInfo);
         if (!validationResult.isSuccess()) {
             System.out.println(validationResult.getMessage());
             fail();
