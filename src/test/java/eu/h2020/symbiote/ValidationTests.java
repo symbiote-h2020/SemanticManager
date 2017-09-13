@@ -3,13 +3,18 @@ package eu.h2020.symbiote;
 import eu.h2020.symbiote.core.cci.InformationModelRequest;
 import eu.h2020.symbiote.core.internal.InformationModelValidationResult;
 import eu.h2020.symbiote.core.internal.PIMMetaModelValidationResult;
+import eu.h2020.symbiote.core.internal.ResourceInstanceValidationRequest;
+import eu.h2020.symbiote.core.internal.ResourceInstanceValidationResult;
 import eu.h2020.symbiote.core.model.InformationModel;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.ontology.SemanticManager;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
+import eu.h2020.symbiote.ontology.utils.OntologyHelper;
 import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
+
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
@@ -26,6 +31,7 @@ public class ValidationTests {
 
     private String TEMPERATURE_NAME = "temperature";
     private String NONEXISTENT_NAME = "temperature1234566789";
+    private String BIM_RESOURCE_FILE = "/bim_resource.ttl";
 
     @Test
     public void testFindInSymbioteModels() {
@@ -43,13 +49,14 @@ public class ValidationTests {
         } catch (PropertyNotFoundException e) {
         }
     }
+
     public static final String PIM_1_0_1_FILE = "/rdf/bim-v1.0.1.owl";
 
     @Test
     public void testLoadBIMasPIM() {
         InformationModel rdfInfo = new InformationModel();
         try {
-            rdfInfo.setRdfFormat(RDFFormat.Turtle);            
+            rdfInfo.setRdfFormat(RDFFormat.Turtle);
             rdfInfo.setRdf(IOUtils.toString(this.getClass()
                     .getResource(PIM_1_0_1_FILE)));
         } catch (IOException e) {
@@ -63,4 +70,37 @@ public class ValidationTests {
         }
     }
 
+    //TODO fails
+//    @Test
+    public void bimResourceValidationTest() {
+        try {
+            InformationModel im = new InformationModel();
+            im.setName("BIM");
+            im.setOwner("BIM");
+            im.setUri(OntologyHelper.getInformationModelUri("BIM"));
+            im.setId("BIM");
+
+            String bimRdf = IOUtils.toString(SymbioteModelsUtil.class
+                    .getResourceAsStream(SymbioteModelsUtil.BIM_FILE));
+            im.setRdf(bimRdf);
+            im.setRdfFormat(RDFFormat.Turtle);
+
+
+            SymbioteModelsUtil.addModels(Arrays.asList(im));
+            ResourceInstanceValidationRequest request = new ResourceInstanceValidationRequest();
+            request.setInformationModelId("BIM");
+            request.setRdfFormat(RDFFormat.Turtle);
+            String resourceRdf = IOUtils.toString(this.getClass()
+                    .getResource(BIM_RESOURCE_FILE));
+            request.setRdf(resourceRdf);
+            ResourceInstanceValidationResult result = SemanticManager.getManager().validateResourcesInstance(request);
+            assertNotNull(result);
+            assertNotNull(result.getObjectDescription());
+            assertTrue(result.isSuccess());
+            assertEquals("Should find 1 resource", 1, result.getObjectDescription().size());
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail("Error occurred when loading model from file");
+        }
+    }
 }

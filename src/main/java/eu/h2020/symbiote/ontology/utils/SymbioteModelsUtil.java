@@ -33,13 +33,13 @@ public class SymbioteModelsUtil {
 
     private static final Log log = LogFactory.getLog(SymbioteModelsUtil.class);
 
-    private static final String CIM_FILE = "/core-v0.6.owl";
+    private static final String CIM_FILE = "/core-v1.0.1.owl";
     private static final String CIM_BASE_NAME = "http://www.symbiote-h2020.eu/ontology/core#";
     private static final String CIM_ID = "CIM1";
-    private static final String BIM_FILE = "/bim-0.3.owl";
+    public static final String BIM_FILE = "/bim-v1.0.2.owl";
     private static final String BIM_BASE_NAME = "http://www.symbiote-h2020.eu/ontology/bim/property#";
-    private static final String BIM_ID = "BIM1";
-    private static final String MIM_FILE = "/meta-v0.3.owl";
+    private static final String BIM_ID = "BIM";
+    private static final String MIM_FILE = "/meta-v1.0.1.owl";
     private static final String MIM_BASE_NAME = "http://www.symbiote-h2020.eu/ontology/meta#";
     public static final String MODEL_BASE_NAME = "http://www.symbiote-h2020.eu/ontology/model#";
     private static final String MIM_ID = "MIM1";

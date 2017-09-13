@@ -1,0 +1,56 @@
+@prefix : <http://nextworks.com/ontology/resource#> .
+@prefix nxw-location: <http://nextworks.com/ontology/location#> .
+@prefix nxw-foi: <http://nextworks.com/ontology/foi#> .
+@prefix geo:   <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix core:  <http://www.symbiote-h2020.eu/ontology/core#> .
+@prefix qu:    <http://purl.oclc.org/NET/ssnx/qu/quantity#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix meta:  <http://www.symbiote-h2020.eu/ontology/meta#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix bim: <http://www.symbiote-h2020.eu/ontology/bim#> .
+@prefix bim-sr: <http://www.symbiote-h2020.eu/ontology/bim/smartresidence#> .
+@base <http://nextworks.com/ontology/resource#> .
+:nxw-Light1
+        a                   bim-sr:Light ;
+        a                   owl:NamedIndividual ;
+        a                   core:FeatureOfInterest ;
+        rdfs:comment        "Light sensor 1"^^xsd:string ;
+        rdfs:label          "NXW Light 1"^^xsd:string ;
+        core:locatedAt      nxw-location:Location1 ;
+        core:hasCapability  [ a                  bim-sr:OnOffCapabililty ;
+                              core:hasEffect     [ a                          bim-sr:OnOffEffect ;
+                                                   core:actsOn :nxw-Light1
+                                                 ] ;
+                              core:hasEffect     [ a                    core:Effect ;
+                                                   core:actsOn nxw-foi:nxw-Room1 ;
+                                                   core:affects qu:illuminance
+                                                 ]
+                            ] ;
+        core:hasCapability  [ a                  bim-sr:DimmerCapability ;
+                              core:hasEffect     [ a                          bim-sr:DimmerEffect ;
+                                                   core:actsOn nxw-foi:nxw-Room1
+                                                 ] ;
+                            ] ;
+        core:hasCapability  [ a                  bim-sr:RGBCapability ;
+                              core:hasEffect     [ a                          bim-sr:RGBEffect ;
+                                                   core:actsOn :nxw-Light1
+                                                 ] ;
+                              core:hasEffect     [ a                    core:Effect ;
+                                                   core:actsOn nxw-foi:nxw-Room1 ;
+                                                   core:affects qu:illuminance
+                                                 ]
+                            ] .
+nxw-location:Location1
+        a             core:WGS84Location ;
+        rdfs:comment  "Location of first deployment nxw"^^xsd:string ;
+        rdfs:label    "Pisa"^^xsd:string ;
+        geo:alt       "15.0"^^xsd:double ;
+        geo:lat       "43.720663784"^^xsd:double ;
+        geo:long      "10.389831774"^^xsd:double .
+nxw-foi:nxw-Room1
+        a                   core:FeatureOfInterest ;
+        rdfs:comment        "Light sensor 1"^^xsd:string ;
+        rdfs:label          "NXW Light 1"^^xsd:string ;
+        core:hasProperty    qu:humidity , qu:temperature, qu:illuminance .
