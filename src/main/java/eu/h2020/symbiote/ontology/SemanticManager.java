@@ -187,12 +187,31 @@ public class SemanticManager {
      */
     public void registerNewPIMMetaModel(InformationModel pimMetaModel) {
         log.info("Registering new PIM meta model " + pimMetaModel.getUri());
-
-//        Model model = ModelFactory.createDefaultModel();
-//        try (StringReader reader = new StringReader(pimMetaModel.getRdf())) {
-//            model.read(reader, null, pimMetaModel.getRdfFormat().toString());
-//        }
         SymbioteModelsUtil.addModels(Arrays.asList(pimMetaModel));
+
+    }
+
+    /**
+     * Delete PIM meta model in rdf store of Semantic Manager.
+     *
+     * @param pimMetaModel Information about the PIM meta model, including model
+     * containing RDF
+     */
+    public void deletePIMMetaModel(InformationModel pimMetaModel) {
+        log.info("Deleting PIM meta model " + pimMetaModel.getUri());
+        SymbioteModelsUtil.removeModels(Arrays.asList(pimMetaModel));
+
+    }
+
+    /**
+     * Modifies PIM meta model in rdf store of Semantic Manager.
+     *
+     * @param pimMetaModel Information about the PIM meta model, including model
+     * containing RDF
+     */
+    public void modifyPIMMetaModel(InformationModel pimMetaModel) {
+        log.info("Modifying PIM meta model " + pimMetaModel.getUri());
+        SymbioteModelsUtil.modifyModels(Arrays.asList(pimMetaModel));
 
     }
 

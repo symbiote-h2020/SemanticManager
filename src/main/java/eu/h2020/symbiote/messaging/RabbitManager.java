@@ -214,6 +214,8 @@ public class RabbitManager {
         try {
             registerPIMInstanceCreationConsumer();
             registerPIMMetaModelCreationConsumer();
+            registerPIMMetaModelDeleteConsumer();
+            registerPIMMetaModelModifyConsumer();
             registerValidateAndCreateBIMPlatform();
             registerValidateAndCreateBIMResource();
             registerValidatePIMInstanceConsumer();
@@ -460,7 +462,37 @@ public class RabbitManager {
         channel.queueBind(queueName, platformExchangeName, platformModelCreatedRoutingKey);
         RegisterPIMMetaModelConsumer consumer = new RegisterPIMMetaModelConsumer(channel, this);
 
-        log.debug("Creating PIM Meta Model consumer");
+        log.debug("Creating PIM Meta Model create consumer");
+        channel.basicConsume(queueName, false, consumer);
+    }
+
+    /**
+     * Registers a platform model creation consumer
+     */
+    private void registerPIMMetaModelDeleteConsumer() throws IOException {
+        String queueName = "symbIoTe-SemanticManager-PIM-MetaModel-delete";
+
+        Channel channel = connection.createChannel();
+        channel.queueDeclare(queueName, true, false, false, null);
+        channel.queueBind(queueName, platformExchangeName, platformModelRemovedRoutingKey);
+        DeletePIMMetaModelConsumer consumer = new DeletePIMMetaModelConsumer(channel, this);
+
+        log.debug("Creating PIM Meta Model delete consumer");
+        channel.basicConsume(queueName, false, consumer);
+    }
+
+    /**
+     * Registers a platform model creation consumer
+     */
+    private void registerPIMMetaModelModifyConsumer() throws IOException {
+        String queueName = "symbIoTe-SemanticManager-PIM-MetaModel-modify";
+
+        Channel channel = connection.createChannel();
+        channel.queueDeclare(queueName, true, false, false, null);
+        channel.queueBind(queueName, platformExchangeName, platformModelModifiedRoutingKey);
+        ModifyPIMMetaModelConsumer consumer = new ModifyPIMMetaModelConsumer(channel, this);
+
+        log.debug("Creating PIM Meta Model modify consumer");
         channel.basicConsume(queueName, false, consumer);
     }
 

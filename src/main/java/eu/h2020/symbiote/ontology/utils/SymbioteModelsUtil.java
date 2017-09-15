@@ -95,8 +95,34 @@ public class SymbioteModelsUtil {
             for (InformationModel model : informationModels) {
                 insertGraph(pimDataset, OntologyHelper.getInformationModelUri(model.getId()), model.getRdf(), model.getRdfFormat());
             }
+            log.debug("Adding finished");
         } else {
-            log.fatal("Information models scheduled to be added, but received null information models");
+            log.fatal("Information models adding, but received null information models");
+        }
+    }
+
+    public static void modifyModels(List<InformationModel> informationModels) {
+        if (informationModels != null) {
+            log.info("Modifying " + informationModels.size() + " information models in Semantic Manager cache");
+            for (InformationModel model : informationModels) {
+                removeGraph(pimDataset, OntologyHelper.getInformationModelUri(model.getId()));
+                insertGraph(pimDataset, OntologyHelper.getInformationModelUri(model.getId()), model.getRdf(), model.getRdfFormat());
+            }
+            log.debug("Modifying finished");
+        } else {
+            log.fatal("Information models modifying, but received null information models");
+        }
+    }
+
+    public static void removeModels(List<InformationModel> informationModels) {
+        if (informationModels != null) {
+            log.info("Removing " + informationModels.size() + " information models from Semantic Manager cache");
+            for (InformationModel model : informationModels) {
+                removeGraph(pimDataset, OntologyHelper.getInformationModelUri(model.getId()));
+            }
+            log.debug("Removing finished");
+        } else {
+            log.fatal("Information models to delete, but received null information models");
         }
     }
 
@@ -172,6 +198,13 @@ public class SymbioteModelsUtil {
 //        dataset.getNamedModel(uri).add(model);
         dataset.begin(ReadWrite.WRITE);
         dataset.getNamedModel(uri).add(model);
+        dataset.commit();
+        dataset.end();
+    }
+
+    private static void removeGraph(Dataset dataset, String uri ) {
+        dataset.begin(ReadWrite.WRITE);
+        dataset.removeNamedModel(uri);
         dataset.commit();
         dataset.end();
     }
