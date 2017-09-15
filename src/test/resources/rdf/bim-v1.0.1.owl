@@ -29,7 +29,7 @@
                                             rdfs:comment "Best Practice Information Model of symbIoTe."@en ;
                                             
                                             owl:imports <http://purl.oclc.org/NET/ssnx/qu/qu-rec20> ,
-                                                        <http://www.symbiote-h2020.eu/ontology/core#> ;
+                                                        <http://www.symbiote-h2020.eu/ontology/core> ;
                                             
                                             owl:versionIRI <http://www.symbiote-h2020.eu/ontology/bim/1.0> ;
                                             

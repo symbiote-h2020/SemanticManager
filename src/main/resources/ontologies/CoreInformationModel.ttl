@@ -8,7 +8,7 @@
 @prefix time: <http://www.w3.org/2006/time#> .
 @base <http://www.symbiote-h2020.eu/ontology/core#> .
 
-<http://www.symbiote-h2020.eu/ontology/core#> rdf:type owl:Ontology ;
+<http://www.symbiote-h2020.eu/ontology/core> rdf:type owl:Ontology ;
                                              
                                              rdfs:label "symbIoTe Core Information Model"@en ;
                                              
@@ -16,7 +16,7 @@
                                              
                                              rdfs:comment "Core Information Model of the symbIoTe project."@en ;
                                              
-                                             owl:versionIRI <http://www.symbiote-h2020.eu/ontology/core/1.0.1#> ;
+                                             owl:versionIRI <http://www.symbiote-h2020.eu/ontology/core/1.0.1> ;
                                              
                                              owl:imports rdf: ,
                                                          rdfs: ,
