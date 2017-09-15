@@ -226,7 +226,7 @@ public class ValidationHelper {
     public static boolean checkImportsCIM(OntModel model) {
         // check also in the import closure for CIM
         // return model.listImportedOntologyURIs(true).contains(CoreInformationModel.NS);
-        return model.listImportedOntologyURIs().contains(CoreInformationModel.NS);
+        return model.listImportedOntologyURIs().stream().anyMatch(x -> x.startsWith(CoreInformationModel.NS.substring(0, CoreInformationModel.NS.length() - 1)));
     }
 
     public static Set<String> getDefinedClasses(OntModel model) {
