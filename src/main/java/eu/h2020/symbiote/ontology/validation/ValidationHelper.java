@@ -41,109 +41,158 @@ public class ValidationHelper {
     private static final Log log = LogFactory.getLog(ValidationHelper.class);
     private static ValidationHelper instance;
 
-    private static final String QUERY_CARDINALITY_EXACTLY_OBJECT_PROPERTY = "SELECT \n"
-            + "?class ?property ?cardinality ?onType (COUNT(DISTINCT ?instance) AS ?presentCardinality)\n"
-            + "WHERE \n"
+    private static final String TAG_RESOURCE_URI = "?RESOURCE_URI";
+    private static final String QUERY_PREFIXES
+            = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
+            + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n"
+            + "PREFIX owl: <http://www.w3.org/2002/07/owl#> \n"
+            + "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> \n"
+            + "PREFIX core: <http://www.symbiote-h2020.eu/ontology/core#> \n"
+            + "\n";
+
+    private static final String QUERY_CARDINALITY_EXACTLY_OBJECT_PROPERTY
+            = QUERY_PREFIXES
+            + "SELECT  ?property ?cardinality ?type (COUNT(DISTINCT ?value) AS ?presentCardinality)\n"
+            + "WHERE\n"
             + "{ \n"
-            + "	?class rdfs:subClassOf [ \n"
-            + "		a owl:Restriction; \n"
-            + "		owl:onProperty ?property;\n"
+            + "	" + TAG_RESOURCE_URI + " a ?class .\n"
+            + "	?class rdfs:subClassOf* core:Resource .\n"
+            + "	?class  rdfs:subClassOf* [\n"
+            + "		rdf:type owl:Restriction ;\n"
+            + "		owl:onProperty ?property ;\n"
             + "		owl:qualifiedCardinality ?cardinality ;\n"
-            + "		owl:onClass ?onType ] .	\n"
-            + "	OPTIONAL {\n"
-            + "		?instance a ?class.\n"
-            + "		?instance ?property [ a ?onType] .\n"
+            + "		owl:onClass ?type \n"
+            + "	]\n"
+            + "	OPTIONAL\n"
+            + "	{ \n"
+            + "		" + TAG_RESOURCE_URI + " a  ?class ;\n"
+            + "		?property  ?value\n"
+            + "		BIND (datatype(?value) as ?x)\n"
+            + "		FILTER EXISTS {?x rdfs:subClassOf* ?type }\n"
             + "	}\n"
             + "}\n"
-            + "GROUP BY ?class ?property ?cardinality ?onType\n"
+            + "GROUP BY ?property ?cardinality ?type\n"
+            + "HAVING(?cardinality != ?presentCardinality)\n"
+            + "";
+
+    private static final String QUERY_CARDINALITY_EXACTLY_DATA_PROPERTY
+            = QUERY_PREFIXES
+            + "SELECT  ?property ?cardinality ?type (COUNT(DISTINCT ?value) AS ?presentCardinality)\n"
+            + "WHERE\n"
+            + "  { \n"
+            + "	" + TAG_RESOURCE_URI + " a ?class .\n"
+            + "	?class rdfs:subClassOf* core:Resource .\n"
+            + "	?class  rdfs:subClassOf* [\n"
+            + "		   a owl:Restriction ;\n"
+            + "            owl:onProperty ?property ;\n"
+            + "            owl:qualifiedCardinality ?cardinality ;\n"
+            + "            owl:onDataRange ?type \n"
+            + "		]\n"
+            + "    OPTIONAL\n"
+            + "	{ \n"
+            + "		" + TAG_RESOURCE_URI + "  a  ?class ;\n"
+            + "			  ?property  ?value\n"
+            + "		BIND (datatype(?value) as ?x)\n"
+            + "		FILTER EXISTS {?x rdfs:subClassOf* ?type }\n"
+            + "	}\n"
+            + "  }\n"
+            + "GROUP BY ?property ?cardinality ?type\n"
             + "HAVING(?cardinality != ?presentCardinality)";
 
-    private static final String QUERY_CARDINALITY_EXACTLY_DATA_PROPERTY = "SELECT \n"
-            + "?class ?property ?cardinality ?onType (COUNT(DISTINCT ?instance) AS ?presentCardinality)\n"
-            + "WHERE \n"
+    private static final String QUERY_CARDINALITY_MIN_OBJECT_PROPERTY
+            = QUERY_PREFIXES
+            + "SELECT  ?property ?cardinality ?type (COUNT(DISTINCT ?value) AS ?presentCardinality)\n"
+            + "WHERE\n"
             + "{ \n"
-            + "	?class rdfs:subClassOf [ \n"
-            + "		a owl:Restriction; \n"
-            + "		owl:onProperty ?property;\n"
-            + "		owl:qualifiedCardinality ?cardinality ;\n"
-            + "		owl:onDataRange ?onType ] .	\n"
-            + "	OPTIONAL {\n"
-            + "		?instance a ?class.\n"
-            + "		?instance ?property ?p .\n"
-            + "		FILTER(DATATYPE(?p) = ?onType)\n"
-            + "	}\n"
-            + "}\n"
-            + "GROUP BY ?class ?property ?cardinality ?onType\n"
-            + "HAVING(?cardinality != ?presentCardinality)";
-
-    private static final String QUERY_CARDINALITY_MIN_OBJECT_PROPERTY = "SELECT \n"
-            + "?class ?property ?cardinality ?onType (COUNT(DISTINCT ?instance) AS ?presentCardinality)\n"
-            + "WHERE \n"
-            + "{ \n"
-            + "	?class rdfs:subClassOf [ \n"
-            + "		a owl:Restriction; \n"
-            + "		owl:onProperty ?property;\n"
+            + "	" + TAG_RESOURCE_URI + " a ?class .\n"
+            + "	?class rdfs:subClassOf* core:Resource .\n"
+            + "	?class  rdfs:subClassOf* [\n"
+            + "		rdf:type owl:Restriction ;\n"
+            + "		owl:onProperty ?property ;\n"
             + "		owl:minQualifiedCardinality ?cardinality ;\n"
-            + "		owl:onClass ?onType ] .	\n"
-            + "	OPTIONAL {\n"
-            + "		?instance a ?class.\n"
-            + "		?instance ?property [ a ?onType] .\n"
+            + "		owl:onClass ?type \n"
+            + "	]\n"
+            + "	OPTIONAL\n"
+            + "	{ \n"
+            + "		" + TAG_RESOURCE_URI + " a  ?class ;\n"
+            + "		?property  ?value\n"
+            + "		BIND (datatype(?value) as ?x)\n"
+            + "		FILTER EXISTS {?x rdfs:subClassOf* ?type }\n"
             + "	}\n"
             + "}\n"
-            + "GROUP BY ?class ?property ?cardinality ?onType\n"
+            + "GROUP BY ?property ?cardinality ?type\n"
             + "HAVING(?cardinality > ?presentCardinality)";
 
-    private static final String QUERY_CARDINALITY_MIN_DATA_PROPERTY = "SELECT \n"
-            + "?class ?property ?cardinality ?onType (COUNT(DISTINCT ?instance) AS ?presentCardinality)\n"
-            + "WHERE \n"
+    private static final String QUERY_CARDINALITY_MIN_DATA_PROPERTY
+            = QUERY_PREFIXES
+            + "SELECT  ?property ?cardinality ?type (COUNT(DISTINCT ?value) AS ?presentCardinality)\n"
+            + "WHERE\n"
             + "{ \n"
-            + "	?class rdfs:subClassOf [ \n"
-            + "		a owl:Restriction; \n"
-            + "		owl:onProperty ?property;\n"
+            + "	" + TAG_RESOURCE_URI + " a ?class .\n"
+            + "	?class rdfs:subClassOf* core:Resource .\n"
+            + "	?class  rdfs:subClassOf* [\n"
+            + "		rdf:type owl:Restriction ;\n"
+            + "		owl:onProperty ?property ;\n"
             + "		owl:minQualifiedCardinality ?cardinality ;\n"
-            + "		owl:onDataRange ?onType ] .	\n"
-            + "	OPTIONAL {\n"
-            + "		?instance a ?class.\n"
-            + "		?instance ?property ?p .\n"
-            + "		FILTER(DATATYPE(?p) = ?onType)\n"
+            + "		owl:onDataRange ?type \n"
+            + "	]\n"
+            + "	OPTIONAL\n"
+            + "	{ \n"
+            + "		" + TAG_RESOURCE_URI + " a  ?class ;\n"
+            + "		?property  ?value\n"
+            + "		BIND (datatype(?value) as ?x)\n"
+            + "		FILTER EXISTS {?x rdfs:subClassOf* ?type }\n"
             + "	}\n"
             + "}\n"
-            + "GROUP BY ?class ?property ?cardinality ?onType\n"
+            + "GROUP BY ?property ?cardinality ?type\n"
             + "HAVING(?cardinality > ?presentCardinality)";
 
-    private static final String QUERY_CARDINALITY_MAX_OBJECT_PROPERTY = "SELECT \n"
-            + "?class ?property ?cardinality ?onType (COUNT(DISTINCT ?instance) AS ?presentCardinality)\n"
-            + "WHERE \n"
+    private static final String QUERY_CARDINALITY_MAX_OBJECT_PROPERTY
+            = QUERY_PREFIXES
+            + "SELECT  ?property ?cardinality ?type (COUNT(DISTINCT ?value) AS ?presentCardinality)\n"
+            + "WHERE\n"
             + "{ \n"
-            + "	?class rdfs:subClassOf [ \n"
-            + "		a owl:Restriction; \n"
-            + "		owl:onProperty ?property;\n"
+            + "	" + TAG_RESOURCE_URI + " a ?class .\n"
+            + "	?class rdfs:subClassOf* core:Resource .\n"
+            + "	?class  rdfs:subClassOf* [\n"
+            + "		rdf:type owl:Restriction ;\n"
+            + "		owl:onProperty ?property ;\n"
             + "		owl:maxQualifiedCardinality ?cardinality ;\n"
-            + "		owl:onClass ?onType ] .	\n"
-            + "	OPTIONAL {\n"
-            + "		?instance a ?class.\n"
-            + "		?instance ?property [ a ?onType] .\n"
+            + "		owl:onClass ?type \n"
+            + "	]\n"
+            + "	OPTIONAL\n"
+            + "	{ \n"
+            + "		" + TAG_RESOURCE_URI + " a  ?class ;\n"
+            + "		?property  ?value\n"
+            + "		BIND (datatype(?value) as ?x)\n"
+            + "		FILTER EXISTS {?x rdfs:subClassOf* ?type }\n"
             + "	}\n"
             + "}\n"
-            + "GROUP BY ?class ?property ?cardinality ?onType\n"
+            + "GROUP BY ?property ?cardinality ?type\n"
             + "HAVING(?cardinality < ?presentCardinality)";
 
-    private static final String QUERY_CARDINALITY_MAX_DATA_PROPERTY = "SELECT \n"
-            + "?class ?property ?cardinality ?onType (COUNT(DISTINCT ?instance) AS ?presentCardinality)\n"
-            + "WHERE \n"
+    private static final String QUERY_CARDINALITY_MAX_DATA_PROPERTY
+            = QUERY_PREFIXES
+            + "SELECT  ?property ?cardinality ?type (COUNT(DISTINCT ?value) AS ?presentCardinality)\n"
+            + "WHERE\n"
             + "{ \n"
-            + "	?class rdfs:subClassOf [ \n"
-            + "		a owl:Restriction; \n"
-            + "		owl:onProperty ?property;\n"
+            + "	" + TAG_RESOURCE_URI + " a ?class .\n"
+            + "	?class rdfs:subClassOf* core:Resource .\n"
+            + "	?class  rdfs:subClassOf* [\n"
+            + "		rdf:type owl:Restriction ;\n"
+            + "		owl:onProperty ?property ;\n"
             + "		owl:maxQualifiedCardinality ?cardinality ;\n"
-            + "		owl:onDataRange ?onType ] .	\n"
-            + "	OPTIONAL {\n"
-            + "		?instance a ?class.\n"
-            + "		?instance ?property ?p .\n"
-            + "		FILTER(DATATYPE(?p) = ?onType)\n"
+            + "		owl:onDataRange ?type \n"
+            + "	]\n"
+            + "	OPTIONAL\n"
+            + "	{ \n"
+            + "		" + TAG_RESOURCE_URI + " a  ?class ;\n"
+            + "		?property  ?value\n"
+            + "		BIND (datatype(?value) as ?x)\n"
+            + "		FILTER EXISTS {?x rdfs:subClassOf* ?type }\n"
             + "	}\n"
             + "}\n"
-            + "GROUP BY ?class ?property ?cardinality ?onType\n"
+            + "GROUP BY ?property ?cardinality ?type\n"
             + "HAVING(?cardinality < ?presentCardinality)";
 
     private static final ParameterizedSparqlString GET_RESOURCE_CLOSURE = new ParameterizedSparqlString(
@@ -156,15 +205,15 @@ public class ValidationHelper {
             + "		{\n"
             + "			SELECT *\n"
             + "			{\n"
-            + "				?RESOURCE_URI ?p ?o.\n"
-            + "				BIND( ?RESOURCE_URI as ?s)\n"
+            + "				" + TAG_RESOURCE_URI + " ?p ?o.\n"
+            + "				BIND( " + TAG_RESOURCE_URI + " as ?s)\n"
             + "			}\n"
             + "		}\n"
             + "		UNION\n"
             + "		{\n"
             + "			SELECT *\n"
             + "			WHERE {\n"
-            + "				?RESOURCE_URI (a|!a)+ ?s . \n"
+            + "				" + TAG_RESOURCE_URI + " (a|!a)+ ?s . \n"
             + "				?s ?p ?o.\n"
             + "			}\n"
             + "		}\n"
@@ -175,6 +224,8 @@ public class ValidationHelper {
     }
 
     public static boolean checkImportsCIM(OntModel model) {
+        // check also in the import closure for CIM
+        // return model.listImportedOntologyURIs(true).contains(CoreInformationModel.NS);
         return model.listImportedOntologyURIs().contains(CoreInformationModel.NS);
     }
 
@@ -236,13 +287,15 @@ public class ValidationHelper {
     public static Map<Resource, Model> sepearteResources(OntModel instances, Model pim) {
         Map<Resource, Model> result = new HashMap<>();
         instances.addSubModel(pim);
+        Set<Individual> resourcesDefinedInPIM = OntologyHelper.withInf(pim).listIndividuals(CoreInformationModel.Resource).toSet();
         Set<Individual> resourceIndividuals = instances.listIndividuals(CoreInformationModel.Resource).toSet();
+        resourceIndividuals.removeAll(resourcesDefinedInPIM);
         instances.removeSubModel(pim);
         for (Individual resource : resourceIndividuals) {
-            GET_RESOURCE_CLOSURE.setIri("?RESOURCE_URI", resource.getURI());
+            GET_RESOURCE_CLOSURE.setIri(TAG_RESOURCE_URI, resource.getURI());
             try (QueryExecution qexec = QueryExecutionFactory.create(GET_RESOURCE_CLOSURE.asQuery(), instances.getRawModel())) {
                 Model resourceClosure = qexec.execConstruct();
-                result.put(resource, resourceClosure);
+                result.put(resourceClosure.getResource(resource.getURI()), resourceClosure);
             }
         }
         return result;
@@ -263,17 +316,33 @@ public class ValidationHelper {
                 .toSet());
         return result;
     }
+    
+    private static String setResourceUri(String source, Resource resource) {
+        return source.replace(TAG_RESOURCE_URI, "<" + resource.getURI() + ">");
+    }
 
-    public static List<String> checkCardinalityViolations(OntModel pim, Model instance) {
+    public static List<String> checkCardinalityViolations(Resource instance, OntModel pim, Model instanceData) {
         List<String> result = new ArrayList<>();
-        pim.addSubModel(instance);
-        result.addAll(OntologyHelper.executeSelectWithResults(pim, QUERY_CARDINALITY_EXACTLY_DATA_PROPERTY, "exact cardinaility for data property violated - "));
-        result.addAll(OntologyHelper.executeSelectWithResults(pim, QUERY_CARDINALITY_EXACTLY_OBJECT_PROPERTY, "exact cardinaility for object property violated - "));
-        result.addAll(OntologyHelper.executeSelectWithResults(pim, QUERY_CARDINALITY_MIN_DATA_PROPERTY, "min cardinaility for data property violated - "));
-        result.addAll(OntologyHelper.executeSelectWithResults(pim, QUERY_CARDINALITY_MIN_OBJECT_PROPERTY, "min cardinaility for object property violated - "));
-        result.addAll(OntologyHelper.executeSelectWithResults(pim, QUERY_CARDINALITY_MAX_DATA_PROPERTY, "max cardinaility for data property violated - "));
-        result.addAll(OntologyHelper.executeSelectWithResults(pim, QUERY_CARDINALITY_MAX_OBJECT_PROPERTY, "max cardinaility for object property violated - "));
-        pim.removeSubModel(instance);
+        pim.addSubModel(instanceData);
+        result.addAll(OntologyHelper.executeSelectWithResults(pim, 
+                setResourceUri(QUERY_CARDINALITY_EXACTLY_DATA_PROPERTY, instance),
+                "exact cardinaility for data property violated - "));
+        result.addAll(OntologyHelper.executeSelectWithResults(pim, 
+                setResourceUri(QUERY_CARDINALITY_EXACTLY_OBJECT_PROPERTY, instance),
+                "exact cardinaility for object property violated - "));
+        result.addAll(OntologyHelper.executeSelectWithResults(pim, 
+                setResourceUri(QUERY_CARDINALITY_MIN_DATA_PROPERTY, instance),
+                "min cardinaility for data property violated - "));
+        result.addAll(OntologyHelper.executeSelectWithResults(pim, 
+                setResourceUri(QUERY_CARDINALITY_MIN_OBJECT_PROPERTY, instance),
+                "min cardinaility for object property violated - "));
+        result.addAll(OntologyHelper.executeSelectWithResults(pim, 
+                setResourceUri(QUERY_CARDINALITY_MAX_DATA_PROPERTY, instance),
+                "max cardinaility for data property violated - "));
+        result.addAll(OntologyHelper.executeSelectWithResults(pim, 
+                setResourceUri(QUERY_CARDINALITY_MAX_OBJECT_PROPERTY, instance),
+                "max cardinaility for object property violated - "));
+        pim.removeSubModel(instanceData);
         return result;
     }
 }

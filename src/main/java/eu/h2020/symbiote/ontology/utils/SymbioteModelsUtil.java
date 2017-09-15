@@ -196,25 +196,29 @@ public class SymbioteModelsUtil {
         if (resource == null) {
             throw new IllegalArgumentException("resource must be non-null");
         }
-        Set<Resource> resourceClasses = resource.listProperties(RDF.type).mapWith(x -> x.getObject().asResource()).toSet();
-        // TODO change to allow for multiple types
-        if (resourceClasses.size() != 1) {
-            throw new IllegalArgumentException("resource must have exactly one rdf type");
-        }
-        Resource resourceClass = resourceClasses.iterator().next();
-        CoreResourceType type = null;
-        if (resourceClass.equals(CoreInformationModel.Device)) {
-            type = CoreResourceType.DEVICE;
-        } else if (resourceClass.equals(CoreInformationModel.MobileSensor)) {
-            type = CoreResourceType.MOBILE_SENSOR;
-        } else if (resourceClass.equals(CoreInformationModel.StationarySensor)) {
-            type = CoreResourceType.STATIONARY_SENSOR;
-        } else if (resourceClass.equals(CoreInformationModel.Actuator)) {
-            type = CoreResourceType.ACTUATOR;
-        } else if (resourceClass.equals(CoreInformationModel.Service)) {
-            type = CoreResourceType.SERVICE;
-        }
-        return type;
+        // TODO add proper implementation or remove property from CoreResource completely when not needed
+        return CoreResourceType.DEVICE;
+//        
+//        
+//        Set<Resource> resourceClasses = resource.listProperties(RDF.type).mapWith(x -> x.getObject().asResource()).toSet();
+//        // TODO change to allow for multiple types
+//        if (resourceClasses.size() != 1) {
+//            throw new IllegalArgumentException("resource must have exactly one rdf type");
+//        }
+//        Resource resourceClass = resourceClasses.iterator().next();
+//        CoreResourceType type = null;
+//        if (resourceClass.equals(CoreInformationModel.Device)) {
+//            type = CoreResourceType.DEVICE;
+//        } else if (resourceClass.equals(CoreInformationModel.MobileSensor)) {
+//            type = CoreResourceType.MOBILE_SENSOR;
+//        } else if (resourceClass.equals(CoreInformationModel.StationarySensor)) {
+//            type = CoreResourceType.STATIONARY_SENSOR;
+//        } else if (resourceClass.equals(CoreInformationModel.Actuator)) {
+//            type = CoreResourceType.ACTUATOR;
+//        } else if (resourceClass.equals(CoreInformationModel.Service)) {
+//            type = CoreResourceType.SERVICE;
+//        }
+//        return type;
     }
 
 }

@@ -6,6 +6,7 @@
 package eu.h2020.symbiote.ontology.utils;
 
 import eu.h2020.symbIoTe.ontology.MetaInformationModel;
+import eu.h2020.symbIoTe.ontology.CoreInformationModel;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
@@ -23,6 +24,8 @@ import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.vocabulary.OWL;
@@ -47,8 +50,9 @@ public class OntologyHelper {
     protected static final OntModelSpec MODEL_SPEC_OWL_INF = OntModelSpec.OWL_DL_MEM_RDFS_INF;
 
     static {
-        DOC_MANAGER.setProcessImports(false);
-        DOC_MANAGER.addAltEntry(eu.h2020.symbIoTe.ontology.CoreInformationModel.NS, eu.h2020.symbIoTe.ontology.CoreInformationModel.SOURCE_PATH);
+        DOC_MANAGER.addAltEntry(CoreInformationModel.NS, CoreInformationModel.SOURCE_PATH);
+        DOC_MANAGER.setProcessImports(true);
+        DOC_MANAGER.addAltEntry(CoreInformationModel.NS.substring(0, CoreInformationModel.NS.length() - 1), CoreInformationModel.SOURCE_PATH);
         MODEL_SPEC_OWL.setDocumentManager(DOC_MANAGER);
         MODEL_SPEC_OWL_INF.setDocumentManager(DOC_MANAGER);
     }
@@ -144,6 +148,7 @@ public class OntologyHelper {
     }
 
     public static OntModel create(Model model, boolean includeImport, boolean withInference) {
+        DOC_MANAGER.setProcessImports(includeImport);
         OntModel result = create(withInference);
         result.add(model);
         if (includeImport) {
@@ -153,6 +158,7 @@ public class OntologyHelper {
     }
 
     public static OntModel read(RDFInfo rdfInfo, boolean includeImport, boolean withInference) throws IOException {
+        DOC_MANAGER.setProcessImports(includeImport);
         OntModel model = create(withInference);
         try (InputStream is = new ByteArrayInputStream(rdfInfo.getRdf().getBytes())) {
             model.read(is, null, rdfInfo.getRdfFormat().name());
@@ -175,6 +181,7 @@ public class OntologyHelper {
     }
 
     public static void loadImports(OntModel model) {
+        DOC_MANAGER.setProcessImports(true);
         DOC_MANAGER.loadImports(model);
     }
 
@@ -190,6 +197,13 @@ public class OntologyHelper {
     }
 
     public static List<String> executeSelectWithResults(OntModel model, String query, String message) {
+        try (QueryExecution qexec1 = QueryExecutionFactory.create(query, model)) {
+            ResultSet result = qexec1.execSelect();
+            while (result.hasNext()) {
+                QuerySolution solution = result.next();
+                System.out.println(solution.toString());
+            }
+        }
         try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
             return StreamHelper.stream(qexec.execSelect())
                     .map(qs

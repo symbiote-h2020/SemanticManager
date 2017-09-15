@@ -71,7 +71,7 @@ public class ValidationTests {
     }
 
     //TODO fails
-//    @Test
+    @Test
     public void bimResourceValidationTest() {
         try {
             InformationModel im = new InformationModel();
