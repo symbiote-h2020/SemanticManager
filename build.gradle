@@ -86,7 +86,7 @@ dependencies {
     */
 
     //compile project(':SymbIoTeLibraries')
-    compile('com.github.symbiote-h2020:SymbIoTeLibraries:security-SNAPSHOT') { changing=true }
+    compile('com.github.symbiote-h2020:SymbIoTeLibraries:develop-SNAPSHOT') { changing=true }
 
     //Just to generate object ids
 //    compile('org.springframework.boot:spring-boot-starter-data-mongodb')
