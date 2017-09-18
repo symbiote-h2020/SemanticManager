@@ -156,7 +156,7 @@ task generateOntologies {
                 if( isFamily(FAMILY_WINDOWS) ) {
                     args = ["-i", "$ontologyDir/$file.name", "-o", generatedSourcesFolder, "--package", ontologyPackage, "--nocomments", "--ontology", "--nostrict", "--declarations", "    public static final URL SOURCE_PATH = MethodHandles.lookup().lookupClass().getResource(\"\"$ontologyDirShort/$file.name\"\");", "--header", "%package%\n%imports%\nimport java.net.URL;\nimport java.lang.invoke.MethodHandles;\n"]
                 } else if( isFamily(FAMILY_UNIX) || isFamily(FAMILY_MAC) ) {
-                    args = ["-i", "$ontologyDir/$file.name", "-o", generatedSourcesFolder, "--package", ontologyPackage, "--nocomments", "--ontology", "--nostrict", "--declarations", "    public static final URL SOURCE_PATH = MethodHandles.lookup().lookupClass().getResource(\$ontologyDirShort/$file.name\");", "--header", "%package%\n%imports%\nimport java.net.URL;\nimport java.lang.invoke.MethodHandles;\n"]
+                    args = ["-i", "$ontologyDir/$file.name", "-o", generatedSourcesFolder, "--package", ontologyPackage, "--nocomments", "--ontology", "--nostrict", "--declarations", "    public static final URL SOURCE_PATH = MethodHandles.lookup().lookupClass().getResource(\"$ontologyDirShort/$file.name\");", "--header", "%package%\n%imports%\nimport java.net.URL;\nimport java.lang.invoke.MethodHandles;\n"]
                 }
             }
         }
