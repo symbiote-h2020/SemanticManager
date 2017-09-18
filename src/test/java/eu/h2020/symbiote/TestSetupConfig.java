@@ -1,5 +1,6 @@
 package eu.h2020.symbiote;
 
+import eu.h2020.symbIoTe.ontology.BestPracticeInformationModel;
 import eu.h2020.symbiote.core.model.*;
 import eu.h2020.symbiote.core.model.resources.*;
 import eu.h2020.symbiote.ontology.utils.OntologyHelper;
@@ -162,8 +163,7 @@ public class TestSetupConfig {
 
         String bimRdf = null;
         try {
-            bimRdf = IOUtils.toString(SymbioteModelsUtil.class
-                    .getResourceAsStream(SymbioteModelsUtil.BIM_FILE));
+            bimRdf = IOUtils.toString(BestPracticeInformationModel.SOURCE_PATH);
         } catch (IOException e) {
             e.printStackTrace();
         }

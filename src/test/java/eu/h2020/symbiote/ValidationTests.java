@@ -1,5 +1,6 @@
 package eu.h2020.symbiote;
 
+import eu.h2020.symbIoTe.ontology.BestPracticeInformationModel;
 import eu.h2020.symbiote.core.cci.InformationModelRequest;
 import eu.h2020.symbiote.core.internal.InformationModelValidationResult;
 import eu.h2020.symbiote.core.internal.PIMMetaModelValidationResult;
@@ -58,15 +59,12 @@ public class ValidationTests {
         }
     }
 
-    public static final String PIM_1_0_1_FILE = "/rdf/bim-v1.0.1.owl";
-
     @Test
     public void testLoadBIMasPIM() {
         InformationModel rdfInfo = new InformationModel();
         try {
             rdfInfo.setRdfFormat(RDFFormat.Turtle);
-            rdfInfo.setRdf(IOUtils.toString(this.getClass()
-                    .getResource(PIM_1_0_1_FILE)));
+            rdfInfo.setRdf(IOUtils.toString(BestPracticeInformationModel.SOURCE_PATH));
         } catch (IOException e) {
             e.printStackTrace();
             fail();

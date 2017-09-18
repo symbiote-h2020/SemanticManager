@@ -140,6 +140,7 @@ tasks.withType(Test) {
 // automatically create ontology classes
 def generatedSourcesFolder = "generated-src";
 def ontologyDir = "src/main/resources/ontologies"
+def ontologyDirShort = "/ontologies"
 def ontologyPackage = "eu.h2020.symbIoTe.ontology"
 def ontologyFileExtensions= ["**/*.rdf", "**/*.owl", "**/*.ttl", "**/*.n3"]
 
@@ -153,9 +154,9 @@ task generateOntologies {
                 classpath sourceSets.main.runtimeClasspath
                 main = 'jena.schemagen'
                 if( isFamily(FAMILY_WINDOWS) ) {
-                    args = ["-i", "$ontologyDir/$file.name", "-o", generatedSourcesFolder, "--package", ontologyPackage, "--nocomments", "--ontology", "--nostrict", "--declarations", "\tpublic static final String SOURCE_PATH = \"\"$ontologyDir/$file.name\"\";"]
+                    args = ["-i", "$ontologyDir/$file.name", "-o", generatedSourcesFolder, "--package", ontologyPackage, "--nocomments", "--ontology", "--nostrict", "--declarations", "    public static final URL SOURCE_PATH = MethodHandles.lookup().lookupClass().getResource(\"\"$ontologyDirShort/$file.name\"\");", "--header", "%package%\n%imports%\nimport java.net.URL;\nimport java.lang.invoke.MethodHandles;\n"]
                 } else if( isFamily(FAMILY_UNIX) || isFamily(FAMILY_MAC) ) {
-                    args = ["-i", "$ontologyDir/$file.name", "-o", generatedSourcesFolder, "--package", ontologyPackage, "--nocomments", "--ontology", "--nostrict", "--declarations", "\tpublic static final String SOURCE_PATH = \"$ontologyDir/$file.name\";"]
+                    args = ["-i", "$ontologyDir/$file.name", "-o", generatedSourcesFolder, "--package", ontologyPackage, "--nocomments", "--ontology", "--nostrict", "--declarations", "    public static final URL SOURCE_PATH = MethodHandles.lookup().lookupClass().getResource(\"$ontologyDirShort/$file.name\");", "--header", "%package%\n%imports%\nimport java.net.URL;\nimport java.lang.invoke.MethodHandles;\n"]
                 }
             }
         }
