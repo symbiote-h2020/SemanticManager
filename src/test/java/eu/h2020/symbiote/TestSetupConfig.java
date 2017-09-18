@@ -1,10 +1,13 @@
 package eu.h2020.symbiote;
 
-import eu.h2020.symbiote.core.model.InterworkingService;
-import eu.h2020.symbiote.core.model.Location;
-import eu.h2020.symbiote.core.model.WGS84Location;
+import eu.h2020.symbIoTe.ontology.BestPracticeInformationModel;
+import eu.h2020.symbiote.core.model.*;
 import eu.h2020.symbiote.core.model.resources.*;
+import eu.h2020.symbiote.ontology.utils.OntologyHelper;
+import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
+import org.apache.commons.io.IOUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -135,6 +138,22 @@ public class TestSetupConfig {
         ACTUATOR1_CAPABILITIES.add(service);
         MOBILEDEVICE1_CAPABILITIES.add(service);
         STATIONARYDEVICE1_CAPABILITIES.add(service);
+
+        InformationModel im = new InformationModel();
+        im.setName("BIM");
+        im.setOwner("BIM");
+        im.setUri(OntologyHelper.getInformationModelUri("BIM"));
+        im.setId("BIM");
+
+        String bimRdf = null;
+        try {
+            bimRdf = IOUtils.toString(BestPracticeInformationModel.SOURCE_PATH);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        im.setRdf(bimRdf);
+        im.setRdfFormat(RDFFormat.Turtle);
+        SymbioteModelsUtil.addModels(Arrays.asList(im));
     }
 
 

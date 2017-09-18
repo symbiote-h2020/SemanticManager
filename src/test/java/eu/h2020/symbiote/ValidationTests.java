@@ -1,11 +1,14 @@
 package eu.h2020.symbiote;
 
 import eu.h2020.symbIoTe.ontology.BestPracticeInformationModel;
+import eu.h2020.symbiote.core.cci.InformationModelRequest;
 import eu.h2020.symbiote.core.internal.InformationModelValidationResult;
+import eu.h2020.symbiote.core.internal.PIMMetaModelValidationResult;
 import eu.h2020.symbiote.core.internal.ResourceInstanceValidationRequest;
 import eu.h2020.symbiote.core.internal.ResourceInstanceValidationResult;
 import eu.h2020.symbiote.core.model.InformationModel;
 import eu.h2020.symbiote.core.model.RDFFormat;
+import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.ontology.SemanticManager;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.utils.OntologyHelper;
@@ -29,7 +32,8 @@ public class ValidationTests {
 
     private String TEMPERATURE_NAME = "temperature";
     private String NONEXISTENT_NAME = "temperature1234566789";
-    private String BIM_RESOURCE_FILE = "/bim_resource.ttl";
+//    private String BIM_RESOURCE_FILE = "/bim_resource.ttl";
+    private String BIM_RESOURCE_FILE = "/bim_from_rest.ttl";
 
     @Test
     public void testFindInSymbioteModels() {
@@ -69,17 +73,7 @@ public class ValidationTests {
     @Test
     public void bimResourceValidationTest() {
         try {
-            InformationModel im = new InformationModel();
-            im.setName("BIM");
-            im.setOwner("BIM");
-            im.setUri(OntologyHelper.getInformationModelUri("BIM"));
-            im.setId("BIM");
 
-            String bimRdf = IOUtils.toString(BestPracticeInformationModel.SOURCE_PATH);
-            im.setRdf(bimRdf);
-            im.setRdfFormat(RDFFormat.Turtle);
-
-            SymbioteModelsUtil.addModels(Arrays.asList(im));
             ResourceInstanceValidationRequest request = new ResourceInstanceValidationRequest();
             request.setInformationModelId("BIM");
             request.setRdfFormat(RDFFormat.Turtle);
