@@ -6,7 +6,6 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix time: <http://www.w3.org/2006/time#> .
-@base <http://www.symbiote-h2020.eu/ontology/core#> .
 
 <http://www.symbiote-h2020.eu/ontology/core> rdf:type owl:Ontology ;
                                              

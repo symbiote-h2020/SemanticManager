@@ -1,13 +1,11 @@
 package eu.h2020.symbiote;
 
-import eu.h2020.symbiote.core.cci.InformationModelRequest;
+import eu.h2020.symbIoTe.ontology.BestPracticeInformationModel;
 import eu.h2020.symbiote.core.internal.InformationModelValidationResult;
-import eu.h2020.symbiote.core.internal.PIMMetaModelValidationResult;
 import eu.h2020.symbiote.core.internal.ResourceInstanceValidationRequest;
 import eu.h2020.symbiote.core.internal.ResourceInstanceValidationResult;
 import eu.h2020.symbiote.core.model.InformationModel;
 import eu.h2020.symbiote.core.model.RDFFormat;
-import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.ontology.SemanticManager;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.utils.OntologyHelper;
@@ -50,15 +48,12 @@ public class ValidationTests {
         }
     }
 
-    public static final String PIM_1_0_1_FILE = "/rdf/bim-v1.0.1.owl";
-
     @Test
     public void testLoadBIMasPIM() {
         InformationModel rdfInfo = new InformationModel();
         try {
             rdfInfo.setRdfFormat(RDFFormat.Turtle);
-            rdfInfo.setRdf(IOUtils.toString(this.getClass()
-                    .getResource(PIM_1_0_1_FILE)));
+            rdfInfo.setRdf(IOUtils.toString(BestPracticeInformationModel.SOURCE_PATH));
         } catch (IOException e) {
             e.printStackTrace();
             fail();
@@ -80,11 +75,9 @@ public class ValidationTests {
             im.setUri(OntologyHelper.getInformationModelUri("BIM"));
             im.setId("BIM");
 
-            String bimRdf = IOUtils.toString(SymbioteModelsUtil.class
-                    .getResourceAsStream(SymbioteModelsUtil.BIM_FILE));
+            String bimRdf = IOUtils.toString(BestPracticeInformationModel.SOURCE_PATH);
             im.setRdf(bimRdf);
             im.setRdfFormat(RDFFormat.Turtle);
-
 
             SymbioteModelsUtil.addModels(Arrays.asList(im));
             ResourceInstanceValidationRequest request = new ResourceInstanceValidationRequest();

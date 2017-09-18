@@ -7,9 +7,8 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix align: <http://knowledgeweb.semanticweb.org/heterogeneity/alignment> .
 @prefix time: <http://www.w3.org/2006/time#> .
-@base <http://www.symbiote-h2020.eu/ontology/meta#> .
 
-<http://www.symbiote-h2020.eu/ontology/meta#> rdf:type owl:Ontology ;
+<http://www.symbiote-h2020.eu/ontology/meta> rdf:type owl:Ontology ;
                                              
                                              rdfs:label "symbIoTe Meta Information Model"@en ;
                                              
@@ -18,10 +17,10 @@
                                              rdfs:comment "Meta Information Model of the symbIoTe project."@en ;
                                              
                                              owl:imports align: ,
-                                                         core:,
+                                                         <http://www.symbiote-h2020.eu/ontology/core>,
 														 owl:;
                                              
-                                             owl:versionIRI <http://www.symbiote-h2020.eu/ontology/meta/1.0.1#> .
+                                             owl:versionIRI <http://www.symbiote-h2020.eu/ontology/meta/1.0.1> .
 
 
 #################################################################
