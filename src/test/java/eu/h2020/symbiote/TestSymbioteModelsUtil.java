@@ -2,6 +2,7 @@ package eu.h2020.symbiote;
 
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -20,6 +21,10 @@ public class TestSymbioteModelsUtil {
     private static final String QU_REC_TEMPERATURE = "temperature";
     private static final String NON_EXISTING = "thispropertydoesnotexist";
 
+    @Before
+    public void init() {
+        TestSetupConfig.loadBIM();
+    }
 
     @Test
     public void testBIMPropertyFind() {

@@ -137,7 +137,23 @@ public class TestSetupConfig {
         ACTUATOR1_CAPABILITIES.add(service);
         MOBILEDEVICE1_CAPABILITIES.add(service);
         STATIONARYDEVICE1_CAPABILITIES.add(service);
+    }
 
+
+    public static Parameter createService1Param() {
+        Parameter param = new Parameter();
+        param.setName(SERVICE1_INPUT_NAME);
+        param.setMandatory(SERVICE1_INPUT_MANDATORY);
+        RangeRestriction restriction1 = new RangeRestriction();
+        restriction1.setMin(SERVICE1_INPUT_RESTRICTION_MIN);
+        restriction1.setMax(SERVICE1_INPUT_RESTRICTION_MAX);
+        param.setRestrictions(Arrays.asList(restriction1));
+
+        param.setDatatype(createDatatypeString());
+        return param;
+    }
+
+    public static void loadBIM() {
         InformationModel im = new InformationModel();
         im.setName("BIM");
         im.setOwner("BIM");
@@ -154,20 +170,6 @@ public class TestSetupConfig {
         im.setRdf(bimRdf);
         im.setRdfFormat(RDFFormat.Turtle);
         SymbioteModelsUtil.addModels(Arrays.asList(im));
-    }
-
-
-    public static Parameter createService1Param() {
-        Parameter param = new Parameter();
-        param.setName(SERVICE1_INPUT_NAME);
-        param.setMandatory(SERVICE1_INPUT_MANDATORY);
-        RangeRestriction restriction1 = new RangeRestriction();
-        restriction1.setMin(SERVICE1_INPUT_RESTRICTION_MIN);
-        restriction1.setMax(SERVICE1_INPUT_RESTRICTION_MAX);
-        param.setRestrictions(Arrays.asList(restriction1));
-
-        param.setDatatype(createDatatypeString());
-        return param;
     }
 
     public static RdfsDatatype createDatatypeString() {

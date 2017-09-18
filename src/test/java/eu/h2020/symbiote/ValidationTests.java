@@ -17,11 +17,13 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.*;
+import static eu.h2020.symbiote.TestSetupConfig.*;
 
 /**
  * Created by Szymon Mueller on 03/05/2017.
@@ -33,6 +35,11 @@ public class ValidationTests {
     private String NONEXISTENT_NAME = "temperature1234566789";
 //    private String BIM_RESOURCE_FILE = "/bim_resource.ttl";
     private String BIM_RESOURCE_FILE = "/bim_from_rest.ttl";
+
+    @Before
+    public void init() {
+        loadBIM();
+    }
 
     @Test
     public void testFindInSymbioteModels() {
