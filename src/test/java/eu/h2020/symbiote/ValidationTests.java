@@ -80,7 +80,6 @@ public class ValidationTests {
     @Test
     public void bimResourceValidationTest() {
         try {
-
             ResourceInstanceValidationRequest request = new ResourceInstanceValidationRequest();
             request.setInformationModelId("BIM");
             request.setRdfFormat(RDFFormat.Turtle);

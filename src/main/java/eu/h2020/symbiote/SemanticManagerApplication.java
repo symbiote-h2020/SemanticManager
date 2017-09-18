@@ -48,6 +48,7 @@ public class SemanticManagerApplication {
 //
             //message retrieval - start rabbit exchange and consumers
             this.rabbitManager.init();
+            this.rabbitManager.dlInformationModels();
 
             //Load all PIM models
 

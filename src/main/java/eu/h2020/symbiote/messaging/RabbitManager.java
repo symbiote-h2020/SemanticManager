@@ -2,11 +2,18 @@ package eu.h2020.symbiote.messaging;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.*;
+import eu.h2020.symbIoTe.ontology.BestPracticeInformationModel;
 import eu.h2020.symbiote.core.internal.InformationModelListResponse;
+import eu.h2020.symbiote.core.internal.ResourceInstanceValidationRequest;
+import eu.h2020.symbiote.core.internal.ResourceInstanceValidationResult;
 import eu.h2020.symbiote.core.model.InformationModel;
+import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.messaging.consumers.*;
+import eu.h2020.symbiote.ontology.SemanticManager;
 import eu.h2020.symbiote.ontology.utils.LocationFinder;
+import eu.h2020.symbiote.ontology.utils.OntologyHelper;
 import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -168,7 +175,7 @@ public class RabbitManager {
             LocationFinder.getSingleton(this.resourceExchangeName, this.resourceSparqlSearchRequestedRoutingKey, this.connection, this);
 
             startConsumers();
-            scheduleLoadingOfPIMs();
+//            scheduleLoadingOfPIMs();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -227,32 +234,85 @@ public class RabbitManager {
     }
 
 
-    private void scheduleLoadingOfPIMs() {
-        try {
-            Channel tempChannel = connection.createChannel();
-
-            String queueName = tempChannel.queueDeclare("symbIoTe-SemanticManager-pimsLookup", true, true, false, null).getQueue();
-
+    public void scheduleLoadingOfPIMs() {
+//        try {
             TimerTask task = new TimerTask() {
                 @Override
                 public void run() {
                     try {
-                        String response = sendRpcMessage(tempChannel, queueName, platformExchangeName, platformInformationModelRequestedKey, "", String.class.getCanonicalName());
-                        ObjectMapper mapper = new ObjectMapper();
-                        InformationModelListResponse informationModelsList = mapper.readValue(response, InformationModelListResponse.class);
-                        SymbioteModelsUtil.addModels(informationModelsList.getBody());
+                        dlInformationModels();
                     } catch (IOException e) {
-                        log.error("Error occurred when loading PIMs from registry");
+                        e.printStackTrace();
                     }
                 }
             };
             Timer timer = new Timer("pim download task",false);
             timer.schedule(task,30000);
 
+//
+//        } catch (IOException e) {
+//            log.error("Error occurred when loading PIMs from registry");
+//        }
 
-        } catch (IOException e) {
-            log.error("Error occurred when loading PIMs from registry");
-        }
+    }
+
+    public void dlInformationModels() throws IOException {
+        Channel tempChannel = connection.createChannel();
+
+        String queueName = tempChannel.queueDeclare("symbIoTe-SemanticManager-pimsLookup", true, true, false, null).getQueue();
+
+//        try {
+//            String response = sendRpcMessage(tempChannel, queueName, platformExchangeName, platformInformationModelRequestedKey, "", String.class.getCanonicalName());
+//            ObjectMapper mapper = new ObjectMapper();
+//            InformationModelListResponse informationModelsList = mapper.readValue(response, InformationModelListResponse.class);
+//            SymbioteModelsUtil.addModels(informationModelsList.getBody());
+
+            InformationModel im = new InformationModel();
+            im.setName("BIM");
+            im.setOwner("BIM");
+            im.setUri(OntologyHelper.getInformationModelUri("BIM"));
+            im.setId("BIM");
+
+            String bimRdf = null;
+            try {
+                bimRdf = IOUtils.toString(BestPracticeInformationModel.SOURCE_PATH);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            im.setRdf(bimRdf);
+            im.setRdfFormat(RDFFormat.Turtle);
+            SymbioteModelsUtil.addModels(Arrays.asList(im));
+
+            //TODO delete
+            try {
+                ResourceInstanceValidationRequest request = new ResourceInstanceValidationRequest();
+                request.setInformationModelId("BIM");
+                request.setRdfFormat(RDFFormat.Turtle);
+                String resourceRdf = IOUtils.toString(this.getClass()
+                        .getResource("/bim_from_rest.ttl"));
+                request.setRdf(resourceRdf);
+                ResourceInstanceValidationResult result = SemanticManager.getManager().validateResourcesInstance(request);
+                if( result != null ) {
+                    System.out.println("Result is not null");
+                    if( result.getObjectDescription() != null ) {
+                        System.out.println("Result desc is not null,size: " + result.getObjectDescription().size());
+                    } else {
+                        System.out.println("Result desc is null");
+
+                    }
+                } else {
+                    System.out.println("Result is null");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+
+            }
+
+
+
+//        } catch (IOException e) {
+//            log.error("Error occurred when loading PIMs from registry");
+//        }
 
     }
 

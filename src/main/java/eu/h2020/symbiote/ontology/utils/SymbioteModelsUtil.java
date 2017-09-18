@@ -83,7 +83,8 @@ public class SymbioteModelsUtil {
         if (informationModels != null) {
             log.info("Adding " + informationModels.size() + " information models to Semantic Manager cache");
             for (InformationModel model : informationModels) {
-                insertGraph(pimDataset, OntologyHelper.getInformationModelUri(model.getId()), model.getRdf(), model.getRdfFormat());
+                System.out.println("Id: " +  model.getId() + " | uri: " + model.getUri() + " | owner: " + model.getOwner() + " | name: " + model.getName() + " | rdfFormat: " + model.getRdfFormat());
+                insertGraph(pimDataset, model.getUri(), model.getRdf(), model.getRdfFormat());
             }
             log.debug("Adding finished");
         } else {
