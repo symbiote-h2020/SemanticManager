@@ -36,7 +36,7 @@ public class SymbioteModelsUtil {
     private static final String CIM_FILE = "/core-v1.0.1.owl";
     private static final String CIM_BASE_NAME = "http://www.symbiote-h2020.eu/ontology/core#";
     private static final String CIM_ID = "CIM1";
-    public static final String BIM_FILE = "/bim-v1.0.2.owl";
+    public static final String BIM_FILE = "/bim-v1.0.1.owl";
     private static final String BIM_BASE_NAME = "http://www.symbiote-h2020.eu/ontology/bim/property#";
     private static final String BIM_ID = "BIM";
     private static final String MIM_FILE = "/meta-v1.0.1.owl";
@@ -48,9 +48,9 @@ public class SymbioteModelsUtil {
     private static final String QU_DIM_BASE_NAME = "http://purl.oclc.org/NET/ssnx/qu/quantity#";
     private static final String QU_ID = "QU1";
 
-    private static Dataset cimDataset;
-    private static Dataset bimDataset;
-    private static Dataset mimDataset;
+//    private static Dataset cimDataset;
+//    private static Dataset bimDataset;
+//    private static Dataset mimDataset;
     private static Dataset quRecDataset;
     private static Dataset pimDataset;
 
@@ -61,27 +61,27 @@ public class SymbioteModelsUtil {
     static {
         //Loads models
         try {
-            String cimRdf = IOUtils.toString(SymbioteModelsUtil.class
-                    .getResourceAsStream(CIM_FILE));
+//            String cimRdf = IOUtils.toString(SymbioteModelsUtil.class
+//                    .getResourceAsStream(CIM_FILE));
 
-            String bimRdf = IOUtils.toString(SymbioteModelsUtil.class
-                    .getResourceAsStream(BIM_FILE));
+//            String bimRdf = IOUtils.toString(SymbioteModelsUtil.class
+//                    .getResourceAsStream(BIM_FILE));
 
-            String mimRdf = IOUtils.toString(SymbioteModelsUtil.class
-                    .getResourceAsStream(MIM_FILE));
+//            String mimRdf = IOUtils.toString(SymbioteModelsUtil.class
+//                    .getResourceAsStream(MIM_FILE));
 
             String quRecRdf = IOUtils.toString(SymbioteModelsUtil.class
                     .getResourceAsStream(QU_FILE));
 
-            cimDataset = DatasetFactory.create();
-            bimDataset = DatasetFactory.create();
-            mimDataset = DatasetFactory.create();
+//            cimDataset = DatasetFactory.create();
+//            bimDataset = DatasetFactory.create();
+//            mimDataset = DatasetFactory.create();
             quRecDataset = DatasetFactory.create();
             pimDataset = DatasetFactory.create();
 
-            insertGraph(cimDataset, OntologyHelper.getInformationModelUri(CIM_ID), cimRdf, RDFFormat.Turtle);
-            insertGraph(bimDataset, OntologyHelper.getInformationModelUri(BIM_ID), bimRdf, RDFFormat.Turtle);
-            insertGraph(mimDataset, OntologyHelper.getInformationModelUri(MIM_ID), mimRdf, RDFFormat.Turtle);
+//            insertGraph(cimDataset, OntologyHelper.getInformationModelUri(CIM_ID), cimRdf, RDFFormat.Turtle);
+//            insertGraph(bimDataset, OntologyHelper.getInformationModelUri(BIM_ID), bimRdf, RDFFormat.Turtle);
+//            insertGraph(mimDataset, OntologyHelper.getInformationModelUri(MIM_ID), mimRdf, RDFFormat.Turtle);
             insertGraph(quRecDataset, OntologyHelper.getInformationModelUri(QU_ID), quRecRdf, RDFFormat.RDFXML);
 
         } catch (IOException e) {
@@ -140,7 +140,7 @@ public class SymbioteModelsUtil {
         log.debug("Checking for " + name + " in symbIoTe models");
         //Check in BIM
         try {
-            uri = findUriForNameInModel(name, OntologyHelper.getInformationModelUri(BIM_ID), bimDataset, BIM_BASE_NAME);
+            uri = findUriForNameInModel(name, OntologyHelper.getInformationModelUri(BIM_ID), pimDataset, BIM_BASE_NAME);
         } catch (eu.h2020.symbiote.ontology.errors.PropertyNotFoundException e) {
             log.error(e);
             propertyNotFoundExceptions.add(e);

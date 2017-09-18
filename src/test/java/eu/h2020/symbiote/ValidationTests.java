@@ -31,7 +31,8 @@ public class ValidationTests {
 
     private String TEMPERATURE_NAME = "temperature";
     private String NONEXISTENT_NAME = "temperature1234566789";
-    private String BIM_RESOURCE_FILE = "/bim_resource.ttl";
+//    private String BIM_RESOURCE_FILE = "/bim_resource.ttl";
+    private String BIM_RESOURCE_FILE = "/bim_from_rest.ttl";
 
     @Test
     public void testFindInSymbioteModels() {
@@ -74,19 +75,7 @@ public class ValidationTests {
     @Test
     public void bimResourceValidationTest() {
         try {
-            InformationModel im = new InformationModel();
-            im.setName("BIM");
-            im.setOwner("BIM");
-            im.setUri(OntologyHelper.getInformationModelUri("BIM"));
-            im.setId("BIM");
 
-            String bimRdf = IOUtils.toString(SymbioteModelsUtil.class
-                    .getResourceAsStream(SymbioteModelsUtil.BIM_FILE));
-            im.setRdf(bimRdf);
-            im.setRdfFormat(RDFFormat.Turtle);
-
-
-            SymbioteModelsUtil.addModels(Arrays.asList(im));
             ResourceInstanceValidationRequest request = new ResourceInstanceValidationRequest();
             request.setInformationModelId("BIM");
             request.setRdfFormat(RDFFormat.Turtle);
