@@ -492,6 +492,7 @@ public class SemanticManager {
         }
         result.setModelValidatedAgainst(OntologyHelper.modelAsString(pim, request.getRdfFormat()));
         result.setSuccess(true);
+        resources.values().stream().forEach( res -> res.setInterworkingServiceURL(request.getInterworkingServiceURL()));
         result.setObjectDescription(resources);
         return result;
     }
