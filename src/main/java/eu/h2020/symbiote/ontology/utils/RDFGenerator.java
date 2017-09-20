@@ -54,7 +54,7 @@ public class RDFGenerator {
         model.setNsPrefix("meta", "http://www.symbiote-h2020.eu/ontology/meta#");
         model.setNsPrefix("geo", "http://www.w3.org/2003/01/geo/wgs84_pos#");
         model.setNsPrefix("qu", "http://purl.oclc.org/NET/ssnx/qu/quantity#");
-        Map<String,CoreResource> resources = new HashMap<>();
+        Map<String, CoreResource> resources = new HashMap<>();
 
         //Add general resource properties
         org.apache.jena.rdf.model.Resource modelResource = model.createResource(OntologyHelper.getResourceGraphURI(resource.getId()));
@@ -77,7 +77,7 @@ public class RDFGenerator {
                 }
             }
 //            modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT,OntologyHelper.getLocationURI(platformId,locatedAt));
-            addLocationToModelResource(model, modelResource, locatedAt,platformId);
+            addLocationToModelResource(model, modelResource, locatedAt, platformId);
         }
         if (resource instanceof StationarySensor) {
             modelResource.addProperty(RDF.type, CoreInformationModel.StationarySensor);
@@ -93,7 +93,7 @@ public class RDFGenerator {
             }
 //            modelResource.addProperty(CoreInformationModel.CIM_HAS_FOI, OntologyHelper.getFoiURI(platformId,featureOfInterest));
 //            modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT,OntologyHelper.getLocationURI(platformId,locatedAt));
-            addLocationToModelResource(model, modelResource, locatedAt,platformId);
+            addLocationToModelResource(model, modelResource, locatedAt, platformId);
             addFoiToModelResource(model, modelResource, featureOfInterest);
         }
 //        if (resource instanceof ActuatingService) {
@@ -106,9 +106,9 @@ public class RDFGenerator {
             List<Parameter> parameters = ((Service) resource).getParameters();
 
             modelResource.addProperty(CoreInformationModel.name, name);
-            addParametersToModelResource(model,modelResource,parameters);
+            addParametersToModelResource(model, modelResource, parameters);
             org.apache.jena.rdf.model.Resource resultTypeResource = createDatatypeModelResource(model, resultType);
-            modelResource.addProperty(CoreInformationModel.hasResultType,resultTypeResource);
+            modelResource.addProperty(CoreInformationModel.hasResultType, resultTypeResource);
 
 //            modelResource.addProperty(CoreInformationModel.CIM_HAS_RESULT_TYPE, resultTypeResource)
 //                    .addProperty()
@@ -125,7 +125,7 @@ public class RDFGenerator {
             List<Capability> capabilities = ((Actuator) resource).getCapabilities();
 
 //            modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT,OntologyHelper.getLocationURI(platformId,locatedAt));
-            addLocationToModelResource(model, modelResource, locatedAt,platformId);
+            addLocationToModelResource(model, modelResource, locatedAt, platformId);
             addCapabilitiesToModelResource(model, modelResource, capabilities);
 //            log.debug("Found " + newRes.size() + " subresources (services) of actuator");
 //            resources.putAll(newRes);
@@ -211,18 +211,18 @@ public class RDFGenerator {
                     }
                     if (restriction instanceof RegExRestriction) {
                         restrictionResource.addProperty(RDF.type, CoreInformationModel.RegExRestriction)
-                                .addProperty(CoreInformationModel.pattern,String.valueOf(((RegExRestriction) restriction).getPattern()));
+                                .addProperty(CoreInformationModel.pattern, String.valueOf(((RegExRestriction) restriction).getPattern()));
                     }
                     if (restriction instanceof InstanceOfRestriction) {
                         restrictionResource.addProperty(RDF.type, CoreInformationModel.InstanceOfRestriction)
-                                .addProperty(CoreInformationModel.onlyInstancesOfClass,String.valueOf(((InstanceOfRestriction) restriction).getInstanceOfClass()))
-                                .addProperty(CoreInformationModel.valueProperty,String.valueOf(((InstanceOfRestriction) restriction).getValueProperty()));
+                                .addProperty(CoreInformationModel.onlyInstancesOfClass, String.valueOf(((InstanceOfRestriction) restriction).getInstanceOfClass()))
+                                .addProperty(CoreInformationModel.valueProperty, String.valueOf(((InstanceOfRestriction) restriction).getValueProperty()));
                     }
                     restrictionResources.add(restrictionResource);
                 }
 
                 org.apache.jena.rdf.model.Resource inputResource = model.createResource().addProperty(RDF.type, eu.h2020.symbIoTe.ontology.CoreInformationModel.Parameter)
-                        .addProperty(CoreInformationModel.hasDatatype, createDatatypeModelResource(model,parameter.getDatatype()))
+                        .addProperty(CoreInformationModel.hasDatatype, createDatatypeModelResource(model, parameter.getDatatype()))
                         .addProperty(CoreInformationModel.name, parameter.getName())
                         .addProperty(CoreInformationModel.mandatory, String.valueOf(parameter.isMandatory()));
                 for (org.apache.jena.rdf.model.Resource restriction : restrictionResources) {
@@ -234,19 +234,19 @@ public class RDFGenerator {
     }
 
     //TODO add a lot of nullchecks - probably as seperate method
-    private static org.apache.jena.rdf.model.Resource createDatatypeModelResource( Model model, Datatype datatype ) {
+    private static org.apache.jena.rdf.model.Resource createDatatypeModelResource(Model model, Datatype datatype) {
         org.apache.jena.rdf.model.Resource datatypeResource = model.createResource();
 
-        if( datatype instanceof ComplexDatatype ) {
+        if (datatype instanceof ComplexDatatype) {
             datatypeResource.addProperty(RDF.type, CoreInformationModel.ComplexDatatype)
                     .addProperty(CoreInformationModel.isArray, String.valueOf(datatype.isArray()))
-                    .addProperty(CoreInformationModel.basedOnClass, ((ComplexDatatype) datatype).getBasedOnClass() );
-            for( DataProperty dataProperty: ((ComplexDatatype) datatype).getDataProperties() ) {
+                    .addProperty(CoreInformationModel.basedOnClass, ((ComplexDatatype) datatype).getBasedOnClass());
+            for (DataProperty dataProperty : ((ComplexDatatype) datatype).getDataProperties()) {
                 org.apache.jena.rdf.model.Resource dataPropertyResource = createDataPropertyModelResource(model, datatypeResource, dataProperty);
                 datatypeResource.addProperty(CoreInformationModel.hasDatatype, dataPropertyResource);
             }
         }
-        if( datatype instanceof RdfsDatatype ) {
+        if (datatype instanceof RdfsDatatype) {
             datatypeResource = model.createResource(((RdfsDatatype) datatype).getDatatypeName());
             datatypeResource.addProperty(RDF.type, RDFS.Datatype);
         }
@@ -255,65 +255,71 @@ public class RDFGenerator {
 
 
     //TODO refactor using interface
-    private static org.apache.jena.rdf.model.Resource createDataPropertyModelResource(Model model, org.apache.jena.rdf.model.Resource datatypeResource, DataProperty dataProperty ) {
+    private static org.apache.jena.rdf.model.Resource createDataPropertyModelResource(Model model, org.apache.jena.rdf.model.Resource datatypeResource, DataProperty dataProperty) {
         org.apache.jena.rdf.model.Resource dataPropertyResource = model.createResource();
         String basedOn = "";
-        if( dataProperty instanceof PrimitiveProperty ) {
+        if (dataProperty instanceof PrimitiveProperty) {
             basedOn = ((PrimitiveProperty) dataProperty).getBasedOnProperty();
-        } else if ( dataProperty instanceof ComplexProperty ) {
+        } else if (dataProperty instanceof ComplexProperty) {
             basedOn = ((ComplexProperty) dataProperty).getBasedOnProperty();
         }
-            dataPropertyResource.addProperty(RDF.type, CoreInformationModel.PrimitiveProperty)
-                    .addProperty(CoreInformationModel.hasDatatype, datatypeResource)
-                    .addProperty(CoreInformationModel.basedOnProperty, basedOn);
+        dataPropertyResource.addProperty(RDF.type, CoreInformationModel.PrimitiveProperty)
+                .addProperty(CoreInformationModel.hasDatatype, datatypeResource)
+                .addProperty(CoreInformationModel.basedOnProperty, basedOn);
 
         return dataPropertyResource;
     }
 
-    private static void addLocationToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, Location location, String platformId) {
-        if (location != null) {
-            String locationURI = null;
+    private static void addLocationToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, Location location, String platformId) throws RDFGenerationError {
 
-            LocationFinder locationFinder = LocationFinder.getSingleton();
-            if( locationFinder != null ) {
-                try {
-                    log.debug("Fetching for location URI... ");
-                    locationURI = locationFinder.queryForLocationUri(location, platformId);
-                    log.debug("Query returned following URI: " + locationURI);
-                } catch( Exception e ) {
-                    log.error("Could not contact search to retrieve location URI: " + e.getMessage(), e);
-                }
-            }
+        verifyLocation(location);
 
-            if( locationURI == null ) {
-                String locationId = ObjectId.get().toString();
-                locationURI = OntologyHelper.getLocationURI(platformId, locationId);
-                log.info("No existing locations have been found fulfilling criteria, created new location with ID: " + locationId + " and URI: <" + locationURI + ">" );
+        String locationURI = null;
+
+        LocationFinder locationFinder = LocationFinder.getSingleton();
+        if (locationFinder != null) {
+            try {
+                log.debug("Fetching for location URI... ");
+                locationURI = locationFinder.queryForLocationUri(location, platformId);
+                log.debug("Query returned following URI: " + locationURI);
+            } catch (Exception e) {
+                log.error("Could not contact search to retrieve location URI: " + e.getMessage(), e);
             }
-            org.apache.jena.rdf.model.Resource locationResource = model.createResource(locationURI);
+        }
+
+        if (locationURI == null) {
+            String locationId = ObjectId.get().toString();
+            locationURI = OntologyHelper.getLocationURI(platformId, locationId);
+            log.info("No existing locations have been found fulfilling criteria, created new location with ID: " + locationId + " and URI: <" + locationURI + ">");
+        }
+        org.apache.jena.rdf.model.Resource locationResource = model.createResource(locationURI);
 //            locationResource.addProperty(RDF.type, CoreInformationModel.Location);
-            for( String label: location.getLabels() ) {
+        if (location.getLabels() != null) {
+            for (String label : location.getLabels()) {
                 locationResource.addProperty(RDFS.label, label);
             }
-            for( String comment: location.getComments() ) {
+        }
+        if (location.getComments() != null) {
+            for (String comment : location.getComments()) {
                 locationResource.addProperty(RDFS.comment, comment);
             }
-            if (location instanceof WGS84Location) {
-                locationResource.addProperty(RDF.type, CoreInformationModel.WGS84Location)
-                        .addProperty(WGS84.lat, Double.valueOf(((WGS84Location) location).getLatitude()).toString())
-                        .addProperty(WGS84.long_, Double.valueOf(((WGS84Location) location).getLongitude()).toString())
-                        .addProperty(WGS84.alt, Double.valueOf(((WGS84Location) location).getAltitude()).toString());
-            }
-            if (location instanceof SymbolicLocation) {
-                locationResource.addProperty(RDF.type, CoreInformationModel.SymbolicLocation);
-            }
-            if (location instanceof WKTLocation) {
-                locationResource.addProperty(RDF.type, CoreInformationModel.WKTLocation)
-                        .addProperty(RDF.value, ((WKTLocation) location).getValue());
-            }
-
-            modelResource.addProperty(CoreInformationModel.locatedAt, locationResource);
         }
+        if (location instanceof WGS84Location) {
+            locationResource.addProperty(RDF.type, CoreInformationModel.WGS84Location)
+                    .addProperty(WGS84.lat, Double.valueOf(((WGS84Location) location).getLatitude()).toString())
+                    .addProperty(WGS84.long_, Double.valueOf(((WGS84Location) location).getLongitude()).toString())
+                    .addProperty(WGS84.alt, Double.valueOf(((WGS84Location) location).getAltitude()).toString());
+        }
+        if (location instanceof SymbolicLocation) {
+            locationResource.addProperty(RDF.type, CoreInformationModel.SymbolicLocation);
+        }
+        if (location instanceof WKTLocation) {
+            locationResource.addProperty(RDF.type, CoreInformationModel.WKTLocation)
+                    .addProperty(RDF.value, ((WKTLocation) location).getValue());
+        }
+
+        modelResource.addProperty(CoreInformationModel.locatedAt, locationResource);
+
     }
 
     private static void addFoiToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, FeatureOfInterest featureOfInterest) throws PropertyNotFoundException {
@@ -357,8 +363,8 @@ public class RDFGenerator {
                 org.apache.jena.rdf.model.Resource capabilityResource = model.createResource();
 
                 capabilityResource.addProperty(RDF.type, CoreInformationModel.Capability);
-                addParametersToModelResource(model, capabilityResource,capability.getParameters());
-                addEffectToModelResource(model,capabilityResource,capability.getEffects());
+                addParametersToModelResource(model, capabilityResource, capability.getParameters());
+                addEffectToModelResource(model, capabilityResource, capability.getEffects());
 
                 modelResource.addProperty(CoreInformationModel.hasCapability, capabilityResource);
 
@@ -376,16 +382,16 @@ public class RDFGenerator {
     }
 
     private static void addEffectToModelResource(Model model, org.apache.jena.rdf.model.Resource capabilityResource, List<Effect> effects) throws PropertyNotFoundException {
-        if( effects != null ) {
-            for( Effect effect: effects ) {
+        if (effects != null) {
+            for (Effect effect : effects) {
                 org.apache.jena.rdf.model.Resource effectResource = model.createResource();
                 effectResource.addProperty(RDF.type, CoreInformationModel.Effect);
-                addFoiToModelResource(model,effectResource,effect.getActsOn());
-                for( String property: effect.getAffects()) {
+                addFoiToModelResource(model, effectResource, effect.getActsOn());
+                for (String property : effect.getAffects()) {
                     //TODO add logic for different Information Models
                     effectResource.addProperty(CoreInformationModel.affects, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
                 }
-                capabilityResource.addProperty(CoreInformationModel.hasEffect,effectResource);
+                capabilityResource.addProperty(CoreInformationModel.hasEffect, effectResource);
             }
         }
     }
@@ -483,6 +489,14 @@ public class RDFGenerator {
         return platformUri + "/service/" + cutServiceUrl;
     }
 
+    private static void verifyLocation(Location location) throws RDFGenerationError {
+        if (location == null) {
+            throw new RDFGenerationError("Location must not be null");
+        }
+        if (location.getLabels() == null || location.getLabels().size() == 0) {
+            throw new RDFGenerationError("Location must have at least one name");
+        }
+    }
 
     private static void checkService(Service service) throws RDFGenerationError {
         if (service == null) {
