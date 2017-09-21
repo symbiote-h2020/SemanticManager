@@ -28,6 +28,7 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.util.FileManager;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDF;
 
@@ -41,17 +42,22 @@ public class OntologyHelper {
 
     public static final String ROOT_URI = "http://www.symbiote-h2020.eu/ontology/";
 
+    private static final String ONT_DOC_MANAGER_CONFIG = "OntDocumentManagerConfig.ttl";
+
     public static final String BIM_URI = ROOT_URI + "bim";
 
     public static final int CORE_MODEL_ID = -1;
 
-    protected static final OntDocumentManager DOC_MANAGER = new OntDocumentManager();
+    protected static final OntDocumentManager DOC_MANAGER;
     protected static final OntModelSpec MODEL_SPEC_OWL = OntModelSpec.OWL_DL_MEM;
     protected static final OntModelSpec MODEL_SPEC_OWL_INF = OntModelSpec.OWL_DL_MEM_RDFS_INF;
 
     static {
+        String liveConfigFile = Thread.currentThread().getContextClassLoader().getResource(ONT_DOC_MANAGER_CONFIG).toString();
+        String cachePath = liveConfigFile.substring(0, liveConfigFile.lastIndexOf("/") + 1);
+        Model config = FileManager.get().loadModel(ONT_DOC_MANAGER_CONFIG, cachePath, "TURTLE");
+        DOC_MANAGER = new OntDocumentManager(config);
         DOC_MANAGER.addAltEntry(CoreInformationModel.NS, CoreInformationModel.SOURCE_RELATIVE);
-        DOC_MANAGER.setProcessImports(true);
         DOC_MANAGER.addAltEntry(CoreInformationModel.NS.substring(0, CoreInformationModel.NS.length() - 1), CoreInformationModel.SOURCE_RELATIVE);
         MODEL_SPEC_OWL.setDocumentManager(DOC_MANAGER);
         MODEL_SPEC_OWL_INF.setDocumentManager(DOC_MANAGER);

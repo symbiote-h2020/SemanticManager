@@ -1,0 +1,46 @@
+@prefix : <http://jena.hpl.hp.com/schemas/2003/03/ont-manager#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+[] a :OntologySpec ;
+    :altURL <cache/align.owl> ;
+    :publicURI <http://knowledgeweb.semanticweb.org/heterogeneity/alignment#> .
+	
+[] a :OntologySpec ;
+    :altURL <cache/dcterms.rdf> ;
+    :publicURI <http://purl.org/dc/terms/> .
+
+[] a :OntologySpec ;
+    :altURL <cache/time.owl> ;
+    :publicURI <http://www.w3.org/2006/time#> .
+
+[] a :OntologySpec ;
+    :altURL <cache/wgs84_pos.rdf> ;
+    :publicURI <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+
+[] a :OntologySpec ;
+    :altURL <cache/rdfs.rdf> ;
+    :publicURI <http://www.w3.org/2000/01/rdf-schema#> .
+
+[] a :OntologySpec ;
+    :altURL <cache/rdf.rdf> ;
+    :publicURI <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+[] a :OntologySpec ;
+    :altURL <cache/qu_2011-06-20.n3> ;
+    :publicURI <http://purl.oclc.org/NET/ssnx/qu/qu#> .
+
+[] a :OntologySpec ;
+    :altURL <cache/qu-rec20.owl> ;
+    :publicURI <http://purl.oclc.org/NET/ssnx/qu/qu-rec20#> .
+
+[] a :OntologySpec ;
+    :altURL <cache/content.owl> ;
+    :publicURI <http://www.w3.org/2011/content#> .	
+
+[] a :DocumentManagerPolicy ;
+    :cacheModels true ;
+    :processImports true .
