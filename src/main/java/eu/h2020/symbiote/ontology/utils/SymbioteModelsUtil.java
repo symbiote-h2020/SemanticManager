@@ -55,13 +55,13 @@ public class SymbioteModelsUtil {
     static {
         //Loads models
         try {
-            String cimRdf = IOUtils.toString(CoreInformationModel.SOURCE_PATH);
+            String cimRdf = IOUtils.toString(CoreInformationModel.SOURCE_ABSOLUTE);
 
-            String bimRdf = IOUtils.toString(BestPracticeInformationModel.SOURCE_PATH);
+            String bimRdf = IOUtils.toString(BestPracticeInformationModel.SOURCE_ABSOLUTE);
 
-            String mimRdf = IOUtils.toString(MetaInformationModel.SOURCE_PATH);
+            String mimRdf = IOUtils.toString(MetaInformationModel.SOURCE_ABSOLUTE);
 
-            String quRecRdf = IOUtils.toString(QU.SOURCE_PATH);
+            String quRecRdf = IOUtils.toString(QU.SOURCE_ABSOLUTE);
 
             cimDataset = DatasetFactory.create();
             bimDataset = DatasetFactory.create();

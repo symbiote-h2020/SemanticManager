@@ -50,9 +50,9 @@ public class OntologyHelper {
     protected static final OntModelSpec MODEL_SPEC_OWL_INF = OntModelSpec.OWL_DL_MEM_RDFS_INF;
 
     static {
-        DOC_MANAGER.addAltEntry(CoreInformationModel.NS, CoreInformationModel.SOURCE_PATH.getFile());
+        DOC_MANAGER.addAltEntry(CoreInformationModel.NS, CoreInformationModel.SOURCE_RELATIVE);
         DOC_MANAGER.setProcessImports(true);
-        DOC_MANAGER.addAltEntry(CoreInformationModel.NS.substring(0, CoreInformationModel.NS.length() - 1), CoreInformationModel.SOURCE_PATH.getFile());
+        DOC_MANAGER.addAltEntry(CoreInformationModel.NS.substring(0, CoreInformationModel.NS.length() - 1), CoreInformationModel.SOURCE_RELATIVE);
         MODEL_SPEC_OWL.setDocumentManager(DOC_MANAGER);
         MODEL_SPEC_OWL_INF.setDocumentManager(DOC_MANAGER);
     }

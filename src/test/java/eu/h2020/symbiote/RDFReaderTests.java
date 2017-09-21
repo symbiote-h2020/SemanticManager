@@ -44,7 +44,7 @@ public class RDFReaderTests {
     public void init() throws MalformedURLException, IOException, URISyntaxException {
         RDFInfo rdfInfoCIM = new RDFInfo();
         rdfInfoCIM.setRdfFormat(RDFFormat.Turtle);
-        rdfInfoCIM.setRdf(IOUtils.toString(new FileReader(CoreInformationModel.SOURCE_PATH.getFile())));
+        rdfInfoCIM.setRdf(IOUtils.toString(CoreInformationModel.SOURCE_ABSOLUTE));
         CIM = OntologyHelper.read(rdfInfoCIM, true, true);
     }
 

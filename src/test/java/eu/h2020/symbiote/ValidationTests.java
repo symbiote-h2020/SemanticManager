@@ -64,7 +64,7 @@ public class ValidationTests {
         InformationModel rdfInfo = new InformationModel();
         try {
             rdfInfo.setRdfFormat(RDFFormat.Turtle);
-            rdfInfo.setRdf(IOUtils.toString(BestPracticeInformationModel.SOURCE_PATH));
+            rdfInfo.setRdf(IOUtils.toString(BestPracticeInformationModel.SOURCE_ABSOLUTE));
         } catch (IOException e) {
             e.printStackTrace();
             fail();

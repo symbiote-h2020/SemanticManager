@@ -163,7 +163,7 @@ public class TestSetupConfig {
 
         String bimRdf = null;
         try {
-            bimRdf = IOUtils.toString(BestPracticeInformationModel.SOURCE_PATH);
+            bimRdf = IOUtils.toString(BestPracticeInformationModel.SOURCE_ABSOLUTE);
         } catch (IOException e) {
             e.printStackTrace();
         }
