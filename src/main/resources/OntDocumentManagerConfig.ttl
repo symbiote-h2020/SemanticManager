@@ -7,7 +7,7 @@
 
 [] a :OntologySpec ;
     :altURL <cache/align.owl> ;
-    :publicURI <http://knowledgeweb.semanticweb.org/heterogeneity/alignment#> .
+    :publicURI <http://knowledgeweb.semanticweb.org/heterogeneity/alignment> .
 	
 [] a :OntologySpec ;
     :altURL <cache/dcterms.rdf> ;
@@ -22,24 +22,29 @@
     :publicURI <http://www.w3.org/2003/01/geo/wgs84_pos#> .
 
 [] a :OntologySpec ;
-    :altURL <cache/rdfs.rdf> ;
+    :altURL <cache/rdfs.ttl> ;
     :publicURI <http://www.w3.org/2000/01/rdf-schema#> .
 
 [] a :OntologySpec ;
-    :altURL <cache/rdf.rdf> ;
+    :altURL <cache/rdf.ttl> ;
     :publicURI <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
 [] a :OntologySpec ;
-    :altURL <cache/qu_2011-06-20.n3> ;
-    :publicURI <http://purl.oclc.org/NET/ssnx/qu/qu#> .
+    :altURL <cache/qu_2011-06-20.ttl> ;
+    :publicURI <http://purl.oclc.org/NET/ssnx/qu/qu> .
 
 [] a :OntologySpec ;
     :altURL <cache/qu-rec20.owl> ;
-    :publicURI <http://purl.oclc.org/NET/ssnx/qu/qu-rec20#> .
+    :publicURI <http://purl.oclc.org/NET/ssnx/qu/qu-rec20> .
 
 [] a :OntologySpec ;
     :altURL <cache/content.owl> ;
     :publicURI <http://www.w3.org/2011/content#> .	
+	
+[] a :OntologySpec ;
+    :altURL <cache/owl.ttl> ;
+    :publicURI <http://www.w3.org/2002/07/owl> .
+
 
 [] a :DocumentManagerPolicy ;
     :cacheModels true ;
