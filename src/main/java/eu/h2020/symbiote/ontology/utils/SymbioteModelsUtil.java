@@ -6,6 +6,7 @@ import eu.h2020.symbIoTe.ontology.MetaInformationModel;
 import eu.h2020.symbIoTe.ontology.QU;
 import eu.h2020.symbiote.core.model.InformationModel;
 import eu.h2020.symbiote.core.model.RDFFormat;
+import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.core.model.internal.CoreResourceType;
 import eu.h2020.symbiote.core.model.resources.*;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
@@ -24,6 +25,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Utility class to handle symbIoTe-defined models.
@@ -175,10 +178,18 @@ public class SymbioteModelsUtil {
     }
 
     private static void insertGraph(Dataset dataset, String uri, String rdf, RDFFormat format) {
-        Model model = ModelFactory.createDefaultModel();
-        model.read(new ByteArrayInputStream(rdf.getBytes()), null, format.toString());
-        insertGraph(dataset, uri, model);
+        RDFInfo rdfInfo = new RDFInfo();
+        rdfInfo.setRdf(rdf);
+        rdfInfo.setRdfFormat(format);        
+        Model model;
+        try {
+            model = OntologyHelper.read(rdfInfo, true, false);
+            insertGraph(dataset, uri, model);
+        } catch (IOException ex) {
+            Logger.getLogger(SymbioteModelsUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }        
     }
+
 
     private static void insertGraph(Dataset dataset, String uri, Model model) {
 //        dataset.begin(ReadWrite.WRITE);

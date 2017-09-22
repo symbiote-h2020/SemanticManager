@@ -1,0 +1,533 @@
+@prefix : <http://www.symbiote-h2020.eu/ontology/bim/smartresidence#> .
+@prefix qu: <http://purl.oclc.org/NET/ssnx/qu/qu#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix core: <http://www.symbiote-h2020.eu/ontology/core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix qu-quantity: <http://purl.oclc.org/NET/ssnx/qu/quantity#> .
+
+<http://www.symbiote-h2020.eu/ontology/bim/smartresidence> rdf:type owl:Ontology ;
+                                            
+                                            rdfs:label "symbIoTe Smart Residence Best Practice Information Model"@en ;
+                                            
+                                            owl:versionInfo "v2.0.0 2017/09/13 12:00:00"^^xsd:string ;
+                                            
+                                            rdfs:comment "Smart Residence part of the Best Practice Information Model of symbIoTe."@en ;
+                                            
+                                            owl:imports <http://purl.oclc.org/NET/ssnx/qu/qu-rec20> ,
+                                                        <http://www.symbiote-h2020.eu/ontology/core/2.0.0> ;
+                                            
+                                            owl:versionIRI <http://www.symbiote-h2020.eu/ontology/bim/smartresidence/2.0.0> .
+
+
+
+#################################################################
+#
+#    Object Properties
+#
+#################################################################
+
+
+#################################################################
+#
+#    Data properties
+#
+#################################################################
+
+
+#################################################################
+#
+#    Classes
+#
+#################################################################
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#BloodPressureMeter
+
+:BloodPressureMeter rdf:type owl:Class ;
+                          
+                          rdfs:subClassOf :HealthDevice .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#BodyScale
+
+:BodyScale rdf:type owl:Class ;
+                 
+                 rdfs:subClassOf :HealthDevice .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#CloseCapability
+
+:CloseCapability rdf:type owl:Class ;
+                       
+                       rdfs:subClassOf core:Capability ,
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty core:hasEffect ;
+                                         owl:onClass :CloseEffect ;
+                                         owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                       ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#CloseEffect
+
+:CloseEffect rdf:type owl:Class ;
+                   
+                   rdfs:subClassOf core:Effect ,
+                                   [ rdf:type owl:Restriction ;
+                                     owl:onProperty core:affects ;
+                                     owl:hasValue :openCloseState
+                                   ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#Curtain
+
+:Curtain rdf:type owl:Class ;
+               
+               rdfs:subClassOf core:Sensor, core:Actuator .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#DimmerCapability
+
+:DimmerCapability rdf:type owl:Class ;
+                        
+                        rdfs:subClassOf core:Capability ,
+                                        [ rdf:type owl:Restriction ;
+                                          owl:onProperty core:hasParameter ;
+                                          owl:hasValue [ rdf:type core:Parameter ;
+                                                         core:name "level"^^xsd:string ;
+                                                         core:mandatory "true"^^xsd:boolean ;
+                                                         core:hasDatatype core:int
+                                                       ]
+                                        ] ,
+                                        [ rdf:type owl:Restriction ;
+                                          owl:onProperty core:hasEffect ;
+                                          owl:onClass :DimmerEffect ;
+                                          owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                        ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#DimmerEffect
+
+:DimmerEffect rdf:type owl:Class ;
+                    
+                    rdfs:subClassOf core:Effect ,
+                                    [ rdf:type owl:Restriction ;
+                                      owl:onProperty core:affects ;
+                                      owl:hasValue qu-quantity:illuminance
+                                    ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#ElectricityMeter
+
+:ElectricityMeter rdf:type owl:Class ;
+                        
+                        rdfs:subClassOf core:Sensor .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#EnviromentalSensor
+
+:EnviromentalSensor rdf:type owl:Class ;
+                          
+                          rdfs:subClassOf core:Sensor .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#Fancoil
+
+:Fancoil rdf:type owl:Class ;
+               
+               rdfs:subClassOf core:Sensor, core:Actuator .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#GaitMeasureDevice
+
+:GaitMeasureDevice rdf:type owl:Class ;
+                         
+                         rdfs:subClassOf core:Sensor, :HealthDevice .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#HealthDevice
+
+:HealthDevice rdf:type owl:Class ;
+                    
+                    rdfs:subClassOf core:Device .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#HumiditySensor
+
+:HumiditySensor rdf:type owl:Class ;
+                      
+                      rdfs:subClassOf core:Sensor .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#Light
+
+:Light rdf:type owl:Class ;
+             
+             rdfs:subClassOf core:Sensor, core:Actuator .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#OnOffCapability
+
+:OnOffCapability rdf:type owl:Class ;
+                        
+                        rdfs:subClassOf core:Capability ,
+                                        [ rdf:type owl:Restriction ;
+                                          owl:onProperty core:hasEffect ;
+                                          owl:onClass :OnOffEffect ;
+                                          owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                        ] ,
+                                        [ rdf:type owl:Restriction ;
+                                          owl:onProperty core:hasParameter ;
+                                          owl:hasValue [ rdf:type core:Parameter ;
+                                                         core:name "on"^^xsd:string ;
+                                                         core:mandatory "true"^^xsd:boolean ;
+                                                         core:hasDatatype core:boolean
+                                                       ]
+                                        ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#OnOffEffect
+
+:OnOffEffect rdf:type owl:Class ;
+                   
+                   rdfs:subClassOf core:Effect ,
+                                   [ rdf:type owl:Restriction ;
+                                     owl:onProperty core:affects ;
+                                     owl:hasValue :onOffState
+                                   ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#OpenCapability
+
+:OpenCapability rdf:type owl:Class ;
+                      
+                      rdfs:subClassOf core:Capability ,
+                                      [ rdf:type owl:Restriction ;
+                                        owl:onProperty core:hasEffect ;
+                                        owl:onClass :OpenEffect ;
+                                        owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                      ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#OpenEffect
+
+:OpenEffect rdf:type owl:Class ;
+                  
+                  rdfs:subClassOf core:Effect ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty core:affects ;
+                                    owl:hasValue :openCloseState
+                                  ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#Person
+
+:Person rdf:type owl:Class .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#PowerMeter
+
+:PowerMeter rdf:type owl:Class ;
+                  
+                  rdfs:subClassOf core:Sensor .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#RGBCapability
+
+:RGBCapability rdf:type owl:Class ;
+                     
+                     rdfs:subClassOf core:Capability ,
+                                     [ rdf:type owl:Restriction ;
+                                       owl:onProperty core:hasParameter ;
+                                       owl:hasValue [ rdf:type core:Parameter ;
+                                                      core:name "g"^^xsd:string ;
+                                                      core:mandatory "true"^^xsd:boolean ;
+                                                      core:hasRestriction :BitValueRestriction ;
+                                                      core:hasDatatype core:int
+                                                    ]
+                                     ] ,
+                                     [ rdf:type owl:Restriction ;
+                                       owl:onProperty core:hasParameter ;
+                                       owl:hasValue [ rdf:type core:Parameter ;
+                                                      core:name "r"^^xsd:string ;
+                                                      core:mandatory "true"^^xsd:boolean ;
+                                                      core:hasRestriction :BitValueRestriction ;
+                                                      core:hasDatatype core:int
+                                                    ]
+                                     ] ,
+                                     [ rdf:type owl:Restriction ;
+                                       owl:onProperty core:hasParameter ;
+                                       owl:hasValue [ rdf:type core:Parameter ;
+                                                      core:name "b"^^xsd:string ;
+                                                      core:mandatory "true"^^xsd:boolean ;
+                                                      core:hasRestriction :BitValueRestriction ;
+                                                      core:hasDatatype core:int
+                                                    ]
+                                     ] ,
+                                     [ rdf:type owl:Restriction ;
+                                       owl:onProperty core:hasEffect ;
+                                       owl:onClass :RGBEffect ;
+                                       owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                     ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#RGBEffect
+
+:RGBEffect rdf:type owl:Class ;
+                 
+                 rdfs:subClassOf core:Effect ,
+                                 [ rdf:type owl:Restriction ;
+                                   owl:onProperty core:affects ;
+                                   owl:hasValue :color
+                                 ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#Room
+
+:Room rdf:type owl:Class .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#SetPositionCapability
+
+:SetPositionCapability rdf:type owl:Class ;
+                             
+                             rdfs:subClassOf core:Capability ,
+                                             [ rdf:type owl:Restriction ;
+                                               owl:onProperty core:hasEffect ;
+                                               owl:onClass :SetPositionEffect ;
+                                               owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                             ] ,
+                                             [ rdf:type owl:Restriction ;
+                                               owl:onProperty core:hasParameter ;
+                                               owl:hasValue [ rdf:type core:Parameter ;
+                                                              core:name "position"^^xsd:string ;
+                                                              core:mandatory "true"^^xsd:boolean ;
+                                                              core:hasDatatype core:decimal
+                                                            ]
+                                             ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#SetPositionEffect
+
+:SetPositionEffect rdf:type owl:Class ;
+                         
+                         rdfs:subClassOf core:Effect ,
+                                         [ rdf:type owl:Restriction ;
+                                           owl:onProperty core:affects ;
+                                           owl:hasValue :position
+                                         ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#SetTemperatureCapability
+
+:SetTemperatureCapability rdf:type owl:Class ;
+                                
+                                rdfs:subClassOf core:Capability ,
+                                                [ rdf:type owl:Restriction ;
+                                                  owl:onProperty core:hasEffect ;
+                                                  owl:onClass :SetTemperatureEffect ;
+                                                  owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                                ] ,
+                                                [ rdf:type owl:Restriction ;
+                                                  owl:onProperty core:hasParameter ;
+                                                  owl:hasValue [ rdf:type core:Parameter ;
+                                                                 core:name "temperature"^^xsd:string ;
+                                                                 core:mandatory "true"^^xsd:boolean ;
+                                                                 core:hasDatatype core:decimal
+                                                               ]
+                                                ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#SetTemperatureEffect
+
+:SetTemperatureEffect rdf:type owl:Class ;
+                            
+                            rdfs:subClassOf core:Effect ,
+                                            [ rdf:type owl:Restriction ;
+                                              owl:onProperty core:affects ;
+                                              owl:hasValue qu-quantity:temperature
+                                            ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#StopCapability
+
+:StopCapability rdf:type owl:Class ;
+                      
+                      rdfs:subClassOf core:Capability ,
+                                      [ rdf:type owl:Restriction ;
+                                        owl:onProperty core:hasEffect ;
+                                        owl:onClass :StopEffect ;
+                                        owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                      ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#StopEffect
+
+:StopEffect rdf:type owl:Class ;
+                  
+                  rdfs:subClassOf core:Effect ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty core:affects ;
+                                    owl:hasValue :activityState
+                                  ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#TemperatureSensor
+
+:TemperatureSensor rdf:type owl:Class ;
+                         
+                         rdfs:subClassOf core:Sensor .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#VoltageMeter
+
+:VoltageMeter rdf:type owl:Class ;
+                    
+                    rdfs:subClassOf core:Sensor .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#Window
+
+:Window rdf:type owl:Class ;
+              
+              rdfs:subClassOf core:Sensor, core:Actuator .
+
+#################################################################
+#
+#    Individuals
+#
+#################################################################
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#BitValueRestriction
+
+:BitValueRestriction rdf:type core:RangeRestriction ,
+                                    owl:NamedIndividual ;
+                           
+                           core:min "0.0"^^xsd:decimal ;
+                           
+                           core:max "255.0"^^xsd:decimal .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#activityState
+
+:activityState rdf:type core:Property ,
+                              owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#cadence
+
+:cadence rdf:type core:Property ,
+                        owl:NamedIndividual ;
+               
+               core:name "cadence" .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#color
+
+:color rdf:type core:Property ,
+                      owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#diastolicBloodPressure
+
+:diastolicBloodPressure rdf:type core:Property ,
+                                       owl:NamedIndividual ;
+                              
+                              core:name "diastolic blood pressure" .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#heartRate
+
+:heartRate rdf:type core:Property ,
+                          owl:NamedIndividual ;
+                 
+                 core:name "heart rate" .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#onOffState
+
+:onOffState rdf:type core:Property ,
+                           owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#openCloseState
+
+:openCloseState rdf:type core:Property ,
+                               owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#position
+
+:position rdf:type core:Property ,
+                         owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#stepLength
+
+:stepLength rdf:type core:Property ,
+                           owl:NamedIndividual ;
+                  
+                  core:name "step length" .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#strideLength
+
+:strideLength rdf:type core:Property ,
+                             owl:NamedIndividual ;
+                    
+                    core:name "stride length" .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartresidence#systolicBloodPressure
+
+:systolicBloodPressure rdf:type core:Property ,
+                                      owl:NamedIndividual ;
+                             
+                             core:name "systolic blood pressure" .
+
+

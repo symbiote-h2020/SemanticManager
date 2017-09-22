@@ -1,0 +1,1937 @@
+@prefix : <http://www.symbiote-h2020.eu/ontology/bim/qu-align#> .
+@prefix qu: <http://purl.oclc.org/NET/ssnx/qu/qu#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix core: <http://www.symbiote-h2020.eu/ontology/core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix qu-unit: <http://purl.oclc.org/NET/ssnx/qu/unit#> .
+@prefix qu-quantity: <http://purl.oclc.org/NET/ssnx/qu/quantity#> .
+
+<http://www.symbiote-h2020.eu/ontology/bim/qu-align> rdf:type owl:Ontology ;
+                                            
+                                            rdfs:label "Alignment between QU ontology and symbIoTe Best Practice Information Model Units"@en ;
+                                            
+                                            owl:versionInfo "v2.0.0 2017/09/04 12:00:00"^^xsd:string ;
+                                            
+                                            rdfs:comment "This ontology defines the alignment betweens the QU ontology and the unit part of the Best Practice Information Model of symbIoTe."@en ;
+                                            
+                                            owl:imports <http://purl.oclc.org/NET/ssnx/qu/qu-rec20> ,
+                                                        <http://www.symbiote-h2020.eu/ontology/core/2.0.0> ;
+                                            
+                                            owl:versionIRI <http://www.symbiote-h2020.eu/ontology/bim/qu-align/2.0.0> .
+
+###  http://purl.oclc.org/NET/ssnx/qu/qu#QuantityKind
+
+qu:QuantityKind rdfs:subClassOf core:Property .
+
+###  http://purl.oclc.org/NET/ssnx/qu/qu#Unit
+
+qu:Unit rdfs:subClassOf core:UnitOfMeasurement .
+
+###  http://purl.oclc.org/NET/ssnx/qu/qu#symbol
+
+qu:symbol owl:equivalentProperty core:symbol .											
+											
+#################################################################
+#
+#    Units
+#     - mapping qu:unit -> rdfs:label to core:description
+#
+#################################################################											
+											
+qu-unit:millimolePerGram	core:description	"millimole per gram"^^xsd:string .
+qu-unit:millimolePerKilogram	core:description	"millimole per kilogram"^^xsd:string .
+qu-unit:molePerKilogram	core:description	"mole per kilogram"^^xsd:string .
+qu-unit:gon	core:description	"gon"^^xsd:string .
+qu-unit:milliradian	core:description	"milliradian"^^xsd:string .
+qu-unit:secondUnitOfAngle	core:description	"second [unit of angle]"^^xsd:string .
+qu-unit:microradian	core:description	"microradian"^^xsd:string .
+qu-unit:degreeUnitOfAngle	core:description	"degree [unit of angle]"^^xsd:string .
+qu-unit:minuteUnitOfAngle	core:description	"minute [unit of angle]"^^xsd:string .
+qu-unit:radian	core:description	"radian"^^xsd:string .
+qu-unit:grayPerSecond	core:description	"gray per second"^^xsd:string .
+qu-unit:kilobecquerel	core:description	"kilobecquerel"^^xsd:string .
+qu-unit:kilocurie	core:description	"kilocurie"^^xsd:string .
+qu-unit:becquerel	core:description	"becquerel"^^xsd:string .
+qu-unit:gigabecquerel	core:description	"gigabecquerel"^^xsd:string .
+qu-unit:megabecquerel	core:description	"megabecquerel"^^xsd:string .
+qu-unit:microbecquerel	core:description	"microbecquerel"^^xsd:string .
+qu-unit:curie	core:description	"curie"^^xsd:string .
+qu-unit:microcurie	core:description	"microcurie"^^xsd:string .
+qu-unit:millicurie	core:description	"millicurie"^^xsd:string .
+qu-unit:poundForcePerSquareInchDegreeFahrenheit	core:description	"pound-force per square inch degree Fahrenheit"^^xsd:string .
+qu-unit:pascalPerKelvin	core:description	"pascal per kelvin"^^xsd:string .
+qu-unit:gray	core:description	"gray"^^xsd:string .
+qu-unit:radAbsorbedDose	core:description	"rad (Absorbed dose)"^^xsd:string .
+qu-unit:milligray	core:description	"milligray"^^xsd:string .
+qu-unit:ergPerCubicCentimetre	core:description	"erg per cubic centimetre"^^xsd:string .
+qu-unit:joulePerCubicMetre	core:description	"joule per cubic metre"^^xsd:string .
+qu-unit:megajoulePerCubicMetre	core:description	"megajoule per cubic metre"^^xsd:string .
+qu-unit:clo	core:description	"clo"^^xsd:string .
+qu-unit:degreeFahrenheitHourSquareFootPerBritishThermalUnitInternationalTable	core:description	"degree Fahrenheit hour square foot per British thermal unit (international table)"^^xsd:string .
+qu-unit:squareMetreKelvinPerWatt	core:description	"square metre kelvin per watt"^^xsd:string .
+qu-unit:degreeFahrenheitHourSquareFootPerBritishThermalUnitThermochemical	core:description	"degree Fahrenheit hour square foot per British thermal unit (thermochemical)"^^xsd:string .
+qu-unit:millicoulombPerSquareMetre	core:description	"millicoulomb per square metre"^^xsd:string .
+qu-unit:megacoulombPerSquareMetre	core:description	"megacoulomb per square metre"^^xsd:string .
+qu-unit:coulombPerSquareCentimetre	core:description	"coulomb per square centimetre"^^xsd:string .
+qu-unit:coulombPerSquareMillimetre	core:description	"coulomb per square millimetre"^^xsd:string .
+qu-unit:coulombPerSquareMetre	core:description	"coulomb per square metre"^^xsd:string .
+qu-unit:microcoulombPerSquareMetre	core:description	"microcoulomb per square metre"^^xsd:string .
+qu-unit:kilocoulombPerSquareMetre	core:description	"kilocoulomb per square metre"^^xsd:string .
+qu-unit:squareMetrePerKilogram	core:description	"square metre per kilogram"^^xsd:string .
+qu-unit:squareCentimetrePerGram	core:description	"square centimetre per gram"^^xsd:string .
+qu-unit:reciprocalJoulePerCubicMetre	core:description	"reciprocal joule per cubic metre"^^xsd:string .
+qu-unit:reciprocalElectronVoltPerCubicMetre	core:description	"reciprocal electron volt per cubic metre"^^xsd:string .
+qu-unit:kilojoulePerMole	core:description	"kilojoule per mole"^^xsd:string .
+qu-unit:joulePerMole	core:description	"joule per mole"^^xsd:string .
+qu-unit:jouleSecond	core:description	"joule second"^^xsd:string .
+qu-unit:gramPerMole	core:description	"gram per mole"^^xsd:string .
+qu-unit:kilogramPerKilomol	core:description	"kilogram per kilomol"^^xsd:string .
+qu-unit:kilogramPerMole	core:description	"kilogram per mole"^^xsd:string .
+qu-unit:luxSecond	core:description	"lux second"^^xsd:string .
+qu-unit:reciprocalMole	core:description	"reciprocal mole"^^xsd:string .
+qu-unit:terahertz	core:description	"terahertz"^^xsd:string .
+qu-unit:kilohertz	core:description	"kilohertz"^^xsd:string .
+qu-unit:hertz	core:description	"hertz"^^xsd:string .
+qu-unit:megahertz	core:description	"megahertz"^^xsd:string .
+qu-unit:gigahertz	core:description	"gigahertz"^^xsd:string .
+qu-unit:litrePerKilogram	core:description	"litre per kilogram"^^xsd:string .
+qu-unit:millilitrePerKilogram	core:description	"millilitre per kilogram"^^xsd:string .
+qu-unit:decilitrePerGram	core:description	"decilitre per gram"^^xsd:string .
+qu-unit:cubicMetrePerKilogram	core:description	"cubic metre per kilogram"^^xsd:string .
+qu-unit:wattPerSteradianSquareMetre	core:description	"watt per steradian square metre"^^xsd:string .
+qu-unit:kilogramPerSquareMetreSecond	core:description	"kilogram per square metre second"^^xsd:string .
+qu-unit:joulePerSquareMetre	core:description	"joule per square metre"^^xsd:string .
+qu-unit:millivoltPerKelvin	core:description	"millivolt per kelvin"^^xsd:string .
+qu-unit:voltPerKelvin	core:description	"volt per kelvin"^^xsd:string .
+qu-unit:becquerelPerCubicMetre	core:description	"becquerel per cubic metre"^^xsd:string .
+qu-unit:centimetreOfMercury	core:description	"centimetre of mercury"^^xsd:string .
+qu-unit:kilopascal	core:description	"kilopascal"^^xsd:string .
+qu-unit:millibar	core:description	"millibar"^^xsd:string .
+qu-unit:kilogramForcePerSquareCentimetre	core:description	"kilogram-force per square centimetre"^^xsd:string .
+qu-unit:newtonPerSquareMetre	core:description	"newton per square metre"^^xsd:string .
+qu-unit:conventionalMillimetreOfMercury	core:description	"conventional millimetre of mercury"^^xsd:string .
+qu-unit:dynePerSquareCentimetre	core:description	"dyne per square centimetre"^^xsd:string .
+qu-unit:micropascal	core:description	"micropascal"^^xsd:string .
+qu-unit:hectobar	core:description	"hectobar"^^xsd:string .
+qu-unit:standardAtmosphere	core:description	"standard atmosphere"^^xsd:string .
+qu-unit:conventionalMillimetreOfWater	core:description	"conventional millimetre of water"^^xsd:string .
+qu-unit:torr	core:description	"torr"^^xsd:string .
+qu-unit:kilobar	core:description	"kilobar"^^xsd:string .
+qu-unit:kilogramForcePerSquareMillimetre	core:description	"kilogram-force per square millimetre"^^xsd:string .
+qu-unit:conventionalCentimetreOfWater	core:description	"conventional centimetre of water"^^xsd:string .
+qu-unit:microbar	core:description	"microbar"^^xsd:string .
+qu-unit:gramForcePerSquareCentimetre	core:description	"gram-force per square centimetre"^^xsd:string .
+qu-unit:kilogramForcePerSquareMetre	core:description	"kilogram-force per square metre"^^xsd:string .
+qu-unit:pascal	core:description	"pascal"^^xsd:string .
+qu-unit:megapascal	core:description	"megapascal"^^xsd:string .
+qu-unit:gigapascal	core:description	"gigapascal"^^xsd:string .
+qu-unit:technicalAtmosphere	core:description	"technical atmosphere"^^xsd:string .
+qu-unit:poundForcePerSquareFoot	core:description	"pound-force per square foot"^^xsd:string .
+qu-unit:decapascal	core:description	"decapascal"^^xsd:string .
+qu-unit:footOfMercury	core:description	"foot of mercury"^^xsd:string .
+qu-unit:footOfWater	core:description	"foot of water"^^xsd:string .
+qu-unit:newtonPerSquareMillimetre	core:description	"newton per square millimetre"^^xsd:string .
+qu-unit:barUnitOfPressure	core:description	"bar [unit of pressure]"^^xsd:string .
+qu-unit:poundForcePerSquareInch	core:description	"pound-force per square inch"^^xsd:string .
+qu-unit:hectopascal	core:description	"hectopascal"^^xsd:string .
+qu-unit:pascalSecondPerCubicMetre	core:description	"pascal second per cubic metre"^^xsd:string .
+qu-unit:pascalSecondPerLitre	core:description	"pascal second per litre"^^xsd:string .
+qu-unit:dyneSecondPerCentimetreToTheFifthPower	core:description	"dyne second per centimetre to the fifth power"^^xsd:string .
+qu-unit:britishThermalUnitInternationalTablePerSecondFootDegreeRankine	core:description	"British thermal unit (international table) per second foot degree Rankine"^^xsd:string .
+qu-unit:britishThermalUnitInternationalTableInchPerHourSquareFootDegreeFahrenheit	core:description	"British thermal unit (international table) inch per hour square foot degree Fahrenheit"^^xsd:string .
+qu-unit:calorieThermochemicalPerCentimetreSecondDegreeCelsius	core:description	"calorie (thermochemical) per centimetre second degree Celsius"^^xsd:string  .
+qu-unit:britishThermalUnitThermochemicalInchPerSecondSquareFootDegreeFahrenheit	core:description	"British thermal unit (thermochemical) inch per second square foot degree Fahrenheit"^^xsd:string .
+qu-unit:britishThermalUnitInternationalTableFootPerHourSquareFootDegreeFahrenheit	core:description	"British thermal unit (international table) foot per hour square foot degree Fahrenheit"^^xsd:string .
+qu-unit:britishThermalUnitThermochemicalInchPerHourSquareFootDegreeFahrenheit	core:description	"British thermal unit (thermochemical) inch per hour square foot degree Fahrenheit"^^xsd:string .
+qu-unit:internationalTableItCaloriePerSecondCentimetreKelvin	core:description	"International Table (IT) calorie per second centimetre kelvin"^^xsd:string .
+qu-unit:britishThermalUnitInternationalTableInchPerSecondSquareFootDegreeFahrenheit	core:description	"British thermal unit (international table) inch per second square foot degree Fahrenheit"^^xsd:string .
+qu-unit:britishThermalUnitThermochemicalFootPerHourSquareFootDegreeFahrenheit	core:description	"British thermal unit (thermochemical) foot per hour square foot degree Fahrenheit"^^xsd:string	.
+qu-unit:calorieThermochemicalPerSecondCentimetreKelvin	core:description	"calorie (thermochemical) per second centimetre kelvin"^^xsd:string .
+qu-unit:wattPerMetreKelvin	core:description	"watt per metre kelvin"^^xsd:string .
+qu-unit:reciprocalSecondPerSteradianMetreSquared	core:description	"reciprocal second per steradian metre squared"^^xsd:string .
+qu-unit:micromolePerSquareMetrePerSecond	core:description	"micromole per square metre per second"^^xsd:string .
+qu-unit:molePerSquareMetrePerSecond	core:description	"mole per square metre per second"^^xsd:string .
+qu-unit:kilomole	core:description	"kilomole"^^xsd:string .
+qu-unit:mole	core:description	"mole"^^xsd:string .
+qu-unit:micromole	core:description	"micromole"^^xsd:string .
+qu-unit:millimole	core:description	"millimole"^^xsd:string .
+qu-unit:newtonSecondPerMetre	core:description	"newton second per metre"^^xsd:string .
+qu-unit:dyneSecondPerCentimetre	core:description	"dyne second per centimetre"^^xsd:string .
+qu-unit:calorieInternationalTablePerGramDegreeCelsius	core:description	"calorie (international table) per gram degree Celsius"^^xsd:string .
+qu-unit:joulePerKilogramKelvin	core:description	"joule per kilogram kelvin"^^xsd:string .
+qu-unit:britishThermalUnitThermochemicalPerPoundDegreeFahrenheit	core:description	"British thermal unit (thermochemical) per pound degree Fahrenheit"^^xsd:string .
+qu-unit:calorieThermochemicalPerGramKelvin	core:description	"calorie (thermochemical) per gram kelvin"^^xsd:string .
+qu-unit:calorieThermochemicalPerGramDegreeCelsius	core:description	"calorie (thermochemical) per gram degree Celsius"^^xsd:string .
+qu-unit:kilojoulePerKilogramKelvin	core:description	"kilojoule per kilogram kelvin"^^xsd:string .
+qu-unit:britishThermalUnitInternationalTablePerPoundDegreeFahrenheit	core:description	"British thermal unit (international table) per pound degree Fahrenheit"^^xsd:string .
+qu-unit:calorieInternationalTablePerGramKelvin	core:description	"calorie (international table) per gram kelvin"^^xsd:string .
+qu-unit:britishThermalUnitInternationalTablePerPoundDegreeRankine	core:description	"British thermal unit (international table) per pound degree Rankine"^^xsd:string .
+qu-unit:lux	core:description	"lux"^^xsd:string .
+qu-unit:weberPerMetre	core:description	"weber per metre"^^xsd:string .
+qu-unit:kiloweberPerMetre	core:description	"kiloweber per metre"^^xsd:string .
+qu-unit:weberPerMillimetre	core:description	"weber per millimetre"^^xsd:string .
+qu-unit:tonShortPerDay	core:description	"ton short per day"^^xsd:string .
+qu-unit:gramPerSecond	core:description	"gram per second"^^xsd:string .
+qu-unit:milligramPerMinute	core:description	"milligram per minute"^^xsd:string .
+qu-unit:slugPerSecond	core:description	"slug per second"^^xsd:string .
+qu-unit:slugPerDay	core:description	"slug per day"^^xsd:string .
+qu-unit:milligramPerSecond	core:description	"milligram per second"^^xsd:string .
+qu-unit:kilogramPerHour	core:description	"kilogram per hour"^^xsd:string .
+qu-unit:kilogramPerDay	core:description	"kilogram per day"^^xsd:string .
+qu-unit:tonnePerSecond	core:description	"tonne per second"^^xsd:string .
+qu-unit:ounceAvoirdupoisPerHour	core:description	"ounce (avoirdupois) per hour"^^xsd:string .
+qu-unit:kilogramPerSecond	core:description	"kilogram per second"^^xsd:string .
+qu-unit:poundPerHour	core:description	"pound per hour"^^xsd:string .
+qu-unit:slugPerMinute	core:description	"slug per minute"^^xsd:string .
+qu-unit:gramPerDay	core:description	"gram per day"^^xsd:string .
+qu-unit:gramPerMinute	core:description	"gram per minute"^^xsd:string .
+qu-unit:milligramPerDay	core:description	"milligram per day"^^xsd:string .
+qu-unit:tonnePerMinute	core:description	"tonne per minute"^^xsd:string .
+qu-unit:tonLongPerDay	core:description	"ton long per day"^^xsd:string .
+qu-unit:ounceAvoirdupoisPerSecond	core:description	"ounce (avoirdupois) per second"^^xsd:string .
+qu-unit:ounceAvoirdupoisPerDay	core:description	"ounce (avoirdupois) per day"^^xsd:string .
+qu-unit:poundAvoirdupoisPerMinute	core:description	"pound (avoirdupois) per minute"^^xsd:string .
+qu-unit:poundAvoirdupoisPerDay	core:description	"pound (avoirdupois) per day"^^xsd:string .
+qu-unit:gramPerHour	core:description	"gram per hour"^^xsd:string .
+qu-unit:ounceAvoirdupoisPerMinute	core:description	"ounce (avoirdupois) per minute"^^xsd:string .
+qu-unit:kilogramPerMinute	core:description	"kilogram per minute"^^xsd:string .
+qu-unit:slugPerHour	core:description	"slug per hour"^^xsd:string .
+qu-unit:poundAvoirdupoisPerSecond	core:description	"pound (avoirdupois) per second"^^xsd:string .
+qu-unit:tonUsPerHour	core:description	"ton (US) per hour"^^xsd:string .
+qu-unit:milligramPerHour	core:description	"milligram per hour"^^xsd:string .
+qu-unit:tonnePerDay	core:description	"tonne per day"^^xsd:string .
+qu-unit:kilovoltAmpere	core:description	"kilovolt - ampere"^^xsd:string .
+qu-unit:voltAmpere	core:description	"volt - ampere"^^xsd:string .
+qu-unit:megavoltAmpere	core:description	"megavolt - ampere"^^xsd:string .
+qu-unit:millivoltAmpere	core:description	"millivolt - ampere"^^xsd:string .
+qu-unit:pascalSecondPerMetre	core:description	"pascal second per metre"^^xsd:string .
+qu-unit:dyneSecondPerCubicCentimetre	core:description	"dyne second per cubic centimetre"^^xsd:string .
+qu-unit:millinewtonPerMetre	core:description	"millinewton per metre"^^xsd:string .
+qu-unit:dynePerCentimetre	core:description	"dyne per centimetre"^^xsd:string .
+qu-unit:newtonPerMetre	core:description	"newton per metre"^^xsd:string .
+qu-unit:newtonPerCentimetre	core:description	"newton per centimetre"^^xsd:string .
+qu-unit:reciprocalSecondPerSteradian	core:description	"reciprocal second per steradian"^^xsd:string .
+qu-unit:nanotesla	core:description	"nanotesla"^^xsd:string .
+qu-unit:microtesla	core:description	"microtesla"^^xsd:string .
+qu-unit:tesla	core:description	"tesla"^^xsd:string .
+qu-unit:millitesla	core:description	"millitesla"^^xsd:string .
+qu-unit:milliroentgen	core:description	"milliroentgen"^^xsd:string .
+qu-unit:millicoulombPerKilogram	core:description	"millicoulomb per kilogram"^^xsd:string .
+qu-unit:kiloroentgen	core:description	"kiloroentgen"^^xsd:string .
+qu-unit:roentgen	core:description	"roentgen"^^xsd:string .
+qu-unit:coulombPerKilogram	core:description	"coulomb per kilogram"^^xsd:string .
+qu-unit:wattPerSquareMetreKelvinToTheFourthPower	core:description	"watt per square metre kelvin to the fourth power"^^xsd:string .
+qu-unit:millisiemens	core:description	"millisiemens"^^xsd:string .
+qu-unit:kilosiemens	core:description	"kilosiemens"^^xsd:string .
+qu-unit:microsiemens	core:description	"microsiemens"^^xsd:string .
+qu-unit:siemens	core:description	"siemens"^^xsd:string .
+qu-unit:reciprocalAngstrom	core:description	"reciprocal angstrom"^^xsd:string .
+qu-unit:reciprocalMetre	core:description	"reciprocal metre"^^xsd:string .
+qu-unit:ergPerCentimetre	core:description	"erg per centimetre"^^xsd:string .
+qu-unit:joulePerMetre	core:description	"joule per metre"^^xsd:string .
+qu-unit:electronvoltPerMetre	core:description	"electronvolt per metre"^^xsd:string .
+qu-unit:squareCentimetrePerSteradianErg	core:description	"square centimetre per steradian erg"^^xsd:string .
+qu-unit:squareMetrePerSteradianJoule	core:description	"square metre per steradian joule"^^xsd:string .
+qu-unit:hundredWeightUk	core:description	"hundred weight (UK)"^^xsd:string .
+qu-unit:stoneUk	core:description	"stone (UK)"^^xsd:string .
+qu-unit:hectogram	core:description	"hectogram"^^xsd:string .
+qu-unit:decagram	core:description	"decagram"^^xsd:string .
+qu-unit:hundredPoundCwtPerHundredWeightUs	core:description	"hundred pound (cwt) / hundred weight (US)"^^xsd:string .
+qu-unit:grain	core:description	"grain"^^xsd:string .
+qu-unit:troyOunceOrApothecaryOunce	core:description	"troy ounce or apothecary ounce"^^xsd:string .
+qu-unit:kilogram	core:description	"kilogram"^^xsd:string .
+qu-unit:tonUkOrLongTonUs	core:description	"ton (UK) or long ton (US)"^^xsd:string .
+qu-unit:decitonne	core:description	"decitonne"^^xsd:string .
+qu-unit:megagram	core:description	"megagram"^^xsd:string .
+qu-unit:pound	core:description	"pound"^^xsd:string .
+qu-unit:decigram	core:description	"decigram"^^xsd:string .
+qu-unit:tonUsOrShortTonUkPerUs	core:description	"ton (US) or short ton (UK/US)"^^xsd:string .
+qu-unit:slug	core:description	"slug"^^xsd:string .
+qu-unit:milligram	core:description	"milligram"^^xsd:string .
+qu-unit:kilotonne	core:description	"kilotonne"^^xsd:string .
+qu-unit:centigram	core:description	"centigram"^^xsd:string .
+qu-unit:ounce	core:description	"ounce"^^xsd:string .
+qu-unit:tonneMetricTon	core:description	"tonne (metric ton)"^^xsd:string .
+qu-unit:microgram	core:description	"microgram"^^xsd:string .
+qu-unit:gram	core:description	"gram"^^xsd:string .
+qu-unit:newtonMetreSquaredKilogramSquared	core:description	"newton metre squared kilogram squared"^^xsd:string .
+qu-unit:lumen	core:description	"lumen"^^xsd:string .
+qu-unit:pintUsLiquidPerSecond	core:description	"pint (US liquid) per second"^^xsd:string .
+qu-unit:cubicFootPerMinute	core:description	"cubic foot per minute"^^xsd:string .
+qu-unit:peckUkPerDay	core:description	"peck (UK) per day"^^xsd:string .
+qu-unit:cubicCentimetrePerSecond	core:description	"cubic centimetre per second"^^xsd:string .
+qu-unit:peckUkPerSecond	core:description	"peck (UK) per second"^^xsd:string .
+qu-unit:pintUsLiquidPerHour	core:description	"pint (US liquid) per hour"^^xsd:string .
+qu-unit:cubicCentimetrePerMinute	core:description	"cubic centimetre per minute"^^xsd:string .
+qu-unit:gallonUkPerDay	core:description	"gallon (UK) per day"^^xsd:string .
+qu-unit:gallonUkPerHour	core:description	"gallon (UK) per hour"^^xsd:string .
+qu-unit:gallonUkPerSecond	core:description	"gallon (UK) per second"^^xsd:string .
+qu-unit:millilitrePerDay	core:description	"millilitre per day"^^xsd:string .
+qu-unit:cubicYardPerMinute	core:description	"cubic yard per minute"^^xsd:string .
+qu-unit:quartUkLiquidPerSecond	core:description	"quart (UK liquid) per second"^^xsd:string .
+qu-unit:peckUkPerMinute	core:description	"peck (UK) per minute"^^xsd:string .
+qu-unit:cubicCentimetrePerDay	core:description	"cubic centimetre per day"^^xsd:string .
+qu-unit:cubicDecimetrePerDay	core:description	"cubic decimetre per day"^^xsd:string .
+qu-unit:barrelUsPetroleumPerHour	core:description	"barrel (US petroleum) per hour"^^xsd:string .
+qu-unit:cubicMetrePerMinute	core:description	"cubic metre per minute"^^xsd:string .
+qu-unit:cubicInchPerSecond	core:description	"cubic inch per second"^^xsd:string .
+qu-unit:cubicFootPerDay	core:description	"cubic foot per day"^^xsd:string .
+qu-unit:pintUsLiquidPerMinute	core:description	"pint (US liquid) per minute"^^xsd:string .
+qu-unit:quartUkLiquidPerDay	core:description	"quart (UK liquid) per day"^^xsd:string .
+qu-unit:cubicFootPerHour	core:description	"cubic foot per hour"^^xsd:string .
+qu-unit:gillUkPerSecond	core:description	"gill (UK) per second"^^xsd:string .
+qu-unit:quartUsLiquidPerDay	core:description	"quart (US liquid) per day"^^xsd:string .
+qu-unit:ounceUsFluidPerHour	core:description	"ounce (US fluid) per hour"^^xsd:string .
+qu-unit:pintUkPerSecond	core:description	"pint (UK) per second"^^xsd:string .
+qu-unit:cubicYardPerDay	core:description	"cubic yard per day"^^xsd:string .
+qu-unit:bushelUsDryPerSecond	core:description	"bushel (US dry) per second"^^xsd:string .
+qu-unit:peckUkPerHour	core:description	"peck (UK) per hour"^^xsd:string .
+qu-unit:usGallonPerMinute	core:description	"US gallon per minute"^^xsd:string .
+qu-unit:barrelUsPerMinute	core:description	"barrel (US) per minute"^^xsd:string .
+qu-unit:bushelUkPerDay	core:description	"bushel (UK) per day"^^xsd:string .
+qu-unit:bushelUkPerHour	core:description	"bushel (UK) per hour"^^xsd:string .
+qu-unit:ounceUsFluidPerSecond	core:description	"ounce (US fluid) per second"^^xsd:string .
+qu-unit:litrePerDay	core:description	"litre per day"^^xsd:string .
+qu-unit:quartUkLiquidPerHour	core:description	"quart (UK liquid) per hour"^^xsd:string .
+qu-unit:imperialGallonPerMinute	core:description	"Imperial gallon per minute"^^xsd:string .
+qu-unit:peckUsDryPerMinute	core:description	"peck (US dry) per minute"^^xsd:string .
+qu-unit:gillUsPerHour	core:description	"gill (US) per hour"^^xsd:string .
+qu-unit:barrelUkPetroleumPerDay	core:description	"barrel (UK petroleum) per day"^^xsd:string .
+qu-unit:barrelUsPetroleumPerSecond	core:description	"barrel (US petroleum) per second"^^xsd:string .
+qu-unit:cubicMetrePerDay	core:description	"cubic metre per day"^^xsd:string .
+qu-unit:ounceUkFluidPerSecond	core:description	"ounce (UK fluid) per second"^^xsd:string .
+qu-unit:bushelUkPerMinute	core:description	"bushel (UK) per minute"^^xsd:string .
+qu-unit:ounceUkFluidPerMinute	core:description	"ounce (UK fluid) per minute"^^xsd:string .
+qu-unit:millilitrePerSecond	core:description	"millilitre per second"^^xsd:string .
+qu-unit:cubicInchPerHour	core:description	"cubic inch per hour"^^xsd:string .
+qu-unit:gallonUsPerHour	core:description	"gallon (US) per hour"^^xsd:string .
+qu-unit:bushelUkPerSecond	core:description	"bushel (UK) per second"^^xsd:string .
+qu-unit:litrePerMinute	core:description	"litre per minute"^^xsd:string .
+qu-unit:barrelUkPetroleumPerMinute	core:description	"barrel (UK petroleum) per minute"^^xsd:string .
+qu-unit:gillUkPerDay	core:description	"gill (UK) per day"^^xsd:string .
+qu-unit:cubicCentimetrePerHour	core:description	"cubic centimetre per hour"^^xsd:string .
+qu-unit:millilitrePerMinute	core:description	"millilitre per minute"^^xsd:string .
+qu-unit:litrePerSecond	core:description	"litre per second"^^xsd:string .
+qu-unit:barrelUkPetroleumPerHour	core:description	"barrel (UK petroleum) per hour"^^xsd:string .
+qu-unit:gillUsPerSecond	core:description	"gill (US) per second"^^xsd:string .
+qu-unit:barrelUkPetroleumPerSecond	core:description	"barrel (UK petroleum) per second"^^xsd:string .
+qu-unit:cubicDecimetrePerHour	core:description	"cubic decimetre per hour"^^xsd:string .
+qu-unit:gillUsPerMinute	core:description	"gill (US) per minute"^^xsd:string .
+qu-unit:ounceUsFluidPerDay	core:description	"ounce (US fluid) per day"^^xsd:string .
+qu-unit:cubicDecimetrePerMinute	core:description	"cubic decimetre per minute"^^xsd:string .
+qu-unit:ounceUkFluidPerDay	core:description	"ounce (UK fluid) per day"^^xsd:string .
+qu-unit:millilitrePerHour	core:description	"millilitre per hour"^^xsd:string .
+qu-unit:peckUsDryPerSecond	core:description	"peck (US dry) per second"^^xsd:string .
+qu-unit:quartUsLiquidPerHour	core:description	"quart (US liquid) per hour"^^xsd:string .
+qu-unit:peckUsDryPerHour	core:description	"peck (US dry) per hour"^^xsd:string .
+qu-unit:peckUsDryPerDay	core:description	"peck (US dry) per day"^^xsd:string .
+qu-unit:pintUsLiquidPerDay	core:description	"pint (US liquid) per day"^^xsd:string .
+qu-unit:quartUsLiquidPerMinute	core:description	"quart (US liquid) per minute"^^xsd:string .
+qu-unit:pintUkPerHour	core:description	"pint (UK) per hour"^^xsd:string .
+qu-unit:gallonUsLiquidPerSecond	core:description	"gallon (US liquid) per second"^^xsd:string .
+qu-unit:bushelUsDryPerMinute	core:description	"bushel (US dry) per minute"^^xsd:string .
+qu-unit:ounceUkFluidPerHour	core:description	"ounce (UK fluid) per hour"^^xsd:string .
+qu-unit:kilolitrePerHour	core:description	"kilolitre per hour"^^xsd:string .
+qu-unit:pintUkPerMinute	core:description	"pint (UK) per minute"^^xsd:string .
+qu-unit:cubicDecimetrePerSecond	core:description	"cubic decimetre per second"^^xsd:string .
+qu-unit:ounceUsFluidPerMinute	core:description	"ounce (US fluid) per minute"^^xsd:string .
+qu-unit:gillUkPerHour	core:description	"gill (UK) per hour"^^xsd:string .
+qu-unit:cubicYardPerHour	core:description	"cubic yard per hour"^^xsd:string .
+qu-unit:quartUkLiquidPerMinute	core:description	"quart (UK liquid) per minute"^^xsd:string .
+qu-unit:cubicInchPerMinute	core:description	"cubic inch per minute"^^xsd:string .
+qu-unit:cubicMetrePerSecond	core:description	"cubic metre per second"^^xsd:string .
+qu-unit:pintUkPerDay	core:description	"pint (UK) per day"^^xsd:string .
+qu-unit:bushelUsDryPerDay	core:description	"bushel (US dry) per day"^^xsd:string .
+qu-unit:bushelUsDryPerHour	core:description	"bushel (US dry) per hour"^^xsd:string .
+qu-unit:cubicMetrePerHour	core:description	"cubic metre per hour"^^xsd:string .
+qu-unit:gillUsPerDay	core:description	"gill (US) per day"^^xsd:string .
+qu-unit:quartUsLiquidPerSecond	core:description	"quart (US liquid) per second"^^xsd:string .
+qu-unit:gillUkPerMinute	core:description	"gill (UK) per minute"^^xsd:string .
+qu-unit:cubicYardPerSecond	core:description	"cubic yard per second"^^xsd:string .
+qu-unit:joulePerMoleKelvin	core:description	"joule per mole kelvin"^^xsd:string .
+qu-unit:poundPerFoot	core:description	"pound per foot"^^xsd:string .
+qu-unit:kilogramPerMetre	core:description	"kilogram per metre"^^xsd:string .
+qu-unit:kilogramPerMillimetre	core:description	"kilogram per millimetre"^^xsd:string .
+qu-unit:gramPerMillimetre	core:description	"gram per millimetre"^^xsd:string .
+qu-unit:gramPerMetreGramPer100Centimetres	core:description	"gram per metre (gram per 100 centimetres)"^^xsd:string .
+qu-unit:kilogramPerKilometre	core:description	"kilogram per kilometre"^^xsd:string .
+qu-unit:milligramPerMetre	core:description	"milligram per metre"^^xsd:string .
+qu-unit:poundPerInchOfLength	core:description	"pound per inch of length"^^xsd:string .
+qu-unit:kilovolt	core:description	"kilovolt"^^xsd:string .
+qu-unit:volt	core:description	"volt"^^xsd:string .
+qu-unit:microvolt	core:description	"microvolt"^^xsd:string .
+qu-unit:millivolt	core:description	"millivolt"^^xsd:string .
+qu-unit:megavolt	core:description	"megavolt"^^xsd:string .
+qu-unit:centipoise	core:description	"centipoise"^^xsd:string .
+qu-unit:poundPerFootHour	core:description	"pound per foot hour"^^xsd:string .
+qu-unit:poundForceSecondPerSquareFoot	core:description	"pound-force second per square foot"^^xsd:string .
+qu-unit:slugPerFootSecond	core:description	"slug per foot second"^^xsd:string .
+qu-unit:poise	core:description	"poise"^^xsd:string .
+qu-unit:pascalSecond	core:description	"pascal second"^^xsd:string .
+qu-unit:micropoise	core:description	"micropoise"^^xsd:string .
+qu-unit:poundForceSecondPerSquareInch	core:description	"pound-force second per square inch"^^xsd:string .
+qu-unit:millipascalSecond	core:description	"millipascal second"^^xsd:string .
+qu-unit:poundPerFootSecond	core:description	"pound per foot second"^^xsd:string .
+qu-unit:milliampere	core:description	"milliampere"^^xsd:string .
+qu-unit:microampere	core:description	"microampere"^^xsd:string .
+qu-unit:kiloampere	core:description	"kiloampere"^^xsd:string .
+qu-unit:ampere	core:description	"ampere"^^xsd:string .
+qu-unit:nanoampere	core:description	"nanoampere"^^xsd:string .
+qu-unit:megaampere	core:description	"megaampere"^^xsd:string .
+qu-unit:picoampere	core:description	"picoampere"^^xsd:string .
+qu-unit:kelvin	core:description	"kelvin"^^xsd:string .
+qu-unit:degreeCelsius	core:description	"degree Celsius"^^xsd:string .
+qu-unit:cubicCentimetrePerMole	core:description	"cubic centimetre per mole"^^xsd:string .
+qu-unit:cubicDecimetrePerMole	core:description	"cubic decimetre per mole"^^xsd:string .
+qu-unit:litrePerMole	core:description	"litre per mole"^^xsd:string .
+qu-unit:cubicMetrePerMole	core:description	"cubic metre per mole"^^xsd:string .
+qu-unit:lumenSecond	core:description	"lumen second"^^xsd:string .
+qu-unit:henryPerMetre	core:description	"henry per metre"^^xsd:string .
+qu-unit:microhenryPerMetre	core:description	"microhenry per metre"^^xsd:string .
+qu-unit:nanohenryPerMetre	core:description	"nanohenry per metre"^^xsd:string .
+qu-unit:coulombMetre	core:description	"coulomb metre"^^xsd:string .
+qu-unit:faradPerMetre	core:description	"farad per metre"^^xsd:string .
+qu-unit:nanofaradPerMetre	core:description	"nanofarad per metre"^^xsd:string .
+qu-unit:picofaradPerMetre	core:description	"picofarad per metre"^^xsd:string .
+qu-unit:microfaradPerMetre	core:description	"microfarad per metre"^^xsd:string .
+qu-unit:faradPerKilometre	core:description	"farad per kilometre"^^xsd:string .
+qu-unit:reciprocalSquareMetre	core:description	"reciprocal square metre"^^xsd:string .
+qu-unit:calorieThermochemicalPerGram	core:description	"calorie (thermochemical) per gram"^^xsd:string .
+qu-unit:megajoulePerKilogram	core:description	"megajoule per kilogram"^^xsd:string .
+qu-unit:joulePerKilogram	core:description	"joule per kilogram"^^xsd:string .
+qu-unit:britishThermalUnitInternationalTablePerPound	core:description	"British thermal unit (international table) per pound"^^xsd:string .
+qu-unit:calorieInternationalTablePerGram	core:description	"calorie (international table) per gram"^^xsd:string .
+qu-unit:kilojoulePerKilogram	core:description	"kilojoule per kilogram"^^xsd:string .
+qu-unit:reciprocalPascalOrPascalToThePowerMinusOne	core:description	"reciprocal pascal or pascal to the power minus one"^^xsd:string .
+qu-unit:reciprocalPsi	core:description	"reciprocal psi"^^xsd:string .
+qu-unit:wattPerKelvin	core:description	"watt per kelvin"^^xsd:string .
+qu-unit:microvoltPerMetre	core:description	"microvolt per metre"^^xsd:string .
+qu-unit:voltPerCentimetre	core:description	"volt per centimetre"^^xsd:string .
+qu-unit:voltPerMetre	core:description	"volt per metre"^^xsd:string .
+qu-unit:millivoltPerMetre	core:description	"millivolt per metre"^^xsd:string .
+qu-unit:megavoltPerMetre	core:description	"megavolt per metre"^^xsd:string .
+qu-unit:kilovoltPerMetre	core:description	"kilovolt per metre"^^xsd:string .
+qu-unit:tonUkLongPerCubicYard	core:description	"ton (UK long) per cubic yard"^^xsd:string .
+qu-unit:gramPerCubicCentimetre	core:description	"gram per cubic centimetre"^^xsd:string .
+qu-unit:poundPerCubicFoot	core:description	"pound per cubic foot"^^xsd:string .
+qu-unit:megagramPerCubicMetre	core:description	"megagram per cubic metre"^^xsd:string .
+qu-unit:gramPerCubicDecimetre	core:description	"gram per cubic decimetre"^^xsd:string .
+qu-unit:milligramPerLitre	core:description	"milligram per litre"^^xsd:string .
+qu-unit:tonnePerCubicMetre	core:description	"tonne per cubic metre"^^xsd:string .
+qu-unit:ounceAvoirdupoisPerGallonUk	core:description	"ounce (avoirdupois) per gallon (UK)"^^xsd:string .
+qu-unit:slugPerCubicFoot	core:description	"slug per cubic foot"^^xsd:string .
+qu-unit:milligramPerCubicMetre	core:description	"milligram per cubic metre"^^xsd:string .
+qu-unit:kilogramPerCubicDecimetre	core:description	"kilogram per cubic decimetre"^^xsd:string .
+qu-unit:poundAvoirdupoisPerGallonUk	core:description	"pound (avoirdupois) per gallon (UK)"^^xsd:string .
+qu-unit:poundPerCubicInch	core:description	"pound per cubic inch"^^xsd:string .
+qu-unit:ounceAvoirdupoisPerCubicInch	core:description	"ounce (avoirdupois) per cubic inch"^^xsd:string .
+qu-unit:kilogramPerCubicMetre	core:description	"kilogram per cubic metre"^^xsd:string .
+qu-unit:poundPerCubicYard	core:description	"pound per cubic yard"^^xsd:string .
+qu-unit:gramPerCubicMetre	core:description	"gram per cubic metre"^^xsd:string .
+qu-unit:microgramPerLitre	core:description	"microgram per litre"^^xsd:string .
+qu-unit:tonUsShortPerCubicYard	core:description	"ton (US short) per cubic yard"^^xsd:string .
+qu-unit:ounceAvoirdupoisPerGallonUs	core:description	"ounce (avoirdupois) per gallon (US)"^^xsd:string .
+qu-unit:kilogramPerLitre	core:description	"kilogram per litre"^^xsd:string .
+qu-unit:ounceAvoirdupoisPerCubicYard	core:description	"ounce (avoirdupois) per cubic yard"^^xsd:string .
+qu-unit:poundPerGallonUs	core:description	"pound per gallon (US)"^^xsd:string .
+qu-unit:kilogramPerCubicCentimetre	core:description	"kilogram per cubic centimetre"^^xsd:string .
+qu-unit:gramPerLitre	core:description	"gram per litre"^^xsd:string .
+qu-unit:gramPerMillilitre	core:description	"gram per millilitre"^^xsd:string .
+qu-unit:microgramPerCubicMetre	core:description	"microgram per cubic metre"^^xsd:string .
+qu-unit:grainPerGallonUs	core:description	"grain per gallon (US)"^^xsd:string .
+qu-unit:degreeRankinePerHour	core:description	"degree Rankine per hour"^^xsd:string .
+qu-unit:kelvinPerHour	core:description	"kelvin per hour"^^xsd:string .
+qu-unit:degreeRankinePerSecond	core:description	"degree Rankine per second"^^xsd:string .
+qu-unit:degreeRankinePerMinute	core:description	"degree Rankine per minute"^^xsd:string .
+qu-unit:kelvinPerSecond	core:description	"kelvin per second"^^xsd:string .
+qu-unit:degreeFahrenheitPerHour	core:description	"degree Fahrenheit per hour"^^xsd:string .
+qu-unit:degreeFahrenheitPerSecond	core:description	"degree Fahrenheit per second"^^xsd:string .
+qu-unit:degreeFahrenheitPerMinute	core:description	"degree Fahrenheit per minute"^^xsd:string .
+qu-unit:kelvinPerMinute	core:description	"kelvin per minute"^^xsd:string .
+qu-unit:milliweber	core:description	"milliweber"^^xsd:string .
+qu-unit:weber	core:description	"weber"^^xsd:string .
+qu-unit:squareMillimetre	core:description	"square millimetre"^^xsd:string .
+qu-unit:squareHectometre	core:description	"square hectometre"^^xsd:string .
+qu-unit:are	core:description	"are"^^xsd:string .
+qu-unit:squareDecimetre	core:description	"square decimetre"^^xsd:string .
+qu-unit:acre	core:description	"acre"^^xsd:string .
+qu-unit:squareMetre	core:description	"square metre"^^xsd:string .
+qu-unit:squareYard	core:description	"square yard"^^xsd:string .
+qu-unit:barn	core:description	"barn"^^xsd:string .
+qu-unit:squareInch	core:description	"square inch"^^xsd:string .
+qu-unit:decare	core:description	"decare"^^xsd:string .
+qu-unit:squareCentimetre	core:description	"square centimetre"^^xsd:string .
+qu-unit:squareKilometre	core:description	"square kilometre"^^xsd:string .
+qu-unit:squareFoot	core:description	"square foot"^^xsd:string .
+qu-unit:squareDecametre	core:description	"square decametre"^^xsd:string .
+qu-unit:hectare	core:description	"hectare"^^xsd:string .
+qu-unit:squareMicrometre	core:description	"square micrometre"^^xsd:string .
+qu-unit:squareFootPerSecond	core:description	"square foot per second"^^xsd:string .
+qu-unit:centistokes	core:description	"centistokes"^^xsd:string .
+qu-unit:millimetreSquaredPerSecond	core:description	"millimetre squared per second"^^xsd:string .
+qu-unit:squareInchPerSecond	core:description	"square inch per second"^^xsd:string .
+qu-unit:squareMetrePerSecond	core:description	"square metre per second"^^xsd:string .
+qu-unit:stokes	core:description	"stokes"^^xsd:string .
+qu-unit:steradian	core:description	"steradian"^^xsd:string .
+qu-unit:millimetrePerKelvin	core:description	"millimetre per kelvin"^^xsd:string .
+qu-unit:centimetrePerKelvin	core:description	"centimetre per kelvin"^^xsd:string .
+qu-unit:micrometrePerKelvin	core:description	"micrometre per kelvin"^^xsd:string .
+qu-unit:yardPerDegreeFahrenheit	core:description	"yard per degree Fahrenheit"^^xsd:string .
+qu-unit:footPerDegreeFahrenheit	core:description	"foot per degree Fahrenheit"^^xsd:string .
+qu-unit:metrePerKelvin	core:description	"metre per kelvin"^^xsd:string .
+qu-unit:inchPerDegreeFahrenheit	core:description	"inch per degree Fahrenheit"^^xsd:string .
+qu-unit:kiloamperePerMetre	core:description	"kiloampere per metre"^^xsd:string .
+qu-unit:amperePerMetre	core:description	"ampere per metre"^^xsd:string .
+qu-unit:milliamperePerInch	core:description	"milliampere per inch"^^xsd:string .
+qu-unit:milliamperePerMillimetre	core:description	"milliampere per millimetre"^^xsd:string .
+qu-unit:amperePerCentimetre	core:description	"ampere per centimetre"^^xsd:string .
+qu-unit:amperePerMillimetre	core:description	"ampere per millimetre"^^xsd:string .
+qu-unit:kiloampereHourThousandAmpereHour	core:description	"kiloampere hour (thousand ampere hour)"^^xsd:string .
+qu-unit:ampereSecond	core:description	"ampere second"^^xsd:string .
+qu-unit:coulomb	core:description	"coulomb"^^xsd:string .
+qu-unit:microcoulomb	core:description	"microcoulomb"^^xsd:string .
+qu-unit:millicoulomb	core:description	"millicoulomb"^^xsd:string .
+qu-unit:ampereHour	core:description	"ampere hour"^^xsd:string .
+qu-unit:kilocoulomb	core:description	"kilocoulomb"^^xsd:string .
+qu-unit:megacoulomb	core:description	"megacoulomb"^^xsd:string .
+qu-unit:picocoulomb	core:description	"picocoulomb"^^xsd:string .
+qu-unit:nanocoulomb	core:description	"nanocoulomb"^^xsd:string .
+qu-unit:picohenry	core:description	"picohenry"^^xsd:string .
+qu-unit:henry	core:description	"henry"^^xsd:string .
+qu-unit:microhenry	core:description	"microhenry"^^xsd:string .
+qu-unit:nanohenry	core:description	"nanohenry"^^xsd:string .
+qu-unit:millihenry	core:description	"millihenry"^^xsd:string .
+qu-unit:squareMetrePerJoule	core:description	"square metre per joule"^^xsd:string .
+qu-unit:squareCentimetrePerErg	core:description	"square centimetre per erg"^^xsd:string .
+qu-unit:barnPerElectronvolt	core:description	"barn per electronvolt"^^xsd:string .
+qu-unit:footPerHour	core:description	"foot per hour"^^xsd:string .
+qu-unit:millilitrePerSquareCentimetreSecond	core:description	"millilitre per square centimetre second"^^xsd:string .
+qu-unit:millimetrePerYear	core:description	"millimetre per year"^^xsd:string .
+qu-unit:kilometrePerHour	core:description	"kilometre per hour"^^xsd:string .
+qu-unit:footPerMinute	core:description	"foot per minute"^^xsd:string .
+qu-unit:knot	core:description	"knot"^^xsd:string .
+qu-unit:centimetrePerSecond	core:description	"centimetre per second"^^xsd:string .
+qu-unit:centimetrePerHour	core:description	"centimetre per hour"^^xsd:string .
+qu-unit:metrePerMinute	core:description	"metre per minute"^^xsd:string .
+qu-unit:millimetrePerHour	core:description	"millimetre per hour"^^xsd:string .
+qu-unit:millimetrePerSecond	core:description	"millimetre per second"^^xsd:string .
+qu-unit:footPerSecond	core:description	"foot per second"^^xsd:string .
+qu-unit:inchPerSecond	core:description	"inch per second"^^xsd:string .
+qu-unit:metrePerSecond	core:description	"metre per second"^^xsd:string .
+qu-unit:milePerHour	core:description	"mile per hour"^^xsd:string .
+qu-unit:millimetrePerMinute	core:description	"millimetre per minute"^^xsd:string .
+qu-unit:reciprocalSecondPerCubicMetre	core:description	"reciprocal second per cubic metre"^^xsd:string .
+qu-unit:perSquareCentimetreHour	core:description	"number per square centimetre hour"^^xsd:string .
+qu-unit:perSquareMetreSecond	core:description	"number per square metre second"^^xsd:string .
+qu-unit:inchToTheFourthPower	core:description	"inch to the fourth power"^^xsd:string .
+qu-unit:millimetreToTheFourthPower	core:description	"millimetre to the fourth power"^^xsd:string .
+qu-unit:metreToTheFourthPower	core:description	"metre to the fourth power"^^xsd:string .
+qu-unit:squareMetrePerSteradian	core:description	"square metre per steradian"^^xsd:string .
+qu-unit:barnPerSteradian	core:description	"barn per steradian"^^xsd:string .
+qu-unit:picosecond	core:description	"picosecond"^^xsd:string .
+qu-unit:year	core:description	"year"^^xsd:string .
+qu-unit:commonYear	core:description	"common year"^^xsd:string .
+qu-unit:millisecond	core:description	"millisecond"^^xsd:string .
+qu-unit:millihenryPerOhm	core:description	"millihenry per ohm"^^xsd:string .
+qu-unit:nanosecond	core:description	"nanosecond"^^xsd:string .
+qu-unit:secondUnitOfTime	core:description	"second [unit of time]"^^xsd:string .
+qu-unit:siderealYear	core:description	"sidereal year"^^xsd:string .
+qu-unit:microsecond	core:description	"microsecond"^^xsd:string .
+qu-unit:microhenryPerOhm	core:description	"microhenry per ohm"^^xsd:string .
+qu-unit:hour	core:description	"hour"^^xsd:string .
+qu-unit:week	core:description	"week"^^xsd:string .
+qu-unit:month	core:description	"month"^^xsd:string .
+qu-unit:henryPerKiloohm	core:description	"henry per kiloohm"^^xsd:string .
+qu-unit:day	core:description	"day"^^xsd:string .
+qu-unit:microhenryPerKiloohm	core:description	"microhenry per kiloohm"^^xsd:string .
+qu-unit:tropicalYear	core:description	"tropical year"^^xsd:string .
+qu-unit:henryPerOhm	core:description	"henry per ohm"^^xsd:string .
+qu-unit:kilosecond	core:description	"kilosecond"^^xsd:string .
+qu-unit:millihenryPerKiloohm	core:description	"millihenry per kiloohm"^^xsd:string .
+qu-unit:minuteUnitOfTime	core:description	"minute [unit of time]"^^xsd:string .
+qu-unit:candela	core:description	"candela"^^xsd:string .
+qu-unit:amperePerSquareMetre	core:description	"ampere per square metre"^^xsd:string .
+qu-unit:amperePerSquareCentimetre	core:description	"ampere per square centimetre"^^xsd:string .
+qu-unit:megaamperePerSquareMetre	core:description	"megaampere per square metre"^^xsd:string .
+qu-unit:kiloamperePerSquareMetre	core:description	"kiloampere per square metre"^^xsd:string .
+qu-unit:amperePerSquareMillimetre	core:description	"ampere per square millimetre"^^xsd:string .
+qu-unit:kelvinPerWatt	core:description	"kelvin per watt"^^xsd:string .
+qu-unit:fathom	core:description	"fathom"^^xsd:string .
+qu-unit:decametre	core:description	"decametre"^^xsd:string .
+qu-unit:hectometre	core:description	"hectometre"^^xsd:string .
+qu-unit:kilometre	core:description	"kilometre"^^xsd:string .
+qu-unit:milliInch	core:description	"milli-inch"^^xsd:string .
+qu-unit:microInch	core:description	"micro-inch"^^xsd:string .
+qu-unit:angstrom	core:description	"angstrom"^^xsd:string .
+qu-unit:millimetre	core:description	"millimetre"^^xsd:string .
+qu-unit:frenchGauge	core:description	"French gauge"^^xsd:string .
+qu-unit:metre	core:description	"metre"^^xsd:string .
+qu-unit:picometre	core:description	"picometre"^^xsd:string .
+qu-unit:lightYear	core:description	"light year"^^xsd:string .
+qu-unit:micrometreMicron	core:description	"micrometre (micron)"^^xsd:string .
+qu-unit:decimetre	core:description	"decimetre"^^xsd:string .
+qu-unit:centimetre	core:description	"centimetre"^^xsd:string .
+qu-unit:gunterSChain	core:description	"Gunter's chain"^^xsd:string .
+qu-unit:nanometre	core:description	"nanometre"^^xsd:string .
+qu-unit:foot	core:description	"foot"^^xsd:string .
+qu-unit:femtometre	core:description	"femtometre"^^xsd:string .
+qu-unit:parsec	core:description	"parsec"^^xsd:string .
+qu-unit:rodUnitOfDistance	core:description	"rod [unit of distance]"^^xsd:string .
+qu-unit:yard	core:description	"yard"^^xsd:string .
+qu-unit:mileStatuteMile	core:description	"mile (statute mile)"^^xsd:string .
+qu-unit:nauticalMile	core:description	"nautical mile"^^xsd:string .
+qu-unit:inch	core:description	"inch"^^xsd:string .
+qu-unit:astronomicalUnit	core:description	"astronomical unit"^^xsd:string .
+qu-unit:britishThermalUnitInternationalTablePerHourSquareFootDegreeRankine	core:description	"British thermal unit (international table) per hour square foot degree Rankine"^^xsd:string .
+qu-unit:internationalTableItCaloriePerSecondSquareCentimetreKelvin	core:description	"International Table (IT) calorie per second square centimetre kelvin"^^xsd:string .
+qu-unit:britishThermalUnitInternationalTablePerSecondSquareFootDegreeRankine	core:description	"British thermal unit (international table) per second square foot degree Rankine"^^xsd:string .
+qu-unit:wattPerSquareMetreKelvin	core:description	"watt per square metre kelvin"^^xsd:string .
+qu-unit:calorieThermochemicalPerSecondSquareCentimetreKelvin	core:description	"calorie (thermochemical) per second square centimetre kelvin"^^xsd:string .
+qu-unit:molePerHour	core:description	"mole per hour"^^xsd:string .
+qu-unit:kilomolePerHour	core:description	"kilomole per hour"^^xsd:string .
+qu-unit:kilomolePerSecond	core:description	"kilomole per second"^^xsd:string .
+qu-unit:molePerMinute	core:description	"mole per minute"^^xsd:string .
+qu-unit:kilomolePerMinute	core:description	"kilomole per minute"^^xsd:string .
+qu-unit:katal	core:description	"katal"^^xsd:string .
+qu-unit:molePerSecond	core:description	"mole per second"^^xsd:string .
+qu-unit:kilojoulePerKelvin	core:description	"kilojoule per kelvin"^^xsd:string .
+qu-unit:joulePerKelvin	core:description	"joule per kelvin"^^xsd:string .
+qu-unit:kilogramPerSquareCentimetre	core:description	"kilogram per square centimetre"^^xsd:string .
+qu-unit:milligramPerSquareCentimetre	core:description	"milligram per square centimetre"^^xsd:string .
+qu-unit:ouncePerSquareYard	core:description	"ounce per square yard"^^xsd:string .
+qu-unit:milligramPerSquareMetre	core:description	"milligram per square metre"^^xsd:string .
+qu-unit:ouncePerSquareFoot	core:description	"ounce per square foot"^^xsd:string .
+qu-unit:poundPerSquareInchAbsolute	core:description	"pound per square inch absolute"^^xsd:string .
+qu-unit:gramPerSquareMetre	core:description	"gram per square metre"^^xsd:string .
+qu-unit:kilogramPerSquareMetre	core:description	"kilogram per square metre"^^xsd:string .
+qu-unit:poundPerSquareFoot	core:description	"pound per square foot"^^xsd:string .
+qu-unit:gramPerSquareCentimetre	core:description	"gram per square centimetre"^^xsd:string .
+qu-unit:microsiemensPerCentimetre	core:description	"microsiemens per centimetre"^^xsd:string .
+qu-unit:siemensPerCentimetre	core:description	"siemens per centimetre"^^xsd:string .
+qu-unit:microsiemensPerMetre	core:description	"microsiemens per metre"^^xsd:string .
+qu-unit:pikosiemensPerMetre	core:description	"pikosiemens per metre"^^xsd:string .
+qu-unit:millisiemensPerCentimetre	core:description	"millisiemens per centimetre"^^xsd:string .
+qu-unit:siemensPerMetre	core:description	"siemens per metre"^^xsd:string .
+qu-unit:megasiemensPerMetre	core:description	"megasiemens per metre"^^xsd:string .
+qu-unit:nanosiemensPerCentimetre	core:description	"nanosiemens per centimetre"^^xsd:string .
+qu-unit:nanosiemensPerMetre	core:description	"nanosiemens per metre"^^xsd:string .
+qu-unit:kilosiemensPerMetre	core:description	"kilosiemens per metre"^^xsd:string .
+qu-unit:var	core:description	"var"^^xsd:string .
+qu-unit:kilovoltAmpereReactive	core:description	"kilovolt ampere (reactive)"^^xsd:string .
+qu-unit:secondPerCubicMetre	core:description	"second per cubic metre"^^xsd:string .
+qu-unit:siemensSquareMetrePerMole	core:description	"siemens square metre per mole"^^xsd:string .
+qu-unit:wattPerMetre	core:description	"watt per metre"^^xsd:string .
+qu-unit:milliroentgenAequivalentMen	core:description	"milliroentgen aequivalent men"^^xsd:string .
+qu-unit:rem	core:description	"rem"^^xsd:string .
+qu-unit:sievert	core:description	"sievert"^^xsd:string .
+qu-unit:millisievert	core:description	"millisievert"^^xsd:string .
+qu-unit:footPerSecondSquared	core:description	"foot per second squared"^^xsd:string .
+qu-unit:inchPerSecondSquared	core:description	"inch per second squared"^^xsd:string .
+qu-unit:gal	core:description	"gal"^^xsd:string .
+qu-unit:metrePerSecondSquared	core:description	"metre per second squared"^^xsd:string .
+qu-unit:kilopascalSquareMetrePerGram	core:description	"kilopascal square metre per gram"^^xsd:string .
+qu-unit:standardAccelerationOfFreeFall	core:description	"standard acceleration of free fall"^^xsd:string .
+qu-unit:milligal	core:description	"milligal"^^xsd:string .
+qu-unit:radianPerSecondSquared	core:description	"radian per second squared"^^xsd:string .
+qu-unit:lumenPerWatt	core:description	"lumen per watt"^^xsd:string .
+qu-unit:millifarad	core:description	"millifarad"^^xsd:string .
+qu-unit:picofarad	core:description	"picofarad"^^xsd:string .
+qu-unit:farad	core:description	"farad"^^xsd:string .
+qu-unit:microfarad	core:description	"microfarad"^^xsd:string .
+qu-unit:nanofarad	core:description	"nanofarad"^^xsd:string .
+qu-unit:radianPerSecond	core:description	"radian per second"^^xsd:string .
+qu-unit:degreePerSecond	core:description	"degree per second"^^xsd:string .
+qu-unit:joulePerMetreToTheFourthPower	core:description	"joule per metre to the fourth power"^^xsd:string .
+qu-unit:newtonMetrePerSquareMetre	core:description	"newton metre per square metre"^^xsd:string .
+qu-unit:megahertzKilometre	core:description	"megahertz kilometre"^^xsd:string .
+qu-unit:kilohertzMetre	core:description	"kilohertz metre"^^xsd:string .
+qu-unit:gigahertzMetre	core:description	"gigahertz metre"^^xsd:string .
+qu-unit:hertzMetre	core:description	"hertz metre"^^xsd:string .
+qu-unit:megahertzMetre	core:description	"megahertz metre"^^xsd:string .
+qu-unit:squareMetrePerMole	core:description	"square metre per mole"^^xsd:string .
+qu-unit:coulombPerKilogramSecond	core:description	"coulomb per kilogram second"^^xsd:string .
+qu-unit:amperePerKilogram	core:description	"ampere per kilogram"^^xsd:string .
+qu-unit:roentgenPerSecond	core:description	"roentgen per second"^^xsd:string .
+qu-unit:gigacoulombPerCubicMetre	core:description	"gigacoulomb per cubic metre"^^xsd:string .
+qu-unit:coulombPerCubicMillimetre	core:description	"coulomb per cubic millimetre"^^xsd:string .
+qu-unit:coulombPerCubicMetre	core:description	"coulomb per cubic metre"^^xsd:string .
+qu-unit:kilocoulombPerCubicMetre	core:description	"kilocoulomb per cubic metre"^^xsd:string .
+qu-unit:megacoulombPerCubicMetre	core:description	"megacoulomb per cubic metre"^^xsd:string .
+qu-unit:coulombPerCubicCentimetre	core:description	"coulomb per cubic centimetre"^^xsd:string .
+qu-unit:millicoulombPerCubicMetre	core:description	"millicoulomb per cubic metre"^^xsd:string .
+qu-unit:microcoulombPerCubicMetre	core:description	"microcoulomb per cubic metre"^^xsd:string .
+qu-unit:kiloohm	core:description	"kiloohm"^^xsd:string .
+qu-unit:teraohm	core:description	"teraohm"^^xsd:string .
+qu-unit:ohm	core:description	"ohm"^^xsd:string .
+qu-unit:milliohm	core:description	"milliohm"^^xsd:string .
+qu-unit:microohm	core:description	"microohm"^^xsd:string .
+qu-unit:gigaohm	core:description	"gigaohm"^^xsd:string .
+qu-unit:megaohm	core:description	"megaohm"^^xsd:string .
+qu-unit:reciprocalHenry	core:description	"reciprocal henry"^^xsd:string .
+qu-unit:ampereSquareMetre	core:description	"ampere square metre"^^xsd:string .
+qu-unit:poundAvoirdupoisSquareFoot	core:description	"pound (avoirdupois) square foot"^^xsd:string .
+qu-unit:poundInchSquared	core:description	"pound inch squared"^^xsd:string .
+qu-unit:kilogramSquareMillimetre	core:description	"kilogram square millimetre"^^xsd:string .
+qu-unit:kilogramMetreSquared	core:description	"kilogram metre squared"^^xsd:string .
+qu-unit:kilogramSquareCentimetre	core:description	"kilogram square centimetre"^^xsd:string .
+qu-unit:kilogramMetrePerSecond	core:description	"kilogram metre per second"^^xsd:string .
+qu-unit:kilocalorieThermochemical	core:description	"kilocalorie (thermochemical)"^^xsd:string .
+qu-unit:millinewtonMetre	core:description	"millinewton metre"^^xsd:string .
+qu-unit:kilonewtonMetre	core:description	"kilonewton metre"^^xsd:string .
+qu-unit:kilocalorieInternationalTable	core:description	"kilocalorie (international table)"^^xsd:string .
+qu-unit:footPoundForce	core:description	"foot pound-force"^^xsd:string .
+qu-unit:kilocalorieMean	core:description	"kilocalorie (mean)"^^xsd:string .
+qu-unit:attojoule	core:description	"attojoule"^^xsd:string .
+qu-unit:calorieThermochemical	core:description	"calorie (thermochemical)"^^xsd:string .
+qu-unit:terawattHour	core:description	"terawatt hour"^^xsd:string .
+qu-unit:megawattHour1000KwH	core:description	"megawatt hour (1000 kW.h)"^^xsd:string .
+qu-unit:britishThermalUnitInternationalTable	core:description	"British thermal unit (international table)"^^xsd:string .
+qu-unit:millijoule	core:description	"millijoule"^^xsd:string .
+qu-unit:joule	core:description	"joule"^^xsd:string .
+qu-unit:decinewtonMetre	core:description	"decinewton metre"^^xsd:string .
+qu-unit:newtonMetre	core:description	"newton metre"^^xsd:string .
+qu-unit:centinewtonMetre	core:description	"centinewton metre"^^xsd:string .
+qu-unit:petajoule	core:description	"petajoule"^^xsd:string .
+qu-unit:kilowattHour	core:description	"kilowatt hour"^^xsd:string .
+qu-unit:terajoule	core:description	"terajoule"^^xsd:string .
+qu-unit:wattSecond	core:description	"watt second"^^xsd:string .
+qu-unit:xo15degCCalorie	core:description	"15 °C calorie"^^xsd:string .
+qu-unit:electronvolt	core:description	"electronvolt"^^xsd:string .
+qu-unit:ounceAvoirdupoisForceInch	core:description	"ounce (avoirdupois)-force inch"^^xsd:string .
+qu-unit:kilogramForceMetre	core:description	"kilogram-force metre"^^xsd:string .
+qu-unit:gigajoule	core:description	"gigajoule"^^xsd:string .
+qu-unit:meganewtonMetre	core:description	"meganewton metre"^^xsd:string .
+qu-unit:kilojoule	core:description	"kilojoule"^^xsd:string .
+qu-unit:gigawattHour	core:description	"gigawatt hour"^^xsd:string .
+qu-unit:micronewtonMetre	core:description	"micronewton metre"^^xsd:string .
+qu-unit:megajoule	core:description	"megajoule"^^xsd:string .
+qu-unit:dyneCentimetre	core:description	"dyne centimetre"^^xsd:string .
+qu-unit:erg	core:description	"erg"^^xsd:string .
+qu-unit:wattHour	core:description	"watt hour"^^xsd:string .
+qu-unit:femtojoule	core:description	"femtojoule"^^xsd:string .
+qu-unit:exajoule	core:description	"exajoule"^^xsd:string .
+qu-unit:britishThermalUnitMean	core:description	"British thermal unit (mean)"^^xsd:string .
+qu-unit:internationalTableItCalorie	core:description	"International Table (IT) calorie"^^xsd:string .
+qu-unit:megaohmPerKilometre	core:description	"megaohm per kilometre"^^xsd:string .
+qu-unit:ohmPerMetre	core:description	"ohm per metre"^^xsd:string .
+qu-unit:gigaohmPerMetre	core:description	"gigaohm per metre"^^xsd:string .
+qu-unit:milliohmPerMetre	core:description	"milliohm per metre"^^xsd:string .
+qu-unit:ohmPerKilometre	core:description	"ohm per kilometre"^^xsd:string .
+qu-unit:ohmPerMile	core:description	"ohm per mile"^^xsd:string .
+qu-unit:megaohmPerMetre	core:description	"megaohm per metre"^^xsd:string .
+qu-unit:cubicFoot	core:description	"cubic foot"^^xsd:string .
+qu-unit:cubicMetre	core:description	"cubic metre"^^xsd:string .
+qu-unit:cubicDecametre	core:description	"cubic decametre"^^xsd:string .
+qu-unit:liquidQuartUs	core:description	"liquid quart (US)"^^xsd:string .
+qu-unit:cubicHectometre	core:description	"cubic hectometre"^^xsd:string .
+qu-unit:dryQuartUs	core:description	"dry quart (US)"^^xsd:string .
+qu-unit:barrelUkPetroleum	core:description	"barrel (UK petroleum)"^^xsd:string .
+qu-unit:cubicMillimetre	core:description	"cubic millimetre"^^xsd:string .
+qu-unit:cubicKilometre	core:description	"cubic kilometre"^^xsd:string .
+qu-unit:hectolitre	core:description	"hectolitre"^^xsd:string .
+qu-unit:decalitre	core:description	"decalitre"^^xsd:string .
+qu-unit:cubicInch	core:description	"cubic inch"^^xsd:string .
+qu-unit:millilitre	core:description	"millilitre"^^xsd:string .
+qu-unit:quartUsDry	core:description	"quart (US dry)"^^xsd:string .
+qu-unit:bushelUk	core:description	"bushel (UK)"^^xsd:string .
+qu-unit:gallonUs	core:description	"gallon (US)"^^xsd:string .
+qu-unit:fluidOunceUk	core:description	"fluid ounce (UK)"^^xsd:string .
+qu-unit:pintUsDry	core:description	"pint (US dry)"^^xsd:string .
+qu-unit:gallonUk	core:description	"gallon (UK)"^^xsd:string .
+qu-unit:cupUnitOfVolume	core:description	"cup [unit of volume]"^^xsd:string .
+qu-unit:barrelUs	core:description	"barrel (US)"^^xsd:string .
+qu-unit:tonUkShipping	core:description	"ton (UK shipping)"^^xsd:string .
+qu-unit:peck	core:description	"peck"^^xsd:string .
+qu-unit:cubicCentimetre	core:description	"cubic centimetre"^^xsd:string .
+qu-unit:pintUs	core:description	"pint (US)"^^xsd:string .
+qu-unit:quartUs	core:description	"quart (US)"^^xsd:string .
+qu-unit:liquidPintUs	core:description	"liquid pint (US)"^^xsd:string .
+qu-unit:stere	core:description	"stere"^^xsd:string .
+qu-unit:cubicDecimetre	core:description	"cubic decimetre"^^xsd:string .
+qu-unit:teaspoonUs	core:description	"teaspoon (US)"^^xsd:string .
+qu-unit:decilitre	core:description	"decilitre"^^xsd:string .
+qu-unit:megaLitre	core:description	"mega litre"^^xsd:string .
+qu-unit:tonUsShipping	core:description	"ton (US shipping)"^^xsd:string .
+qu-unit:dryGallonUs	core:description	"dry gallon (US)"^^xsd:string .
+qu-unit:peckUk	core:description	"peck (UK)"^^xsd:string .
+qu-unit:standardCubicFoot	core:description	"standard cubic foot"^^xsd:string .
+qu-unit:dryBarrelUs	core:description	"dry barrel (US)"^^xsd:string .
+qu-unit:litre	core:description	"litre"^^xsd:string .
+qu-unit:centilitre	core:description	"centilitre"^^xsd:string .
+qu-unit:bushelUs	core:description	"bushel (US)"^^xsd:string .
+qu-unit:fluidOunceUs	core:description	"fluid ounce (US)"^^xsd:string .
+qu-unit:microlitre	core:description	"microlitre"^^xsd:string .
+qu-unit:dryPintUs	core:description	"dry pint (US)"^^xsd:string .
+qu-unit:kilolitre	core:description	"kilolitre"^^xsd:string .
+qu-unit:cubicYard	core:description	"cubic yard"^^xsd:string .
+qu-unit:tablespoonUs	core:description	"tablespoon (US)"^^xsd:string .
+qu-unit:quartUk	core:description	"quart (UK)"^^xsd:string .
+qu-unit:pintUk	core:description	"pint (UK)"^^xsd:string .
+qu-unit:horsepowerBoiler	core:description	"horsepower (boiler)"^^xsd:string .
+qu-unit:kilocalorieThermochemicalPerMinute	core:description	"kilocalorie (thermochemical) per minute"^^xsd:string .
+qu-unit:britishThermalUnitInternationalTablePerSecond	core:description	"British thermal unit (international table) per second"^^xsd:string .
+qu-unit:britishThermalUnitInternationalTablePerMinute	core:description	"British thermal unit (international table) per minute"^^xsd:string .
+qu-unit:brakeHorsePower	core:description	"brake horse power"^^xsd:string .
+qu-unit:britishThermalUnitInternationalTablePerHour	core:description	"British thermal unit (international table) per hour"^^xsd:string .
+qu-unit:footPoundForcePerHour	core:description	"foot pound-force per hour"^^xsd:string .
+qu-unit:kilowatt	core:description	"kilowatt"^^xsd:string .
+qu-unit:britishThermalUnitThermochemicalPerHour	core:description	"British thermal unit (thermochemical) per hour"^^xsd:string .
+qu-unit:picowatt	core:description	"picowatt"^^xsd:string .
+qu-unit:kilocalorieThermochemicalPerSecond	core:description	"kilocalorie (thermochemical) per second"^^xsd:string .
+qu-unit:nanowatt	core:description	"nanowatt"^^xsd:string .
+qu-unit:footPoundForcePerSecond	core:description	"foot pound-force per second"^^xsd:string .
+qu-unit:milliwatt	core:description	"milliwatt"^^xsd:string .
+qu-unit:footPoundForcePerMinute	core:description	"foot pound-force per minute"^^xsd:string .
+qu-unit:calorieThermochemicalPerSecond	core:description	"calorie (thermochemical) per second"^^xsd:string .
+qu-unit:kilogramForceMetrePerSecond	core:description	"kilogram-force metre per second"^^xsd:string .
+qu-unit:megawatt	core:description	"megawatt"^^xsd:string .
+qu-unit:metricHorsePower	core:description	"metric horse power"^^xsd:string .
+qu-unit:gigawatt	core:description	"gigawatt"^^xsd:string .
+qu-unit:britishThermalUnitThermochemicalPerMinute	core:description	"British thermal unit (thermochemical) per minute"^^xsd:string .
+qu-unit:horsepowerElectric	core:description	"horsepower (electric)"^^xsd:string .
+qu-unit:microwatt	core:description	"microwatt"^^xsd:string .
+qu-unit:terawatt	core:description	"terawatt"^^xsd:string .
+qu-unit:calorieThermochemicalPerMinute	core:description	"calorie (thermochemical) per minute"^^xsd:string .
+qu-unit:ergPerSecond	core:description	"erg per second"^^xsd:string .
+qu-unit:watt	core:description	"watt"^^xsd:string .
+qu-unit:kilocalorieThermochemicalPerHour	core:description	"kilocalorie (thermochemical) per hour"^^xsd:string .
+qu-unit:chevalVapeur	core:description	"cheval vapeur"^^xsd:string .
+qu-unit:britishThermalUnitThermochemicalPerSecond	core:description	"British thermal unit (thermochemical) per second"^^xsd:string .
+qu-unit:one	core:description	"one"^^xsd:string .
+qu-unit:euclid	core:description	"Euclid"^^xsd:string .
+qu-unit:percent	core:description	"Per cent"^^xsd:string .
+qu-unit:secondPerCubicMetreRadian	core:description	"second per cubic metre radian"^^xsd:string .
+qu-unit:perSquareCentimetre	core:description	"per square centimetre"^^xsd:string .
+qu-unit:perSquareMetre	core:description	"number per square metre"^^xsd:string .
+qu-unit:millimolePerLitre	core:description	"millimole per litre"^^xsd:string .
+qu-unit:molePerLitre	core:description	"mole per litre"^^xsd:string .
+qu-unit:kilomolePerCubicMetre	core:description	"kilomole per cubic metre"^^xsd:string .
+qu-unit:molePerCubicMetre	core:description	"mole per cubic metre"^^xsd:string .
+qu-unit:molePerCubicDecimetre	core:description	"mole per cubic decimetre"^^xsd:string .
+qu-unit:neper	core:description	"neper"^^xsd:string .
+qu-unit:decibel	core:description	"decibel"^^xsd:string .
+qu-unit:tonForceUsShort	core:description	"ton-force (US short)"^^xsd:string .
+qu-unit:kilopond	core:description	"kilopond"^^xsd:string .
+qu-unit:kilogramForce	core:description	"kilogram-force"^^xsd:string .
+qu-unit:kilonewton	core:description	"kilonewton"^^xsd:string .
+qu-unit:millinewton	core:description	"millinewton"^^xsd:string .
+qu-unit:ounceAvoirdupoisForce	core:description	"ounce (avoirdupois)-force"^^xsd:string .
+qu-unit:micronewton	core:description	"micronewton"^^xsd:string .
+qu-unit:poundForce	core:description	"pound-force"^^xsd:string .
+qu-unit:meganewton	core:description	"meganewton"^^xsd:string .
+qu-unit:dyne	core:description	"dyne"^^xsd:string .
+qu-unit:newton	core:description	"newton"^^xsd:string .
+qu-unit:megaohmKilometre	core:description	"megaohm kilometre"^^xsd:string .
+qu-unit:ohmMetre	core:description	"ohm metre"^^xsd:string .
+qu-unit:microohmMetre	core:description	"microohm metre"^^xsd:string .
+qu-unit:ohmKilometre	core:description	"ohm kilometre"^^xsd:string .
+qu-unit:megaohmMetre	core:description	"megaohm metre"^^xsd:string .
+qu-unit:nanoohmMetre	core:description	"nanoohm metre"^^xsd:string .
+qu-unit:kiloohmMetre	core:description	"kiloohm metre"^^xsd:string .
+qu-unit:milliohmMetre	core:description	"milliohm metre"^^xsd:string .
+qu-unit:gigaohmMetre	core:description	"gigaohm metre"^^xsd:string .
+qu-unit:ohmCentimetre	core:description	"ohm centimetre"^^xsd:string .
+qu-unit:wattPerSteradian	core:description	"watt per steradian"^^xsd:string .
+qu-unit:microwattPerSquareMetre	core:description	"microwatt per square metre"^^xsd:string .
+qu-unit:wattPerSquareMetre	core:description	"watt per square metre"^^xsd:string .
+qu-unit:ergPerSquareCentimetreSecond	core:description	"erg per square centimetre second"^^xsd:string .
+qu-unit:picowattPerSquareMetre	core:description	"picowatt per square metre"^^xsd:string .
+qu-unit:ergPerSecondSquareCentimetre	core:description	"erg per second square centimetre"^^xsd:string .
+qu-unit:milliwattPerSquareMetre	core:description	"milliwatt per square metre"^^xsd:string .
+qu-unit:radianSquareMetrePerKilogram	core:description	"radian square metre per kilogram"^^xsd:string .
+
+#################################################################
+#
+#    Properties
+#     - mapping qu:QuantityKind -> rdfs:label to core:name
+#     - mapping qu:QuantityKind -> rdfs:comment to core:description
+#
+#################################################################											
+
+qu-quantity:luminousIntensity	core:name	"luminous intensity"^^xsd:string .
+qu-quantity:luminousIntensity	core:description	"luminous intensity is a property that is the quotient of the luminous flux leaving the source and propagated in the element of solid angle containing the given direction, by the element of solid angle."@en .
+qu-quantity:electricFieldStrength	core:name	"electric field strength"^^xsd:string .
+qu-quantity:electricFieldStrength	core:description	"electric field strength is a vector property that is a voltage per unit of distance."@en .
+qu-quantity:heatFlux	core:name	"heat flux"^^xsd:string .
+qu-quantity:heatFlux	core:description	"heat flux is an energy flux that is the rate of heat per unit of area flowing through a surface."@en .
+qu-quantity:soundIntensity	core:name	"sound intensity"^^xsd:string .
+qu-quantity:soundIntensity	core:description	"sound intensity is a property that is a sound power per unit of area"@en .
+qu-quantity:energyFlux	core:name	"energy flux"^^xsd:string .
+qu-quantity:energyFlux	core:description	"energy flux is a flux that is the rate of energy per unit of area flowing through a surface."@en .
+qu-quantity:soundParticleVelocity	core:name	"sound particle velocity"^^xsd:string .
+qu-quantity:soundParticleVelocity	core:description	"sound particle velocity is a velocity "@en .
+qu-quantity:phaseVelocity	core:name	"phase velocity"^^xsd:string .
+qu-quantity:phaseVelocity	core:description	"phase velocity is a velocity "@en .
+qu-quantity:neutronSpeed	core:name	"neutron speed"^^xsd:string .
+qu-quantity:neutronSpeed	core:description	"neutron speed is a speed "@en .
+qu-quantity:velocity	core:name	"velocity"^^xsd:string .
+qu-quantity:velocity	core:description	"velocity is a vector property that is time rate of motion of matter at a point in a fixed direction. Typically also used for the relative velocity with reference to a point on the earth (v = ds/dt  where s is the displacement and t is the time)."@en .
+qu-quantity:groupVelocity	core:name	"group velocity"^^xsd:string .
+qu-quantity:groupVelocity	core:description	"group velocity is a velocity "@en .
+qu-quantity:speed	core:name	"speed"^^xsd:string .
+qu-quantity:speed	core:description	"speed is a rate of travelling along a path. It is a magnitude of velocity irrespect of direction."@en .
+qu-quantity:velocityOfSound	core:name	"velocity of sound"^^xsd:string .
+qu-quantity:velocityOfSound	core:description	"velocity of sound is a velocity that is the speed of sound in a material"@en .
+qu-quantity:diffusionArea	core:name	"diffusion area"^^xsd:string .
+qu-quantity:diffusionArea	core:description	"diffusion area is an area "@en .
+qu-quantity:area	core:name	"area"^^xsd:string .
+qu-quantity:area	core:description	"area is a property that is the size of a 2D surface. It can be calculated as a double integral (dx.dy), where x and y are cartesian coordinates."@en .
+qu-quantity:migrationArea	core:name	"migration area"^^xsd:string .
+qu-quantity:migrationArea	core:description	"migration area is an area "@en .
+qu-quantity:pressureAtBatteryLimit	core:name	"pressure at battery limit"^^xsd:string .
+qu-quantity:pressureAtBatteryLimit	core:description	"pressure at battery limit is a pressure at the location in the medium at the battery limit of the unit under consideration."@en .
+qu-quantity:lowerRequiredPressureLimit	core:name	"lower required pressure limit"^^xsd:string .
+qu-quantity:lowerRequiredPressureLimit	core:description	"lower required pressure limit is a pressure that is the lower limit of the required pressure."@en .
+qu-quantity:settlingOutPressure	core:name	"settling out pressure"^^xsd:string .
+qu-quantity:settlingOutPressure	core:description	"settling out pressure is a pressure "@en .
+qu-quantity:dragPressure	core:name	"drag pressure"^^xsd:string .
+qu-quantity:dragPressure	core:description	"drag pressure is a pressure that is a resistance to motion through a fluid."@en .
+qu-quantity:fatigueStrength	core:name	"fatigue strength"^^xsd:string .
+qu-quantity:fatigueStrength	core:description	"fatigue strength is a stress that is the maximum repeated stress a material can take without breaking, regardless of number of applied stress cycles."@en .
+qu-quantity:designPressure	core:name	"design pressure"^^xsd:string .
+qu-quantity:designPressure	core:description	"design pressure is a pressure for which an item is designed to withstand. Normally an internal pressure, assuming absolute vacuum on the outside surface. It is typically derived from various normal and possible abnormal operating conditions. Different values may be applicable for different parts such as at suction and at discharge."@en .
+qu-quantity:windPressure	core:name	"wind pressure"^^xsd:string .
+qu-quantity:windPressure	core:description	"wind pressure is a pressure that a wind will practice on an item when that item is subject to wind."@en .
+qu-quantity:blastPressure	core:name	"blast pressure"^^xsd:string .
+qu-quantity:blastPressure	core:description	"blast pressure is a pressure caused by an explosion or detonation."@en .
+qu-quantity:protectionPressure	core:name	"protection pressure"^^xsd:string .
+qu-quantity:protectionPressure	core:description	"protection pressure is a pressure for which exceeding an item is protected. Typically by a set pressure of a relief valve."@en .
+qu-quantity:shearStress	core:name	"shear stress"^^xsd:string .
+qu-quantity:shearStress	core:description	"shear stress is a stress due to shear. It is the product of shear rate and viscosity."@en .
+qu-quantity:tensionStress	core:name	"tension stress"^^xsd:string .
+qu-quantity:tensionStress	core:description	"tension stress is a stress that is due to tension, being a degree of being stretched."@en .
+qu-quantity:closingPressure	core:name	"closing pressure"^^xsd:string .
+qu-quantity:closingPressure	core:description	"closing pressure is a pressure of a controlled fluid at which a valve closes. Typically measured at the valve inlet."@en .
+qu-quantity:vapourPressure	core:name	"vapour pressure"^^xsd:string .
+qu-quantity:vapourPressure	core:description	"vapour pressure is a pressure of the vapour phase of a substance over the liquid phase when the phases are in equilibrium."@en .
+qu-quantity:hydrostaticPressure	core:name	"hydrostatic pressure"^^xsd:string .
+qu-quantity:hydrostaticPressure	core:description	"hydrostatic pressure is a pressure "@en .
+qu-quantity:popPressure	core:name	"pop pressure"^^xsd:string .
+qu-quantity:popPressure	core:description	"pop pressure is a pressure at which a relief valve suddenly opens."@en .
+qu-quantity:atmosphericPressure	core:name	"atmospheric pressure"^^xsd:string .
+qu-quantity:atmosphericPressure	core:description	"atmospheric pressure is a pressure of the atmosphere."@en .
+qu-quantity:bulkModulus	core:name	"bulk modulus"^^xsd:string .
+qu-quantity:bulkModulus	core:description	"bulk modulus is a property "@en .
+qu-quantity:setPressure	core:name	"set pressure"^^xsd:string .
+qu-quantity:setPressure	core:description	"set pressure is a pressure at which an item is intended to start an operation."@en .
+qu-quantity:torsionStress	core:name	"torsion stress"^^xsd:string .
+qu-quantity:torsionStress	core:description	"torsion stress is a stress that is due to torsion."@en .
+qu-quantity:dynamicPressure	core:name	"dynamic pressure"^^xsd:string .
+qu-quantity:dynamicPressure	core:description	"dynamic pressure is a pressure that is created by fluid velocity"@en .
+qu-quantity:reliefPressure	core:name	"relief pressure"^^xsd:string .
+qu-quantity:reliefPressure	core:description	"relief pressure is a pressure at which a relief device starts to discharge a fluid."@en .
+qu-quantity:internalPressure	core:name	"internal pressure"^^xsd:string .
+qu-quantity:internalPressure	core:description	"internal pressure is a pressure that is expressed on the inside of an item"@en .
+qu-quantity:steamOutPressure	core:name	"steam out pressure"^^xsd:string .
+qu-quantity:steamOutPressure	core:description	"steam out pressure is a pressure at which inside cleaning of an item should take place. It may be determining for stress analysis as design condition"@en .
+qu-quantity:staticPressure	core:name	"static pressure"^^xsd:string .
+qu-quantity:staticPressure	core:description	"static pressure is a pressure in a material in rest or as if in rest. E.g. in the absence of sound waves and wind."@en .
+qu-quantity:benchSet	core:name	"bench set"^^xsd:string .
+qu-quantity:benchSet	core:description	"bench set of air that is expelled on a diaphragm of a valve that causes a valve to open."@en .
+qu-quantity:partialPressure	core:name	"partial pressure"^^xsd:string .
+qu-quantity:partialPressure	core:description	"partial pressure is a pressure of a component in a mixture"@en .
+qu-quantity:stress	core:name	"stress"^^xsd:string .
+qu-quantity:stress	core:description	"stress is a second order tensor property that is a force per area acting upon a surface or a body and producing or tending to produce deformation in a substance. Typically its magnitude varies over the direction."@en .
+qu-quantity:soundPressure	core:name	"sound pressure"^^xsd:string .
+qu-quantity:soundPressure	core:description	"sound pressure is a pressure that is the difference between the instantaneous total pressure and the static pressure."@en .
+qu-quantity:upperRequiredPressureLimit	core:name	"upper required pressure limit"^^xsd:string .
+qu-quantity:upperRequiredPressureLimit	core:description	"upper required pressure limit is a pressure that is the upper limit of the required pressure."@en .
+qu-quantity:criticalPressure	core:name	"critical pressure"^^xsd:string .
+qu-quantity:criticalPressure	core:description	"critical pressure is a pressure at the critical point"@en .
+qu-quantity:operatingPressure	core:name	"operating pressure"^^xsd:string .
+qu-quantity:operatingPressure	core:description	"operating pressure is a pressure at which a physical object operates. Typically occurring in a fluid and exposed to a surface of an object that forms a barrier to the fluid."@en .
+qu-quantity:loadPressure	core:name	"load (pressure)"^^xsd:string .
+qu-quantity:loadPressure	core:description	"load (pressure) is a pressure expelled by a material on another material. Typically by wind or explosion."@en .
+qu-quantity:dewPointPressure	core:name	"dew point pressure"^^xsd:string .
+qu-quantity:dewPointPressure	core:description	"dew point pressure is a pressure above which condensation of vapor in gas takes place at a given temperature. Typically the pressure at which a dew point temperature is determined."@en .
+qu-quantity:nominalPressure	core:name	"nominal pressure"^^xsd:string .
+qu-quantity:nominalPressure	core:description	"nominal pressure is a pressure that is used to name a pressure, a series of pressures or pressure ranges"@en .
+qu-quantity:openingPressure	core:name	"opening pressure"^^xsd:string .
+qu-quantity:openingPressure	core:description	"opening pressure is a pressure at which something opens due to the pressure."@en .
+qu-quantity:pressure	core:name	"pressure"^^xsd:string .
+qu-quantity:pressure	core:description	"pressure is a property that is a force applied to, or distributed, over a surface. It is a force perpendicular to the area divided by area (p = dF/dA where dF is the perpendicular component of the force acting on the area element dA)."@en .
+qu-quantity:bendingStress	core:name	"bending stress"^^xsd:string .
+qu-quantity:bendingStress	core:description	"bending stress is a stress due to bending."@en .
+qu-quantity:boilingPressure	core:name	"boiling pressure"^^xsd:string .
+qu-quantity:boilingPressure	core:description	"boiling pressure is a pressure at which a pure substance boils at a given temperature."@en .
+qu-quantity:normalStress	core:name	"normal stress"^^xsd:string .
+qu-quantity:normalStress	core:description	"normal stress is a stress that acts in a direction perpendicular to the cut surface. Typically expressed in Pa."@en .
+qu-quantity:vacuumPressure	core:name	"vacuum pressure"^^xsd:string .
+qu-quantity:vacuumPressure	core:description	"vacuum pressure is a pressure that is below atmospheric pressure."@en .
+qu-quantity:testPressure	core:name	"test pressure"^^xsd:string .
+qu-quantity:testPressure	core:description	"test pressure is a pressure required or applied to execute a pressure test. Typically the maximum allowable operating pressure multiplied with a specified factor."@en .
+qu-quantity:externalPressure	core:name	"external pressure"^^xsd:string .
+qu-quantity:externalPressure	core:description	"external pressure is a pressure that is expressed on the outside of an item"@en .
+qu-quantity:allowablePressure	core:name	"allowable pressure"^^xsd:string .
+qu-quantity:allowablePressure	core:description	"allowable pressure is a pressure that is allowed. It may be interpreted as the upper limit of a pressure range."@en .
+qu-quantity:vacuum	core:name	"vacuum"^^xsd:string .
+qu-quantity:vacuum	core:description	"vacuum is a pressure below atmospheric pressure."@en .
+qu-quantity:maximumPressure	core:name	"maximum pressure"^^xsd:string .
+qu-quantity:maximumPressure	core:description	"maximum pressure is a pressure that is maximum occurring or allowed"@en .
+qu-quantity:minimumPressure	core:name	"minimum pressure"^^xsd:string .
+qu-quantity:minimumPressure	core:description	"minimum pressure is a pressure that is a minimum possible or allowed or occurring or required"@en .
+qu-quantity:actualPressure	core:name	"actual pressure"^^xsd:string .
+qu-quantity:actualPressure	core:description	"actual pressure is a pressure at which something actually is or was. It can be a local pressure, a pressure varying in space and/or time or an average pressure in a space and/or over time."@en .
+qu-quantity:ventSystemPressure	core:name	"vent system pressure"^^xsd:string .
+qu-quantity:ventSystemPressure	core:description	"vent system pressure is a pressure "@en .
+qu-quantity:backPressure	core:name	"back pressure"^^xsd:string .
+qu-quantity:backPressure	core:description	"back pressure is a pressure that occurs downstream of a device, at the low pressure side."@en .
+qu-quantity:pressureStress	core:name	"pressure stress"^^xsd:string .
+qu-quantity:pressureStress	core:description	"pressure stress is a stress that is due to pressure."@en .
+qu-quantity:triplePointPressure	core:name	"triple point pressure"^^xsd:string .
+qu-quantity:triplePointPressure	core:description	"triple point pressure is a pressure at which all three phases, solid, liquid and vapour, of a substance can occur simultaneously."@en .
+qu-quantity:surfaceDensityOfMechanicalImpedance	core:name	"surface density of mechanical impedance"^^xsd:string .
+qu-quantity:surfaceDensityOfMechanicalImpedance	core:description	"surface density of mechanical impedance is a property "@en .
+qu-quantity:weight	core:name	"weight"^^xsd:string .
+qu-quantity:weight	core:description	"weight is a force that is the attraction force between the earth and a body. Typically when the body is a the surface of the earth. The weight is caused by gravity."@en .
+qu-quantity:force	core:name	"force"^^xsd:string .
+qu-quantity:force	core:description	"force is a vector property that changes the state of rest or motion in matter."@en .
+qu-quantity:activity	core:name	"activity"^^xsd:string .
+qu-quantity:activity	core:description	"activity is a specific energy "@en .
+qu-quantity:diffusionCoefficient	core:name	"diffusion coefficient"^^xsd:string .
+qu-quantity:diffusionCoefficient	core:description	"diffusion coefficient is a property Typically expressed in m2/s"@en .
+qu-quantity:kinematicViscosity	core:name	"kinematic viscosity"^^xsd:string .
+qu-quantity:kinematicViscosity	core:description	"kinematic viscosity is a viscosity that indicates an internal friction due to relative motion."@en .
+qu-quantity:diffusionCoefficientForNeutronNumberDensity	core:name	"diffusion coefficient for neutron number density"^^xsd:string .
+qu-quantity:diffusionCoefficientForNeutronNumberDensity	core:description	"diffusion coefficient for neutron number density is a diffusion coefficient "@en .
+qu-quantity:thermalDiffusionCoefficient	core:name	"thermal diffusion coefficient"^^xsd:string .
+qu-quantity:thermalDiffusionCoefficient	core:description	"thermal diffusion coefficient is a property "@en .
+qu-quantity:thermalDiffusivity	core:name	"thermal diffusivity"^^xsd:string .
+qu-quantity:thermalDiffusivity	core:description	"thermal diffusivity is a property "@en .
+qu-quantity:volume	core:name	"volume"^^xsd:string .
+qu-quantity:volume	core:description	"volume is a property that is an amount of space. A volume V is correlated with the coordinates x, y and z as V  = triple integral (dx.dy.dz)  where x, y and z are cartesian coordinates of the space which occupies the volume."@en .
+qu-quantity:sectionModulus	core:name	"section modulus"^^xsd:string .
+qu-quantity:sectionModulus	core:description	"section modulus is a property of a plane area (section) about an axis in its plane, which is the second moment of area divided by the distance from the axis to the most remote point of the area."@en .
+qu-quantity:electricConductivity	core:name	"electric conductivity"^^xsd:string .
+qu-quantity:electricConductivity	core:description	"electric conductivity is a property that is the possibility to allow the flow of an electric current. It is the reciproque of electrical resistance (gamma = 1/rho). Typically expressed in S/m"@en .
+qu-quantity:radianceExposure	core:name	"radiance exposure"^^xsd:string .
+qu-quantity:radianceExposure	core:description	"radiance exposure is a property "@en .
+qu-quantity:massEnergyTransferCoefficient	core:name	"mass energy transfer coefficient"^^xsd:string .
+qu-quantity:massEnergyTransferCoefficient	core:description	"mass energy transfer coefficient is a property "@en .
+qu-quantity:massAttenuationCoefficient	core:name	"mass attenuation coefficient"^^xsd:string .
+qu-quantity:massAttenuationCoefficient	core:description	"mass attenuation coefficient is a property "@en .
+qu-quantity:magnetization	core:name	"magnetization"^^xsd:string .
+qu-quantity:magnetization	core:description	"magnetization is a property "@en .
+qu-quantity:linearElectricCurrentDensity	core:name	"linear electric current density"^^xsd:string .
+qu-quantity:linearElectricCurrentDensity	core:description	"linear electric current density is a property "@en .
+qu-quantity:magneticFieldStrength	core:name	"magnetic field strength"^^xsd:string .
+qu-quantity:magneticFieldStrength	core:description	"magnetic field strength is a vector property the rotation (curl) of which is equal to the sum of the electric current density and the time derivative of the electric flux density."@en .
+qu-quantity:linearEnergyTransfer	core:name	"linear energy transfer"^^xsd:string .
+qu-quantity:linearEnergyTransfer	core:description	"linear energy transfer is a property "@en .
+qu-quantity:radiationDose	core:name	"radiation dose"^^xsd:string .
+qu-quantity:radiationDose	core:description	"radiation dose is a dose that is an absorbed quantity of radiation. Typically expressed in Gy"@en .
+qu-quantity:absorbedDose	core:name	"absorbed dose"^^xsd:string .
+qu-quantity:absorbedDose	core:description	"absorbed dose is a radiation dose that is an absorbed quantity of radiation. Typically expressed in Gy"@en .
+qu-quantity:duration	core:name	"duration"^^xsd:string .
+qu-quantity:duration	core:description	"duration is a property difference that is an elapsed time irrespect of when occurring on the time scale or the time difference between a moment in time and a reference moment in time."@en .
+qu-quantity:reverberationTime	core:name	"reverberation time"^^xsd:string .
+qu-quantity:reverberationTime	core:description	"reverberation time is a duration "@en .
+qu-quantity:timeConstant	core:name	"time constant"^^xsd:string .
+qu-quantity:timeConstant	core:description	"time constant is a duration that is the time for value to decrease to 1/e, I.e. 0.368 of its initial value following a sudden change in operating conditions"@en .
+qu-quantity:meanLife	core:name	"mean life"^^xsd:string .
+qu-quantity:meanLife	core:description	"mean life is a duration "@en .
+qu-quantity:periodicTime	core:name	"periodic time"^^xsd:string .
+qu-quantity:periodicTime	core:description	"periodic time is a duration of a periodic phenomenon."@en .
+qu-quantity:relaxationTime	core:name	"relaxation time"^^xsd:string .
+qu-quantity:relaxationTime	core:description	"relaxation time is a duration "@en .
+qu-quantity:angularAcceleration	core:name	"angular acceleration"^^xsd:string .
+qu-quantity:angularAcceleration	core:description	"angular acceleration is a property that is an increase of rotational speed."@en .
+qu-quantity:linearDensity	core:name	"linear density"^^xsd:string .
+qu-quantity:linearDensity	core:description	"linear density is a property that is a mass per unit of length"@en .
+qu-quantity:luminousFlux	core:name	"luminous flux"^^xsd:string .
+qu-quantity:luminousFlux	core:description	"luminous flux is a radiant flux that is the rate of visible light flowing through a surface. The luminous flux d PHI of a source of luminous intensity I in an element of solid angle dOMEGA is given by d(PHI) = I.d(OMEGA)."@en .
+qu-quantity:inducedVoltage	core:name	"induced voltage"^^xsd:string .
+qu-quantity:inducedVoltage	core:description	"induced voltage is a voltage that is induced in a conductor due to a varying magnetic field"@en .
+qu-quantity:ratedVoltage	core:name	"rated voltage"^^xsd:string .
+qu-quantity:ratedVoltage	core:description	"rated voltage is a voltage for which an item is designed to operate. Typically a primary power voltage (for a three-phase supply, the phase-to-phase voltage) as declared by the manufacturer."@en .
+qu-quantity:maximumVoltage	core:name	"maximum voltage"^^xsd:string .
+qu-quantity:maximumVoltage	core:description	"maximum voltage is a voltage that is maximally occurring or allowed."@en .
+qu-quantity:directAxisComponentOfSynchronousGeneratedVoltage	core:name	"direct-axis component of synchronous generated  voltage"^^xsd:string .
+qu-quantity:directAxisComponentOfSynchronousGeneratedVoltage	core:description	"direct-axis component of synchronous generated  voltage is a voltage that is that component of the synchronous generated voltage induced by the flux due to the quadrature-axis component of the magnetomotive force of the synchronous machine."@en .
+qu-quantity:openCircuitVoltage	core:name	"open-circuit voltage"^^xsd:string .
+qu-quantity:openCircuitVoltage	core:description	"open-circuit voltage is a voltage across the terminals of a voltage source when no external current is flowing"@en .
+qu-quantity:rectifiedMeanVoltage	core:name	"rectified mean voltage"^^xsd:string .
+qu-quantity:rectifiedMeanVoltage	core:description	"rectified mean voltage is a voltage that is the mean value, taken over one period , of the instantaneous absolute values of the alternating quantities"@en .
+qu-quantity:resistanceFreeVoltage	core:name	"resistance free voltage"^^xsd:string .
+qu-quantity:resistanceFreeVoltage	core:description	"resistance free voltage is a voltage at the open circuit terminals of a battery which is free from the equivalent series resistance voltage drop error."@en .
+qu-quantity:residualVoltage	core:name	"residual voltage"^^xsd:string .
+qu-quantity:residualVoltage	core:description	"residual voltage is a voltage equal to the sum of the phase-to-earth voltages"@en .
+qu-quantity:directAxisComponentOfVoltage	core:name	"direct-axis component of voltage"^^xsd:string .
+qu-quantity:directAxisComponentOfVoltage	core:description	"direct-axis component of voltage is a voltage resulting from the vectorial addition of the direct-axis component of the synchronous generated voltage and the voltage drop in the direct axis."@en .
+qu-quantity:alternatingCurrentComponent	core:name	"alternating current component"^^xsd:string .
+qu-quantity:alternatingCurrentComponent	core:description	"alternating current component is a voltage that is the quantity derived by removing the direct component from the pulsating quantity."@en .
+qu-quantity:nominalVoltage	core:name	"nominal voltage"^^xsd:string .
+qu-quantity:nominalVoltage	core:description	"nominal voltage is a voltage that is to be described by qualitatively or by a suitable approximate value of voltage and is used to designate or identify a system."@en .
+qu-quantity:testVoltage	core:name	"test voltage"^^xsd:string .
+qu-quantity:testVoltage	core:description	"test voltage is a voltage under testing conditions."@en .
+qu-quantity:positiveSequenceVoltageComponent	core:name	"positive sequence voltage component"^^xsd:string .
+qu-quantity:positiveSequenceVoltageComponent	core:description	"positive sequence voltage component is a voltage that is one of the three symmetrical sequence components which exists in symmetrical and unsymmetrical three-phase system(s) of sinusoidal quantities"@en .
+qu-quantity:alternatingElectricCurrentVoltage	core:name	"alternating electric current voltage"^^xsd:string .
+qu-quantity:alternatingElectricCurrentVoltage	core:description	"alternating electric current voltage is a voltage of an alternating current which alternates between positive and negative values."@en .
+qu-quantity:touchVoltage	core:name	"touch voltage"^^xsd:string .
+qu-quantity:touchVoltage	core:description	"touch voltage is a voltage appearing during an insulation fault, between simultaneously accessible parts."@en .
+qu-quantity:limitingShortTimeThermalWithstandValueOfAnEnergizingVoltage	core:name	"limiting short-time thermal withstand value of an energizing voltage"^^xsd:string .
+qu-quantity:limitingShortTimeThermalWithstandValueOfAnEnergizingVoltage	core:description	"limiting short-time thermal withstand value of an energizing voltage is a voltage that is that highest value (r.m.s. if a.c.) of the energizing voltage that a relay can withstand under specified conditions for a specified short time without permanent degradation of the specified characteristics due to overheating."@en .
+qu-quantity:systemVoltage	core:name	"system voltage"^^xsd:string .
+qu-quantity:systemVoltage	core:description	"system voltage is a voltage "@en .
+qu-quantity:quadratureAxisComponentOfVoltage	core:name	"quadrature-axis component of voltage"^^xsd:string .
+qu-quantity:quadratureAxisComponentOfVoltage	core:description	"quadrature-axis component of voltage is a voltage resulting from the vectorial addition of the quadrature-axis component of the synchronous generated voltage and the voltage drop in the quadrature axis."@en .
+qu-quantity:energizingVoltage	core:name	"energizing voltage"^^xsd:string .
+qu-quantity:energizingVoltage	core:description	"energizing voltage is a voltage that alone, or in combination with any other such quantity, applied to a relay under specified conditions enables it to fulfil its purpose."@en .
+qu-quantity:phaseToNeutralVoltage	core:name	"phase to neutral voltage"^^xsd:string .
+qu-quantity:phaseToNeutralVoltage	core:description	"phase to neutral voltage is a voltage between a phase in a polyphase system and the neutral point."@en .
+qu-quantity:operatingRangeOfAnEnergizingVoltage	core:name	"operating range of an energizing voltage"^^xsd:string .
+qu-quantity:operatingRangeOfAnEnergizingVoltage	core:description	"operating range of an energizing voltage is a voltage that is the range of values of a given energizing voltage for which the relay under specified conditions, is able to perform its intended function(s) according to the specified requirements."@en .
+qu-quantity:nonReleaseVoltage	core:name	"non-release voltage"^^xsd:string .
+qu-quantity:nonReleaseVoltage	core:description	"non-release voltage is a voltage at which a relay does not release under specified conditions."@en .
+qu-quantity:nonOperateVoltage	core:name	"non-operate voltage"^^xsd:string .
+qu-quantity:nonOperateVoltage	core:description	"non-operate voltage is a voltage at which a relay does not operate under specified conditions."@en .
+qu-quantity:releaseVoltage	core:name	"release voltage"^^xsd:string .
+qu-quantity:releaseVoltage	core:description	"release voltage is a voltage at which a relay releases under specified conditions."@en .
+qu-quantity:ratedValueOfEnergizingVoltage	core:name	"rated value of energizing voltage"^^xsd:string .
+qu-quantity:ratedValueOfEnergizingVoltage	core:description	"rated value of energizing voltage is a voltage that is that value of the energizing voltage that is assigned either by the standard or the manufacturer, for a specified condition."@en .
+qu-quantity:voltage	core:name	"voltage"^^xsd:string .
+qu-quantity:voltage	core:description	"voltage is a property difference that is a potential relative to a reference potential. Typically relative to the potential of the earth."@en .
+qu-quantity:limitingDynamicValueOfAnEnergizingVoltage	core:name	"limiting dynamic value of an energizing voltage"^^xsd:string .
+qu-quantity:limitingDynamicValueOfAnEnergizingVoltage	core:description	"limiting dynamic value of an energizing voltage is a voltage that is the highest value of an energizing voltage that a relay can withstand under specified conditions of waveform and duration without permanent degradation of the specified characteristics due to the resultant dynamic effect."@en .
+qu-quantity:directVoltageComponent	core:name	"direct voltage component"^^xsd:string .
+qu-quantity:directVoltageComponent	core:description	"direct voltage component is a voltage that is the mean value, taken over one period, of the pulsating quantity"@en .
+qu-quantity:phaseToPhaseVoltage	core:name	"phase to phase voltage"^^xsd:string .
+qu-quantity:phaseToPhaseVoltage	core:description	"phase to phase voltage is a voltage between phases."@en .
+qu-quantity:limitingContinuousThermalWithstandValueOfEnergizingVoltage	core:name	"limiting continuous thermal withstand value of energizing voltage"^^xsd:string .
+qu-quantity:limitingContinuousThermalWithstandValueOfEnergizingVoltage	core:description	"limiting continuous thermal withstand value of energizing voltage is a voltage that is that highest value (r.m.s. if a.c.) of the energizing voltage that a relay can carry continuously and under specified conditions, while satisfying the temperature requirements."@en .
+qu-quantity:endOfChargeVoltage	core:name	"end-of-charge voltage"^^xsd:string .
+qu-quantity:endOfChargeVoltage	core:description	"end-of-charge voltage is a voltage of a cell or battery during charging at a specified constant current when a cell of battery has become completely charged"@en .
+qu-quantity:operateVoltage	core:name	"operate voltage"^^xsd:string .
+qu-quantity:operateVoltage	core:description	"operate voltage is a voltage at which a relay operates under specified conditions."@en .
+qu-quantity:neutralPointDisplacementVoltage	core:name	"neutral point displacement voltage"^^xsd:string .
+qu-quantity:neutralPointDisplacementVoltage	core:description	"neutral point displacement voltage is a voltage between the real or virtual neutral point and the earth."@en .
+qu-quantity:operatingVoltage	core:name	"operating voltage"^^xsd:string .
+qu-quantity:operatingVoltage	core:description	"operating voltage is a voltage under operating conditions, at a given instant and a given location"@en .
+qu-quantity:redoxPotential	core:name	"redox potential"^^xsd:string .
+qu-quantity:redoxPotential	core:description	"redox potential is a voltage that indicates the affinity of a substance for electrons - its electronegativity - compared with hydrogen (which is set at 0). "@en .
+qu-quantity:negativeSequenceVoltageComponent	core:name	"negative sequence voltage component"^^xsd:string .
+qu-quantity:negativeSequenceVoltageComponent	core:description	"negative sequence voltage component is a voltage that is one of the three symmetrical sequence components which exists only in an unsymmetrical three-phase system of sinusoidal quantities"@en .
+qu-quantity:voltageRequiredForStarting	core:name	"voltage required for starting"^^xsd:string .
+qu-quantity:voltageRequiredForStarting	core:description	"voltage required for starting is a voltage that is the minimum required to start the motor"@en .
+qu-quantity:switchingVoltage	core:name	"switching voltage"^^xsd:string .
+qu-quantity:switchingVoltage	core:description	"switching voltage is a voltage at which a relay switches under specified conditions."@en .
+qu-quantity:closedCircuitVoltage	core:name	"closed-circuit voltage"^^xsd:string .
+qu-quantity:closedCircuitVoltage	core:description	"closed-circuit voltage is a voltage across the terminals of a voltage source when an external current is flowing."@en .
+qu-quantity:auxiliaryVoltage	core:name	"auxiliary voltage"^^xsd:string .
+qu-quantity:auxiliaryVoltage	core:description	"auxiliary voltage is a voltage of a current other than the input current."@en .
+qu-quantity:synchronousGeneratedVoltage	core:name	"synchronous generated voltage"^^xsd:string .
+qu-quantity:synchronousGeneratedVoltage	core:description	"synchronous generated voltage is a voltage that would be generated in the primary windings on open-circuit, in the absence of saturation, by the excitation current for the conditions under consideration."@en .
+qu-quantity:ceilingVoltage	core:name	"ceiling voltage"^^xsd:string .
+qu-quantity:ceilingVoltage	core:description	"ceiling voltage is a voltage that is the maximum voltage that a generator, under normal operating conditions, is required to supply at its terminals for a limited time."@en .
+qu-quantity:terminalVoltage	core:name	"terminal voltage"^^xsd:string .
+qu-quantity:terminalVoltage	core:description	"terminal voltage is a voltage measured at the terminals of an item of electrical equipment"@en .
+qu-quantity:zeroSequenceVoltageComponent	core:name	"zero sequence voltage component"^^xsd:string .
+qu-quantity:zeroSequenceVoltageComponent	core:description	"zero sequence voltage component is a voltage that is one of the three symmetrical sequence components which exists only in an unsymmetrical three-phase system of sinusoidal quantities"@en .
+qu-quantity:controlVoltage	core:name	"control voltage"^^xsd:string .
+qu-quantity:controlVoltage	core:description	"control voltage is a voltage required for control"@en .
+qu-quantity:electromotiveForce	core:name	"electromotive force"^^xsd:string .
+qu-quantity:electromotiveForce	core:description	"electromotive force is a voltage at the terminals of the ideal voltage source in the representation of an active element"@en .
+qu-quantity:floatVoltage	core:name	"float voltage"^^xsd:string .
+qu-quantity:floatVoltage	core:description	"float voltage is a voltage that is continuously supplying a low current from a battery charger applied to a battery in the standby mode to make up for internal losses and maintain the battery in a fully charged state."@en .
+qu-quantity:directCurrentVoltage	core:name	"direct current voltage"^^xsd:string .
+qu-quantity:directCurrentVoltage	core:description	"direct current voltage is a voltage that has constantly positive values."@en .
+qu-quantity:electricPotential	core:name	"electric potential"^^xsd:string .
+qu-quantity:electricPotential	core:description	"The amount of work required to bring a unit charge into an electric field from infinity."@en .
+qu-quantity:resettingVoltage	core:name	"resetting voltage"^^xsd:string .
+qu-quantity:resettingVoltage	core:description	"resetting voltage is a voltage at which a relay resets under specified conditions."@en .
+qu-quantity:boostVoltage	core:name	"boost voltage"^^xsd:string .
+qu-quantity:boostVoltage	core:description	"boost voltage is a voltage that is applied at initial charging of a battery. A battery that is shipped wet and fully charged loses some charge in transit or while standing idle before installation. Therefore, at the first opportunity, it should be given a boost charge, using either the constant voltage method or the constant current method."@en .
+qu-quantity:quadratureAxisComponentOfSynchronousGeneratedVoltage	core:name	"quadrature-axis component of synchronous generated voltage"^^xsd:string .
+qu-quantity:quadratureAxisComponentOfSynchronousGeneratedVoltage	core:description	"quadrature-axis component of synchronous generated voltage is a voltage that is that component of the synchronous generated voltage induced by the flux due to the direct-axis component of the magnetomotive force of the synchronous machine."@en .
+qu-quantity:startingVoltage	core:name	"starting voltage"^^xsd:string .
+qu-quantity:startingVoltage	core:description	"starting voltage is a voltage at which a relay starts under specified conditions."@en .
+qu-quantity:minimumVoltage	core:name	"minimum voltage"^^xsd:string .
+qu-quantity:minimumVoltage	core:description	"minimum voltage is a voltage that is minimally occurring or allowed."@en .
+qu-quantity:phaseToEarthVoltage	core:name	"phase to earth voltage"^^xsd:string .
+qu-quantity:phaseToEarthVoltage	core:description	"phase to earth voltage is a voltage between phase and earth."@en .
+qu-quantity:equalizeVoltage	core:name	"equalize voltage"^^xsd:string .
+qu-quantity:equalizeVoltage	core:description	"equalize voltage is a voltage intended to set a battery up when first installed. Typically equal to a boost voltage."@en .
+qu-quantity:rootMeanSquareVoltage	core:name	"root mean square voltage"^^xsd:string .
+qu-quantity:rootMeanSquareVoltage	core:description	"root mean square voltage is a voltage of an alternating current that is a steady direct current voltage that would generate heat at the same rate in a given resistance as the voltage of the alternating current. For a sinusoid wave amplitude: Vrms = Vmax/sqrt(2)."@en .
+qu-quantity:disengagingVoltage	core:name	"disengaging voltage"^^xsd:string .
+qu-quantity:disengagingVoltage	core:description	"disengaging voltage is a voltage at which a relay disengages under specified conditions."@en .
+qu-quantity:levelOfAFieldQuantity	core:name	"level of a field quantity"^^xsd:string .
+qu-quantity:levelOfAFieldQuantity	core:description	"level of a field quantity is a property "@en .
+qu-quantity:coefficientOfThermalInsulation	core:name	"coefficient of thermal insulation"^^xsd:string .
+qu-quantity:coefficientOfThermalInsulation	core:description	"coefficient of thermal insulation is a property "@en .
+qu-quantity:electricCurrentRate	core:name	"electric current rate"^^xsd:string .
+qu-quantity:electricCurrentRate	core:description	"electric current rate is a flow rate of electricity, in particular a rate of flow of electric charge."@en .
+qu-quantity:currentLinkage	core:name	"current linkage"^^xsd:string .
+qu-quantity:currentLinkage	core:description	"current linkage is an electric current rate "@en .
+qu-quantity:magnetomotiveForce	core:name	"magnetomotive force"^^xsd:string .
+qu-quantity:magnetomotiveForce	core:description	"magnetomotive force is a property "@en .
+qu-quantity:magneticPotentialDifference	core:name	"magnetic potential difference"^^xsd:string .
+qu-quantity:magneticPotentialDifference	core:description	"magnetic potential difference is a property difference that is the magnetic potential difference between point 1 and point 2 on a given path, is the line integral from 1 to 2 of the magnetic field strength along that path."@en .
+qu-quantity:specificVolume	core:name	"specific volume"^^xsd:string .
+qu-quantity:specificVolume	core:description	"specific volume is a property that is a volume per unit of mass of substance ( v=1/rho)."@en .
+qu-quantity:photonIntensity	core:name	"photon intensity"^^xsd:string .
+qu-quantity:photonIntensity	core:description	"photon intensity is a property "@en .
+qu-quantity:photonExposure	core:name	"photon exposure"^^xsd:string .
+qu-quantity:photonExposure	core:description	"photon exposure is a property "@en .
+qu-quantity:inductance	core:name	"inductance"^^xsd:string .
+qu-quantity:inductance	core:description	"inductance is a property that is the quotient of the voltage by the time derivative of the current"@en .
+qu-quantity:mutualInductance	core:name	"mutual inductance"^^xsd:string .
+qu-quantity:mutualInductance	core:description	"mutual inductance is an inductance that is the quotient of the magnetic flux induced in one circuit by the current in another circuit which produces that flux"@en .
+qu-quantity:selfInductance	core:name	"self inductance"^^xsd:string .
+qu-quantity:selfInductance	core:description	"self inductance is a property of a thin conducting loop, which is the magnetic flux through the loop, caused by an electric current in the loop, divided by that current."@en .
+qu-quantity:permeance	core:name	"permeance"^^xsd:string .
+qu-quantity:permeance	core:description	"permeance is a property that is the reciprocal of  reluctance"@en .
+qu-quantity:electricFluxDensity	core:name	"electric flux density"^^xsd:string .
+qu-quantity:electricFluxDensity	core:description	"electric flux density is a property is an electric flux per square meter"@en .
+qu-quantity:surfaceDensityOfCharge	core:name	"surface density of charge"^^xsd:string .
+qu-quantity:surfaceDensityOfCharge	core:description	"surface density of charge is a property that is an electric charge per unit of area"@en .
+qu-quantity:electricDisplacement	core:name	"Electric displacement"^^xsd:string .
+qu-quantity:electricDisplacement	core:description	"Strength of the electric displacement."@en .
+qu-quantity:secondMomentOfArea	core:name	"second moment of area"^^xsd:string .
+qu-quantity:secondMomentOfArea	core:description	"second moment of area is a property of the cross section at a point on a beam evaluated about the area centroid - see ISO 10303-104:2000 - 5.13.16. It is a property of a shape which indicates the efficiency of that shape in respect of its resistance to bending. Certain shapes are better able to resist bending than others and, in general, a shape is more efficient when the greater part of its mass is as far as possible from its centroid (or centre of gravity)."@en .
+qu-quantity:soundPower	core:name	"sound power"^^xsd:string .
+qu-quantity:soundPower	core:description	"sound power is a power of sound"@en .
+qu-quantity:power	core:name	"power"^^xsd:string .
+qu-quantity:power	core:description	"power is an energy flow rate that is a rate of energy transfer."@en .
+qu-quantity:activePower	core:name	"active power"^^xsd:string .
+qu-quantity:activePower	core:description	"active power is a power that is the mean value, taken over one period, of the instantaneous power."@en .
+qu-quantity:heatFlowRate	core:name	"heat flow rate"^^xsd:string .
+qu-quantity:heatFlowRate	core:description	"heat flow rate is an energy flow rate in the form of heat. It is the rate at which heat crosses a given surface."@en .
+qu-quantity:radiantPower	core:name	"radiant power"^^xsd:string .
+qu-quantity:radiantPower	core:description	"radiant power is a power "@en .
+qu-quantity:magneticFlux	core:name	"magnetic flux"^^xsd:string .
+qu-quantity:magneticFlux	core:description	"magnetic flux is a flux that is the rate of magnetic lines of force flowing through a surface. It is the scalar product of the magnetic flux density and the surface element across which it is defined."@en .
+qu-quantity:criticalCompressibility	core:name	"critical compressibility"^^xsd:string .
+qu-quantity:criticalCompressibility	core:description	"critical compressibility is a compressibility at the critical point"@en .
+qu-quantity:isentropicCompressibility	core:name	"isentropic compressibility"^^xsd:string .
+qu-quantity:isentropicCompressibility	core:description	"isentropic compressibility is a compressibility at constant entropy. Typically expressed in /Pa"@en .
+qu-quantity:compressibility	core:name	"compressibility"^^xsd:string .
+qu-quantity:compressibility	core:description	"compressibility is a property that can be calculated from volume change due to pressure change as -(1/V).dV/dP"@en .
+qu-quantity:vapourCompressibility	core:name	"vapour compressibility"^^xsd:string .
+qu-quantity:vapourCompressibility	core:description	"vapour compressibility is a compressibility of a vapour."@en .
+qu-quantity:heatOfCombustion	core:name	"heat of combustion"^^xsd:string .
+qu-quantity:heatOfCombustion	core:description	"heat of combustion is a heat "@en .
+qu-quantity:maximumBetaParticleEnergy	core:name	"maximum beta particle energy"^^xsd:string .
+qu-quantity:maximumBetaParticleEnergy	core:description	"maximum beta particle energy is an energy "@en .
+qu-quantity:gapEnergy	core:name	"gap energy"^^xsd:string .
+qu-quantity:gapEnergy	core:description	"gap energy is an energy "@en .
+qu-quantity:breakawayTorque	core:name	"breakaway torque"^^xsd:string .
+qu-quantity:breakawayTorque	core:description	"breakaway torque is a torque required to change rotating parts from zero speed to initial rotation. In case of an electric motor it is the smallest torque developed by the electric motor when at rest, and when it is supplied at the rated voltage and frequency."@en .
+qu-quantity:translationEnergy	core:name	"translation energy"^^xsd:string .
+qu-quantity:translationEnergy	core:description	"translation energy is a kinetic energy where the motion is a linear velocity. Typically calculated by U = ½.m.v2"@en .
+qu-quantity:thermalEnergy	core:name	"thermal energy"^^xsd:string .
+qu-quantity:thermalEnergy	core:description	"thermal energy is an energy that exists in the form of heat. It is dependent of temperature and/or aggregation state"@en .
+qu-quantity:mechanicalEnergy	core:name	"mechanical energy"^^xsd:string .
+qu-quantity:mechanicalEnergy	core:description	"mechanical energy is an external energy that is present because of the motion or location of material relative to another material"@en .
+qu-quantity:startingTorque	core:name	"starting torque"^^xsd:string .
+qu-quantity:startingTorque	core:description	"starting torque is a torque that is the electromagnetic torque exerted by a motor during the starting period."@en .
+qu-quantity:heatOfVaporisation	core:name	"heat of vaporisation"^^xsd:string .
+qu-quantity:heatOfVaporisation	core:description	"heat of vaporisation is a heat that is required to transform a liquid to a vapor. It will be freed when the vapor is condensed"@en .
+qu-quantity:work	core:name	"work"^^xsd:string .
+qu-quantity:work	core:description	"work is an energy in transit between a system and its surroundings resulting from the displacement of an external force acting on the physical object"@en .
+qu-quantity:alphaDisintegrationEnergy	core:name	"alpha disintegration energy"^^xsd:string .
+qu-quantity:alphaDisintegrationEnergy	core:description	"alpha disintegration energy is an energy "@en .
+qu-quantity:brakingTorque	core:name	"braking torque"^^xsd:string .
+qu-quantity:brakingTorque	core:description	"braking torque is a torque exerted by a motor,  in the same direction as the load torque, so as to reduce its speed."@en .
+qu-quantity:stallingTorque	core:name	"stalling torque"^^xsd:string .
+qu-quantity:stallingTorque	core:description	"stalling torque is a torque is the maximum torque under which a motor will operate at a given voltage and frequency. If a load greater than this torque is applied to the motor, it will stall."@en .
+qu-quantity:pullOutTorque	core:name	"pull-out torque"^^xsd:string .
+qu-quantity:pullOutTorque	core:description	"pull-out torque is a torque that is the highest torque that an electric motor can develop during its start up from stationary to full load, while running at rated voltage and frequency."@en .
+qu-quantity:enthalpyVol	core:name	"enthalpy-vol"^^xsd:string .
+qu-quantity:enthalpyVol	core:description	"enthalpy-vol is an enthalpy that is an enthalpy in energy per force per mass"@en .
+qu-quantity:reactiveEnergy	core:name	"reactive energy"^^xsd:string .
+qu-quantity:reactiveEnergy	core:description	"reactive energy is an electrical energy that is exchanged continuously between the different electric and magnetic fields associated with the operation of an a.c. electrical system and of all the connected apparatus"@en .
+qu-quantity:donorIonizationEnergy	core:name	"donor ionization energy"^^xsd:string .
+qu-quantity:donorIonizationEnergy	core:description	"donor ionization energy is an energy "@en .
+qu-quantity:averageEnergyLossPerIonPairFormed	core:name	"average energy loss per ion pair formed"^^xsd:string .
+qu-quantity:averageEnergyLossPerIonPairFormed	core:description	"average energy loss per ion pair formed is an energy "@en .
+qu-quantity:radiantEnergy	core:name	"radiant energy"^^xsd:string .
+qu-quantity:radiantEnergy	core:description	"radiant energy is an energy "@en .
+qu-quantity:energyLoss	core:name	"energy loss"^^xsd:string .
+qu-quantity:energyLoss	core:description	"energy loss is an energy being a time integral of power losses."@en .
+qu-quantity:torqueAtMaximumContinuousRotationalSpeed	core:name	"torque at maximum continuous rotational speed"^^xsd:string .
+qu-quantity:torqueAtMaximumContinuousRotationalSpeed	core:description	"torque at maximum continuous rotational speed is a torque that occurs at the maximum continuous rotational speed."@en .
+qu-quantity:hartreeEnergy	core:name	"Hartree energy"^^xsd:string .
+qu-quantity:hartreeEnergy	core:description	"Hartree energy is an energy "@en .
+qu-quantity:kineticEnergy	core:name	"kinetic energy"^^xsd:string .
+qu-quantity:kineticEnergy	core:description	"kinetic energy is a mechanical energy in the form of motion"@en .
+qu-quantity:setTorque	core:name	"set torque"^^xsd:string .
+qu-quantity:setTorque	core:description	"set torque is a torque that is set at a required value."@en .
+qu-quantity:chemicalEnergy	core:name	"chemical energy"^^xsd:string .
+qu-quantity:chemicalEnergy	core:description	"chemical energy is an energy that is required or becomes available during a chemical reaction"@en .
+qu-quantity:resonanceEnergy	core:name	"resonance energy"^^xsd:string .
+qu-quantity:resonanceEnergy	core:description	"resonance energy is an energy "@en .
+qu-quantity:enthalpyWt	core:name	"enthalpy-wt"^^xsd:string .
+qu-quantity:enthalpyWt	core:description	"enthalpy-wt is an enthalpy that is an enthalpy in energy per unit of mass."@en .
+qu-quantity:moment	core:name	"moment"^^xsd:string .
+qu-quantity:moment	core:description	"moment is a torque that is a force at a distance from a center line in a direction rectangular to the radius"@en .
+qu-quantity:ratedLoadTorque	core:name	"rated load torque"^^xsd:string .
+qu-quantity:ratedLoadTorque	core:description	"rated load torque is a torque that is the shaft torque of a motor corresponding to rated output and speed."@en .
+qu-quantity:unavoidableEnergy	core:name	"unavoidable energy"^^xsd:string .
+qu-quantity:unavoidableEnergy	core:description	"unavoidable energy is an energy that consumption cannot be delayed and that would be wasted if it could not be transformed into electricity."@en .
+qu-quantity:energyShortfall	core:name	"energy shortfall"^^xsd:string .
+qu-quantity:energyShortfall	core:description	"energy shortfall is an energy that availability is lacking with respect to the energy demand over a stated period of time."@en .
+qu-quantity:enthalpyOfCombustion	core:name	"enthalpy of combustion"^^xsd:string .
+qu-quantity:enthalpyOfCombustion	core:description	"enthalpy of combustion is an enthalpy that is the enthalpy that is released when combustion takes place"@en .
+qu-quantity:internalEnergy	core:name	"internal energy"^^xsd:string .
+qu-quantity:internalEnergy	core:description	"internal energy is an energy that is an intrinsic property of a physical object in equilibrium"@en .
+qu-quantity:residualHeat	core:name	"residual heat"^^xsd:string .
+qu-quantity:residualHeat	core:description	"residual heat is a heat "@en .
+qu-quantity:synchronousPullOutTorque	core:name	"synchronous pull-out torque"^^xsd:string .
+qu-quantity:synchronousPullOutTorque	core:description	"synchronous pull-out torque is a torque that is the maximum torque that a synchronous machine can develop without loss of synchronism while operating at rated voltage, frequency and excitation."@en .
+qu-quantity:acceptorIonizationEnergy	core:name	"acceptor ionization energy"^^xsd:string .
+qu-quantity:acceptorIonizationEnergy	core:description	"acceptor ionization energy is an energy "@en .
+qu-quantity:heatContent	core:name	"heat content"^^xsd:string .
+qu-quantity:heatContent	core:description	"heat content is a heat that is the quantity of heat contained in a material"@en .
+qu-quantity:activeEnergy	core:name	"active energy"^^xsd:string .
+qu-quantity:activeEnergy	core:description	"active energy is an electrical energy transformable into some other form of energy."@en .
+qu-quantity:electricalEnergy	core:name	"electrical energy"^^xsd:string .
+qu-quantity:electricalEnergy	core:description	"electrical energy is an energy that exists in the form of electricity"@en .
+qu-quantity:rotationEnergy	core:name	"rotation energy"^^xsd:string .
+qu-quantity:rotationEnergy	core:description	"rotation energy is a kinetic energy where the motion is rotational. Typically calculated by U = I.omega2.R"@en .
+qu-quantity:betaDisintegrationEnergy	core:name	"beta disintegration energy"^^xsd:string .
+qu-quantity:betaDisintegrationEnergy	core:description	"beta disintegration energy is an energy "@en .
+qu-quantity:energyOutput	core:name	"energy output"^^xsd:string .
+qu-quantity:energyOutput	core:description	"energy output is an energy delivered by a battery under specified conditions of discharge"@en .
+qu-quantity:molarThermodynamicEnergy	core:name	"molar thermodynamic energy"^^xsd:string .
+qu-quantity:molarThermodynamicEnergy	core:description	"molar thermodynamic energy is an energy "@en .
+qu-quantity:fermiEnergy	core:name	"fermi energy"^^xsd:string .
+qu-quantity:fermiEnergy	core:description	"fermi energy is an energy "@en .
+qu-quantity:energy	core:name	"energy"^^xsd:string .
+qu-quantity:energy	core:description	"energy is a property that is an equivalent of work done when the point of application of a force is displaced a distance in the direction of the force."@en .
+qu-quantity:activationEnergy	core:name	"activation energy"^^xsd:string .
+qu-quantity:activationEnergy	core:description	"activation energy is an energy "@en .
+qu-quantity:thermodynamicEnergy	core:name	"thermodynamic energy"^^xsd:string .
+qu-quantity:thermodynamicEnergy	core:description	"thermodynamic energy is an energy "@en .
+qu-quantity:acceleratingTorque	core:name	"accelerating torque"^^xsd:string .
+qu-quantity:acceleratingTorque	core:description	"accelerating torque is a torque that is the difference between the electromagnetic starting torque and the total load torque, available for accelerating the rotating parts."@en .
+qu-quantity:energyImparted	core:name	"energy imparted"^^xsd:string .
+qu-quantity:energyImparted	core:description	"energy imparted is an energy "@en .
+qu-quantity:potentialEnergy	core:name	"potential energy"^^xsd:string .
+qu-quantity:potentialEnergy	core:description	"potential energy is a mechanical energy due to the location of material relative to a reference location of another material, due to the attraction between the materials. Typically because of elevated altitude on earth (gravitational energy) or of compression or extension of an elastic material"@en .
+qu-quantity:excitationEnergy	core:name	"excitation energy"^^xsd:string .
+qu-quantity:excitationEnergy	core:description	"excitation energy is an energy "@en .
+qu-quantity:molarOpticalRotatoryPower	core:name	"molar optical rotatory power"^^xsd:string .
+qu-quantity:molarOpticalRotatoryPower	core:description	"molar optical rotatory power is an energy "@en .
+qu-quantity:enthalpy	core:name	"enthalpy"^^xsd:string .
+qu-quantity:enthalpy	core:description	"enthalpy is a thermodynamic property that is the energy content per unit of mass (H = U + p.V)."@en .
+qu-quantity:meanEnergyImparted	core:name	"mean energy imparted"^^xsd:string .
+qu-quantity:meanEnergyImparted	core:description	"mean energy imparted is an energy "@en .
+qu-quantity:torque	core:name	"torque"^^xsd:string .
+qu-quantity:torque	core:description	"torque is a property that is a twisting force being a product of a force and a distance. The force is applied to something that has a role as a lever and the distance is the distance between the point on the lever where the force applies and the fulcrum of the lever."@en .
+qu-quantity:externalEnergy	core:name	"external energy"^^xsd:string .
+qu-quantity:externalEnergy	core:description	"external energy is an energy that is due to the surrounding of the possessor of the energy"@en .
+qu-quantity:lockedRotorTorque	core:name	"locked-rotor torque"^^xsd:string .
+qu-quantity:lockedRotorTorque	core:description	"locked-rotor torque is a torque that is the minimum measured torque which the motor will develop with the rotor locked and rated voltage applied at rated frequency."@en .
+qu-quantity:strainEnergy	core:name	"strain energy"^^xsd:string .
+qu-quantity:strainEnergy	core:description	"strain energy is an energy "@en .
+qu-quantity:heatOfSolution	core:name	"heat of solution"^^xsd:string .
+qu-quantity:heatOfSolution	core:description	"heat of solution is a heat "@en .
+qu-quantity:pullUpTorque	core:name	"pull-up torque"^^xsd:string .
+qu-quantity:pullUpTorque	core:description	"pull-up torque is a torque that is the smallest torque developed by an electric motor between zero speed and the speed that corresponds to the pull-out torque (breakdown torque) when the motor is supplied at the rated voltage and frequency."@en .
+qu-quantity:meltingEnthalpy	core:name	"melting enthalpy"^^xsd:string .
+qu-quantity:meltingEnthalpy	core:description	"melting enthalpy is an enthalpy that is required to melt a substance"@en .
+qu-quantity:nuclearEnergy	core:name	"nuclear energy"^^xsd:string .
+qu-quantity:nuclearEnergy	core:description	"nuclear energy is an energy that is nuclear"@en .
+qu-quantity:enthalpyOfVaporisation	core:name	"enthalpy of vaporisation"^^xsd:string .
+qu-quantity:enthalpyOfVaporisation	core:description	"enthalpy of vaporisation is an enthalpy of a material which is the difference between the enthalpy of the saturated vapor and that of the saturated liquid at the same temperature."@en .
+qu-quantity:heat	core:name	"heat"^^xsd:string .
+qu-quantity:heat	core:description	"heat is a thermal energy that crosses a system boundary under influence of a temperature difference or gradient"@en .
+qu-quantity:resetTorque	core:name	"reset torque"^^xsd:string .
+qu-quantity:resetTorque	core:description	"reset torque is a torque that is intended to be present after a reset of a control function."@en .
+qu-quantity:enthalpyOfFormation	core:name	"enthalpy of formation"^^xsd:string .
+qu-quantity:enthalpyOfFormation	core:description	"enthalpy of formation is an enthalpy that is the isothermal enthalpy change in a synthesis reaction from the elements in their standard states."@en .
+qu-quantity:pullInTorque	core:name	"pull-in torque"^^xsd:string .
+qu-quantity:pullInTorque	core:description	"pull-in torque is a torque that is the maximum torque against which a synchronous motor will pull its connected load into synchronism at rated voltage and frequency, when the field excitation, if used, is applied."@en .
+qu-quantity:reactionEnergy	core:name	"reaction energy"^^xsd:string .
+qu-quantity:reactionEnergy	core:description	"reaction energy is an energy "@en .
+qu-quantity:maximumSpectralLuminousEfficacy	core:name	"maximum spectral luminous efficacy"^^xsd:string .
+qu-quantity:maximumSpectralLuminousEfficacy	core:description	"maximum spectral luminous efficacy is a spectral luminous efficacy "@en .
+qu-quantity:spectralLuminousEfficacy	core:name	"spectral luminous efficacy"^^xsd:string .
+qu-quantity:spectralLuminousEfficacy	core:description	"spectral luminous efficacy is a luminous efficacy "@en .
+qu-quantity:luminousEfficacy	core:name	"luminous efficacy"^^xsd:string .
+qu-quantity:luminousEfficacy	core:description	"luminous efficacy is an efficacy that is the quotient of the luminous flux emitted and the power consumed by the source (K = PHIv/PHIe)."@en .
+qu-quantity:molecularWeight	core:name	"molecular weight"^^xsd:string .
+qu-quantity:molecularWeight	core:description	"molecular weight is a property that is a quotient of the mass of a substance and its quantity of moles."@en .
+qu-quantity:luminousExposure	core:name	"luminous exposure"^^xsd:string .
+qu-quantity:luminousExposure	core:description	"luminous exposure is a property "@en .
+qu-quantity:electromagneticEnergyDensity	core:name	"electromagnetic energy density"^^xsd:string .
+qu-quantity:electromagneticEnergyDensity	core:description	"electromagnetic energy density is a volumetric energy density "@en .
+qu-quantity:radiantEnergyDensity	core:name	"radiant energy density"^^xsd:string .
+qu-quantity:radiantEnergyDensity	core:description	"radiant energy density is a volumetric energy density "@en .
+qu-quantity:soundEnergyDensity	core:name	"sound energy density"^^xsd:string .
+qu-quantity:soundEnergyDensity	core:description	"sound energy density is a property that is an energy level due to sound per unit of volume."@en .
+qu-quantity:volumicElectromagneticEnergy	core:name	"volumic electromagnetic energy"^^xsd:string .
+qu-quantity:volumicElectromagneticEnergy	core:description	"volumic electromagnetic energy is a volumetric energy density "@en .
+qu-quantity:energyDensity	core:name	"energy density"^^xsd:string .
+qu-quantity:energyDensity	core:description	"Amount of energy per unit volume."@en .
+qu-quantity:volumetricEnergyDensity	core:name	"volumetric energy density"^^xsd:string .
+qu-quantity:volumetricEnergyDensity	core:description	"volumetric energy density is a property that is an amount of energy relative to a volume. Typically an energy output of a battery per unit of its volume."@en .
+qu-quantity:momentum	core:name	"momentum"^^xsd:string .
+qu-quantity:momentum	core:description	"momentum is a property that determines the duration required to bring a body to rest when under action of a constant force or moment. It can be determined as the product of its mass and velocity."@en .
+qu-quantity:soundParticleAcceleration	core:name	"sound particle acceleration"^^xsd:string .
+qu-quantity:soundParticleAcceleration	core:description	"sound particle acceleration is an acceleration "@en .
+qu-quantity:acceleration	core:name	"acceleration"^^xsd:string .
+qu-quantity:acceleration	core:description	"acceleration is a vector property that is an increase of speed of matter at a point per time in a direction. In other words: the derivative of the speed over time. Typically expressed as a = dv/dt."@en .
+qu-quantity:accelerationDueToGravity	core:name	"acceleration due to gravity"^^xsd:string .
+qu-quantity:accelerationDueToGravity	core:description	"acceleration due to gravity is an acceleration at the start of the free fall of a material when subject to the attraction of the earth at the earth surface. It is an acceleration excluding the effect of any resistance, such as due to movement through air. It varies a bit over the earth surface. A standardised value has been defined of g = 9.80665 m/s2."@en .
+qu-quantity:reactance	core:name	"reactance"^^xsd:string .
+qu-quantity:reactance	core:description	"reactance is a property that is the imaginary part of a complex impedance. Typically of an a.c. circuit due to capacitance and inductance."@en .
+qu-quantity:modulusOfImpedance	core:name	"modulus of impedance"^^xsd:string .
+qu-quantity:modulusOfImpedance	core:description	"modulus of impedance is a scalar property that is equal to the quotient of the r.m.s. value of the voltage by the r.m.s. value of the current of a 2-terminal circuit. Correlated with … as |Z| = root (R2 + X2)."@en .
+qu-quantity:electricResistance	core:name	"electric resistance"^^xsd:string .
+qu-quantity:electricResistance	core:description	"electric resistance is a property that is a barrier which limits an electrical current resulting from a given difference in potential between two points in a material. It can be determined as the quotient of the voltage by the current."@en .
+qu-quantity:impedance	core:name	"impedance"^^xsd:string .
+qu-quantity:impedance	core:description	"impedance is a property that is an apparent opposition to a flow of alternating current or any other varying current at a particular frequency. It is a combination of resistance R and reactance X. It takes into account a possible phase offset. The practical difference between impedance and resistance is that impedance changes as a function of frequency."@en .
+qu-quantity:heatTransferCoefficient	core:name	"heat transfer coefficient"^^xsd:string .
+qu-quantity:heatTransferCoefficient	core:description	"heat transfer coefficient is a property that is a watt per square meter kelvin"@en .
+qu-quantity:surfaceCoefficientOfHeatTransfer	core:name	"surface coefficient of heat transfer"^^xsd:string .
+qu-quantity:surfaceCoefficientOfHeatTransfer	core:description	"surface coefficient of heat transfer is a heat transfer coefficient "@en .
+qu-quantity:angularMomentum	core:name	"angular momentum"^^xsd:string .
+qu-quantity:angularMomentum	core:description	"angular momentum is a vector property that is a measure of the rotational momentum of a rotating body or system, that is equal in classical physics to the product of the angular velocity of the body or system and its moment of inertia with respect to the rotation axis, and that is directed al"@en .
+qu-quantity:surfaceDensity	core:name	"surface density"^^xsd:string .
+qu-quantity:surfaceDensity	core:description	"surface density is a property that is a mass per unit of area"@en .
+qu-quantity:resistivity	core:name	"resistivity"^^xsd:string .
+qu-quantity:resistivity	core:description	"resistivity is a property that is an opposition against the flow of electric current in a material. A low resistivity indicates a material that readily allows the movement of electrons. The SI unit for electrical resistivity is the ohm metre. Resistance in ohms is equal to the resistivity of the material multiplied by the cross sectional area of the material divided by the length of the material."@en .
+qu-quantity:exposure	core:name	"exposure"^^xsd:string .
+qu-quantity:exposure	core:description	"exposure is a property "@en .
+qu-quantity:solidAngle	core:name	"solid angle"^^xsd:string .
+qu-quantity:solidAngle	core:description	"solid angle is a property difference that is a portion of the whole of space about a given point, bounded by a conical surface with its vertex at that point and measured by the area cut by the bounding surface from the surface of a sphere of unit radius centered at that point."@en .
+qu-quantity:thickness	core:name	"thickness"^^xsd:string .
+qu-quantity:thickness	core:description	"thickness is a distance that is the length from surface to surface of the normal fibber at a point of a shell, plate or wall."@en .
+qu-quantity:distance	core:name	"distance"^^xsd:string .
+qu-quantity:distance	core:description	"distance is a vector property that is a measure of remoteness between two points, or minimum remoteness between lines or surfaces."@en .
+qu-quantity:height	core:name	"height"^^xsd:string .
+qu-quantity:height	core:description	"height is a distance between the bottom and the top of something."@en .
+qu-quantity:diameter	core:name	"diameter"^^xsd:string .
+qu-quantity:diameter	core:description	"diameter is a distance between two opposite points on an idealized cylindrical surface. It may be an average over the axis of the surface and around the cross section or a location dependent variable."@en .
+qu-quantity:halfThickness	core:name	"half-thickness"^^xsd:string .
+qu-quantity:halfThickness	core:description	"half-thickness is a thickness "@en .
+qu-quantity:meanFreePath	core:name	"mean free path"^^xsd:string .
+qu-quantity:meanFreePath	core:description	"mean free path is a length "@en .
+qu-quantity:length	core:name	"length"^^xsd:string .
+qu-quantity:length	core:description	"length is a distance measured in the direction of the longest side of an item or in the direction of its main axis"@en .
+qu-quantity:radius	core:name	"radius"^^xsd:string .
+qu-quantity:radius	core:description	"radius is a distance between a center point an a point on a circle or circle segment around that center point"@en .
+qu-quantity:focalDistance	core:name	"focal distance"^^xsd:string .
+qu-quantity:focalDistance	core:description	"focal distance is a distance "@en .
+qu-quantity:imageDistance	core:name	"image distance"^^xsd:string .
+qu-quantity:imageDistance	core:description	"image distance is a distance "@en .
+qu-quantity:waveLength	core:name	"wave length"^^xsd:string .
+qu-quantity:waveLength	core:description	"wave length is a length of one cycle of a wave"@en .
+qu-quantity:radiusOfCurvature	core:name	"radius of curvature"^^xsd:string .
+qu-quantity:radiusOfCurvature	core:description	"radius of curvature is a radius "@en .
+qu-quantity:soundParticleDisplacement	core:name	"sound particle displacement"^^xsd:string .
+qu-quantity:soundParticleDisplacement	core:description	"sound particle displacement is a length "@en .
+qu-quantity:width	core:name	"width"^^xsd:string .
+qu-quantity:width	core:description	"width is a distance of an item defined orthogonal to its length and height."@en .
+qu-quantity:migrationLength	core:name	"migration length"^^xsd:string .
+qu-quantity:migrationLength	core:description	"migration length is a length "@en .
+qu-quantity:diffusionLength	core:name	"diffusion length"^^xsd:string .
+qu-quantity:diffusionLength	core:description	"diffusion length is a length "@en .
+qu-quantity:objectDistance	core:name	"object distance"^^xsd:string .
+qu-quantity:objectDistance	core:description	"object distance is a distance between an object and a lens"@en .
+qu-quantity:frequency	core:name	"frequency"^^xsd:string .
+qu-quantity:frequency	core:description	"frequency is a property that is a number of occurrences per time. Typically for a periodic phenomenon (f = 1/T  where T is a period of one cycle)."@en .
+qu-quantity:thermalConductivity	core:name	"thermal conductivity"^^xsd:string .
+qu-quantity:thermalConductivity	core:description	"thermal conductivity is a property that is a quantity of heat energy transferred through a unit of cross sectional area due to a unit of differential temperature. In other words it is the thermal conductance per unit of cross sectional area. It is an areal heat flow rate divided by temper"@en .
+qu-quantity:molarHeatCapacity	core:name	"molar heat capacity"^^xsd:string .
+qu-quantity:molarHeatCapacity	core:description	"molar heat capacity is a property that is a heat capacity per molar amount of a substance."@en .
+qu-quantity:molarEntropy	core:name	"molar entropy"^^xsd:string .
+qu-quantity:molarEntropy	core:description	"Amount of entropy present in a system per unit amount of substance."@en .
+qu-quantity:quantityOfLight	core:name	"quantity of light"^^xsd:string .
+qu-quantity:quantityOfLight	core:description	"quantity of light is a property "@en .
+qu-quantity:electricConductance	core:name	"electric conductance"^^xsd:string .
+qu-quantity:electricConductance	core:description	"electric conductance is a property that is the power to conduct electric current. It is the reciprocal of electric resistance. Typically expressed in S"@en .
+qu-quantity:conductance	core:name	"conductance"^^xsd:string .
+qu-quantity:conductance	core:description	"Measure for how easily current flows through a material."@en .
+qu-quantity:reactivePower	core:name	"reactive power"^^xsd:string .
+qu-quantity:reactivePower	core:description	"reactive power is a power that is the imaginary part of the complex power."@en .
+qu-quantity:photonLuminance	core:name	"photon luminance"^^xsd:string .
+qu-quantity:photonLuminance	core:description	"photon luminance is a property "@en .
+qu-quantity:density	core:name	"density"^^xsd:string .
+qu-quantity:density	core:description	"density is a property that is a concentration of matter, measured as a mass per unit volume."@en .
+qu-quantity:surfaceTension	core:name	"surface tension"^^xsd:string .
+qu-quantity:surfaceTension	core:description	"surface tension is a stress that is an interfacial tension in the surface of separation between two fluids."@en .
+qu-quantity:cutOutSpeed	core:name	"cut out speed"^^xsd:string .
+qu-quantity:cutOutSpeed	core:description	"cut out speed is a rotational speed that is the highest speed at which a motor stops producing power."@en .
+qu-quantity:ratedRotationalSpeed	core:name	"rated rotational speed"^^xsd:string .
+qu-quantity:ratedRotationalSpeed	core:description	"rated rotational speed is a rotational speed for which the equipment is designed to operate under specified, rated conditions."@en .
+qu-quantity:maximumRotationalSpeed	core:name	"maximum rotational speed"^^xsd:string .
+qu-quantity:maximumRotationalSpeed	core:description	"maximum rotational speed is a rotational speed that is maximum possible or allowed or obtained."@en .
+qu-quantity:criticalSpeed	core:name	"critical speed"^^xsd:string .
+qu-quantity:criticalSpeed	core:description	"critical speed is a rotational speed that occurs when the frequency of a periodic forcing phenomenon applied to a rotor-bearing support system corresponds to a natural frequency at that system which could cause resonance."@en .
+qu-quantity:fullLoadSpeed	core:name	"full load speed"^^xsd:string .
+qu-quantity:fullLoadSpeed	core:description	"full load speed is a rotational speed that occurs when fully loaded."@en .
+qu-quantity:rotationalSpeedDecay	core:name	"rotational speed decay"^^xsd:string .
+qu-quantity:rotationalSpeedDecay	core:description	"rotational speed decay is a rotational speed that is a decrease from a sound or prosperous rotational speed."@en .
+qu-quantity:rotationalSpeedAtMaximumTorque	core:name	"rotational speed at maximum torque"^^xsd:string .
+qu-quantity:rotationalSpeedAtMaximumTorque	core:description	"rotational speed at maximum torque is a rotational speed that occurs when the delivered torque is maximal."@en .
+qu-quantity:minimumRotationalSpeed	core:name	"minimum rotational speed"^^xsd:string .
+qu-quantity:minimumRotationalSpeed	core:description	"minimum rotational speed is a rotational speed that is minimally occurring or allowed or possible to occur."@en .
+qu-quantity:rotationalSpeed	core:name	"rotational speed"^^xsd:string .
+qu-quantity:rotationalSpeed	core:description	"rotational speed is a property that is the rate of rotation of a material around an axis."@en .
+qu-quantity:slip	core:name	"slip"^^xsd:string .
+qu-quantity:slip	core:description	"slip is a rotational speed that is the difference between the synchronous speed and the actual speed of a rotor relative to the synchronous speed."@en .
+qu-quantity:breakawaySpeed	core:name	"breakaway speed"^^xsd:string .
+qu-quantity:breakawaySpeed	core:description	"breakaway speed is a rotational speed where a significant increase in acceleration occurs. Typically where the rotational speed of a rotor of a turbine really takes off."@en .
+qu-quantity:normalRotationalSpeed	core:name	"normal rotational speed"^^xsd:string .
+qu-quantity:normalRotationalSpeed	core:description	"normal rotational speed is a rotational speed that occurs or is supposed to occur during normal operating conditions."@en .
+qu-quantity:designRotationalSpeed	core:name	"design rotational speed"^^xsd:string .
+qu-quantity:designRotationalSpeed	core:description	"design rotational speed is a rotational speed for which an equipment is designed to operate under specified, design conditions."@en .
+qu-quantity:tripSpeed	core:name	"trip speed"^^xsd:string .
+qu-quantity:tripSpeed	core:description	"trip speed is a rotational speed at which an item stops operating or is intended to stop operating. Typically caused by protection control."@en .
+qu-quantity:criticalBuildUpSpeed	core:name	"critical build-up speed"^^xsd:string .
+qu-quantity:criticalBuildUpSpeed	core:description	"critical build-up speed is a rotational speed that is the lowest speed at which the machine voltage builds up under specified conditions."@en .
+qu-quantity:rotationalSpeedAtNormalOutputPower	core:name	"rotational speed at normal output power"^^xsd:string .
+qu-quantity:rotationalSpeedAtNormalOutputPower	core:description	"rotational speed at normal output power is a rotational speed that occurs or is expected or intended to occur at the normal output power."@en .
+qu-quantity:criticalWhirlingSpeed	core:name	"critical whirling speed"^^xsd:string .
+qu-quantity:criticalWhirlingSpeed	core:description	"critical whirling speed is a rotational speed at which the amplitudes of the vibrations of a machine rotor due to shaft whirling vibration reach their maximum values."@en .
+qu-quantity:overspeed	core:name	"overspeed"^^xsd:string .
+qu-quantity:overspeed	core:description	"overspeed is a rotational speed in access of sound or prosperous rotational speed."@en .
+qu-quantity:prepressurizationRotationalSpeed	core:name	"prepressurization rotational speed"^^xsd:string .
+qu-quantity:prepressurizationRotationalSpeed	core:description	"prepressurization rotational speed is a rotational speed to start a turbine created by prepressurization. A compressed air starter is used to spin the turbine up to a set speed."@en .
+qu-quantity:rotationalSpeedAtMaximumOutputPower	core:name	"rotational speed at maximum output power"^^xsd:string .
+qu-quantity:rotationalSpeedAtMaximumOutputPower	core:description	"rotational speed at maximum output power is a rotational speed that occurs or is expected or intended to occur at the maximum output power."@en .
+qu-quantity:synchronousSpeed	core:name	"synchronous speed"^^xsd:string .
+qu-quantity:synchronousSpeed	core:description	"synchronous speed is a rotational speed that results from the frequency of the system to which the machine is connected and either the number of poles or the number of projections in the machine."@en .
+qu-quantity:criticalTorsionalSpeed	core:name	"critical torsional speed"^^xsd:string .
+qu-quantity:criticalTorsionalSpeed	core:description	"critical torsional speed is a rotational speed at which the amplitudes of the vibrations of a machine rotor due to shaft torsional vibration reach their maximum values."@en .
+qu-quantity:molarAbsorptionCoefficient	core:name	"molar absorption coefficient"^^xsd:string .
+qu-quantity:molarAbsorptionCoefficient	core:description	"molar absorption coefficient is a property "@en .
+qu-quantity:reluctance	core:name	"reluctance"^^xsd:string .
+qu-quantity:reluctance	core:description	"reluctance is a property that is the quotient of the magnetomotive force by the associated magnetic flux"@en .
+qu-quantity:angle	core:name	"angle"^^xsd:string .
+qu-quantity:angle	core:description	"angle is a property difference that is the difference between the direction of a vector and the direction of another vector. It can be calculated as the ratio of the length of the arc of the circle included between two half-lines that terminate at the same point."@en .
+qu-quantity:chargeDensity	core:name	"charge density"^^xsd:string .
+qu-quantity:chargeDensity	core:description	"charge density is a property that is an electric charge per unit of volume."@en .
+qu-quantity:molarVolume	core:name	"molar volume"^^xsd:string .
+qu-quantity:molarVolume	core:description	"molar volume is a property that is a volume per mole of substance."@en .
+qu-quantity:elementaryCharge	core:name	"elementary charge"^^xsd:string .
+qu-quantity:elementaryCharge	core:description	"elementary charge is an electric charge "@en .
+qu-quantity:electricCharge	core:name	"electric charge"^^xsd:string .
+qu-quantity:electricCharge	core:description	"electric charge is a property that is a quantity of electricity that flows in an electric current or that can be accumulated on the surface of dissimilar non-metallic surfaces when rubbed together."@en .
+qu-quantity:electricFlux	core:name	"electric flux"^^xsd:string .
+qu-quantity:electricFlux	core:description	"electric flux is a property that is the scalar product of an electric flux density and a surface element across that surface element."@en .
+qu-quantity:volumicActivity	core:name	"volumic activity"^^xsd:string .
+qu-quantity:volumicActivity	core:description	"volumic activity is a property "@en .
+qu-quantity:effectiveMultiplicationFactor	core:name	"effective multiplication factor"^^xsd:string .
+qu-quantity:effectiveMultiplicationFactor	core:description	"effective multiplication factor is a multiplication factor "@en .
+qu-quantity:gruneisenParameter	core:name	"Grüneisen parameter"^^xsd:string .
+qu-quantity:gruneisenParameter	core:description	"Grüneisen parameter is a property "@en .
+qu-quantity:grashofNumberForMassTransfer	core:name	"Grashof number for mass transfer"^^xsd:string .
+qu-quantity:grashofNumberForMassTransfer	core:description	"Grashof number for mass transfer is a Grashof number "@en .
+qu-quantity:directionalSpectralDimensionless	core:name	"directional spectral emissivity"^^xsd:string .
+qu-quantity:directionalSpectralDimensionless	core:description	"directional spectral emissivity is an emissivity "@en .
+qu-quantity:orderOfReflexion	core:name	"order of reflexion"^^xsd:string .
+qu-quantity:orderOfReflexion	core:description	"order of reflexion is a property "@en .
+qu-quantity:magneticQuantumNumber	core:name	"magnetic quantum number"^^xsd:string .
+qu-quantity:magneticQuantumNumber	core:description	"magnetic quantum number is a property "@en .
+qu-quantity:d6060	core:name	"d60/60"^^xsd:string .
+qu-quantity:d6060	core:description	"d60/60 is a specific gravity where the material is at 60 degree F relative to water at 60 degree F"@en .
+qu-quantity:apiGravity	core:name	"API gravity"^^xsd:string .
+qu-quantity:apiGravity	core:description	"API gravity is a specific gravity that is defined in ISO 1998 def. 2-003"@en .
+qu-quantity:hyperfineStructureQuantumNumber	core:name	"hyperfine structure quantum number"^^xsd:string .
+qu-quantity:hyperfineStructureQuantumNumber	core:description	"hyperfine structure quantum number is a property "@en .
+qu-quantity:alfvenNumber	core:name	"Alfven number"^^xsd:string .
+qu-quantity:alfvenNumber	core:description	"Alfven number is a property "@en .
+qu-quantity:seatingCapacity	core:name	"seating capacity"^^xsd:string .
+qu-quantity:seatingCapacity	core:description	"seating capacity is a number of people that can sit in a specified area or place."@en .
+qu-quantity:absorbance	core:name	"absorbance"^^xsd:string .
+qu-quantity:absorbance	core:description	"absorbance of radiant energy absorbed by a body to the corresponding absorption of a blackbody at the same temperature. Absorbance equals emittance on bodies whose temperature is not changing. (A = 1 - R - T, where R is the reflectance and T is the transmittance.)."@en .
+qu-quantity:schmidtNumber	core:name	"Schmidt number"^^xsd:string .
+qu-quantity:schmidtNumber	core:description	"Schmidt number is a dimensionless property that represents the ratio of momentum to molecular diffusivity."@en .
+qu-quantity:shortRangeOrderParameter	core:name	"short-range order parameter"^^xsd:string .
+qu-quantity:shortRangeOrderParameter	core:description	"short-range order parameter is a property "@en .
+qu-quantity:reactivity	core:name	"reactivity"^^xsd:string .
+qu-quantity:reactivity	core:description	"reactivity is an ability to form a chemical bond or the speed with which a chemical reaction takes place."@en .
+qu-quantity:relativePermittivity	core:name	"relative permittivity"^^xsd:string .
+qu-quantity:relativePermittivity	core:description	"relative permittivity is a ratio of the capacitance of a capacitor, in which the space between and around the electrodes is entirely and exclusively filled with the insulating material in question, to the capacitance of the same configuration of electrodes in vacuum."@en .
+qu-quantity:dissipationFactor	core:name	"dissipation factor"^^xsd:string .
+qu-quantity:dissipationFactor	core:description	"dissipation factor is a factor "@en .
+qu-quantity:lethargy	core:name	"lethargy"^^xsd:string .
+qu-quantity:lethargy	core:description	"lethargy is a factor "@en .
+qu-quantity:eulerNumber	core:name	"Euler number"^^xsd:string .
+qu-quantity:eulerNumber	core:description	"Euler number is a property "@en .
+qu-quantity:canonicalPartitionFunction	core:name	"canonical partition function"^^xsd:string .
+qu-quantity:canonicalPartitionFunction	core:description	"canonical partition function is a mathematical function "@en .
+qu-quantity:standardEquilibriumConstant	core:name	"standard equilibrium constant"^^xsd:string .
+qu-quantity:standardEquilibriumConstant	core:description	"standard equilibrium constant is an equilibrium constant "@en .
+qu-quantity:landauGinzburgNumber	core:name	"Landau-Ginzburg number"^^xsd:string .
+qu-quantity:landauGinzburgNumber	core:description	"Landau-Ginzburg number is a property "@en .
+qu-quantity:thermalUtilizationFactor	core:name	"thermal utilization factor"^^xsd:string .
+qu-quantity:thermalUtilizationFactor	core:description	"thermal utilization factor is a factor "@en .
+qu-quantity:cowlingNumber	core:name	"Cowling number"^^xsd:string .
+qu-quantity:cowlingNumber	core:description	"Cowling number is a property "@en .
+qu-quantity:relativeMassDensity	core:name	"relative mass density"^^xsd:string .
+qu-quantity:relativeMassDensity	core:description	"relative density is a relative property that is a ratio between a density and a reference density. Typically relative to the density of water at 0 degree Celcius and 1 bar."@en .
+qu-quantity:d1515	core:name	"d15/15"^^xsd:string .
+qu-quantity:d1515	core:description	"d15/15 is a specific gravity where the material is at 15 degree C relative to water at 15 degree C"@en .
+qu-quantity:operatingSpecificGravity	core:name	"operating specific gravity"^^xsd:string .
+qu-quantity:operatingSpecificGravity	core:description	"operating specific gravity is a specific gravity at operating conditions."@en .
+qu-quantity:longRangeOrderParameter	core:name	"long-range order parameter"^^xsd:string .
+qu-quantity:longRangeOrderParameter	core:description	"long-range order parameter is a property "@en .
+qu-quantity:spectralTransmissionFactor	core:name	"spectral transmission factor"^^xsd:string .
+qu-quantity:spectralTransmissionFactor	core:description	"spectral transmission factor is a transmission factor "@en .
+qu-quantity:shearStrain	core:name	"shear strain"^^xsd:string .
+qu-quantity:shearStrain	core:description	"shear strain is a strain "@en .
+qu-quantity:ratioOfTheSpecificHeatCapacities	core:name	"ratio of the specific heat capacities"^^xsd:string .
+qu-quantity:ratioOfTheSpecificHeatCapacities	core:description	"ratio of the specific heat capacities is a ratio "@en .
+qu-quantity:grandCanonicalPartitionFunction	core:name	"grand-canonical partition function"^^xsd:string .
+qu-quantity:grandCanonicalPartitionFunction	core:description	"grand-canonical partition function is a canonical partition function "@en .
+qu-quantity:spinAngularMomentumQuantumNumber	core:name	"spin angular momentum quantum number"^^xsd:string .
+qu-quantity:spinAngularMomentumQuantumNumber	core:description	"spin angular momentum quantum number is a property "@en .
+qu-quantity:orbitalAngularMomentumQuantumNumber	core:name	"orbital angular momentum quantum number"^^xsd:string .
+qu-quantity:orbitalAngularMomentumQuantumNumber	core:description	"orbital angular momentum quantum number is a property "@en .
+qu-quantity:multiplicationFactor	core:name	"multiplication factor"^^xsd:string .
+qu-quantity:multiplicationFactor	core:description	"multiplication factor is a factor "@en .
+qu-quantity:relativeMassExcess	core:name	"relative mass excess"^^xsd:string .
+qu-quantity:relativeMassExcess	core:description	"relative mass excess is a property "@en .
+qu-quantity:relativeDensity	core:name	"relative density"^^xsd:string .
+qu-quantity:relativeDensity	core:description	"relative density is a relative property that is a ratio between a density and a reference density. Typically relative to the density of water at 0 degree Celcius and 1 bar."@en .
+qu-quantity:relativePermeability	core:name	"relative permeability"^^xsd:string .
+qu-quantity:relativePermeability	core:description	"relative permeability is a relative property "@en .
+qu-quantity:nuclearSpinQuantumNumber	core:name	"nuclear spin quantum number"^^xsd:string .
+qu-quantity:nuclearSpinQuantumNumber	core:description	"nuclear spin quantum number is a property "@en .
+qu-quantity:froudeNumber	core:name	"Froude number"^^xsd:string .
+qu-quantity:froudeNumber	core:description	"Froude number is a dimensionless property that is a dimensionless parameter for agitation and expressed in impeller diameter. times agitator speed exp.2 , divided by the magnitude of gravity factor."@en .
+qu-quantity:fourierNumber	core:name	"Fourier number"^^xsd:string .
+qu-quantity:fourierNumber	core:description	"Fourier number is a property "@en .
+qu-quantity:relativeMassDefect	core:name	"relative mass defect"^^xsd:string .
+qu-quantity:relativeMassDefect	core:description	"relative mass defect is a property "@en .
+qu-quantity:opticalDensity	core:name	"optical density"^^xsd:string .
+qu-quantity:opticalDensity	core:description	"optical density is a ratio "@en .
+qu-quantity:spectralAbsorptionFactor	core:name	"spectral absorption factor"^^xsd:string .
+qu-quantity:spectralAbsorptionFactor	core:description	"spectral absorption factor is a factor "@en .
+qu-quantity:machNumber	core:name	"Mach number"^^xsd:string .
+qu-quantity:machNumber	core:description	"Mach number is a dimensionless property "@en .
+qu-quantity:frictionFactor	core:name	"friction factor"^^xsd:string .
+qu-quantity:frictionFactor	core:description	"friction factor is a factor that is a measure for a relative roughness of a surface, a flow pattern and a Reynolds number"@en .
+qu-quantity:grashofNumber	core:name	"Grashof number"^^xsd:string .
+qu-quantity:grashofNumber	core:description	"Grashof number is a property "@en .
+qu-quantity:nusseltNumber	core:name	"Nusselt number"^^xsd:string .
+qu-quantity:nusseltNumber	core:description	"Nusselt number is a dimensionless property that is a measure for mass transfer within an agitation process."@en .
+qu-quantity:electricSusceptibility	core:name	"electric susceptibility"^^xsd:string .
+qu-quantity:electricSusceptibility	core:description	"electric susceptibility is a property that can be calculated as chi = epsilon - 1"@en .
+qu-quantity:spectralRadianceFactor	core:name	"spectral radiance factor"^^xsd:string .
+qu-quantity:spectralRadianceFactor	core:description	"spectral radiance factor is a factor "@en .
+qu-quantity:knudsenNumber	core:name	"Knudsen number"^^xsd:string .
+qu-quantity:knudsenNumber	core:description	"Knudsen number is a property "@en .
+qu-quantity:stantonNumber	core:name	"Stanton number"^^xsd:string .
+qu-quantity:stantonNumber	core:description	"Stanton number is a property "@en .
+qu-quantity:molecularPartitionFunction	core:name	"molecular partition function"^^xsd:string .
+qu-quantity:molecularPartitionFunction	core:description	"molecular partition function is a property "@en .
+qu-quantity:refractiveIndex	core:name	"refractive index"^^xsd:string .
+qu-quantity:refractiveIndex	core:description	"refractive index is an index "@en .
+qu-quantity:number	core:name	"number"^^xsd:string .
+qu-quantity:number	core:description	"number is a quantity that is a quantity of discrete, countable things."@en .
+qu-quantity:strouhalNumber	core:name	"Strouhal number"^^xsd:string .
+qu-quantity:strouhalNumber	core:description	"Strouhal number is a property "@en .
+qu-quantity:transmissionFactor	core:name	"transmission factor"^^xsd:string .
+qu-quantity:transmissionFactor	core:description	"transmission factor is a factor "@en .
+qu-quantity:isentropicExponent	core:name	"isentropic exponent"^^xsd:string .
+qu-quantity:isentropicExponent	core:description	"isentropic exponent is an exponent "@en .
+qu-quantity:numberRequired	core:name	"number required"^^xsd:string .
+qu-quantity:numberRequired	core:description	"number required is a number of things that are required. This can be a number of things in a collection of things or a number of things that are identical to the specified single thing or that satisfy the same specifications as the specified single thing."@en .
+qu-quantity:averageLogarithmicEnergyDecrement	core:name	"average logarithmic energy decrement"^^xsd:string .
+qu-quantity:averageLogarithmicEnergyDecrement	core:description	"average logarithmic energy decrement is a factor "@en .
+qu-quantity:linearStrain	core:name	"linear strain"^^xsd:string .
+qu-quantity:linearStrain	core:description	"linear strain is a strain that is a relative elongation resulting from a stress. It is measured by the ratio of change to the total value of the dimension in which the change occurred"@en .
+qu-quantity:pecletNumber	core:name	"Peclet number"^^xsd:string .
+qu-quantity:pecletNumber	core:description	"Peclet number is a dimensionless property that is a heat transfer number and the product of the prandl number and the reynolds number."@en .
+qu-quantity:absorptionFactor	core:name	"absorption factor"^^xsd:string .
+qu-quantity:absorptionFactor	core:description	"absorption factor is a factor "@en .
+qu-quantity:fastFissionFactor	core:name	"fast fission factor"^^xsd:string .
+qu-quantity:fastFissionFactor	core:description	"fast fission factor is a factor "@en .
+qu-quantity:reynoldsNumber	core:name	"Reynolds number"^^xsd:string .
+qu-quantity:reynoldsNumber	core:description	"Reynolds number is a dimensionless property that is the dimensionless ratio between the inertia force and the dynamic force used to describe dynamic similarity."@en .
+qu-quantity:magneticSusceptibility	core:name	"magnetic susceptibility"^^xsd:string .
+qu-quantity:magneticSusceptibility	core:description	"magnetic susceptibility is a factor "@en .
+qu-quantity:relativeElongation	core:name	"relative elongation"^^xsd:string .
+qu-quantity:relativeElongation	core:description	"linear strain is a strain that is a relative elongation resulting from a stress. It is measured by the ratio of change to the total value of the dimension in which the change occurred"@en .
+qu-quantity:gFactorOfAtomOrElectron	core:name	"g-factor of atom or electron"^^xsd:string .
+qu-quantity:gFactorOfAtomOrElectron	core:description	"g-factor of atom or electron is a property "@en .
+qu-quantity:d154	core:name	"d15/4"^^xsd:string .
+qu-quantity:d154	core:description	"d15/4 is a specific gravity where the material is at 15 degree C relative to water at 4 degree C"@en .
+qu-quantity:emissivity	core:name	"emissivity"^^xsd:string .
+qu-quantity:emissivity	core:description	"emissivity is a ratio the relative power of a surface to emit heat by radiation relative to the heat emitted by a blackbody at the same temperature."@en .
+qu-quantity:specificGravity	core:name	"specific gravity"^^xsd:string .
+qu-quantity:specificGravity	core:description	"specific gravity is a ratio of the mass of a material relative to the mass of an equal volume of water at 4 degree C or at another specified temperature and at atmospheric pressure."@en .
+qu-quantity:spectralDimensionless	core:name	"spectral emissivity"^^xsd:string .
+qu-quantity:spectralDimensionless	core:description	"spectral emissivity is an emissivity "@en .
+qu-quantity:lewisNumber	core:name	"Lewis number"^^xsd:string .
+qu-quantity:lewisNumber	core:description	"Lewis number is a property "@en .
+qu-quantity:reflectionFactor	core:name	"reflection factor"^^xsd:string .
+qu-quantity:reflectionFactor	core:description	"reflection factor is a factor "@en .
+qu-quantity:infiniteMediumMultiplicationFactor	core:name	"infinite medium multiplication factor"^^xsd:string .
+qu-quantity:infiniteMediumMultiplicationFactor	core:description	"infinite medium multiplication factor is a multiplication factor "@en .
+qu-quantity:neutronYieldPerFission	core:name	"neutron yield per fission"^^xsd:string .
+qu-quantity:neutronYieldPerFission	core:description	"neutron yield per fission is a yield "@en .
+qu-quantity:fourierNumberForMassTransfer	core:name	"Fourier number for mass transfer"^^xsd:string .
+qu-quantity:fourierNumberForMassTransfer	core:description	"Fourier number for mass transfer is a Fourier number "@en .
+qu-quantity:weberNumber	core:name	"Weber number"^^xsd:string .
+qu-quantity:weberNumber	core:description	"Weber number is a dimensionless property that is the dimensional analysis of bubble break-up in gas-liquid systems."@en .
+qu-quantity:neutronYieldPerAbsorption	core:name	"neutron yield per absorption"^^xsd:string .
+qu-quantity:neutronYieldPerAbsorption	core:description	"neutron yield per absorption is a yield "@en .
+qu-quantity:microcanonicalPartitionFunction	core:name	"microcanonical partition function"^^xsd:string .
+qu-quantity:microcanonicalPartitionFunction	core:description	"microcanonical partition function is a property "@en .
+qu-quantity:rayleighNumber	core:name	"Rayleigh number"^^xsd:string .
+qu-quantity:rayleighNumber	core:description	"Rayleigh number is a property "@en .
+qu-quantity:transmittance	core:name	"transmittance"^^xsd:string .
+qu-quantity:transmittance	core:description	"transmittance of incident radiant energy that passes through a substance."@en .
+qu-quantity:totalAngularMomentumQuantumNumber	core:name	"total angular momentum quantum number"^^xsd:string .
+qu-quantity:totalAngularMomentumQuantumNumber	core:description	"total angular momentum quantum number is a property "@en .
+qu-quantity:cieColorimetricFunctions	core:name	"CIE colorimetric functions"^^xsd:string .
+qu-quantity:cieColorimetricFunctions	core:description	"CIE colorimetric functions is a factor "@en .
+qu-quantity:resonanceEscapeProbability	core:name	"resonance escape probability"^^xsd:string .
+qu-quantity:resonanceEscapeProbability	core:description	"resonance escape probability is a probability that a neutron slowing down will traverse all or some specified portion of the range of resonance energies without being absorbed in an infinity medium."@en .
+qu-quantity:hartmannNumber	core:name	"Hartmann number"^^xsd:string .
+qu-quantity:hartmannNumber	core:description	"Hartmann number is a property "@en .
+qu-quantity:thermalDiffusionFactor	core:name	"thermal diffusion factor"^^xsd:string .
+qu-quantity:thermalDiffusionFactor	core:description	"thermal diffusion factor is a property "@en .
+qu-quantity:reflectance	core:name	"reflectance"^^xsd:string .
+qu-quantity:reflectance	core:description	"reflectance of incident radiant energy that is reflected from a surface."@en .
+qu-quantity:magneticMoment	core:name	"magnetic moment"^^xsd:string .
+qu-quantity:magneticMoment	core:description	"magnetic moment is a property "@en .
+qu-quantity:electromagneticMoment	core:name	"electromagnetic moment"^^xsd:string .
+qu-quantity:electromagneticMoment	core:description	"electromagnetic moment is a property "@en .
+qu-quantity:doseEquivalent	core:name	"dose equivalent"^^xsd:string .
+qu-quantity:doseEquivalent	core:description	"dose equivalent is a property expressed in sievert (Sv)"@en .
+qu-quantity:magneticFluxDensity	core:name	"magnetic flux density"^^xsd:string .
+qu-quantity:magneticFluxDensity	core:description	"magnetic flux density is a property "@en .
+qu-quantity:magneticPolarization	core:name	"magnetic polarization"^^xsd:string .
+qu-quantity:magneticPolarization	core:description	"magnetic polarization is a property "@en .
+qu-quantity:lowerCriticalMagneticFluxDensity	core:name	"lower critical magnetic flux density"^^xsd:string .
+qu-quantity:lowerCriticalMagneticFluxDensity	core:description	"lower critical magnetic flux density is a magnetic flux density "@en .
+qu-quantity:magneticInduction	core:name	"magnetic induction"^^xsd:string .
+qu-quantity:magneticInduction	core:description	"magnetic induction is a property "@en .
+qu-quantity:ionicStrength	core:name	"ionic strength"^^xsd:string .
+qu-quantity:ionicStrength	core:description	"ionic strength is a property "@en .
+qu-quantity:permeabilityOfVacuum	core:name	"permeability of vacuum"^^xsd:string .
+qu-quantity:permeabilityOfVacuum	core:description	"permeability of vacuum is a permeability "@en .
+qu-quantity:magneticConstant	core:name	"magnetic constant"^^xsd:string .
+qu-quantity:magneticConstant	core:description	"magnetic constant is a property "@en .
+qu-quantity:permeability	core:name	"permeability"^^xsd:string .
+qu-quantity:permeability	core:description	"permeability is a property that is a measure for the possibility to allow material to flow through an item"@en .
+qu-quantity:apparentPower	core:name	"apparent power"^^xsd:string .
+qu-quantity:apparentPower	core:description	"apparent power is a power that is the product of the r.m.s. values of voltage and current at a port."@en .
+qu-quantity:massFlowRate	core:name	"mass flow rate"^^xsd:string .
+qu-quantity:massFlowRate	core:description	"mass flow rate is a flow rate that is a quantity of mass which crosses a given surface area per unit of time."@en .
+qu-quantity:mechanicalImpedance	core:name	"mechanical impedance"^^xsd:string .
+qu-quantity:mechanicalImpedance	core:description	"mechanical impedance is an impedance "@en .
+qu-quantity:thermalConductance	core:name	"thermal conductance"^^xsd:string .
+qu-quantity:thermalConductance	core:description	"Measure for the amount of available states for a system."@en .
+qu-quantity:magneticVectorPotential	core:name	"magnetic vector potential"^^xsd:string .
+qu-quantity:magneticVectorPotential	core:description	"magnetic vector potential is a property "@en .
+qu-quantity:volumeFlowRate	core:name	"volume flow rate"^^xsd:string .
+qu-quantity:volumeFlowRate	core:description	"volume flow rate is a flow rate that is the volumetric throughput per unit of time through a surface. It consists of a flow rate size and a direction."@en .
+qu-quantity:effectiveMass	core:name	"effective mass"^^xsd:string .
+qu-quantity:effectiveMass	core:description	"effective mass is a mass "@en .
+qu-quantity:mass	core:name	"mass"^^xsd:string .
+qu-quantity:mass	core:description	"mass is a property that is a constant that indicates the resistance of a material against acceleration."@en .
+qu-quantity:absorbedDoseRate	core:name	"absorbed dose rate"^^xsd:string .
+qu-quantity:absorbedDoseRate	core:description	"absorbed dose rate is a radiation dose rate that is the rate with which a quantity of radiation is absorbed. Typically expressed in Gy/s."@en .
+qu-quantity:radiationDoseRate	core:name	"radiation dose rate"^^xsd:string .
+qu-quantity:radiationDoseRate	core:description	"radiation dose rate is a dose rate that is the rate with which a quantity of radiation is absorbed. Typically expressed in Gy/s."@en .
+qu-quantity:specificThermodynamicEnergy	core:name	"specific thermodynamic energy"^^xsd:string .
+qu-quantity:specificThermodynamicEnergy	core:description	"specific thermodynamic energy is a property "@en .
+qu-quantity:specificEnergy	core:name	"specific energy"^^xsd:string .
+qu-quantity:specificEnergy	core:description	"specific energy is a ratio of an amount of energy relative to a mass. Typically of the output of a battery."@en .
+qu-quantity:specificEnthalpy	core:name	"specific enthalpy"^^xsd:string .
+qu-quantity:specificEnthalpy	core:description	"specific enthalpy is a property that is an enthalpy per unit of mass. It is representative for a kind of substance."@en .
+qu-quantity:momentOfInertia	core:name	"moment of inertia"^^xsd:string .
+qu-quantity:momentOfInertia	core:description	"moment of inertia is a second order tensor property that is the inertial resistance against acceleration. It is determined for a body about an axis by taking the sum (integral) of the product of its elements of mass and the square of their distances from the axis (I = Integral (r*r*)dm."@en .
+qu-quantity:molarEnergy	core:name	"molar energy"^^xsd:string .
+qu-quantity:molarEnergy	core:description	"Amount of energy present is a system per unit amount of substance."@en .
+qu-quantity:chemicalPotential	core:name	"chemical potential"^^xsd:string .
+qu-quantity:chemicalPotential	core:description	"chemical potential is a property "@en .
+qu-quantity:illuminance	core:name	"illuminance"^^xsd:string .
+qu-quantity:illuminance	core:description	"illuminance is a property that is the quotient of the luminous flux incident on an element of the surface containing the point, by the area of that element"@en .
+qu-quantity:radiance	core:name	"radiance"^^xsd:string .
+qu-quantity:radiance	core:description	"radiance is a radiant intensity the radiant intensity of an element of a surface, divided by the area of the orthogonal projection of this element on a plane perpendicular to the given direction, defined at a point on a surface and in a given direction. Typically measured in watt per steradian"@en .
+qu-quantity:electricDipoleMomentOfMolecule	core:name	"electric dipole moment of molecule"^^xsd:string .
+qu-quantity:electricDipoleMomentOfMolecule	core:description	"electric dipole moment of molecule is an electric dipole moment of the molecules of a kind within a material."@en .
+qu-quantity:electricDipoleMoment	core:name	"electric dipole moment"^^xsd:string .
+qu-quantity:electricDipoleMoment	core:description	"electric dipole moment is a property that is the product of the distance between the two electric poles of a dipole and the magnitude of either pole."@en .
+qu-quantity:molarConductivity	core:name	"molar conductivity"^^xsd:string .
+qu-quantity:molarConductivity	core:description	"molar conductivity is a property "@en .
+qu-quantity:entropy	core:name	"entropy"^^xsd:string .
+qu-quantity:entropy	core:description	"entropy is a thermodynamic property that, for systems in equilibrium is an intrinsic property of the system, functionally related to the measurable coordinates that characterize the system"@en .
+qu-quantity:heatCapacity	core:name	"heat capacity"^^xsd:string .
+qu-quantity:heatCapacity	core:description	"heat capacity is a thermodynamic property that is the derivative of heat added to a material and the resulting increase in temperature. When the temperature of a system is increased by dT as a result of the addition of a small quantity of heat dQ, the quantity dQ/dT is the heat capacity (C = dQ/dT)."@en .
+qu-quantity:repetency	core:name	"repetency"^^xsd:string .
+qu-quantity:repetency	core:description	"repetency is a number per length that is the reciproque of a wave length."@en .
+qu-quantity:curvature	core:name	"curvature"^^xsd:string .
+qu-quantity:curvature	core:description	"curvature is a property that is the reciprocal of a radius of curvature (kappa = 1/rho). Typically at a point - see ISO 10303-104:2000 - 6.3.30."@en .
+qu-quantity:numberPerLength	core:name	"number per length"^^xsd:string .
+qu-quantity:numberPerLength	core:description	"number per length is a property that is a number of countable items per unit of length"@en .
+qu-quantity:capacitance	core:name	"capacitance"^^xsd:string .
+qu-quantity:capacitance	core:description	"capacitance is a property that is the quotient of the current by the time derivative of the voltage or a charge divided by a potential difference."@en .
+qu-quantity:radiantIntensity	core:name	"radiant intensity"^^xsd:string .
+qu-quantity:radiantIntensity	core:description	"radiant intensity is a property "@en .
+qu-quantity:areicElectricCurrent	core:name	"areic electric current"^^xsd:string .
+qu-quantity:areicElectricCurrent	core:description	"areic electric current is an electric current rate "@en .
+qu-quantity:currentDensity	core:name	"current density"^^xsd:string .
+qu-quantity:currentDensity	core:description	"current density is an areic electric current "@en .
+qu-quantity:pressureCoefficient	core:name	"pressure coefficient"^^xsd:string .
+qu-quantity:pressureCoefficient	core:description	"pressure coefficient is a property that is an increase in pressure per increase of a unit of temperature"@en .
+qu-quantity:dynamicViscosity	core:name	"dynamic viscosity"^^xsd:string .
+qu-quantity:dynamicViscosity	core:description	"dynamic viscosity is a viscosity that is a resistance to change of form."@en .
+qu-quantity:specificHeatCapacity	core:name	"specific heat capacity"^^xsd:string .
+qu-quantity:specificHeatCapacity	core:description	"specific heat capacity is a property that is a heat content increase per unit of mass per unit of temperature."@en .
+qu-quantity:specificEntropy	core:name	"specific entropy"^^xsd:string .
+qu-quantity:specificEntropy	core:description	"specific entropy is a property that is an entropy per unit of mass. It is representative for a kind of substance."@en .
+qu-quantity:thermalResistance	core:name	"thermal resistance"^^xsd:string .
+qu-quantity:thermalResistance	core:description	"thermal resistance is a property that is a resistance against heat transfer. It is equal to a temperature difference divided by heat flow rate."@en .
+qu-quantity:permittivity	core:name	"permittivity"^^xsd:string .
+qu-quantity:permittivity	core:description	"permittivity is a property that is correlated with an electric flux density epsilon and an electric field strength E as permittivity D = electric flux density.electric field strength (D = epsilon.E)."@en .
+qu-quantity:permittivityOfVacuum	core:name	"permittivity of vacuum"^^xsd:string .
+qu-quantity:permittivityOfVacuum	core:description	"permittivity of vacuum is a permittivity that is a capacitance per unit of length"@en .
+qu-quantity:humidity	core:name	"humidity"^^xsd:string .
+qu-quantity:humidity	core:description	"humidity is a concentration being a quantity of water per quantity of vapor."@en .
+qu-quantity:piano	core:name	"PIANO"^^xsd:string .
+qu-quantity:piano	core:description	"PIANO is a concentration of the sum of paraffines, isoparaffines, aromatics, naphthenes and olefins"@en .
+qu-quantity:maximumAllowableConcentration	core:name	"maximum allowable concentration"^^xsd:string .
+qu-quantity:maximumAllowableConcentration	core:description	"maximum allowable concentration is a concentration of a substance that is the maximum that a human may be exposed to during a given period of time. For example, for a normal working week of five days, eight hours per day, ozone has a MAC-value of 0,06 ppm (parts per million, or mg/L). For 15 minutes, the MAC-value is 0,3 ppm."@en .
+qu-quantity:bsW	core:name	"BS&W"^^xsd:string .
+qu-quantity:bsW	core:description	"BS&W is a concentration "@en .
+qu-quantity:massPerVolume	core:name	"mass per volume"^^xsd:string .
+qu-quantity:massPerVolume	core:description	"mass per volume is a concentration of the mass of a component in the total volume of a material."@en .
+qu-quantity:concentration	core:name	"concentration"^^xsd:string .
+qu-quantity:concentration	core:description	"concentration is a fraction that is the relative quantity of a substance in a mixture"@en .
+qu-quantity:moleFraction	core:name	"mole fraction"^^xsd:string .
+qu-quantity:moleFraction	core:description	"mole fraction is a concentration that is the quantity of moles of a substance in a mixture relative to the total quantity of moles of the mixture."@en .
+qu-quantity:moistureContent	core:name	"moisture content"^^xsd:string .
+qu-quantity:moistureContent	core:description	"moisture content is a concentration of moisture in the matter at a point - see ISO 10303-104:2000 - 6.3.23 "@en .
+qu-quantity:volumetricConcentration	core:name	"volumetric concentration"^^xsd:string .
+qu-quantity:volumetricConcentration	core:description	"volumetric concentration is a concentration that is the volume of a component in a substance relative to the total volume of the substance"@en .
+qu-quantity:limitOfDetection	core:name	"limit of detection"^^xsd:string .
+qu-quantity:limitOfDetection	core:description	"limit of detection is a concentration below which a substance cannot be detected by the item"@en .
+qu-quantity:potentialHcl	core:name	"potential HCl"^^xsd:string .
+qu-quantity:potentialHcl	core:description	"potential HCl is a concentration "@en .
+qu-quantity:waterAndSediment	core:name	"water and sediment"^^xsd:string .
+qu-quantity:waterAndSediment	core:description	"water and sediment is a concentration that is defined in ISO 1998 def. 2-009"@en .
+qu-quantity:pna	core:name	"PNA"^^xsd:string .
+qu-quantity:pna	core:description	"PNA is a concentration of the sum of paraffines, naphthenes and aromatics"@en .
+qu-quantity:carbonContent	core:name	"carbon content"^^xsd:string .
+qu-quantity:carbonContent	core:description	"carbon content is a concentration of carbon, both free and bounded."@en .
+qu-quantity:potentialHydrogenSulphide	core:name	"potential hydrogen sulphide"^^xsd:string .
+qu-quantity:potentialHydrogenSulphide	core:description	"potential hydrogen sulphide is a concentration "@en .
+qu-quantity:asphalteneConcentration	core:name	"asphaltene concentration"^^xsd:string .
+qu-quantity:asphalteneConcentration	core:description	"asphaltene concentration is a concentration of asphaltene in a mixture."@en .
+qu-quantity:velocityOrSpeed	core:name	"velocity or speed"^^xsd:string .
+qu-quantity:stressOrPressure	core:name	"stress or pressure"^^xsd:string .
+qu-quantity:specificAcousticImpedance	core:name	"specific acoustic impedance"^^xsd:string .
+qu-quantity:exposureRate	core:name	"exposure rate"^^xsd:string .
+qu-quantity:lengthPerTemperature	core:name	"length per temperature"^^xsd:string .
+qu-quantity:volumeDensityRate	core:name	"volume density rate"^^xsd:string .
+qu-quantity:differentialCrossSection	core:name	"differential cross-section"^^xsd:string .
+qu-quantity:gravitationalCoupling	core:name	"gravitational coupling"^^xsd:string .
+qu-quantity:accousticalImpedance	core:name	"accoustical impedance"^^xsd:string .
+qu-quantity:photonFluxDensity	core:name	"photon flux density"^^xsd:string .
+qu-quantity:thicknessFrequencyProduct	core:name	"thickness frequency product"^^xsd:string .
+qu-quantity:powerGradient	core:name	"power gradient"^^xsd:string .
+qu-quantity:action	core:name	"action"^^xsd:string .
+qu-quantity:electricLineReactance	core:name	"electric line reactance"^^xsd:string .
+qu-quantity:electricLineResistance	core:name	"electric line resistance"^^xsd:string .
+qu-quantity:massicOptical	core:name	"massic optical"^^xsd:string .
+qu-quantity:rotatoryPower	core:name	"rotatory power"^^xsd:string .
+qu-quantity:specificOpticalRotatoryPower	core:name	"specific optical rotatory power"^^xsd:string .
+qu-quantity:areaRelatedTorsionalMoment	core:name	"area-related torsional moment"^^xsd:string .
+qu-quantity:torsionalStiffness	core:name	"torsional stiffness"^^xsd:string .
+qu-quantity:inverseAmount	core:name	"inverse amount"^^xsd:string .
+qu-quantity:electronicDensityOfStates	core:name	"electronic density of states"^^xsd:string .
+qu-quantity:spectralAngularCrossSection	core:name	"spectral angular cross-section"^^xsd:string .
+qu-quantity:molarFlux	core:name	"molar flux"^^xsd:string .
+qu-quantity:enzymaticActivity	core:name	"enzymatic activity"^^xsd:string .
+qu-quantity:molarFlowRate	core:name	"molar flow rate"^^xsd:string .
+qu-quantity:volumicDose	core:name	"volumic dose"^^xsd:string .
+qu-quantity:temperatureDrift	core:name	"temperature drift"^^xsd:string .
+qu-quantity:massRatio	core:name	"mass ratio"^^xsd:string .
+qu-quantity:prandtlNumber	core:name	"Prandtl number"^^xsd:string .
+qu-quantity:spectralLuminousEfficiency	core:name	"spectral luminous efficiency"^^xsd:string .
+qu-quantity:leakageCoefficient	core:name	"leakage coefficient"^^xsd:string .
+qu-quantity:chargeNumberOfIon	core:name	"charge number of ion"^^xsd:string .
+qu-quantity:standardAbsoluteActivityOfBInALiquidOrASolidMixture	core:name	"standard absolute activity of B (in a liquid or a solid mixture)"^^xsd:string .
+qu-quantity:bindingFraction	core:name	"binding fraction"^^xsd:string .
+qu-quantity:principleQuantumNumber	core:name	"principle quantum number"^^xsd:string .
+qu-quantity:numberOfMoleculesOrOtherElementaryEntities	core:name	"number of molecules or other elementary entities"^^xsd:string .
+qu-quantity:degreeOfDissociation	core:name	"degree of dissociation"^^xsd:string .
+qu-quantity:spectralReflectionfactorSpectralReflectance	core:name	"spectral reflectionfactor,spectral reflectance"^^xsd:string .
+qu-quantity:gFactorOfNucleus	core:name	"g-factor of nucleus"^^xsd:string .
+qu-quantity:volumeOrBulkStrain	core:name	"volume or bulk strain"^^xsd:string .
+qu-quantity:coordinatesTrichromatic	core:name	"coordinates trichromatic"^^xsd:string .
+qu-quantity:internalConversionFactor	core:name	"internal conversion factor"^^xsd:string .
+qu-quantity:currentFractionOfIonB	core:name	"current fraction of ion B"^^xsd:string .
+qu-quantity:packingFraction	core:name	"packing fraction"^^xsd:string .
+qu-quantity:grandPartitionFunction	core:name	"grand partition function"^^xsd:string .
+qu-quantity:standardAbsoluteActivityOfSolventAEspeciallyInADiluteSolution	core:name	"standard absolute activity of solvent A (especially in a dilute solution)"^^xsd:string .
+qu-quantity:nonLeakageProbability	core:name	"non leakage probability"^^xsd:string .
+qu-quantity:partitionFunctionOfAMolecule	core:name	"partition function of a molecule"^^xsd:string .
+qu-quantity:massNumber	core:name	"mass number"^^xsd:string .
+qu-quantity:emissivityAtASpecifiedWavelength	core:name	"emissivity at a specified wavelength"^^xsd:string .
+qu-quantity:moleRatioOfSoluteB	core:name	"mole ratio of solute B"^^xsd:string .
+qu-quantity:coefficientOfFriction	core:name	"coefficient of friction"^^xsd:string .
+qu-quantity:stoichiometricNumberOfB	core:name	"stoichiometric number of B"^^xsd:string .
+qu-quantity:spectralAbsorptance	core:name	"spectral absorptance"^^xsd:string .
+qu-quantity:couplingCoefficient	core:name	"coupling coefficient"^^xsd:string .
+qu-quantity:dimensionless	core:name	"dimensionless"^^xsd:string .
+qu-quantity:osmoticCoefficientOfTheSolventAEspeciallyInADiluteSolution	core:name	"osmotic coefficient of the solvent A (especially in a dilute solution)"^^xsd:string .
+qu-quantity:activityOfSolventA	core:name	"activity of solvent A"^^xsd:string .
+qu-quantity:stantonNumberForMassTransfer	core:name	"Stanton number for mass transfer"^^xsd:string .
+qu-quantity:pecletNumberForMassTransfer	core:name	"Peclet number for mass transfer"^^xsd:string .
+qu-quantity:activityCoefficientOfBInALiquidAsASolidMixture	core:name	"activity coefficient of B (in a liquid as a solid mixture)"^^xsd:string .
+qu-quantity:restMassOfProton	core:name	"(rest) mass of proton"^^xsd:string .
+qu-quantity:spectralTransmittance	core:name	"spectral transmittance"^^xsd:string .
+qu-quantity:standardAbsoluteActivityOfSoluteBEspeciallyInADiluteSolution	core:name	"standard absolute activity of solute B (especially in a dilute solution)"^^xsd:string .
+qu-quantity:atomicNumber	core:name	"atomic number"^^xsd:string .
+qu-quantity:restMassOfNeutron	core:name	"(rest) mass of neutron"^^xsd:string .
+qu-quantity:relativeMolecularMass	core:name	"relative molecular mass"^^xsd:string .
+qu-quantity:volumeRatio	core:name	"volume ratio"^^xsd:string .
+qu-quantity:restMassOfElectron	core:name	"(rest) mass of electron"^^xsd:string .
+qu-quantity:magneticReynoldsNumber	core:name	"magnetic Reynolds number"^^xsd:string .
+qu-quantity:fineStructureConstant	core:name	"fine structure constant"^^xsd:string .
+qu-quantity:protonNumber	core:name	"proton number"^^xsd:string .
+qu-quantity:poissonNumber	core:name	"poisson number"^^xsd:string .
+qu-quantity:standardAbsoluteActivityOfBInAGaseousMixture	core:name	"standard absolute activity of B (in a gaseous mixture)"^^xsd:string .
+qu-quantity:moleFractionOfB	core:name	"mole fraction of B"^^xsd:string .
+qu-quantity:thermalDiffusionRatio	core:name	"thermal diffusion ratio"^^xsd:string .
+qu-quantity:neutronNumber	core:name	"neutron number"^^xsd:string .
+qu-quantity:nusseltNumberForMassTransfer	core:name	"Nusselt number for mass transfer"^^xsd:string .
+qu-quantity:poissonRatio	core:name	"poisson ratio"^^xsd:string .
+qu-quantity:nucleonNumber	core:name	"nucleon number"^^xsd:string .
+qu-quantity:madelungConstant	core:name	"Madelung constant"^^xsd:string .
+qu-quantity:ratioOfTheMassicHeatCapacity	core:name	"ratio of the massic heat capacity"^^xsd:string .
+qu-quantity:luminousEfficiencyAtASpecifiedWavelength	core:name	"luminous efficiency at a specified wavelength"^^xsd:string .
+qu-quantity:debyeWalleFactor	core:name	"Debye-Walle factor"^^xsd:string .
+qu-quantity:activityCoefficientOfSoluteBEspeciallyInADiluteSolution	core:name	"activity coefficient of solute B (especially in a dilute solution)"^^xsd:string .
+qu-quantity:numberOfPairsOfPoles	core:name	"number of pairs of poles"^^xsd:string .
+qu-quantity:dissipance	core:name	"dissipance"^^xsd:string .
+qu-quantity:relativeActivityOfSolventAEspeciallyInADiluteSolution	core:name	"relative activity of solvent A (especially in a dilute solution)"^^xsd:string .
+qu-quantity:transportNumberOfIonB	core:name	"transport number of ion B"^^xsd:string .
+qu-quantity:luminousEfficiency	core:name	"luminous efficiency"^^xsd:string .
+qu-quantity:relativeAtomicMass	core:name	"relative atomic mass"^^xsd:string .
+qu-quantity:mobilityRatio	core:name	"mobility ratio"^^xsd:string .
+qu-quantity:numberOfTurnsInAWinding	core:name	"number of turns in a winding"^^xsd:string .
+qu-quantity:numberOfPhases	core:name	"number of phases"^^xsd:string .
+qu-quantity:pressureRatio	core:name	"pressure ratio"^^xsd:string .
+qu-quantity:hailAmount	core:name	"hail amount"^^xsd:string .
+qu-quantity:hailIntensity	core:name	"hail intensity"^^xsd:string .
+qu-quantity:fluxDensity	core:name	"flux density"^^xsd:string .
+qu-quantity:reciprocalArea	core:name	"reciprocal area"^^xsd:string .
+qu-quantity:temperature	core:name	"temperature"^^xsd:string .
+qu-quantity:spectralConcentrationOfVibrationalModesInTermsOfAngularFrequency	core:name	"spectral concentration of vibrational modes (in terms of angular frequency) "^^xsd:string .
+qu-quantity:massPerTimePerArea	core:name	"mass per time per area"^^xsd:string .
+qu-quantity:molinity	core:name	"Molinity"^^xsd:string .
+qu-quantity:molality	core:name	"Molality"^^xsd:string .
+qu-quantity:holographicMaterialSlabSensitivity	core:name	"holographic material slab sensitivity"^^xsd:string .
+qu-quantity:seebeckCoefficient	core:name	"Seebeck coefficient"^^xsd:string .
+qu-quantity:thomsonCoefficient	core:name	"Thomson coefficient"^^xsd:string .
+qu-quantity:spectralRadiantEnergyDensityInTermsOfWaveLength	core:name	"spectral radiant energy density (in terms of wave length)"^^xsd:string .
+qu-quantity:reciprocalArea	core:name	"reciprocal area"^^xsd:string .
+qu-quantity:stefanBoltzmannConstant	core:name	"Stefan-Boltzmann constant"^^xsd:string .
+qu-quantity:amountOfSubstance	core:name	"amount of substance"^^xsd:string .
+qu-quantity:molarity	core:name	"Molarity"^^xsd:string .

@@ -16,8 +16,8 @@
         a                   bim-sr:Light ;
         a                   owl:NamedIndividual ;
         a                   core:FeatureOfInterest ;
-        rdfs:comment        "Light sensor 1" ;
-        rdfs:label          "NXW Light 1" ;
+        core:description        "Light sensor 1" ;
+        core:name          "NXW Light 1" ;
         core:locatedAt      nxw-location:Location1 ;
         core:hasCapability  [ a                  bim-sr:OnOffCapabililty ;
                               core:hasEffect     [ a                          bim-sr:OnOffEffect ;
@@ -41,16 +41,17 @@
                                                    core:actsOn nxw-foi:nxw-Room1 ;
                                                    core:affects qu:illuminance
                                                  ]
-                            ] .
+                            ] ;
+        core:observesProperty qu:temperature .
 nxw-location:Location1
         a             core:WGS84Location ;
-        rdfs:comment  "Location of first deployment nxw" ;
-        rdfs:label    "Pisa" ;
+        core:description  "Location of first deployment nxw" ;
+        core:name    "Pisa" ;
         geo:alt       "15.0" ;
         geo:lat       "43.720663784" ;
         geo:long      "10.389831774" .
 nxw-foi:nxw-Room1
         a                   core:FeatureOfInterest ;
-        rdfs:comment        "Light sensor 1" ;
-        rdfs:label          "NXW Light 1" ;
+        core:description        "Light sensor 1" ;
+        core:name          "NXW Light 1" ;
         core:hasProperty    qu:humidity , qu:temperature, qu:illuminance .

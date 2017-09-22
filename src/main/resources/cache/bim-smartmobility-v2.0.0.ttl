@@ -1,0 +1,398 @@
+@prefix : <http://www.symbiote-h2020.eu/ontology/bim/smartmobility#> .
+@prefix bim: <http://www.symbiote-h2020.eu/ontology/bim#> .
+@prefix qu: <http://purl.oclc.org/NET/ssnx/qu/qu#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix core: <http://www.symbiote-h2020.eu/ontology/core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://www.symbiote-h2020.eu/ontology/bim/smartmobility> rdf:type owl:Ontology ;
+                                            
+                                            rdfs:label "symbIoTe Smart Mobility Best Practice Information Model"@en ;
+                                            
+                                            owl:versionInfo "v2.0.0 2017/09/04 12:00:00"^^xsd:string ;
+                                            
+                                            rdfs:comment "Smart Mobility part of the Best Practice Information Model of symbIoTe."@en ;
+                                            
+                                            owl:imports <http://www.symbiote-h2020.eu/ontology/core/2.0.0> ;
+                                            
+                                            owl:versionIRI <http://www.symbiote-h2020.eu/ontology/bim/smartmobility/2.0.0> .
+
+
+
+#################################################################
+#
+#    Object Properties
+#
+#################################################################
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#hasObservationType
+
+:hasObservationType rdf:type owl:ObjectProperty ;
+                          
+                          rdfs:range :ObservationType ;
+                          
+                          rdfs:domain core:Observation .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#hasPoIType
+
+:hasPoIType rdf:type owl:ObjectProperty ;
+                  
+                  rdfs:domain :PointOfInterest ;
+                  
+                  rdfs:range :PointOfInterestType .
+
+
+#################################################################
+#
+#    Data properties
+#
+#################################################################
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#hint
+
+:hint rdf:type owl:DatatypeProperty ;
+            
+            rdfs:range xsd:string .
+			
+
+
+#################################################################
+#
+#    Classes
+#
+#################################################################
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#Level
+
+:Level rdf:type owl:Class ;
+             
+             rdfs:subClassOf [ rdf:type owl:Restriction ;
+                               owl:onProperty core:name ;
+                               owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                               owl:onDataRange xsd:string
+                             ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#MovementType
+
+:MovementType rdf:type owl:Class ;
+                    
+                    rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                      owl:onProperty core:name ;
+                                      owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                      owl:onDataRange xsd:string
+                                    ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#ObservationType
+
+:ObservationType rdf:type owl:Class .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#PointOfInterest
+
+:PointOfInterest rdf:type owl:Class ;
+                       
+                       rdfs:subClassOf core:WGS84Location ,
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty :hasPoIType ;
+                                         owl:onClass :PointOfInterestType ;
+                                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                       ],
+									   [ rdf:type owl:Restriction ;
+                                         owl:onProperty core:name ;
+                                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                         owl:onDataRange xsd:string
+                                       ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#PointOfInterestType
+
+:PointOfInterestType rdf:type owl:Class ;
+                           
+                           rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                             owl:onProperty core:name ;
+                                             owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                             owl:onDataRange xsd:string
+                                           ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#Waypoint
+
+:Waypoint rdf:type owl:Class ;
+                
+                rdfs:subClassOf core:WGS84Location ,
+                                [ rdf:type owl:Restriction ;
+                                  owl:onProperty :hint ;
+                                  owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                  owl:onDataRange xsd:string
+                                ] .
+
+###  http://www.symbiote-h2020.eu/ontology/core#Observation
+
+core:Observation                
+                 rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                   owl:onProperty :hasObservationType ;
+                                   owl:onClass :ObservationType ;
+                                   owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                 ] .
+								
+#################################################################
+#
+#    Individuals
+#
+#################################################################
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#artsCenter
+
+:artsCenter rdf:type :PointOfInterestType ,
+                           owl:NamedIndividual ;
+                  
+                  core:name "artsCenter"^^xsd:string .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#bar
+
+:bar rdf:type :PointOfInterestType ,
+                    owl:NamedIndividual ;
+           
+           core:name "bar"^^xsd:string .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#bicycle
+
+:bicycle rdf:type :MovementType ,
+                        owl:NamedIndividual ;
+               
+               core:name "bicycle"^^xsd:string .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#cafe
+
+:cafe rdf:type :PointOfInterestType ,
+                     owl:NamedIndividual ;
+            
+            core:name "cafe"^^xsd:string .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#car
+
+:car rdf:type :MovementType ,
+                    owl:NamedIndividual ;
+           
+           core:name "car"^^xsd:string .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#casino
+
+:casino rdf:type :PointOfInterestType ,
+                       owl:NamedIndividual ;
+              
+              core:name "casino"^^xsd:string .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#cinema
+
+:cinema rdf:type :PointOfInterestType ,
+                       owl:NamedIndividual ;
+              
+              core:name "cinema"^^xsd:string .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#dailyAverage
+
+:dailyAverage rdf:type :ObservationType ,
+                             owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#fastFoodRestaurant
+
+:fastFoodRestaurant rdf:type :PointOfInterestType ,
+                                   owl:NamedIndividual ;
+                          
+                          core:name "fastFoodRestaurant"^^xsd:string .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#foodCourt
+
+:foodCourt rdf:type :PointOfInterestType ,
+                          owl:NamedIndividual ;
+                 
+                 core:name "foodCourt"^^xsd:string .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#forthnightlyAverage
+
+:forthnightlyAverage rdf:type :ObservationType ,
+                                    owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#high
+
+:high rdf:type :Level ,
+                     owl:NamedIndividual ;
+            
+            core:name "high"^^xsd:string .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#hourlyAverage
+
+:hourlyAverage rdf:type :ObservationType ,
+                              owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#jogging
+
+:jogging rdf:type :MovementType ,
+                        owl:NamedIndividual ;
+               
+               core:name "jogging"^^xsd:string .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#library
+
+:library rdf:type :PointOfInterestType ,
+                        owl:NamedIndividual ;
+               
+               core:name "library"^^xsd:string .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#low
+
+:low rdf:type :Level ,
+                    owl:NamedIndividual ;
+           
+           core:name "low"^^xsd:string .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#marketplace
+
+:marketplace rdf:type :PointOfInterestType ,
+                            owl:NamedIndividual ;
+                   
+                   core:name "marketplace"^^xsd:string .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#medium
+
+:medium rdf:type :Level ,
+                       owl:NamedIndividual ;
+              
+              core:name "medium"^^xsd:string .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#monthlyAverage
+
+:monthlyAverage rdf:type :ObservationType ,
+                               owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#nightclub
+
+:nightclub rdf:type :PointOfInterestType ,
+                          owl:NamedIndividual ;
+                 
+                 core:name "nightclub"^^xsd:string .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#none
+
+:none rdf:type :Level ,
+                     owl:NamedIndividual ;
+            
+            core:name "none"^^xsd:string .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#placeOfWorship
+
+:placeOfWorship rdf:type :PointOfInterestType ,
+                               owl:NamedIndividual ;
+                      
+                      core:name "placeOfWorship"^^xsd:string .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#pub
+
+:pub rdf:type :PointOfInterestType ,
+                    owl:NamedIndividual ;
+           
+           core:name "pub"^^xsd:string .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#quarterlyAverage
+
+:quarterlyAverage rdf:type :ObservationType ,
+                                 owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#restaurant
+
+:restaurant rdf:type :PointOfInterestType ,
+                           owl:NamedIndividual ;
+                  
+                  core:name "restaurant"^^xsd:string .
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#truck
+
+:truck rdf:type :MovementType ,
+                      owl:NamedIndividual ;
+             
+             core:name "truck"^^xsd:string .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#variableAverage
+
+:variableAverage rdf:type :ObservationType ,
+                                owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#weeklyAverage
+
+:weeklyAverage rdf:type :ObservationType ,
+                              owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartmobility#yearlyAverage
+
+:yearlyAverage rdf:type :ObservationType ,
+                              owl:NamedIndividual .

@@ -7,20 +7,20 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix align: <http://knowledgeweb.semanticweb.org/heterogeneity/alignment> .
 @prefix time: <http://www.w3.org/2006/time#> .
+@base <http://www.symbiote-h2020.eu/ontology/meta#> .
 
 <http://www.symbiote-h2020.eu/ontology/meta> rdf:type owl:Ontology ;
                                              
                                              rdfs:label "symbIoTe Meta Information Model"@en ;
                                              
-                                             owl:versionInfo "v 1.0.1 2017/08/25 12:00:00"^^xsd:string ;
+                                             owl:versionInfo "v 2.0.0 2017/09/13 12:00:00"^^xsd:string ;
                                              
                                              rdfs:comment "Meta Information Model of the symbIoTe project."@en ;
                                              
                                              owl:imports align: ,
-                                                         <http://www.symbiote-h2020.eu/ontology/core>,
-														 owl:;
+														 <http://www.symbiote-h2020.eu/ontology/core/2.0.0> ;
                                              
-                                             owl:versionIRI <http://www.symbiote-h2020.eu/ontology/meta/1.0.1> .
+                                             owl:versionIRI <http://www.symbiote-h2020.eu/ontology/meta/2.0.0> .
 
 
 #################################################################
@@ -80,9 +80,7 @@
 ###  http://www.symbiote-h2020.eu/ontology/meta#hasMetaAttribute
 
 :hasMetaAttribute rdf:type owl:ObjectProperty ;
-                  
-                  rdfs:domain :AccessAttribute ;
-                  
+
                   rdfs:range :MetaAccessAttribute .
 
 
@@ -90,9 +88,7 @@
 ###  http://www.symbiote-h2020.eu/ontology/meta#hasPopularity
 
 :hasPopularity rdf:type owl:ObjectProperty ;
-               
-               rdfs:domain core:Resource ;
-               
+
                rdfs:range :ResourcePopularity .
 
 
@@ -101,9 +97,7 @@
 
 :hasResource rdf:type owl:ObjectProperty ;
              
-             rdfs:range core:Resource ;
-             
-             rdfs:domain :InterworkingService .
+             rdfs:range core:Resource .
 
 
 
@@ -111,9 +105,7 @@
 
 :hasService rdf:type owl:ObjectProperty ;
             
-            rdfs:range :InterworkingService ;
-            
-            rdfs:domain :Platform .
+            rdfs:range :InterworkingService .
 
 
 
@@ -132,8 +124,6 @@
 
 :hasStatus rdf:type owl:ObjectProperty ;
            
-           rdfs:domain core:Resource ;
-           
            rdfs:range :ResourceStatus .
 
 
@@ -141,10 +131,7 @@
 ###  http://www.symbiote-h2020.eu/ontology/meta#isOwnerOf
 
 :isOwnerOf rdf:type owl:ObjectProperty ;
-           
-           rdfs:range :InformationModel ,
-                      :Platform ;
-           
+
            rdfs:domain :User .
 
 
@@ -153,10 +140,7 @@
 
 :ownedBy rdf:type owl:FunctionalProperty ,
                   owl:ObjectProperty ;
-         
-         rdfs:domain :InformationModel ,
-                     :Platform ;
-         
+
          rdfs:range :User ;
          
          owl:inverseOf :isOwnerOf .
@@ -291,7 +275,7 @@
 
 :trust rdf:type owl:DatatypeProperty ;
        
-       rdfs:range xsd:double .
+       rdfs:range xsd:decimal .
 
 
 
@@ -350,7 +334,7 @@ core:Resource rdfs:subClassOf [ rdf:type owl:Restriction ;
                                                                       [ rdf:type owl:Restriction ;
                                                                         owl:onProperty :trust ;
                                                                         owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                                                        owl:onDataRange xsd:double
+                                                                        owl:onDataRange xsd:decimal
                                                                       ] ,
                                                                       [ rdf:type owl:Restriction ;
                                                                         owl:onProperty :supportsOptionalFeature ;
@@ -398,7 +382,7 @@ core:Resource rdfs:subClassOf [ rdf:type owl:Restriction ;
                             [ rdf:type owl:Restriction ;
                               owl:onProperty core:id ;
                               owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                              owl:onDataRange core:ID
+                              owl:onDataRange xsd:string
                             ] ,
                             [ rdf:type owl:Restriction ;
                               owl:onProperty core:name ;
@@ -415,7 +399,7 @@ core:Resource rdfs:subClassOf [ rdf:type owl:Restriction ;
                   rdfs:subClassOf [ rdf:type owl:Restriction ;
                                     owl:onProperty core:id ;
                                     owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                    owl:onDataRange core:ID
+                                    owl:onDataRange xsd:string
                                   ] ,
                                   [ rdf:type owl:Restriction ;
                                     owl:onProperty :usedBy ;
@@ -489,7 +473,7 @@ core:Resource rdfs:subClassOf [ rdf:type owl:Restriction ;
                          [ rdf:type owl:Restriction ;
                            owl:onProperty core:id ;
                            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                           owl:onDataRange core:ID
+                           owl:onDataRange xsd:string
                          ] ,
                          [ rdf:type owl:Restriction ;
                            owl:onProperty :hasDestinationModel ;
@@ -529,7 +513,7 @@ core:Resource rdfs:subClassOf [ rdf:type owl:Restriction ;
                                        owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
                                      ] ,
                                      [ rdf:type owl:Restriction ;
-                                       owl:onProperty rdfs:comment ;
+                                       owl:onProperty core:description ;
                                        owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
                                        owl:onDataRange rdf:langString
                                      ] .
@@ -547,9 +531,9 @@ core:Resource rdfs:subClassOf [ rdf:type owl:Restriction ;
 :Platform rdf:type owl:Class ;
           
           rdfs:subClassOf [ rdf:type owl:Restriction ;
-                            owl:onProperty rdfs:label ;
-                            owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                            owl:onDataRange rdf:langString
+                            owl:onProperty core:name ;
+                            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                            owl:onDataRange xsd:string
                           ] ,
                           [ rdf:type owl:Restriction ;
                             owl:onProperty :ownedBy ;
@@ -569,7 +553,7 @@ core:Resource rdfs:subClassOf [ rdf:type owl:Restriction ;
                           [ rdf:type owl:Restriction ;
                             owl:onProperty core:id ;
                             owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                            owl:onDataRange core:ID
+                            owl:onDataRange xsd:string
                           ] ,
                           [ rdf:type owl:Restriction ;
                             owl:onProperty :definesAttribute ;
@@ -577,7 +561,7 @@ core:Resource rdfs:subClassOf [ rdf:type owl:Restriction ;
                             owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
                           ] ,
                           [ rdf:type owl:Restriction ;
-                            owl:onProperty rdfs:comment ;
+                            owl:onProperty core:description ;
                             owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
                             owl:onDataRange rdf:langString
                           ] .
@@ -625,7 +609,7 @@ core:Resource rdfs:subClassOf [ rdf:type owl:Restriction ;
       rdfs:subClassOf [ rdf:type owl:Restriction ;
                         owl:onProperty core:id ;
                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                        owl:onDataRange core:ID
+                        owl:onDataRange xsd:string
                       ] ,
                       [ rdf:type owl:Restriction ;
                         owl:onProperty :password ;
@@ -652,22 +636,6 @@ core:Resource rdfs:subClassOf [ rdf:type owl:Restriction ;
                         owl:onClass :AccessAttribute ;
                         owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
                       ] .
-
-
-
-###  http://www.w3.org/2002/07/owl#Ontology
-
-owl:Ontology rdf:type owl:Class ;
-             
-             rdfs:label "Ontology" ;
-             
-             rdfs:subClassOf rdfs:Resource ;
-             
-             rdfs:comment "The class of ontologies." ;
-             
-             rdfs:isDefinedBy owl: .
-
-
 
 
 

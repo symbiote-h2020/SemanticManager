@@ -4,7 +4,107 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+### Policy
+[] a :DocumentManagerPolicy ;
+    :cacheModels true ;
+    :processImports true .
 
+### Base ontologies
+[] a :OntologySpec ;
+    :altURL <cache/rdfs.ttl> ;
+    :publicURI <http://www.w3.org/2000/01/rdf-schema#> .
+
+[] a :OntologySpec ;
+    :altURL <cache/rdf.ttl> ;
+    :publicURI <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+[] a :OntologySpec ;
+    :altURL <cache/owl.ttl> ;
+    :publicURI <http://www.w3.org/2002/07/owl> .
+
+### symbIoTe main ontologies	
+[] a :OntologySpec ;
+    :altURL <ontologies/CoreInformationModel.ttl> ;
+    :publicURI <http://www.symbiote-h2020.eu/ontology/core> .
+	
+[] a :OntologySpec ;
+    :altURL <ontologies/CoreInformationModel.ttl> ;
+    :publicURI <http://www.symbiote-h2020.eu/ontology/core/2.0.0> .	
+	
+[] a :OntologySpec ;
+    :altURL <ontologies/MetaInformationModel.ttl> ;
+    :publicURI <http://www.symbiote-h2020.eu/ontology/meta> .	
+	
+[] a :OntologySpec ;
+    :altURL <ontologies/MetaInformationModel.ttl> ;
+    :publicURI <http://www.symbiote-h2020.eu/ontology/meta/2.0.0> .		
+	
+[] a :OntologySpec ;
+    :altURL <ontologies/BestPracticeInformationModel.ttl> ;
+    :publicURI <http://www.symbiote-h2020.eu/ontology/bim> .
+	
+[] a :OntologySpec ;
+    :altURL <ontologies/BestPracticeInformationModel.ttl> ;
+    :publicURI <http://www.symbiote-h2020.eu/ontology/bim/2.0.0> .	
+	
+### symbIoTe BIM ontologies
+[] a :OntologySpec ;
+    :altURL <cache/bim-property-v2.0.0.ttl> ;
+    :publicURI <http://www.symbiote-h2020.eu/ontology/bim/property> .
+	
+[] a :OntologySpec ;
+    :altURL <cache/bim-property-v2.0.0.ttl> ;
+    :publicURI <http://www.symbiote-h2020.eu/ontology/bim/property/2.0.0> .	
+	
+[] a :OntologySpec ;
+    :altURL <cache/bim-qu-align-v2.0.0.ttl> ;
+    :publicURI <http://www.symbiote-h2020.eu/ontology/bim/qu-align> .
+
+[] a :OntologySpec ;
+    :altURL <cache/bim-qu-align-v2.0.0.ttl> ;
+    :publicURI <http://www.symbiote-h2020.eu/ontology/bim/qu-align/2.0.0> .
+
+[] a :OntologySpec ;
+    :altURL <cache/bim-smartmobility-v2.0.0.ttl> ;
+    :publicURI <http://www.symbiote-h2020.eu/ontology/bim/smartmobility> .
+
+[] a :OntologySpec ;
+    :altURL <cache/bim-smartmobility-v2.0.0.ttl> ;
+    :publicURI <http://www.symbiote-h2020.eu/ontology/bim/smartmobility/2.0.0> .
+
+[] a :OntologySpec ;
+    :altURL <cache/bim-smartresidence-v2.0.0.ttl> ;
+    :publicURI <http://www.symbiote-h2020.eu/ontology/bim/smartresidence> .
+
+[] a :OntologySpec ;
+    :altURL <cache/bim-smartresidence-v2.0.0.ttl> ;
+    :publicURI <http://www.symbiote-h2020.eu/ontology/bim/smartresidence/2.0.0> .
+
+[] a :OntologySpec ;
+    :altURL <cache/bim-smartstadium-v2.0.0.ttl> ;
+    :publicURI <http://www.symbiote-h2020.eu/ontology/bim/smartstadium> .
+
+[] a :OntologySpec ;
+    :altURL <cache/bim-smartstadium-v2.0.0.ttl> ;
+    :publicURI <http://www.symbiote-h2020.eu/ontology/bim/smartstadium/2.0.0> .
+
+[] a :OntologySpec ;
+    :altURL <cache/bim-smartyachting-v2.0.0.ttl> ;
+    :publicURI <http://www.symbiote-h2020.eu/ontology/bim/smartyachting> .
+
+[] a :OntologySpec ;
+    :altURL <cache/bim-smartyachting-v2.0.0.ttl> ;
+    :publicURI <http://www.symbiote-h2020.eu/ontology/bim/smartyachting/2.0.0> .	
+	
+[] a :OntologySpec ;
+    :altURL <cache/bim-unit-v2.0.0.ttl> ;
+    :publicURI <http://www.symbiote-h2020.eu/ontology/bim/unit> .
+
+[] a :OntologySpec ;
+    :altURL <cache/bim-unit-v2.0.0.ttl> ;
+    :publicURI <http://www.symbiote-h2020.eu/ontology/bim/unit/2.0.0> .		
+	
+### Third party ontologies
 [] a :OntologySpec ;
     :altURL <cache/align.owl> ;
     :publicURI <http://knowledgeweb.semanticweb.org/heterogeneity/alignment> .
@@ -15,19 +115,11 @@
 
 [] a :OntologySpec ;
     :altURL <cache/time.owl> ;
-    :publicURI <http://www.w3.org/2006/time#> .
+    :publicURI <http://www.w3.org/2006/time> .
 
 [] a :OntologySpec ;
     :altURL <cache/wgs84_pos.rdf> ;
     :publicURI <http://www.w3.org/2003/01/geo/wgs84_pos#> .
-
-[] a :OntologySpec ;
-    :altURL <cache/rdfs.ttl> ;
-    :publicURI <http://www.w3.org/2000/01/rdf-schema#> .
-
-[] a :OntologySpec ;
-    :altURL <cache/rdf.ttl> ;
-    :publicURI <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
 [] a :OntologySpec ;
     :altURL <cache/qu_2011-06-20.ttl> ;
@@ -40,12 +132,8 @@
 [] a :OntologySpec ;
     :altURL <cache/content.owl> ;
     :publicURI <http://www.w3.org/2011/content#> .	
-	
+
 [] a :OntologySpec ;
-    :altURL <cache/owl.ttl> ;
-    :publicURI <http://www.w3.org/2002/07/owl> .
-
-
-[] a :DocumentManagerPolicy ;
-    :cacheModels true ;
-    :processImports true .
+    :altURL <cache/skos.rdf> ;
+    :publicURI <http://www.w3.org/2004/02/skos/core> .	
+	

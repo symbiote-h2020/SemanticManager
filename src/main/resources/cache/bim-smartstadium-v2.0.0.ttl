@@ -1,0 +1,879 @@
+@prefix : <http://www.symbiote-h2020.eu/ontology/bim/smartstadium#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix core: <http://www.symbiote-h2020.eu/ontology/core#> .
+
+<http://www.symbiote-h2020.eu/ontology/bim/smartstadium> rdf:type owl:Ontology ;
+                                            
+                                            rdfs:label "symbIoTe Smart Stadium Best Practice Information Model"@en ;
+                                            
+                                            owl:versionInfo "v2.0.0 2017/09/13 12:00:00"^^xsd:string ;
+                                            
+                                            rdfs:comment "Smart Stadium part of the Best Practice Information Model of symbIoTe."@en ;
+                                            
+                                            owl:imports <http://www.symbiote-h2020.eu/ontology/core/2.0.0> ;
+                                            
+                                            owl:versionIRI <http://www.symbiote-h2020.eu/ontology/bim/smartstadium/2.0.0> .
+
+#################################################################
+#
+#    Datatypes
+#
+#################################################################
+
+#################################################################
+#
+#    Object Properties
+#
+#################################################################
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#hasAttachment
+
+:hasAttachment rdf:type owl:ObjectProperty ;
+                     
+                     rdfs:range :Attachment .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#hasMessage
+
+:hasMessage rdf:type owl:ObjectProperty ;
+                  
+                  rdfs:range :Message .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#hasOrderItem
+
+:hasOrderItem rdf:type owl:ObjectProperty ;
+                    
+                    rdfs:domain :Order ;
+                    
+                    rdfs:range :OrderItem .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#hasProduct
+
+:hasProduct rdf:type owl:ObjectProperty ;
+                  
+                  rdfs:range :Product ;
+                  
+                  rdfs:domain :Store .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#hasPromotion
+
+:hasPromotion rdf:type owl:ObjectProperty ;
+                    
+                    rdfs:range :Promotion .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#hasSender
+
+:hasSender rdf:type owl:ObjectProperty ;
+                 
+                 rdfs:range :Sender .
+
+
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#referencesProduct
+
+:referencesProduct rdf:type owl:ObjectProperty ;
+                         
+                         rdfs:range :Product .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#referencesPromotion
+
+:referencesPromotion rdf:type owl:ObjectProperty ;
+                            
+                            rdfs:range :Promotion .
+
+
+
+
+#################################################################
+#
+#    Data properties
+#
+#################################################################
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#content
+
+:content rdf:type owl:DatatypeProperty .
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#discount
+
+:discount rdf:type owl:DatatypeProperty ;
+                
+                rdfs:range xsd:decimal .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#end
+
+:end rdf:type owl:DatatypeProperty ;
+           
+           rdfs:range xsd:dateTime .
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#newPrice
+
+:newPrice rdf:type owl:DatatypeProperty ;
+                
+                rdfs:range xsd:decimal .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#picture
+
+:picture rdf:type owl:DatatypeProperty ;
+
+				rdfs:range xsd:base64Binary .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#price
+
+:price rdf:type owl:DatatypeProperty ;
+             
+             rdfs:range xsd:decimal .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#productId
+
+:productId rdf:type owl:DatatypeProperty ;
+                 
+                 rdfs:range xsd:string .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#quantity
+
+:quantity rdf:type owl:DatatypeProperty ;
+                
+                rdfs:range xsd:integer .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#start
+
+:start rdf:type owl:DatatypeProperty ;
+             
+             rdfs:range xsd:dateTime .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#type
+
+:type rdf:type owl:DatatypeProperty ;
+            
+            rdfs:range xsd:string .
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#timestamp
+
+:timestamp rdf:type owl:DatatypeProperty ;
+            
+            rdfs:range xsd:dateTime .
+
+
+
+#################################################################
+#
+#    Classes
+#
+#################################################################
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#Attachment
+
+:Attachment rdf:type owl:Class ;
+                  
+                  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                    owl:onProperty :type ;
+                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                    owl:onDataRange xsd:string
+                                  ] ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty core:name ;
+                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                    owl:onDataRange xsd:string
+                                  ] ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty :content ;
+                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                    owl:onDataRange xsd:base64Binary
+                                  ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#Catalog
+
+:Catalog rdf:type owl:Class ;
+               
+               rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                 owl:onProperty :hasPromotion ;
+                                 owl:onClass :Promotion ;
+                                 owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
+                               ] ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty :hasMessage ;
+                                 owl:onClass :Message ;
+                                 owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
+                               ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#FoodStore
+
+:FoodStore rdf:type owl:Class ;
+                 
+                 rdfs:subClassOf :Store .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#GetCatalogService
+
+:GetCatalogService rdf:type owl:Class ;
+                         
+                         rdfs:subClassOf :PromowallService ,
+                                         [ rdf:type owl:Restriction ;
+                                           owl:onProperty core:hasResultType ;
+                                           owl:hasValue [ rdf:type core:ComplexDatatype ;
+                                                          core:basedOnClass :Catalog ;
+                                                          core:hasProperty [ rdf:type core:ComplexProperty ;
+                                                                             core:basedOnProperty :hasMessage ;
+                                                                             core:hasDatatype [ rdf:type core:ComplexDatatype ;
+                                                                                                core:basedOnClass :Message ;
+                                                                                                core:hasProperty [ rdf:type core:ComplexProperty ;
+                                                                                                                   core:isArray "true"^^xsd:boolean ;
+                                                                                                                   core:basedOnProperty :hasAttachment ;
+                                                                                                                   core:hasDatatype [ rdf:type core:ComplexDatatype ;
+                                                                                                                                      core:basedOnClass :Attachment ;
+                                                                                                                                      core:hasProperty [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                                         core:basedOnProperty core:name ;
+                                                                                                                                                         core:hasDatatype core:string
+                                                                                                                                                       ] ,
+                                                                                                                                                       [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                                         core:basedOnProperty :type ;
+                                                                                                                                                         core:hasDatatype core:string
+                                                                                                                                                       ] ,
+                                                                                                                                                       [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                                         core:basedOnProperty :content ;
+                                                                                                                                                         core:hasDatatype core:base64Binary
+                                                                                                                                                       ]
+                                                                                                                                    ]
+                                                                                                                 ] ,
+                                                                                                                 [ rdf:type core:PrimitiveProperty ;
+                                                                                                                   core:basedOnProperty :content ;
+                                                                                                                   core:hasDatatype core:string
+                                                                                                                 ] ,
+                                                                                                                 [ rdf:type core:PrimitiveProperty ;
+                                                                                                                   core:basedOnProperty :timestamp ;
+                                                                                                                   core:hasDatatype core:dateTime
+                                                                                                                 ] ,
+                                                                                                                 [ rdf:type core:ComplexProperty ;
+                                                                                                                   core:basedOnProperty :hasSender ;
+                                                                                                                   core:hasDatatype [ rdf:type core:ComplexDatatype ;
+                                                                                                                                      core:basedOnClass :Sender ;
+                                                                                                                                      core:hasProperty [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                                         core:basedOnProperty core:name ;
+                                                                                                                                                         core:hasDatatype core:string
+                                                                                                                                                       ]
+                                                                                                                                    ]
+                                                                                                                 ]
+                                                                                              ]
+                                                                           ] ,
+                                                                           [ rdf:type core:ComplexProperty ;
+                                                                             core:basedOnProperty :hasPromotion ;
+                                                                             core:hasDatatype [ rdf:type core:ComplexDatatype ;
+                                                                                                core:isArray "true"^^xsd:boolean ;
+                                                                                                core:basedOnClass :Promotion ;
+                                                                                                core:hasProperty [ rdf:type core:PrimitiveProperty ;
+                                                                                                                   core:basedOnProperty core:id ;
+                                                                                                                   core:hasDatatype core:string
+                                                                                                                 ] ,
+                                                                                                                 [ rdf:type core:PrimitiveProperty ;
+                                                                                                                   core:basedOnProperty :start ;
+                                                                                                                   core:hasDatatype core:dateTime
+                                                                                                                 ] ,
+                                                                                                                 [ rdf:type core:PrimitiveProperty ;
+                                                                                                                   core:basedOnProperty :newPrice ;
+                                                                                                                   core:hasDatatype core:decimal
+                                                                                                                 ] ,
+                                                                                                                 [ rdf:type core:PrimitiveProperty ;
+                                                                                                                   core:basedOnProperty :end ;
+                                                                                                                   core:hasDatatype core:dateTime
+                                                                                                                 ] ,
+                                                                                                                 [ rdf:type core:PrimitiveProperty ;
+                                                                                                                   core:basedOnProperty core:name ;
+                                                                                                                   core:hasDatatype core:string
+                                                                                                                 ] ,
+                                                                                                                 [ rdf:type core:ComplexProperty ;
+                                                                                                                   core:basedOnProperty :referencesProduct ;
+                                                                                                                   core:hasDatatype [ rdf:type core:ComplexDatatype ;
+                                                                                                                                      core:basedOnClass :Product ;
+                                                                                                                                      core:hasProperty [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                                         core:basedOnProperty :picture ;
+                                                                                                                                                         core:hasDatatype core:base64Binary
+                                                                                                                                                       ] ,
+                                                                                                                                                       [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                                         core:basedOnProperty :price ;
+                                                                                                                                                         core:hasDatatype core:decimal
+                                                                                                                                                       ] ,
+                                                                                                                                                       [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                                         core:basedOnProperty core:id ;
+                                                                                                                                                         core:hasDatatype core:string
+                                                                                                                                                       ] ,
+                                                                                                                                                       [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                                         core:basedOnProperty core:name ;
+                                                                                                                                                         core:hasDatatype core:string
+                                                                                                                                                       ]
+                                                                                                                                    ]
+                                                                                                                 ] ,
+                                                                                                                 [ rdf:type core:PrimitiveProperty ;
+                                                                                                                   core:basedOnProperty :discount ;
+                                                                                                                   core:hasDatatype core:decimal
+                                                                                                                 ]
+                                                                                              ]
+                                                                           ]
+                                                        ]
+                                         ] ,
+                                         [ rdf:type owl:Restriction ;
+                                           owl:onProperty core:hasResultType ;
+                                           owl:hasValue core:string
+                                         ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#GetInformationService
+
+:GetInformationService rdf:type owl:Class ;
+                             
+                             rdfs:subClassOf :RetailerService ,
+                                             [ rdf:type owl:Restriction ;
+                                               owl:onProperty core:hasResultType ;
+                                               owl:hasValue [ rdf:type core:ComplexDatatype ;
+                                                              core:basedOnClass :Store ;
+                                                              core:hasProperty [ rdf:type core:ComplexProperty ;
+                                                                                 core:isArray "true"^^xsd:boolean ;
+                                                                                 core:basedOnProperty :hasProduct ;
+                                                                                 core:hasDatatype [ rdf:type core:ComplexDatatype ;
+                                                                                                    core:basedOnClass :Product ;
+                                                                                                    core:hasProperty [ rdf:type core:PrimitiveProperty ;
+                                                                                                                       core:basedOnProperty core:id ;
+                                                                                                                       core:hasDatatype core:string
+                                                                                                                     ] ,
+                                                                                                                     [ rdf:type core:PrimitiveProperty ;
+                                                                                                                       core:basedOnProperty core:name ;
+                                                                                                                       core:hasDatatype core:string
+                                                                                                                     ] ,
+                                                                                                                     [ rdf:type core:PrimitiveProperty ;
+                                                                                                                       core:basedOnProperty :picture ;
+                                                                                                                       core:hasDatatype core:base64Binary
+                                                                                                                     ] ,
+                                                                                                                     [ rdf:type core:PrimitiveProperty ;
+                                                                                                                       core:basedOnProperty :price ;
+                                                                                                                       core:hasDatatype core:decimal
+                                                                                                                     ]
+                                                                                                  ]
+                                                                               ] ,
+                                                                               [ rdf:type core:PrimitiveProperty ;
+                                                                                 core:basedOnProperty core:name ;
+                                                                                 core:hasDatatype core:string
+                                                                               ] ,
+                                                                               [ rdf:type core:PrimitiveProperty ;
+                                                                                 core:basedOnProperty :picture ;
+                                                                                 core:hasDatatype core:base64Binary
+                                                                               ] ,
+                                                                               [ rdf:type core:PrimitiveProperty ;
+                                                                                 core:basedOnProperty core:id ;
+                                                                                 core:hasDatatype core:string
+                                                                               ]
+                                                            ]
+                                             ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#GoodStore
+
+:GoodStore rdf:type owl:Class ;
+                 
+                 rdfs:subClassOf :Store .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#Message
+
+:Message rdf:type owl:Class ;
+               
+               rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                 owl:onProperty :timestamp ;
+                                 owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                 owl:onDataRange xsd:dateTime
+                               ] ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty :hasSender ;
+                                 owl:onClass :Sender ;
+                                 owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                               ] ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty :content ;
+                                 owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                 owl:onDataRange xsd:string
+                               ] ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty :hasAttachment ;
+                                 owl:onClass :Attachment ;
+                                 owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
+                               ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#NotificationService
+
+:NotificationService rdf:type owl:Class ;
+                           
+                           rdfs:subClassOf :VisitorService ,
+                                           [ rdf:type owl:Restriction ;
+                                             owl:onProperty core:hasResultType ;
+                                             owl:hasValue core:string
+                                           ] ,
+                                           [ rdf:type owl:Restriction ;
+                                             owl:onProperty core:hasParameter ;
+                                             owl:hasValue [ rdf:type core:Parameter ;
+                                                            core:name "message"^^xsd:string ;
+                                                            core:mandatory "true"^^xsd:boolean ;
+                                                            core:hasDatatype [ rdf:type core:ComplexDatatype ;
+                                                                               core:basedOnClass :Message ;
+                                                                               core:hasProperty [ rdf:type core:PrimitiveProperty ;
+                                                                                                  core:basedOnProperty :content ;
+                                                                                                  core:hasDatatype core:string
+                                                                                                ] ,
+                                                                                                [ rdf:type core:ComplexProperty ;
+                                                                                                  core:basedOnProperty :hasSender ;
+                                                                                                  core:hasDatatype [ rdf:type core:ComplexDatatype ;
+                                                                                                                     core:basedOnClass :Sender ;
+                                                                                                                     core:hasProperty [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                        core:basedOnProperty core:name ;
+                                                                                                                                        core:hasDatatype core:string
+                                                                                                                                      ]
+                                                                                                                   ]
+                                                                                                ] ,
+                                                                                                [ rdf:type core:PrimitiveProperty ;
+                                                                                                  core:basedOnProperty :timestamp ;
+                                                                                                  core:hasDatatype core:dateTime
+                                                                                                ] ,
+                                                                                                [ rdf:type core:ComplexProperty ;
+                                                                                                  core:isArray "true"^^xsd:boolean ;
+                                                                                                  core:basedOnProperty :hasAttachment ;
+                                                                                                  core:hasDatatype [ rdf:type core:ComplexDatatype ;
+                                                                                                                     core:basedOnClass :Attachment ;
+                                                                                                                     core:hasProperty [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                        core:basedOnProperty :type ;
+                                                                                                                                        core:hasDatatype core:string
+                                                                                                                                      ] ,
+                                                                                                                                      [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                        core:basedOnProperty core:name ;
+                                                                                                                                        core:hasDatatype core:string
+                                                                                                                                      ] ,
+                                                                                                                                      [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                        core:basedOnProperty :content ;
+                                                                                                                                        core:hasDatatype core:base64Binary
+                                                                                                                                      ]
+                                                                                                                   ]
+                                                                                                ]
+                                                                             ]
+                                                          ]
+                                           ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#Order
+
+:Order rdf:type owl:Class ;
+             
+             rdfs:subClassOf [ rdf:type owl:Restriction ;
+                               owl:onProperty :referencesPromotion ;
+                               owl:onClass :Promotion ;
+                               owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :hasOrderItem ;
+                               owl:onClass :OrderItem ;
+                               owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                             ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#OrderItem
+
+:OrderItem rdf:type owl:Class ;
+                 
+                 rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                   owl:onProperty :productId ;
+                                   owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                   owl:onDataRange xsd:string
+                                 ] ,
+                                 [ rdf:type owl:Restriction ;
+                                   owl:onProperty :quantity ;
+                                   owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                   owl:onDataRange xsd:integer
+                                 ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#PlaceOrderService
+
+:PlaceOrderService rdf:type owl:Class ;
+                         
+                         rdfs:subClassOf :RetailerService ,
+                                         [ rdf:type owl:Restriction ;
+                                           owl:onProperty core:hasResultType ;
+                                           owl:hasValue core:string
+                                         ] ,
+                                         [ rdf:type owl:Restriction ;
+                                           owl:onProperty core:hasParameter ;
+                                           owl:hasValue [ rdf:type core:Parameter ;
+                                                          core:name "order"^^xsd:string ;
+                                                          core:mandatory "true"^^xsd:boolean ;
+                                                          core:hasDatatype [ rdf:type core:ComplexDatatype ;
+                                                                             core:basedOnClass :Order ;
+                                                                             core:hasProperty [ rdf:type core:ComplexProperty ;
+                                                                                                core:basedOnProperty :hasOrderItem ;
+                                                                                                core:hasDatatype [ rdf:type core:ComplexDatatype ;
+                                                                                                                   core:basedOnClass :OrderItem ;
+                                                                                                                   core:hasProperty [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                      core:basedOnProperty :quantity ;
+                                                                                                                                      core:hasDatatype core:int
+                                                                                                                                    ] ,
+                                                                                                                                    [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                      core:basedOnProperty :productId ;
+                                                                                                                                      core:hasDatatype core:string
+                                                                                                                                    ]
+                                                                                                                 ]
+                                                                                              ]
+                                                                           ]
+                                                        ]
+                                         ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#Product
+
+:Product rdf:type owl:Class ;
+               
+               rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                 owl:onProperty core:id ;
+                                 owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                 owl:onDataRange xsd:string
+                               ] ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty :picture ;
+                                 owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                 owl:onDataRange xsd:base64Binary
+                               ] ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty core:name ;
+                                 owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                 owl:onDataRange xsd:string
+                               ] ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty :price ;
+                                 owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                 owl:onDataRange xsd:decimal
+                               ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#Promotion
+
+:Promotion rdf:type owl:Class ;
+                 
+                 rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                   owl:onProperty :discount ;
+                                   owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                   owl:onDataRange xsd:decimal
+                                 ] ,
+                                 [ rdf:type owl:Restriction ;
+                                   owl:onProperty core:id ;
+                                   owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                   owl:onDataRange xsd:string
+                                 ] ,
+                                 [ rdf:type owl:Restriction ;
+                                   owl:onProperty core:name ;
+                                   owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                   owl:onDataRange xsd:string
+                                 ] ,
+                                 [ rdf:type owl:Restriction ;
+                                   owl:onProperty :newPrice ;
+                                   owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                   owl:onDataRange xsd:decimal
+                                 ] ,
+                                 [ rdf:type owl:Restriction ;
+                                   owl:onProperty :referencesProduct ;
+                                   owl:onClass :Product ;
+                                   owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                 ] ,
+                                 [ rdf:type owl:Restriction ;
+                                   owl:onProperty :end ;
+                                   owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                   owl:onDataRange xsd:dateTime
+                                 ] ,
+                                 [ rdf:type owl:Restriction ;
+                                   owl:onProperty :start ;
+                                   owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                   owl:onDataRange xsd:dateTime
+                                 ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#PromowallDevice
+
+:PromowallDevice rdf:type owl:Class ;
+                       
+                       rdfs:subClassOf core:Device ,
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty core:providesService ;
+                                         owl:onClass :PromowallService ;
+                                         owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
+                                       ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#PromowallService
+
+:PromowallService rdf:type owl:Class ;
+                        
+                        rdfs:subClassOf core:Service .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#PublishInformationService
+
+:PublishInformationService rdf:type owl:Class ;
+                                 
+                                 rdfs:subClassOf :PromowallService ,
+                                                 [ rdf:type owl:Restriction ;
+                                                   owl:onProperty core:hasParameter ;
+                                                   owl:hasValue [ rdf:type core:Parameter ;
+                                                                  core:name "message"^^xsd:string ;
+                                                                  core:mandatory "true"^^xsd:boolean ;
+                                                                  core:hasDatatype [ rdf:type core:ComplexDatatype ;
+                                                                                     core:basedOnClass :Message ;
+                                                                                     core:hasProperty [ rdf:type core:PrimitiveProperty ;
+                                                                                                        core:basedOnProperty :content ;
+                                                                                                        core:hasDatatype core:string
+                                                                                                      ] ,
+                                                                                                      [ rdf:type core:ComplexProperty ;
+                                                                                                        core:basedOnProperty :hasSender ;
+                                                                                                        core:hasDatatype [ rdf:type core:ComplexDatatype ;
+                                                                                                                           core:basedOnClass :Sender ;
+                                                                                                                           core:hasProperty [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                              core:basedOnProperty core:name ;
+                                                                                                                                              core:hasDatatype core:string
+                                                                                                                                            ]
+                                                                                                                         ]
+                                                                                                      ] ,
+                                                                                                      [ rdf:type core:PrimitiveProperty ;
+                                                                                                        core:basedOnProperty :timestamp ;
+                                                                                                        core:hasDatatype core:dateTime
+                                                                                                      ] ,
+                                                                                                      [ rdf:type core:ComplexProperty ;
+                                                                                                        core:isArray "true"^^xsd:boolean ;
+                                                                                                        core:basedOnProperty :hasAttachment ;
+                                                                                                        core:hasDatatype [ rdf:type core:ComplexDatatype ;
+                                                                                                                           core:basedOnClass :Attachment ;
+                                                                                                                           core:hasProperty [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                              core:basedOnProperty :content ;
+                                                                                                                                              core:hasDatatype core:base64Binary
+                                                                                                                                            ] ,
+                                                                                                                                            [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                              core:basedOnProperty core:name ;
+                                                                                                                                              core:hasDatatype core:string
+                                                                                                                                            ] ,
+                                                                                                                                            [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                              core:basedOnProperty :type ;
+                                                                                                                                              core:hasDatatype core:string
+                                                                                                                                            ]
+                                                                                                                         ]
+                                                                                                      ]
+                                                                                   ]
+                                                                ]
+                                                 ] ,
+                                                 [ rdf:type owl:Restriction ;
+                                                   owl:onProperty core:hasResultType ;
+                                                   owl:hasValue core:string
+                                                 ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#PublishPromotionService
+
+:PublishPromotionService rdf:type owl:Class ;
+                               
+                               rdfs:subClassOf :PromowallService ,
+                                               [ rdf:type owl:Restriction ;
+                                                 owl:onProperty core:hasParameter ;
+                                                 owl:hasValue [ rdf:type core:Parameter ;
+                                                                core:name "promotion"^^xsd:string ;
+                                                                core:mandatory "true"^^xsd:boolean ;
+                                                                core:hasDatatype [ rdf:type core:ComplexDatatype ;
+                                                                                   core:basedOnClass :Promotion ;
+                                                                                   core:hasProperty [ rdf:type core:PrimitiveProperty ;
+                                                                                                      core:basedOnProperty :newPrice ;
+                                                                                                      core:hasDatatype core:decimal
+                                                                                                    ] ,
+                                                                                                    [ rdf:type core:PrimitiveProperty ;
+                                                                                                      core:basedOnProperty :start ;
+                                                                                                      core:hasDatatype core:dateTime
+                                                                                                    ] ,
+                                                                                                    [ rdf:type core:PrimitiveProperty ;
+                                                                                                      core:basedOnProperty :discount ;
+                                                                                                      core:hasDatatype core:decimal
+                                                                                                    ] ,
+                                                                                                    [ rdf:type core:PrimitiveProperty ;
+                                                                                                      core:basedOnProperty core:name ;
+                                                                                                      core:hasDatatype core:string
+                                                                                                    ] ,
+                                                                                                    [ rdf:type core:PrimitiveProperty ;
+                                                                                                      core:basedOnProperty core:id ;
+                                                                                                      core:hasDatatype core:string
+                                                                                                    ] ,
+                                                                                                    [ rdf:type core:PrimitiveProperty ;
+                                                                                                      core:basedOnProperty :end ;
+                                                                                                      core:hasDatatype core:dateTime
+                                                                                                    ] ,
+                                                                                                    [ rdf:type core:ComplexProperty ;
+                                                                                                      core:basedOnProperty :referencesProduct ;
+                                                                                                      core:hasDatatype [ rdf:type core:ComplexDatatype ;
+                                                                                                                         core:basedOnClass :Product ;
+                                                                                                                         core:hasProperty [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                            core:basedOnProperty core:name ;
+                                                                                                                                            core:hasDatatype core:string
+                                                                                                                                          ] ,
+                                                                                                                                          [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                            core:basedOnProperty :picture ;
+                                                                                                                                            core:hasDatatype core:base64Binary
+                                                                                                                                          ] ,
+                                                                                                                                          [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                            core:basedOnProperty :price ;
+                                                                                                                                            core:hasDatatype core:decimal
+                                                                                                                                          ] ,
+                                                                                                                                          [ rdf:type core:PrimitiveProperty ;
+                                                                                                                                            core:basedOnProperty core:id ;
+                                                                                                                                            core:hasDatatype core:string
+                                                                                                                                          ]
+                                                                                                                       ]
+                                                                                                    ]
+                                                                                 ]
+                                                              ]
+                                               ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#RetailerDevice
+
+:RetailerDevice rdf:type owl:Class ;
+                      
+                      rdfs:subClassOf core:Device ,
+                                      [ rdf:type owl:Restriction ;
+                                        owl:onProperty core:providesService ;
+                                        owl:onClass :RetailerService ;
+                                        owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
+                                      ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#RetailerService
+
+:RetailerService rdf:type owl:Class ;
+                       
+                       rdfs:subClassOf core:Service .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#Sender
+
+:Sender rdf:type owl:Class ;
+              
+              rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                owl:onProperty core:name ;
+                                owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                owl:onDataRange xsd:string
+                              ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#Store
+
+:Store rdf:type owl:Class ;
+             
+             rdfs:subClassOf [ rdf:type owl:Restriction ;
+                               owl:onProperty core:name ;
+                               owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                               owl:onDataRange xsd:string
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :hasProduct ;
+                               owl:onClass :Product ;
+                               owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :picture ;
+                               owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                               owl:onDataRange xsd:base64Binary
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty core:id ;
+                               owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                               owl:onDataRange xsd:string
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :hasPromotion ;
+                               owl:onClass :Promotion ;
+                               owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
+                             ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#VisitorDevice
+
+:VisitorDevice rdf:type owl:Class ;
+                     
+                     rdfs:subClassOf core:Device ,
+                                     [ rdf:type owl:Restriction ;
+                                       owl:onProperty core:providesService ;
+                                       owl:onClass :VisitorService ;
+                                       owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
+                                     ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartstadium#VisitorService
+
+:VisitorService rdf:type owl:Class ;
+                      
+                      rdfs:subClassOf core:Service .
+
+
+
+#################################################################
+#
+#    Individuals
+#
+#################################################################
+

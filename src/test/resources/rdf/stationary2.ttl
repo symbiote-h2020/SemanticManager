@@ -11,12 +11,12 @@
 
 :StationarySensor2
         a core:StationarySensor;
-        rdfs:comment "This is stationary sensor 2" ;
-        rdfs:label "Stationary 1" ;
+        core:description "This is stationary sensor 2" ;
+        core:name "Stationary 1" ;
         core:hasFeatureOfInterest
                 [ a core:FeatureOfInterest ;
-                  rdfs:comment "This is room 1" ;
-                  rdfs:label "Room1" ;
+                  core:description "This is room 1" ;
+                  core:name "Room1" ;
                   core:hasProperty qu:temperature
                 ] ;
         core:locatedAt :Paris2 ;
@@ -24,8 +24,8 @@
 
 
 :Paris2 a core:WGS84Location;
-        rdfs:comment "This is paris" ;
-        rdfs:label "Paris" ;
+        core:description "This is paris" ;
+        core:name "Paris" ;
         geo:alt "15.0"^^xsd:double ;
         geo:lat "48.864716"^^xsd:double ;
         geo:long "2.349014"^^xsd:double .

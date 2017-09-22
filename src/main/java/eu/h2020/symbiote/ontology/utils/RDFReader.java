@@ -58,14 +58,14 @@ public class RDFReader {
             }
             StmtIterator idIterator = model.listStatements(platformRes, CoreInformationModel.id, (RDFNode) null);
             String platformId = ensureSingleStatement(idIterator).getObject().asLiteral().toString();
-            StmtIterator labelIterator = model.listStatements(platformRes, RDFS.label, (RDFNode) null);
+            StmtIterator labelIterator = model.listStatements(platformRes, CoreInformationModel.name, (RDFNode) null);
             List<String> labelsList = new ArrayList<>();
             while (labelIterator.hasNext()) {
                 Statement labelStmt = labelIterator.next();
                 labelsList.add(labelStmt.getObject().asLiteral().toString());
             }
 
-            StmtIterator commentsIterator = model.listStatements(platformRes, RDFS.comment, (RDFNode) null);
+            StmtIterator commentsIterator = model.listStatements(platformRes, CoreInformationModel.description, (RDFNode) null);
             List<String> commentList = new ArrayList<>();
             while (commentsIterator.hasNext()) {
                 String comment = commentsIterator.next().getObject().asLiteral().toString();
@@ -178,12 +178,12 @@ public class RDFReader {
         // id                
         resource.setId(getResourceId(rdfResource));
         // labels                
-        resource.setLabels(rdfResource.listProperties(RDFS.label).mapWith(x -> x.getObject().asLiteral().getString()).toList());
+        resource.setLabels(rdfResource.listProperties(CoreInformationModel.name).mapWith(x -> x.getObject().asLiteral().getString()).toList());
         if (resource.getLabels().isEmpty()) {
             throw new RDFParsingError("Must define at least one label for resource " + rdfResource.getURI());
         }
         // comments
-        resource.setComments(rdfResource.listProperties(RDFS.comment).mapWith(x -> x.getObject().asLiteral().getString()).toList());
+        resource.setComments(rdfResource.listProperties(CoreInformationModel.description).mapWith(x -> x.getObject().asLiteral().getString()).toList());
         resource.setRdfFormat(rdfFormat);
         resource.setRdf(OntologyHelper.modelAsString(model, rdfFormat));
         return resource;

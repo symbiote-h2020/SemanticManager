@@ -57,8 +57,6 @@ public class OntologyHelper {
         String cachePath = liveConfigFile.substring(0, liveConfigFile.lastIndexOf("/") + 1);
         Model config = FileManager.get().loadModel(ONT_DOC_MANAGER_CONFIG, cachePath, "TURTLE");
         DOC_MANAGER = new OntDocumentManager(config);
-        DOC_MANAGER.addAltEntry(CoreInformationModel.NS, CoreInformationModel.SOURCE_RELATIVE);
-        DOC_MANAGER.addAltEntry(CoreInformationModel.NS.substring(0, CoreInformationModel.NS.length() - 1), CoreInformationModel.SOURCE_RELATIVE);
         MODEL_SPEC_OWL.setDocumentManager(DOC_MANAGER);
         MODEL_SPEC_OWL_INF.setDocumentManager(DOC_MANAGER);
     }

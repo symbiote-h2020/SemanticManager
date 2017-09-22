@@ -1,0 +1,721 @@
+@prefix : <http://www.symbiote-h2020.eu/ontology/bim/smartyachting#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix core: <http://www.symbiote-h2020.eu/ontology/core#> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix schema: <http://schema.org/> .
+
+<http://www.symbiote-h2020.eu/ontology/bim/smartyachting> rdf:type owl:Ontology ;
+                                            
+                                            rdfs:label "symbIoTe Smart Yachting Best Practice Information Model"@en ;
+                                            
+                                            owl:versionInfo "v2.0.0 2017/09/13 12:00:00"^^xsd:string ;
+                                            
+                                            rdfs:comment "Smart Yachting part of the Best Practice Information Model of symbIoTe."@en ;
+                                            
+                                            owl:imports <http://www.symbiote-h2020.eu/ontology/core/2.0.0> ;
+                                            
+                                            owl:versionIRI <http://www.symbiote-h2020.eu/ontology/bim/smartyachting/2.0.0> .
+
+
+#################################################################
+#
+#    Object Properties
+#
+#################################################################
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#causedByFault
+
+:causedByFault rdf:type owl:ObjectProperty ;
+                     
+                     rdfs:range :Fault .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#hasComponent
+
+:hasComponent rdf:type owl:ObjectProperty ;
+                    
+                    rdfs:domain :Yacht ;
+                    
+                    rdfs:range :YachtComponent .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#hasPoint
+
+:hasPoint rdf:type owl:ObjectProperty ;
+                
+                rdfs:domain :Route ;
+                
+                rdfs:range :RoutePoint .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#hasPotentialSupplier
+
+:hasPotentialSupplier rdf:type owl:ObjectProperty ;
+                            
+                            rdfs:range :PotentialSupplierOrganization .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#hasServiceType
+
+:hasServiceType rdf:type owl:ObjectProperty ;
+                      
+                      rdfs:range :HarbourServiceType ;
+                      
+                      rdfs:domain :SmartYachtingService .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#hasSupportedService
+
+:hasSupportedService rdf:type owl:ObjectProperty ;
+                           
+                           rdfs:range core:Service .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#supportsServiceType
+
+:supportsServiceType rdf:type owl:ObjectProperty ;
+                           
+                           rdfs:range :HarbourServiceType  .
+
+
+
+
+#################################################################
+#
+#    Data properties
+#
+#################################################################
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#occurance
+
+:occurance rdf:type owl:DatatypeProperty ;
+                 
+                 rdfs:range xsd:dateTime .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#timestamp
+
+:timestamp rdf:type owl:DatatypeProperty ;
+                 
+                 rdfs:range xsd:dateTime .
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#hint
+
+:hint rdf:type owl:DatatypeProperty ;
+            
+            rdfs:range xsd:string .
+			
+
+
+#################################################################
+#
+#    Classes
+#
+#################################################################
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#BlackWaterTank
+
+:BlackWaterTank rdf:type owl:Class ;
+                      
+                      rdfs:subClassOf :Tank .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#ConsumableNeed
+
+:ConsumableNeed rdf:type owl:Class ;
+                      
+                      rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                        owl:onProperty :hasPotentialSupplier ;
+                                        owl:onClass :PotentialSupplierOrganization ;
+                                        owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                      ] ,
+                                      [ rdf:type owl:Restriction ;
+                                        owl:onProperty core:description ;
+                                        owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                        owl:onDataRange rdf:langString
+                                      ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#Exhaust
+
+:Exhaust rdf:type owl:Class ;
+               
+               rdfs:subClassOf :YachtComponent .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#Fault
+
+:Fault rdf:type owl:Class .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#FreshWaterTank
+
+:FreshWaterTank rdf:type owl:Class ;
+                      
+                      rdfs:subClassOf :Tank .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#GreyWaterTank
+
+:GreyWaterTank rdf:type owl:Class ;
+                     
+                     rdfs:subClassOf :Tank .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#HarbourServiceType
+
+:HarbourServiceType rdf:type owl:Class .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#MaintenanceNeed
+
+:MaintenanceNeed rdf:type owl:Class ;
+                       
+                       rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                         owl:onProperty core:description ;
+                                         owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                         owl:onDataRange rdf:langString
+                                       ] ,
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty :hasPotentialSupplier ;
+                                         owl:onClass :PotentialSupplierOrganization ;
+                                         owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                       ] ,
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty :causedByFault ;
+                                         owl:onClass :Fault ;
+                                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                       ] ,
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty :occurance ;
+                                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                         owl:onDataRange xsd:dateTime
+                                       ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#Port
+
+:Port rdf:type owl:Class ;
+            
+            rdfs:subClassOf [ rdf:type owl:Restriction ;
+                              owl:onProperty :supportsServiceType ;
+                              owl:onClass :HarbourServiceType ;
+                              owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                            ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#PortExhaust
+
+:PortExhaust rdf:type owl:Class ;
+                   
+                   rdfs:subClassOf :Exhaust .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#PotentialSupplierOrganization
+
+:PotentialSupplierOrganization rdf:type owl:Class .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#Route
+
+:Route rdf:type owl:Class ;
+             
+             rdfs:subClassOf [ rdf:type owl:Restriction ;
+                               owl:onProperty :hasPoint ;
+                               owl:onClass :RoutePoint ;
+                               owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                             ] .
+
+
+							 
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#Waypoint
+
+:Waypoint rdf:type owl:Class ;
+                
+                rdfs:subClassOf core:WGS84Location ,
+                                [ rdf:type owl:Restriction ;
+                                  owl:onProperty :hint ;
+                                  owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                  owl:onDataRange xsd:string
+                                ] .
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#RoutePoint
+
+:RoutePoint rdf:type owl:Class ;
+                  
+                  rdfs:subClassOf :Waypoint ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty :timestamp ;
+                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                    owl:onDataRange xsd:dateTime
+                                  ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#ServiceFuelOilTank
+
+:ServiceFuelOilTank rdf:type owl:Class ;
+                          
+                          rdfs:subClassOf :Tank .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#SmartYachtingService
+
+:SmartYachtingService rdf:type owl:Class ;
+                            
+                            rdfs:subClassOf core:Service ,
+                                            [ rdf:type owl:Restriction ;
+                                              owl:onProperty :hasServiceType ;
+                                              owl:onClass :HarbourServiceType ;
+                                              owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                            ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#StarboardExhaust
+
+:StarboardExhaust rdf:type owl:Class ;
+                        
+                        rdfs:subClassOf :Exhaust .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#StorageFuelOilTank
+
+:StorageFuelOilTank rdf:type owl:Class ;
+                          
+                          rdfs:subClassOf :Tank .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#Tank
+
+:Tank rdf:type owl:Class ;
+            
+            rdfs:subClassOf :YachtComponent .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#Yacht
+
+:Yacht rdf:type owl:Class ;
+             
+             rdfs:subClassOf [ rdf:type owl:Restriction ;
+                               owl:onProperty :hasComponent ;
+                               owl:onClass :YachtComponent ;
+                               owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :supportsServiceType ;
+                               owl:onClass :HarbourServiceType ;
+                               owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :hasSupportedService ;
+                               owl:onClass :SmartYachtingService ;
+                               owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
+                             ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#YachtComponent
+
+:YachtComponent rdf:type owl:Class .
+
+
+
+#################################################################
+#
+#    Individuals
+#
+#################################################################
+
+
+
+###  http://schema.org/AutoRepair
+
+schema:AutoRepair rdf:type :PotentialSupplierOrganization ,
+                                        owl:NamedIndividual ;
+                               
+                               core:name "AutoRepair"^^xsd:string .
+
+
+
+###  http://schema.org/ComputerStore
+
+schema:ComputerStore rdf:type :PotentialSupplierOrganization ,
+                                           owl:NamedIndividual ;
+                                  
+                                  core:name "ComputerStore"^^xsd:string .
+
+
+
+###  http://schema.org/DepartmentStore
+
+schema:DepartmentStore rdf:type :PotentialSupplierOrganization ,
+                                             owl:NamedIndividual ;
+                                    
+                                    core:name "DepartmentStore"^^xsd:string .
+
+
+
+###  http://schema.org/DryCleaningOrLaundry
+
+schema:DryCleaningOrLaundry rdf:type :PotentialSupplierOrganization ,
+                                                  owl:NamedIndividual ;
+                                         
+                                         core:name "DryCleaningOrLaundry"^^xsd:string .
+
+
+
+###  http://schema.org/Electrician
+
+schema:Electrician rdf:type :PotentialSupplierOrganization ,
+                                         owl:NamedIndividual ;
+                                
+                                core:name "Electrician"^^xsd:string .
+
+
+
+###  http://schema.org/ElectronicsStore
+
+schema:ElectronicsStore rdf:type :PotentialSupplierOrganization ,
+                                              owl:NamedIndividual ;
+                                     
+                                     core:name "ElectronicsStore"^^xsd:string .
+
+
+
+###  http://schema.org/GasStation
+
+schema:GasStation rdf:type :PotentialSupplierOrganization ,
+                                        owl:NamedIndividual ;
+                               
+                               core:name "ComputerStoreGasStation"^^xsd:string .
+
+
+
+###  http://schema.org/GroceryStore
+
+schema:GroceryStore rdf:type :PotentialSupplierOrganization ,
+                                          owl:NamedIndividual ;
+                                 
+                                 core:name "GroceryStore"^^xsd:string .
+
+
+
+###  http://schema.org/HVACBusiness
+
+schema:HVACBusiness rdf:type :PotentialSupplierOrganization ,
+                                          owl:NamedIndividual ;
+                                 
+                                 core:name "HVACBusiness"^^xsd:string .
+
+
+
+###  http://schema.org/HardwareStore
+
+schema:HardwareStore rdf:type :PotentialSupplierOrganization ,
+                                           owl:NamedIndividual ;
+                                  
+                                  core:name "HardwareStore"^^xsd:string .
+
+
+
+###  http://schema.org/Plumber
+
+schema:Plumber rdf:type :PotentialSupplierOrganization ,
+                                     owl:NamedIndividual ;
+                            
+                            core:name "Plumber"^^xsd:string .
+
+
+
+###  http://schema.org/Winery
+
+schema:Winery rdf:type :PotentialSupplierOrganization ,
+                                    owl:NamedIndividual ;
+                           
+                           core:name "Winery"^^xsd:string .
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#ConsumableNeed
+
+:ConsumableNeed rdf:type owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#Fault
+
+:Fault rdf:type owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#HVACFault
+
+:HVACFault rdf:type :Fault ,
+                          owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#MaintenanceNeed
+
+:MaintenanceNeed rdf:type owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#PotentialSupplierOrganization
+
+:PotentialSupplierOrganization rdf:type owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#Route
+
+:Route rdf:type owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#RoutePoint
+
+:RoutePoint rdf:type owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#automatedSupplyChain
+
+:automatedSupplyChain rdf:type :HarbourServiceType ,
+                                     owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#averageFuelConsumptionPerNauticalMile
+
+:averageFuelConsumptionPerNauticalMile rdf:type core:Property ,
+                                                      owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#causedByFault
+
+:causedByFault rdf:type owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#electricFault
+
+:electricFault rdf:type :Fault ,
+                              owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#engineFault
+
+:engineFault rdf:type :Fault ,
+                            owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#exhaustTemperature
+
+:exhaustTemperature rdf:type core:Property ,
+                                   owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#getConsumableNeedsService
+
+:getConsumableNeedsService rdf:type :SmartYachtingService ,
+                                          owl:NamedIndividual ;
+                                 
+                                 core:name "getConsumableNeeds"^^xsd:string ;
+                                 
+                                 :hasServiceType :automatedSupplyChain ;
+                                 
+                                 core:hasResultType [ rdf:type core:ComplexDatatype ;
+                                                      core:isArray "true"^^xsd:boolean ;
+                                                      core:basedOnClass :ConsumableNeed ;
+                                                      core:hasProperty [ rdf:type core:PrimitiveProperty ;
+																		 core:isArray "true"^^xsd:boolean ;
+                                                                         core:basedOnProperty core:description ;
+                                                                         core:hasDatatype core:langString
+                                                                       ] ,
+                                                                       [ rdf:type core:ComplexProperty ;
+                                                                         core:basedOnProperty :hasPotentialSupplier ;
+                                                                         core:hasDatatype [ rdf:type core:ComplexDatatype ;
+                                                                                            core:isArray "true"^^xsd:boolean ;
+                                                                                            core:basedOnClass :PotentialSupplierOrganization ;
+                                                                                            core:hasProperty [ rdf:type core:PrimitiveProperty ;
+                                                                                                               core:basedOnProperty core:name ;
+                                                                                                               core:hasDatatype core:string
+                                                                                                             ]
+                                                                                          ]
+                                                                       ]
+                                                    ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#getLatestRouteService
+
+:getLatestRouteService rdf:type :SmartYachtingService ,
+                                      owl:NamedIndividual ;
+                             
+                             :hasServiceType :smartMooring ;
+                             
+                             core:hasResultType [ rdf:type core:ComplexDatatype ;
+                                                  core:isArray "true"^^xsd:boolean ;
+                                                  core:basedOnClass :Route ;
+                                                  core:hasProperty [ rdf:type core:ComplexProperty ;
+                                                                     core:basedOnProperty :hasPoint ;
+                                                                     core:hasDatatype [ rdf:type core:ComplexDatatype ;
+                                                                                        core:basedOnClass :RoutePoint ;
+                                                                                        core:hasProperty [ rdf:type core:PrimitiveProperty ;
+                                                                                                           core:basedOnProperty :hint ;
+                                                                                                           core:hasDatatype core:string
+                                                                                                         ] ,
+                                                                                                         [ rdf:type core:PrimitiveProperty ;
+                                                                                                           core:hasDatatype core:decimal ;
+                                                                                                           core:basedOnProperty geo:lat
+                                                                                                         ] ,
+                                                                                                         [ rdf:type core:PrimitiveProperty ;
+                                                                                                           core:basedOnProperty :timestamp ;
+                                                                                                           core:hasDatatype core:dateTime
+                                                                                                         ] ,
+                                                                                                         [ rdf:type core:PrimitiveProperty ;
+                                                                                                           core:hasDatatype core:decimal ;
+                                                                                                           core:basedOnProperty geo:long
+                                                                                                         ]
+                                                                                      ]
+                                                                   ]
+                                                ] ;
+                             
+                             core:hasParameter [ rdf:type core:Parameter ;
+                                                 core:mandatory "false"^^xsd:boolean ;
+                                                 core:name "since"^^xsd:string ;
+                                                 core:hasDatatype core:datetime
+                                               ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#getMaintenanceNeedsService
+
+:getMaintenanceNeedsService rdf:type :SmartYachtingService ,
+                                           owl:NamedIndividual ;
+                                  
+                                  :hasServiceType :automatedSupplyChain ;
+                                  
+                                  core:hasResultType [ rdf:type core:ComplexDatatype ;
+                                                       core:isArray "true"^^xsd:boolean ;
+                                                       core:basedOnClass :MaintenanceNeed ;
+                                                       core:hasProperty [ rdf:type core:ComplexProperty ;
+                                                                          core:basedOnProperty :hasPotentialSupplier ;
+                                                                          core:hasDatatype [ rdf:type core:ComplexDatatype ;
+                                                                                             core:isArray "true"^^xsd:boolean ;
+                                                                                             core:basedOnClass :PotentialSupplierOrganization ;
+                                                                                             core:hasProperty [ rdf:type core:PrimitiveProperty ;
+                                                                                                                core:basedOnProperty core:name ;
+                                                                                                                core:hasDatatype core:string
+                                                                                                              ]
+                                                                                           ]
+                                                                        ] ,
+                                                                        [ rdf:type core:ComplexProperty ;
+                                                                          core:basedOnProperty :causedByFault ;
+                                                                          core:hasDatatype [ rdf:type core:ComplexDatatype ;
+                                                                                             core:basedOnClass :Fault ;
+                                                                                             core:hasProperty [ rdf:type core:PrimitiveProperty ;
+                                                                                                                core:basedOnProperty core:name ;
+                                                                                                                core:hasDatatype core:string
+                                                                                                              ]
+                                                                                           ]
+                                                                        ] ,
+                                                                        [ rdf:type core:PrimitiveProperty ;
+                                                                          core:basedOnProperty :occurance ;
+                                                                          core:hasDatatype core:dateTime
+                                                                        ] ,
+                                                                        [ rdf:type core:PrimitiveProperty ;
+																		 core:isArray "true"^^xsd:boolean ;
+                                                                         core:basedOnProperty core:description ;
+                                                                         core:hasDatatype core:langString
+                                                                       ]
+                                                     ] .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#hasPoint
+
+:hasPoint rdf:type owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#hasPotentialSupplier
+
+:hasPotentialSupplier rdf:type owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#hydraulicFault
+
+:hydraulicFault rdf:type :Fault ,
+                               owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#occurance
+
+:occurance rdf:type owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#smartMooring
+
+:smartMooring rdf:type :HarbourServiceType ,
+                             owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#tankLevel
+
+:tankLevel rdf:type core:Property ,
+                          owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#timestamp
+
+:timestamp rdf:type owl:NamedIndividual .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/smartyachting#weelhouseFault
+
+:weelhouseFault rdf:type :Fault ,
+                               owl:NamedIndividual .
+

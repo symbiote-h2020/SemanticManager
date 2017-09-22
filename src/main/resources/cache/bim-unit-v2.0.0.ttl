@@ -1,0 +1,511 @@
+@prefix : <http://www.symbiote-h2020.eu/ontology/bim/unit#> .
+@prefix qu: <http://purl.oclc.org/NET/ssnx/qu/qu#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix core: <http://www.symbiote-h2020.eu/ontology/core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix qu-dim: <http://purl.oclc.org/NET/ssnx/qu/dim#> .
+@prefix qu-unit: <http://purl.oclc.org/NET/ssnx/qu/unit#> .
+@prefix qu-quantity: <http://purl.oclc.org/NET/ssnx/qu/quantity#> .
+@prefix property: <http://www.symbiote-h2020.eu/ontology/bim/property#> .
+
+<http://www.symbiote-h2020.eu/ontology/bim/unit> rdf:type owl:Ontology ;
+                                            
+                                            rdfs:label "symbIoTe Best Practice Information Model Units"@en ;
+                                            
+                                            owl:versionInfo "v2.0.0 2017/09/04 12:00:00"^^xsd:string ;
+                                            
+                                            rdfs:comment "Unit part of the Best Practice Information Model of symbIoTe."@en ;
+                                            
+                                            owl:imports <http://purl.oclc.org/NET/ssnx/qu/qu-rec20> ,
+                                                        <http://www.symbiote-h2020.eu/ontology/bim/qu-align/2.0.0> ;
+                                            
+                                            owl:versionIRI <http://www.symbiote-h2020.eu/ontology/bim/unit/2.0.0> .
+
+
+#################################################################
+#
+#    Object Properties
+#
+#################################################################
+
+
+#################################################################
+#
+#    Data properties
+#
+#################################################################
+
+
+#################################################################
+#
+#    Classes
+#
+#################################################################
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#SurfaceDensityRateUnit
+
+:SurfaceDensityRateUnit rdf:type owl:Class ;
+                            
+                            rdfs:subClassOf qu:Unit .
+
+
+#################################################################
+#
+#    Individuals
+#
+#################################################################
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#beatsPerMinute
+
+:beatsPerMinute rdf:type qu-dim:FrequencyUnit ,
+                             owl:NamedIndividual ;
+                    
+                    core:description "beats per minute" ;
+                    
+                    qu:conversionOffset "0.0"^^xsd:double ;
+                    
+                    qu:conversionFactor "1.0"^^xsd:double ;
+                    
+                    qu:symbol "bpm"^^xsd:string ;
+                    
+                    qu:quantityKind property:beatRate ;
+                    
+                    qu:referenceUnit :onePerMinute .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#breathsPerMinute
+
+:breathsPerMinute rdf:type qu-dim:FrequencyUnit ,
+                               owl:NamedIndividual ;
+                      
+                      core:description "breaths per minute" ;
+                      
+                      qu:conversionOffset "0.0"^^xsd:double ;
+                      
+                      qu:conversionFactor "1.0"^^xsd:double ;
+                      
+                      qu:symbol "breaths/min"^^xsd:string ;
+                      
+                      qu:quantityKind property:respirationRate ;
+                      
+                      qu:referenceUnit :onePerMinute .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#degreeFahrenheit
+
+:degreeFahrenheit rdf:type qu-dim:TemperatureUnit ,
+                               owl:NamedIndividual ;
+                      
+                      core:description "degree Fahrenheit" ;
+                      
+                      qu:conversionFactor "0.555555555555556"^^xsd:double ;
+                      
+                      qu:conversionOffset "2.5537037037037E42"^^xsd:double ;
+                      
+                      qu:symbol "degF"^^xsd:string ;
+                      
+                      qu:quantityKind qu-quantity:temperature ;
+                      
+                      qu:referenceUnit qu-unit:kelvin .
+
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#kilogramPerSquareMetreSecond
+
+:kilogramPerSquareMetreSecond rdf:type :SurfaceDensityRateUnit ,
+                                           owl:NamedIndividual ;
+                                  
+                                  core:description "kilogram per square metre second" ;
+                                  
+                                  qu:symbol "kg/m2s"^^xsd:string ;
+                                  
+                                  qu:quantityKind property:surfaceDensityRate .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#kilogramSecondPerCubicMetre
+
+:kilogramSecondPerCubicMetre rdf:type qu-dim:ExposureUnit ,
+                                          owl:NamedIndividual ;
+                                 
+                                 core:description "kilogram second per cubic metre" ;
+                                 
+                                 qu:symbol "kgs/m3"^^xsd:string ;
+                                 
+                                 qu:quantityKind qu-quantity:exposure .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#microgramDayPerCubicMetre
+
+:microgramDayPerCubicMetre rdf:type qu-dim:ExposureUnit ,
+                                        owl:NamedIndividual ;
+                               
+                               core:description "microgram day per cubic metre" ;
+                               
+                               qu:conversionOffset "0.0"^^xsd:double ;
+                               
+                               qu:conversionFactor "8.64E-5"^^xsd:double ;
+                               
+                               qu:symbol "ugd/m3"^^xsd:string ;
+                               
+                               qu:quantityKind qu-quantity:exposure ;
+                               
+                               qu:referenceUnit :kilogramSecondPerCubicMetre .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#microgramHourPerCubicMetre
+
+:microgramHourPerCubicMetre rdf:type qu-dim:ExposureUnit ,
+                                         owl:NamedIndividual ;
+                                
+                                core:description "microgram hour per cubic metre" ;
+                                
+                                qu:conversionOffset "0.0"^^xsd:double ;
+                                
+                                qu:conversionFactor "3.6E-6"^^xsd:double ;
+                                
+                                qu:symbol "ugh/m3"^^xsd:string ;
+                                
+                                qu:quantityKind qu-quantity:exposure ;
+                                
+                                qu:referenceUnit :kilogramSecondPerCubicMetre .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#microgramPerSquareMetreDay
+
+:microgramPerSquareMetreDay rdf:type :SurfaceDensityRateUnit ,
+                                         owl:NamedIndividual ;
+                                
+                                core:description "microgram per square metre day" ;
+                                
+                                qu:conversionOffset "0.0"^^xsd:double ;
+                                
+                                qu:conversionFactor "1.15740741E-14"^^xsd:double ;
+                                
+                                qu:symbol "ug/m2d"^^xsd:string ;
+                                
+                                qu:quantityKind property:surfaceDensityRate ;
+                                
+                                qu:referenceUnit :kilogramPerSquareMetreSecond .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#milligramDayPerCubicMetre
+
+:milligramDayPerCubicMetre rdf:type qu-dim:ExposureUnit ,
+                                        owl:NamedIndividual ;
+                               
+                               core:description "milligram day per cubic metre" ;
+                               
+                               qu:conversionOffset "0.0"^^xsd:double ;
+                               
+                               qu:conversionFactor "0.0864"^^xsd:double ;
+                               
+                               qu:symbol "mgd/m3"^^xsd:string ;
+                               
+                               qu:quantityKind qu-quantity:exposure ;
+                               
+                               qu:referenceUnit :kilogramSecondPerCubicMetre .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#milligramHourPerCubicMetre
+
+:milligramHourPerCubicMetre rdf:type qu-dim:ExposureUnit ,
+                                         owl:NamedIndividual ;
+                                
+                                core:description "milligram hour per cubic metre" ;
+                                
+                                qu:conversionOffset "0.0"^^xsd:double ;
+                                
+                                qu:conversionFactor "0.0036"^^xsd:double ;
+                                
+                                qu:symbol "mgh/m3"^^xsd:string ;
+                                
+                                qu:quantityKind qu-quantity:exposure ;
+                                
+                                qu:referenceUnit :kilogramSecondPerCubicMetre .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#milligramPerDecilitre
+
+:milligramPerDecilitre rdf:type qu-dim:DensityUnit ,
+                                    owl:NamedIndividual ;
+                           
+                           core:description "milligram per decilitre" ;
+                           
+                           qu:conversionOffset "0.0"^^xsd:double ;
+                           
+                           qu:conversionFactor "0.01"^^xsd:double ;
+                           
+                           qu:symbol "mg/dl"^^xsd:string ;
+                           
+                           qu:quantityKind qu-quantity:density ;
+                           
+                           qu:referenceUnit qu-unit:kilogramPerCubicMetre .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#milligramPerSquareMetreMonth
+
+:milligramPerSquareMetreMonth rdf:type :SurfaceDensityRateUnit ,
+                                           owl:NamedIndividual ;
+                                  
+                                  core:description "milligram per square metre month" ;
+                                  
+                                  qu:conversionOffset "0.0"^^xsd:double ;
+                                  
+                                  qu:conversionFactor "3.80265176E-13"^^xsd:double ;
+                                  
+                                  qu:symbol "mg/m2m"^^xsd:string ;
+                                  
+                                  qu:quantityKind property:surfaceDensityRate ;
+                                  
+                                  qu:referenceUnit :kilogramPerSquareMetreSecond .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#nanogram
+
+:nanogram rdf:type qu-dim:MassUnit ,
+                       owl:NamedIndividual ;
+              
+              core:description "ng" ;
+              
+              qu:conversionOffset "0.0"^^xsd:double ;
+              
+              qu:conversionFactor "1.0E-12"^^xsd:double ;
+              
+              qu:symbol "ng"^^xsd:string ;
+              
+              qu:quantityKind qu-quantity:mass ;
+              
+              qu:referenceUnit qu-unit:kilogram .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#nanogramPerCubicMetre
+
+:nanogramPerCubicMetre rdf:type qu-dim:DensityUnit ,
+                                    owl:NamedIndividual ;
+                           
+                           core:description "nanogram per cubic metre" ;
+                           
+                           qu:conversionOffset "0.0"^^xsd:double ;
+                           
+                           qu:conversionFactor "1.0E-12"^^xsd:double ;
+                           
+                           qu:symbol "ng/m3"^^xsd:string ;
+                           
+                           qu:quantityKind qu-quantity:density ;
+                           
+                           qu:referenceUnit qu-unit:kilogramPerCubicMetre .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#nanogramPerLitre
+
+:nanogramPerLitre rdf:type qu-dim:DensityUnit ,
+                               owl:NamedIndividual ;
+                      
+                      core:description "nanogram per litre" ;
+                      
+                      qu:conversionOffset "0.0"^^xsd:double ;
+                      
+                      qu:conversionFactor "1.0E-9"^^xsd:double ;
+                      
+                      qu:symbol "ng/l"^^xsd:string ;
+                      
+                      qu:quantityKind qu-quantity:density ;
+                      
+                      qu:referenceUnit qu-unit:kilogramPerCubicMetre .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#nanogramPerSquareMetre
+
+:nanogramPerSquareMetre rdf:type qu-dim:SurfaceDensityUnit ,
+                                     owl:NamedIndividual ;
+                            
+                            core:description "nanogram per square metre" ;
+                            
+                            qu:conversionOffset "0.0"^^xsd:double ;
+                            
+                            qu:conversionFactor "1.0E-12"^^xsd:double ;
+                            
+                            qu:symbol "ng/m2"^^xsd:string ;
+                            
+                            qu:quantityKind qu-quantity:surfaceDensity ;
+                            
+                            qu:referenceUnit qu-unit:kilogramPerSquareMetre .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#nanogramPerSquareMetreDay
+
+:nanogramPerSquareMetreDay rdf:type :SurfaceDensityRateUnit ,
+                                        owl:NamedIndividual ;
+                               
+                               core:description "nanogram per square metre day" ;
+                               
+                               qu:conversionOffset "0.0"^^xsd:double ;
+                               
+                               qu:conversionFactor "1.15740741E-17"^^xsd:double ;
+                               
+                               qu:symbol "ng/m2d"^^xsd:string ;
+                               
+                               qu:quantityKind property:surfaceDensityRate ;
+                               
+                               qu:referenceUnit :kilogramPerSquareMetreSecond .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#onePerMeter
+
+:onePerMeter rdf:type qu-dim:LinearDensityUnit ,
+                          owl:NamedIndividual ;
+                 
+                 core:description "one per meter" ;
+                 
+                 qu:symbol "1/m"^^xsd:string ;
+                 
+                 qu:quantityKind qu-quantity:linearDensity .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#onePerMinute
+
+:onePerMinute rdf:type qu-dim:FrequencyUnit ,
+                           owl:NamedIndividual ;
+                  
+                  core:description "1 per minute" ;
+                  
+                  qu:conversionOffset "0.0"^^xsd:double ;
+                  
+                  qu:conversionFactor "0.0166666666666667"^^xsd:double ;
+                  
+                  qu:symbol "1/min"^^xsd:string ;
+                  
+                  qu:quantityKind qu-quantity:frequency ;
+                  
+                  qu:referenceUnit qu-unit:hertz .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#partsPerBillion
+
+:partsPerBillion rdf:type qu-dim:DimensionlessUnit ,
+                              owl:NamedIndividual ;
+                     
+                     core:description "parts per billion" ;
+                     
+                     qu:conversionOffset "0.0"^^xsd:double ;
+                     
+                     qu:conversionFactor "1000.0"^^xsd:double ;
+                     
+                     qu:symbol "ppb"^^xsd:string ;
+                     
+                     qu:quantityKind qu-quantity:dimensionless ;
+                     
+                     qu:referenceUnit :partsPerMillion .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#partsPerMillion
+
+:partsPerMillion rdf:type qu-dim:DimensionlessUnit ,
+                              owl:NamedIndividual ;
+                     
+                     core:description "parts per million" ;
+                     
+                     qu:symbol "ppm"^^xsd:string ;
+                     
+                     qu:quantityKind qu-quantity:dimensionless .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#partsPerTrillion
+
+:partsPerTrillion rdf:type qu-dim:DimensionlessUnit ,
+                               owl:NamedIndividual ;
+                      
+                      core:description "parts per trillion" ;
+                      
+                      qu:conversionOffset "0.0"^^xsd:double ;
+                      
+                      qu:conversionFactor "1000000.0"^^xsd:double ;
+                      
+                      qu:symbol "ppt"^^xsd:string ;
+                      
+                      qu:quantityKind qu-quantity:dimensionless ;
+                      
+                      qu:referenceUnit :partsPerMillion .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#picogram
+
+:picogram rdf:type qu-dim:MassUnit ,
+                       owl:NamedIndividual ;
+              
+              core:description "pg" ;
+              
+              qu:conversionOffset "0.0"^^xsd:double ;
+              
+              qu:conversionFactor "1.0E-15"^^xsd:double ;
+              
+              qu:symbol "pg"^^xsd:string ;
+              
+              qu:quantityKind qu-quantity:mass ;
+              
+              qu:referenceUnit qu-unit:kilogram .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#picogramPerCubicMetre
+
+:picogramPerCubicMetre rdf:type qu-dim:DensityUnit ,
+                                    owl:NamedIndividual ;
+                           
+                           core:description "picogram per cubic metre" ;
+                           
+                           qu:conversionOffset "0.0"^^xsd:double ;
+                           
+                           qu:conversionFactor "1.0E-15"^^xsd:double ;
+                           
+                           qu:symbol "pg/m3"^^xsd:string ;
+                           
+                           qu:quantityKind qu-quantity:density ;
+                           
+                           qu:referenceUnit qu-unit:kilogramPerCubicMetre .
+
+
+
+###  http://www.symbiote-h2020.eu/ontology/bim/unit#revolutionsPerMinute
+
+:revolutionsPerMinute rdf:type qu-dim:RotationalSpeedUnit ,
+                                   owl:NamedIndividual ;
+                          
+                          core:description "rounds per minute" ;
+                          
+                          qu:conversionOffset "0.0"^^xsd:double ;
+                          
+                          qu:conversionFactor "0.10471975511965999"^^xsd:double ;
+                          
+                          qu:symbol "rpm"^^xsd:string ;
+                          
+                          qu:quantityKind qu-quantity:rotationalSpeed ;
+                          
+                          qu:referenceUnit qu-unit:radianPerSecond .
+
+

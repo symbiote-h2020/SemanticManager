@@ -6,68 +6,20 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix time: <http://www.w3.org/2006/time#> .
+@base <http://www.symbiote-h2020.eu/ontology/core#> .
 
 <http://www.symbiote-h2020.eu/ontology/core> rdf:type owl:Ontology ;
                                              
                                              rdfs:label "symbIoTe Core Information Model"@en ;
                                              
-                                             owl:versionInfo "v 1.0.1 2017/08/25 12:00:00"^^xsd:string ;
+                                             owl:versionInfo "v 2.0.0 2017/09/13 12:00:00"^^xsd:string ;
                                              
                                              rdfs:comment "Core Information Model of the symbIoTe project."@en ;
                                              
-                                             owl:versionIRI <http://www.symbiote-h2020.eu/ontology/core/1.0.1> ;
+                                             owl:versionIRI <http://www.symbiote-h2020.eu/ontology/core/2.0.0> ;
                                              
-                                             owl:imports rdf: ,
-                                                         rdfs: ,
-														 geo: .
-
-xsd:string rdfs:subClassOf :ID .
-xsd:string rdfs:subClassOf rdf:langString .
-#################################################################
-#
-#    Annotation properties
-#
-#################################################################
-
-
-###  http://purl.org/dc/elements/1.1/date
-
-<http://purl.org/dc/elements/1.1/date> rdf:type owl:AnnotationProperty .
-
-
-
-###  http://purl.org/dc/elements/1.1/description
-
-<http://purl.org/dc/elements/1.1/description> rdf:type owl:AnnotationProperty .
-
-
-
-###  http://purl.org/dc/elements/1.1/title
-
-<http://purl.org/dc/elements/1.1/title> rdf:type owl:AnnotationProperty .
-
-
-
-
-
-
-
-
-#################################################################
-#
-#    Datatypes
-#
-#################################################################
-
-
-###  http://www.symbiote-h2020.eu/ontology/core#ID
-
-:ID rdf:type rdfs:Datatype ;
-    
-    owl:equivalentClass :ID .
-
-
-
+                                             owl:imports geo:,
+														 <http://www.w3.org/2006/time>.
 
 
 #################################################################
@@ -80,10 +32,7 @@ xsd:string rdfs:subClassOf rdf:langString .
 ###  http://www.symbiote-h2020.eu/ontology/core#providesService
 
 :providesService rdf:type owl:ObjectProperty ;
-                                                                           
-                                                                           rdfs:domain :Device ;
-                                                                           
-                                                                           rdfs:range :Service .
+	   rdfs:range :Service .
 
 
 
@@ -131,9 +80,7 @@ xsd:string rdfs:subClassOf rdf:langString .
 ###  http://www.symbiote-h2020.eu/ontology/core#hasCapability
 
 :hasCapability rdf:type owl:ObjectProperty ;
-               
-               rdfs:domain :Actuator ;
-               
+                             
                rdfs:range :Capability .
 
 
@@ -143,15 +90,17 @@ xsd:string rdfs:subClassOf rdf:langString .
 :hasDatatype rdf:type owl:ObjectProperty ;
              
              rdfs:range :Datatype .
+			 
+###  http://www.symbiote-h2020.eu/ontology/core#hasBaseDatatype
+
+:hasBaseDatatype rdf:type owl:DataProperty .
 
 
 
 ###  http://www.symbiote-h2020.eu/ontology/core#hasEffect
 
 :hasEffect rdf:type owl:ObjectProperty ;
-           
-           rdfs:domain :Capability ;
-           
+                      
            rdfs:range :Effect .
 
 
@@ -182,7 +131,7 @@ xsd:string rdfs:subClassOf rdf:langString .
 
 :hasObservationValue rdf:type owl:ObjectProperty ;
                      
-                     rdfs:domain :Observation .
+                     rdfs:range :ObservationValue .
 
 
 
@@ -206,9 +155,7 @@ xsd:string rdfs:subClassOf rdf:langString .
 ###  http://www.symbiote-h2020.eu/ontology/core#hasProperty
 
 :hasProperty rdf:type owl:ObjectProperty ;
-             
-             rdfs:domain :FeatureOfInterest ;
-             
+                          
              rdfs:range :Property .
 
 
@@ -225,9 +172,7 @@ xsd:string rdfs:subClassOf rdf:langString .
 
 :hasResultType rdf:type owl:ObjectProperty ;
                
-               rdfs:range :Datatype ;
-               
-               rdfs:domain :Service .
+               rdfs:range :Datatype .
 
 
 
@@ -254,9 +199,7 @@ xsd:string rdfs:subClassOf rdf:langString .
 :madeFrom rdf:type owl:FunctionalProperty ,
                    owl:ObjectProperty ;
           
-          rdfs:range :Location ;
-          
-          rdfs:domain :Observation .
+          rdfs:range :Location .
 
 
 
@@ -275,9 +218,7 @@ xsd:string rdfs:subClassOf rdf:langString .
 
 :observesProperty rdf:type owl:ObjectProperty ;
                   
-                  rdfs:range :Property ;
-                  
-                  rdfs:domain :Sensor .
+                  rdfs:range :Property  .
 
 
 
@@ -313,11 +254,9 @@ xsd:string rdfs:subClassOf rdf:langString .
 
 
 
-###  http://www.symbiote-h2020.eu/ontology/core#value
 
-:value rdf:type owl:ObjectProperty ;
-       
-       rdfs:range rdfs:Literal .
+
+
 
 
 
@@ -331,21 +270,10 @@ xsd:string rdfs:subClassOf rdf:langString .
 
 
 
-###  http://www.w3.org/2000/01/rdf-schema#comment
 
-rdfs:comment rdf:type owl:ObjectProperty ;
+:description rdf:type owl:DatatypeProperty ;
              
              rdfs:range rdf:langString .
-
-
-
-###  http://www.w3.org/2000/01/rdf-schema#label
-
-rdfs:label rdf:type owl:ObjectProperty ;
-           
-           rdfs:range rdf:langString .
-
-
 
 
 
@@ -361,9 +289,7 @@ rdfs:label rdf:type owl:ObjectProperty ;
 :id rdf:type owl:DatatypeProperty ,
              owl:FunctionalProperty ;
     
-    rdfs:range :ID ;
-    
-    rdfs:domain :Resource .
+    rdfs:range xsd:string .
 
 
 
@@ -411,9 +337,7 @@ rdfs:label rdf:type owl:ObjectProperty ;
 ###  http://www.symbiote-h2020.eu/ontology/core#pattern
 
 :pattern rdf:type owl:DatatypeProperty ;
-         
-         rdfs:domain :RegExRestriction ;
-         
+
          rdfs:range xsd:string .
 
 
@@ -421,45 +345,26 @@ rdfs:label rdf:type owl:ObjectProperty ;
 ###  http://www.symbiote-h2020.eu/ontology/core#step
 
 :step rdf:type owl:DatatypeProperty ;
-      
-      rdfs:domain :StepRestriction ;
-      
-      rdfs:range xsd:double .
+
+      rdfs:range xsd:decimal .
 
 
 
 ###  http://www.symbiote-h2020.eu/ontology/core#symbol
 
 :symbol rdf:type owl:DatatypeProperty ;
-        
-        rdfs:domain :UnitOfMeasurement ;
-        
+
         rdfs:range xsd:string .
 
-
-
 ###  http://www.symbiote-h2020.eu/ontology/core#value
-
+		
 :value rdf:type owl:DatatypeProperty .
-
-
-
-###  http://www.w3.org/2000/01/rdf-schema#comment
-
-rdfs:comment rdf:type owl:DatatypeProperty .
-
-
-
-###  http://www.w3.org/2000/01/rdf-schema#label
-
-rdfs:label rdf:type owl:DatatypeProperty .
-
 
 ###  http://www.w3.org/2003/01/geo/wgs84_pos#alt
 
 geo:alt rdf:type owl:DatatypeProperty ,
                  owl:FunctionalProperty ;
-        rdfs:range xsd:double .
+        rdfs:range xsd:decimal .
 
 
 
@@ -467,7 +372,7 @@ geo:alt rdf:type owl:DatatypeProperty ,
 
 geo:lat rdf:type owl:DatatypeProperty ,
                  owl:FunctionalProperty ;
-        rdfs:range xsd:double .
+        rdfs:range xsd:decimal .
 
 
 
@@ -475,13 +380,15 @@ geo:lat rdf:type owl:DatatypeProperty ,
 
 geo:long rdf:type owl:DatatypeProperty ,
                   owl:FunctionalProperty ;
-         rdfs:range xsd:double .
+         rdfs:range xsd:decimal .
 
+###  http://www.w3.org/2003/01/geo/wgs84_pos#Point
+		 
 geo:Point rdf:type owl:Class .
 
+###  http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing
+
 geo:SpatialThing rdf:type owl:Class .
-
-
 
 
 #################################################################
@@ -509,14 +416,14 @@ geo:SpatialThing rdf:type owl:Class .
 :Capability rdf:type owl:Class ;
             
             rdfs:subClassOf [ rdf:type owl:Restriction ;
-                              owl:onProperty :hasParameter ;
-                              owl:onClass :Parameter ;
-                              owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
-                            ] ,
-                            [ rdf:type owl:Restriction ;
                               owl:onProperty :hasEffect ;
                               owl:onClass :Effect ;
                               owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                            ] ,
+                            [ rdf:type owl:Restriction ;
+                              owl:onProperty :hasParameter ;
+                              owl:onClass :Parameter ;
+                              owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
                             ] .
 
 
@@ -527,14 +434,14 @@ geo:SpatialThing rdf:type owl:Class .
                  
                  rdfs:subClassOf :Datatype ,
                                  [ rdf:type owl:Restriction ;
-                                   owl:onProperty :hasProperty ;
-                                   owl:onClass :DataProperty ;
-                                   owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
-                                 ] ,
-                                 [ rdf:type owl:Restriction ;
                                    owl:onProperty :basedOnClass ;
                                    owl:onClass owl:Class ;
                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                 ] ,
+                                 [ rdf:type owl:Restriction ;
+                                   owl:onProperty :hasProperty ;
+                                   owl:onClass :DataProperty ;
+                                   owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
                                  ] .
 
 
@@ -574,6 +481,17 @@ geo:SpatialThing rdf:type owl:Class .
                             owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
                             owl:onDataRange xsd:boolean
                           ] .
+						  
+###  http://www.symbiote-h2020.eu/ontology/core#PrimitiveDatatype
+
+:PrimitiveDatatype rdf:type owl:Class ;
+          
+          rdfs:subClassOf :Datatype,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :hasBaseDatatype ;
+                            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                            owl:onClass xsd:boolean
+                          ] .						  
 
 
 
@@ -600,19 +518,20 @@ geo:SpatialThing rdf:type owl:Class .
 :Effect rdf:type owl:Class ;
         
         rdfs:subClassOf [ rdf:type owl:Restriction ;
-                          owl:onProperty :actsOn ;
-                          owl:onClass :FeatureOfInterest ;
-                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
-                        ] ,
-                        [ rdf:type owl:Restriction ;
                           owl:onProperty :affects ;
                           owl:onClass :Property ;
                           owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :actsOn ;
+                          owl:onClass :FeatureOfInterest ;
+                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                         ] .
 
 
 
 ###  http://www.symbiote-h2020.eu/ontology/core#EnumRestriction
+
 
 :EnumRestriction rdf:type owl:Class ;
                  
@@ -630,19 +549,19 @@ geo:SpatialThing rdf:type owl:Class .
 :FeatureOfInterest rdf:type owl:Class ;
                    
                    rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                     owl:onProperty :description ;
+                                     owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                                     owl:onDataRange rdf:langString
+                                   ] ,
+                                   [ rdf:type owl:Restriction ;
                                      owl:onProperty :hasProperty ;
                                      owl:onClass :Property ;
                                      owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
                                    ] ,
                                    [ rdf:type owl:Restriction ;
-                                     owl:onProperty rdfs:label ;
-                                     owl:onClass rdf:langString ;
-                                     owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
-                                   ] ,
-                                   [ rdf:type owl:Restriction ;
-                                     owl:onProperty rdfs:comment ;
-                                     owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                     owl:onDataRange rdf:langString
+                                     owl:onProperty :name ;
+                                     owl:onDataRange xsd:string ;
+                                     owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                                    ] .
 
 
@@ -653,13 +572,13 @@ geo:SpatialThing rdf:type owl:Class .
                        
                        rdfs:subClassOf :Restriction ,
                                        [ rdf:type owl:Restriction ;
-                                         owl:onProperty :onlyInstancesOfClass ;
-                                         owl:onClass owl:Class ;
+                                         owl:onProperty :valueProperty ;
+                                         owl:onClass owl:DatatypeProperty ;
                                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                                        ] ,
                                        [ rdf:type owl:Restriction ;
-                                         owl:onProperty :valueProperty ;
-                                         owl:onClass owl:DatatypeProperty ;
+                                         owl:onProperty :onlyInstancesOfClass ;
+                                         owl:onClass owl:Class ;
                                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                                        ] .
 
@@ -671,12 +590,12 @@ geo:SpatialThing rdf:type owl:Class .
                    
                    rdfs:subClassOf :Restriction ,
                                    [ rdf:type owl:Restriction ;
-                                     owl:onProperty :min ;
+                                     owl:onProperty :max ;
                                      owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
                                      owl:onDataRange xsd:integer
                                    ] ,
                                    [ rdf:type owl:Restriction ;
-                                     owl:onProperty :max ;
+                                     owl:onProperty :min ;
                                      owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
                                      owl:onDataRange xsd:integer
                                    ] .
@@ -688,14 +607,14 @@ geo:SpatialThing rdf:type owl:Class .
 :Location rdf:type owl:Class ;
           
           rdfs:subClassOf [ rdf:type owl:Restriction ;
-                            owl:onProperty rdfs:comment ;
-                            owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
-                            owl:onDataRange rdf:langString
+                            owl:onProperty :name ;
+                            owl:onDataRange xsd:string ;
+                            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                           ] ,
                           [ rdf:type owl:Restriction ;
-                            owl:onProperty rdfs:label ;
-                            owl:onClass rdf:langString ;
-                            owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                            owl:onProperty :description ;
+                            owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                            owl:onDataRange rdf:langString
                           ] .
 
 
@@ -715,13 +634,18 @@ geo:SpatialThing rdf:type owl:Class .
 :Observation rdf:type owl:Class ;
              
              rdfs:subClassOf [ rdf:type owl:Restriction ;
-                               owl:onProperty :resultTime ;
-                               owl:onClass time:Instant ;
+                               owl:onProperty :madeFrom ;
+                               owl:onClass :Location ;
                                owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                              ] ,
                              [ rdf:type owl:Restriction ;
                                owl:onProperty :observedBy ;
                                owl:onClass :Sensor ;
+                               owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :resultTime ;
+                               owl:onClass time:Instant ;
                                owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                              ] ,
                              [ rdf:type owl:Restriction ;
@@ -733,11 +657,6 @@ geo:SpatialThing rdf:type owl:Class .
                                owl:onProperty :hasObservationValue ;
                                owl:onClass :ObservationValue ;
                                owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
-                             ] ,
-                             [ rdf:type owl:Restriction ;
-                               owl:onProperty :madeFrom ;
-                               owl:onClass :Location ;
-                               owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                              ] .
 
 
@@ -747,9 +666,8 @@ geo:SpatialThing rdf:type owl:Class .
 :ObservationValue rdf:type owl:Class ;
                   
                   rdfs:subClassOf [ rdf:type owl:Restriction ;
-                                    owl:onProperty :hasObservedProperty ;
-                                    owl:onClass :Property ;
-                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                    owl:onProperty :value ;
+                                    owl:minCardinality "0"^^xsd:nonNegativeInteger
                                   ] ,
                                   [ rdf:type owl:Restriction ;
                                     owl:onProperty :hasFeatureOfInterest ;
@@ -757,12 +675,13 @@ geo:SpatialThing rdf:type owl:Class .
                                     owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                                   ] ,
                                   [ rdf:type owl:Restriction ;
-                                    owl:onProperty :value ;
-                                    owl:cardinality "1"^^xsd:nonNegativeInteger
-                                  ] ,
-                                  [ rdf:type owl:Restriction ;
                                     owl:onProperty :hasUnitOfMeasurement ;
                                     owl:onClass :UnitOfMeasurement ;
+                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                  ] ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty :hasObservedProperty ;
+                                    owl:onClass :Property ;
                                     owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                                   ] .
 
@@ -773,9 +692,9 @@ geo:SpatialThing rdf:type owl:Class .
 :Parameter rdf:type owl:Class ;
            
            rdfs:subClassOf [ rdf:type owl:Restriction ;
-                             owl:onProperty :name ;
-                             owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                             owl:onDataRange xsd:string
+                             owl:onProperty :hasRestriction ;
+                             owl:onClass :Restriction ;
+                             owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
                            ] ,
                            [ rdf:type owl:Restriction ;
                              owl:onProperty :mandatory ;
@@ -783,14 +702,14 @@ geo:SpatialThing rdf:type owl:Class .
                              owl:onDataRange xsd:boolean
                            ] ,
                            [ rdf:type owl:Restriction ;
-                             owl:onProperty :hasRestriction ;
-                             owl:onClass :Restriction ;
-                             owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
-                           ] ,
-                           [ rdf:type owl:Restriction ;
                              owl:onProperty :hasDatatype ;
                              owl:onClass :Datatype ;
                              owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :name ;
+                             owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                             owl:onDataRange xsd:string
                            ] .
 
 
@@ -801,19 +720,19 @@ geo:SpatialThing rdf:type owl:Class .
                    
                    rdfs:subClassOf :DataProperty ,
                                    [ rdf:type owl:Restriction ;
-                                     owl:onProperty :hasRestriction ;
-                                     owl:onClass :Restriction ;
-                                     owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
-                                   ] ,
-                                   [ rdf:type owl:Restriction ;
                                      owl:onProperty :hasDatatype ;
-                                     owl:onClass rdfs:Datatype ;
+                                     owl:onClass rdfs:PrimitiveDatatype ;
                                      owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                                    ] ,
                                    [ rdf:type owl:Restriction ;
                                      owl:onProperty :basedOnProperty ;
                                      owl:onClass owl:DatatypeProperty ;
                                      owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                   ] ,
+                                   [ rdf:type owl:Restriction ;
+                                     owl:onProperty :hasRestriction ;
+                                     owl:onClass :Restriction ;
+                                     owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
                                    ] .
 
 
@@ -823,9 +742,14 @@ geo:SpatialThing rdf:type owl:Class .
 :Property rdf:type owl:Class ;
           
           rdfs:subClassOf [ rdf:type owl:Restriction ;
-                            owl:onProperty rdfs:label ;
-                            owl:onClass rdf:langString ;
-                            owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                            owl:onProperty :name ;
+                            owl:onDataRange xsd:string ;
+                            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                          ],
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :description ;
+                            owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                            owl:onDataRange rdf:langString
                           ] .
 
 
@@ -836,14 +760,14 @@ geo:SpatialThing rdf:type owl:Class .
                   
                   rdfs:subClassOf :Restriction ,
                                   [ rdf:type owl:Restriction ;
-                                    owl:onProperty :max ;
-                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                    owl:onDataRange xsd:double
-                                  ] ,
-                                  [ rdf:type owl:Restriction ;
                                     owl:onProperty :min ;
                                     owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                    owl:onDataRange xsd:double
+                                    owl:onDataRange xsd:decimal
+                                  ] ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty :max ;
+                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                    owl:onDataRange xsd:decimal
                                   ] .
 
 
@@ -864,21 +788,21 @@ geo:SpatialThing rdf:type owl:Class .
 ###  http://www.symbiote-h2020.eu/ontology/core#Resource
 
 :Resource rdf:type owl:Class ;
-          
+          owl:hasKey ( :id ) ;
           rdfs:subClassOf [ rdf:type owl:Restriction ;
-                            owl:onProperty rdfs:label ;
-                            owl:onDataRange rdf:langString ;
-                            owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
-                          ] ,
-                          [ rdf:type owl:Restriction ;
-                            owl:onProperty rdfs:comment ;
-                            owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
-                            owl:onDataRange rdf:langString
-                          ] ,
-                          [ rdf:type owl:Restriction ;
                             owl:onProperty :id ;
                             owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                            owl:onDataRange :ID
+                            owl:onDataRange xsd:string
+                          ] ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :name ;
+                            owl:onDataRange xsd:string ;
+                            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                          ] ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :description ;
+                            owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                            owl:onDataRange rdf:langString
                           ] .
 
 
@@ -918,14 +842,14 @@ geo:SpatialThing rdf:type owl:Class .
                            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                          ] ,
                          [ rdf:type owl:Restriction ;
-                           owl:onProperty :name ;
-                           owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                           owl:onDataRange xsd:string
-                         ] ,
-                         [ rdf:type owl:Restriction ;
                            owl:onProperty :hasParameter ;
                            owl:onClass :Parameter ;
                            owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger
+                         ] ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :name ;
+                           owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                           owl:onDataRange xsd:string
                          ] .
 
 
@@ -951,7 +875,7 @@ geo:SpatialThing rdf:type owl:Class .
                                  [ rdf:type owl:Restriction ;
                                    owl:onProperty :step ;
                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                   owl:onDataRange xsd:double
+                                   owl:onDataRange xsd:decimal
                                  ] .
 
 
@@ -969,13 +893,14 @@ geo:SpatialThing rdf:type owl:Class .
 :UnitOfMeasurement rdf:type owl:Class ;
                    
                    rdfs:subClassOf [ rdf:type owl:Restriction ;
-                                     owl:onProperty rdfs:label ;
-                                     owl:onClass rdf:langString ;
-                                     owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                     owl:onProperty :name ;
+                                     owl:onDataRange xsd:string ;
+                                     owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                                    ] ,
                                    [ rdf:type owl:Restriction ;
                                      owl:onProperty :symbol ;
-                                     owl:cardinality "1"^^xsd:nonNegativeInteger
+									 owl:onDataRange xsd:string ;
+                                     owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
                                    ] .
 
 
@@ -986,19 +911,19 @@ geo:SpatialThing rdf:type owl:Class .
                
                rdfs:subClassOf :Location ,
                                [ rdf:type owl:Restriction ;
+                                 owl:onProperty geo:long ;
+                                 owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                 owl:onDataRange xsd:decimal
+                               ] ,
+                               [ rdf:type owl:Restriction ;
                                  owl:onProperty geo:alt ;
                                  owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                 owl:onDataRange xsd:double
+                                 owl:onDataRange xsd:decimal
                                ] ,
                                [ rdf:type owl:Restriction ;
                                  owl:onProperty geo:lat ;
                                  owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                 owl:onDataRange xsd:double
-                               ] ,
-                               [ rdf:type owl:Restriction ;
-                                 owl:onProperty geo:long ;
-                                 owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                 owl:onDataRange xsd:double
+                                 owl:onDataRange xsd:decimal
                                ] .
 
 
@@ -1016,11 +941,291 @@ geo:SpatialThing rdf:type owl:Class .
 
 
 
-###  http://www.w3.org/2000/01/rdf-schema#Datatype
+###  http://www.w3.org/2006/time#Instant
 
-rdfs:Datatype rdfs:subClassOf :Datatype .
+time:Instant rdfs:subClassOf [ rdf:type owl:Restriction ;
+                               owl:onProperty time:inXSDDateTimeStamp ;
+                               owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                               owl:onDataRange xsd:dateTimeStamp
+                             ] .
 
 
+
+###  http://www.w3.org/2006/time#Interval
+
+time:Interval rdfs:subClassOf time:TemporalEntity ,
+                              [ rdf:type owl:Restriction ;
+                                owl:onProperty time:hasEnd ;
+                                owl:onClass time:Instant ;
+                                owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                              ] ,
+                              [ rdf:type owl:Restriction ;
+                                owl:onProperty time:hasBeginning ;
+                                owl:onClass time:Instant ;
+                                owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                              ] .
+
+
+#################################################################
+#
+#    Individuals
+#
+#################################################################
+
+
+###  http://www.symbiote-h2020.eu/ontology/core#boolean
+
+:boolean rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:boolean ;
+				  :isArray "false"^^xsd:boolean .
+				  
+###  http://www.symbiote-h2020.eu/ontology/core#booleanArray
+
+:booleanArray rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:boolean ;
+				  :isArray "true"^^xsd:boolean .
+				  
+###  http://www.symbiote-h2020.eu/ontology/core#byte
+
+:byte rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:byte ;
+				  :isArray "false"^^xsd:boolean .
+				  
+###  http://www.symbiote-h2020.eu/ontology/core#byteArray
+
+:byteArray rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:byte ;
+				  :isArray "true"^^xsd:boolean .
+
+###  http://www.symbiote-h2020.eu/ontology/core#short
+
+:short rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:short ;
+				  :isArray "false"^^xsd:boolean .
+				  
+###  http://www.symbiote-h2020.eu/ontology/core#shortArray
+
+:shortArray rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:short ;
+				  :isArray "true"^^xsd:boolean .
+
+###  http://www.symbiote-h2020.eu/ontology/core#int
+
+:int rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:int ;
+				  :isArray "false"^^xsd:boolean .
+				  
+###  http://www.symbiote-h2020.eu/ontology/core#intArray
+
+:intArray rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:int ;
+				  :isArray "true"^^xsd:boolean .
+
+###  http://www.symbiote-h2020.eu/ontology/core#long
+
+:long rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:long ;
+				  :isArray "false"^^xsd:boolean .
+				  
+###  http://www.symbiote-h2020.eu/ontology/core#longArray
+
+:longArray rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:long ;
+				  :isArray "true"^^xsd:boolean .
+
+###  http://www.symbiote-h2020.eu/ontology/core#unsignedByte
+
+:unsignedByte rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:unsignedByte ;
+				  :isArray "false"^^xsd:boolean .
+				  
+###  http://www.symbiote-h2020.eu/ontology/core#unsignedByteArray
+
+:unsignedByteArray rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:unsignedByte ;
+				  :isArray "true"^^xsd:boolean .
+
+###  http://www.symbiote-h2020.eu/ontology/core#unsignedShort
+
+:unsignedShort rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:unsignedShort ;
+				  :isArray "false"^^xsd:boolean .
+				  
+###  http://www.symbiote-h2020.eu/ontology/core#unsignedShortArray
+
+:unsignedShortArray rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:unsignedShort ;
+				  :isArray "true"^^xsd:boolean .
+
+###  http://www.symbiote-h2020.eu/ontology/core#unsignedInt
+
+:unsignedInt rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:unsignedInt ;
+				  :isArray "false"^^xsd:boolean .
+				  
+###  http://www.symbiote-h2020.eu/ontology/core#unsignedIntArray
+
+:unsignedIntArray rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:unsignedInt ;
+				  :isArray "true"^^xsd:boolean .
+
+###  http://www.symbiote-h2020.eu/ontology/core#unsignedLong
+
+:unsignedLong rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:unsignedLong ;
+				  :isArray "false"^^xsd:boolean .
+				  
+###  http://www.symbiote-h2020.eu/ontology/core#unsignedLongArray
+
+:unsignedLongArray rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:unsignedLong ;
+				  :isArray "true"^^xsd:boolean .
+
+###  http://www.symbiote-h2020.eu/ontology/core#decimal
+
+:decimal rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:decimal ;
+				  :isArray "false"^^xsd:boolean .
+				  
+###  http://www.symbiote-h2020.eu/ontology/core#decimalArray
+
+:decimalArray rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:decimal ;
+				  :isArray "true"^^xsd:boolean .
+
+###  http://www.symbiote-h2020.eu/ontology/core#float
+
+:float rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:float ;
+				  :isArray "false"^^xsd:boolean .
+				  
+###  http://www.symbiote-h2020.eu/ontology/core#floatArray
+
+:floatArray rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:float ;
+				  :isArray "true"^^xsd:boolean .
+
+###  http://www.symbiote-h2020.eu/ontology/core#double
+
+:double rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:double ;
+				  :isArray "false"^^xsd:boolean .
+				  
+###  http://www.symbiote-h2020.eu/ontology/core#doubleArray
+
+:doubleArray rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:double ;
+				  :isArray "true"^^xsd:boolean .
+
+###  http://www.symbiote-h2020.eu/ontology/core#string
+
+:string rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:string ;
+				  :isArray "false"^^xsd:boolean .
+				  
+###  http://www.symbiote-h2020.eu/ontology/core#stringArray
+
+:stringArray rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:string ;
+				  :isArray "true"^^xsd:boolean .
+
+###  http://www.symbiote-h2020.eu/ontology/core#langString
+
+:langString rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype rdf:langString ;
+				  :isArray "false"^^xsd:boolean .
+				  
+###  http://www.symbiote-h2020.eu/ontology/core#langStringArray
+
+:langStringArray rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype rdf:langString ;
+				  :isArray "true"^^xsd:boolean .
+
+###  http://www.symbiote-h2020.eu/ontology/core#hexBinary
+
+:hexBinary rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:hexBinary ;
+				  :isArray "false"^^xsd:boolean .
+				  
+###  http://www.symbiote-h2020.eu/ontology/core#hexBinaryArray
+
+:hexBinaryArray rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:hexBinary ;
+				  :isArray "true"^^xsd:boolean .
+
+###  http://www.symbiote-h2020.eu/ontology/core#base64Binary
+
+:base64Binary rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:base64Binary ;
+				  :isArray "false"^^xsd:boolean .
+				  
+###  http://www.symbiote-h2020.eu/ontology/core#base64BinaryArray
+
+:base64BinaryArray rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:base64Binary ;
+				  :isArray "true"^^xsd:boolean .
+
+###  http://www.symbiote-h2020.eu/ontology/core#dateTime
+
+:dateTime rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:dateTime ;
+				  :isArray "false"^^xsd:boolean .
+				  
+###  http://www.symbiote-h2020.eu/ontology/core#dateTimeArray
+
+:dateTimeArray rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:dateTime ;
+				  :isArray "true"^^xsd:boolean .
+
+###  http://www.symbiote-h2020.eu/ontology/core#dateTimeStamp
+
+:dateTimeStamp rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:dateTimeStamp ;
+				  :isArray "false"^^xsd:boolean .
+				  
+###  http://www.symbiote-h2020.eu/ontology/core#dateTimeStampArray
+
+:dateTimeStampArray rdf:type :PrimitiveDatatype ,
+                  owl:NamedIndividual ;
+                  :hasBaseDatatype xsd:dateTimeStamp ;
+				  :isArray "true"^^xsd:boolean .
+
+				  
 
 ###  Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net
 

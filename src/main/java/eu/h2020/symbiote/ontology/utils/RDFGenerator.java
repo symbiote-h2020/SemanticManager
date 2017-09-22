@@ -61,10 +61,10 @@ public class RDFGenerator {
 //        modelResource.addProperty(RDF.type, CoreInformationModel.Resource);
         modelResource.addProperty(CoreInformationModel.id, resource.getId()); //TODO this needs to be changed to cim:ID type
         for (String label : resource.getLabels()) {
-            modelResource.addProperty(RDFS.label, label);
+            modelResource.addProperty(CoreInformationModel.name, label);
         }
         for (String comment : resource.getComments()) {
-            modelResource.addProperty(RDFS.comment, comment);
+            modelResource.addProperty(CoreInformationModel.description, comment);
         }
         if (resource instanceof MobileSensor) {
             modelResource.addProperty(RDF.type, CoreInformationModel.MobileSensor);
@@ -296,12 +296,12 @@ public class RDFGenerator {
 //            locationResource.addProperty(RDF.type, CoreInformationModel.Location);
         if (location.getLabels() != null) {
             for (String label : location.getLabels()) {
-                locationResource.addProperty(RDFS.label, label);
+                locationResource.addProperty(CoreInformationModel.name, label);
             }
         }
         if (location.getComments() != null) {
             for (String comment : location.getComments()) {
-                locationResource.addProperty(RDFS.comment, comment);
+                locationResource.addProperty(CoreInformationModel.description, comment);
             }
         }
         if (location instanceof WGS84Location) {
@@ -329,14 +329,14 @@ public class RDFGenerator {
 
             if (featureOfInterest.getLabels() != null && featureOfInterest.getLabels().size() > 0) {
                 for (String foiLabel : featureOfInterest.getLabels()) {
-                    foiResource.addProperty(RDFS.label, foiLabel);
+                    foiResource.addProperty(CoreInformationModel.name, foiLabel);
                 }
             } else {
                 throw new IllegalArgumentException(featureOfInterest.getLabels() == null ? "Feature of interest must have not null labels!" : "Feature of interest must have at least one label!");
             }
             if (featureOfInterest.getComments() != null) {
                 for (String foiComment : featureOfInterest.getComments()) {
-                    foiResource.addProperty(RDFS.comment, foiComment);
+                    foiResource.addProperty(CoreInformationModel.description, foiComment);
                 }
             }
 
@@ -455,10 +455,10 @@ public class RDFGenerator {
                 .addProperty(CoreInformationModel.id, platform.getId());
 
         for (String comment : platform.getComments()) {
-            platformRes.addProperty(RDFS.comment, comment);
+            platformRes.addProperty(CoreInformationModel.description, comment);
         }
         for (String name : platform.getLabels()) {
-            platformRes.addProperty(RDFS.label, name);
+            platformRes.addProperty(CoreInformationModel.name, name);
         }
 
         for (InterworkingService service : platform.getInterworkingServices()) {
