@@ -13,7 +13,6 @@ import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.errors.RDFGenerationError;
 import eu.h2020.symbiote.ontology.errors.RDFParsingError;
 import eu.h2020.symbiote.ontology.utils.GenerationResult;
-import eu.h2020.symbiote.ontology.utils.OntologyHelper;
 import eu.h2020.symbiote.ontology.utils.RDFGenerator;
 import eu.h2020.symbiote.ontology.utils.RDFReader;
 import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;

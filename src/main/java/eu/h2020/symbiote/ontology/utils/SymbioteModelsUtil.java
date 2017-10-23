@@ -32,13 +32,13 @@ public class SymbioteModelsUtil {
 
     private static final Log log = LogFactory.getLog(SymbioteModelsUtil.class);
 
-    private static final String CIM_ID = "CIM1";
+    private static final String CIM_ID = "CIM";
     private static final String BIM_ID = "BIM";
-    private static final String MIM_ID = "MIM1";
+    private static final String MIM_ID = "MIM";
     public static final String MODEL_BASE_NAME = "http://www.symbiote-h2020.eu/ontology/model#";
     private static final String QU_QUANTITY_BASE_NAME = "http://purl.oclc.org/NET/ssnx/qu/quantity#";
     private static final String BIM_PROPERTY_NAME = "http://www.symbiote-h2020.eu/ontology/bim/property#";
-    private static final String QU_ID = "QU1";
+    private static final String QU_ID = "QU";
 
     private static Dataset cimDataset;
     private static Dataset bimDataset;
@@ -68,12 +68,14 @@ public class SymbioteModelsUtil {
     }
 
     static {
+        initDatasets();
+
         //Loads models
         loadBaseModel(CIM.getURI(), ModelHelper.getInformationModelURI(CIM_ID), cimDataset);
-        loadBaseModel(MIM.getURI(), ModelHelper.getInformationModelURI(MIM_ID), cimDataset);
-        loadBaseModel(BIM.getURI(), ModelHelper.getInformationModelURI(BIM_ID), cimDataset);
+        loadBaseModel(MIM.getURI(), ModelHelper.getInformationModelURI(MIM_ID), mimDataset);
+        loadBaseModel(BIM.getURI(), ModelHelper.getInformationModelURI(BIM_ID), bimDataset);
         // should not be neccesarry if BIM is loaded with imports
-        loadBaseModel(QU.getURI(), ModelHelper.getInformationModelURI(QU_ID), cimDataset);
+        loadBaseModel(QU.getURI(), ModelHelper.getInformationModelURI(QU_ID), quRecDataset);
     }
 
     public static void addModels(List<InformationModel> informationModels) {

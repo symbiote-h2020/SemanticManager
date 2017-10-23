@@ -4,7 +4,6 @@ import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
 import eu.h2020.symbiote.core.model.*;
 import eu.h2020.symbiote.core.model.internal.CoreResource;
 import eu.h2020.symbiote.core.model.resources.*;
-import eu.h2020.symbiote.core.model.resources.Resource;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.errors.RDFGenerationError;
 import eu.h2020.symbiote.semantics.ModelHelper;
@@ -13,7 +12,8 @@ import eu.h2020.symbiote.semantics.ontology.MIM;
 import eu.h2020.symbiote.semantics.ontology.WGS84;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.jena.rdf.model.*;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
@@ -37,7 +37,7 @@ public class RDFGenerator {
     /**
      * Generates and returns RDF for the resource in specified format.
      *
-     * @param resource Resource to be translated to RDF.
+     * @param resource   Resource to be translated to RDF.
      * @param platformId
      * @return String containing resource description in RDF.
      */
@@ -72,7 +72,7 @@ public class RDFGenerator {
             Location locatedAt = ((MobileSensor) resource).getLocatedAt();
             if (observesProperty != null) {
                 for (String property : observesProperty) {
-                    modelResource.addProperty(CIM.observesProperty, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
+                    modelResource.addProperty(CIM.observesProperty, model.createResource(findBIMPlatformPropertyUri(property)));
                 }
             }
 //            modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT,OntologyHelper.getLocationURI(platformId,locatedAt));
@@ -87,7 +87,7 @@ public class RDFGenerator {
 
             if (observesProperty != null) {
                 for (String property : observesProperty) {
-                    modelResource.addProperty(CIM.observesProperty, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
+                    modelResource.addProperty(CIM.observesProperty, model.createResource(findBIMPlatformPropertyUri(property)));
                 }
             }
 //            modelResource.addProperty(CoreInformationModel.CIM_HAS_FOI, OntologyHelper.getFoiURI(platformId,featureOfInterest));
@@ -287,7 +287,7 @@ public class RDFGenerator {
 
         if (locationURI == null) {
             String locationId = ObjectId.get().toString();
-            locationURI = OntologyHelper.getLocationURI(platformId, locationId);
+            locationURI = ModelHelper.getPlatformURI(platformId) + "/location/" + location;
             log.info("No existing locations have been found fulfilling criteria, created new location with ID: " + locationId + " and URI: <" + locationURI + ">");
         }
         org.apache.jena.rdf.model.Resource locationResource = model.createResource(locationURI);
@@ -340,7 +340,7 @@ public class RDFGenerator {
 
             if (featureOfInterest.getHasProperty() != null) {
                 for (String foiProperty : featureOfInterest.getHasProperty()) {
-                    foiResource.addProperty(CIM.hasProperty, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(foiProperty)));
+                    foiResource.addProperty(CIM.hasProperty, model.createResource(findBIMPlatformPropertyUri(foiProperty)));
                 }
             }
 
@@ -386,14 +386,14 @@ public class RDFGenerator {
                 addFoiToModelResource(model, effectResource, effect.getActsOn());
                 for (String property : effect.getAffects()) {
                     //TODO add logic for different Information Models
-                    effectResource.addProperty(CIM.affects, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
+                    effectResource.addProperty(CIM.affects, model.createResource(findBIMPlatformPropertyUri(property)));
                 }
                 capabilityResource.addProperty(CIM.hasEffect, effectResource);
             }
         }
     }
 
-//    private static Map<String,Service> addServicesToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, List<Service> services) throws PropertyNotFoundException, RDFGenerationError {
+    //    private static Map<String,Service> addServicesToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, List<Service> services) throws PropertyNotFoundException, RDFGenerationError {
 //        Map<String,CoreResource> result = new HashMap<>();
 //        if( services != null ) {
 //            for( Service service: services ) {
@@ -504,6 +504,12 @@ public class RDFGenerator {
         if (service.getName() == null || service.getName().isEmpty()) {
             throw new RDFGenerationError("Actuating service must have a name property");
         }
+    }
+
+    private static String findBIMPlatformPropertyUri(String property) throws PropertyNotFoundException {
+        String uri = SymbioteModelsUtil.findInSymbioteCoreModels(property);
+        log.debug("Found property in symbIoTe models: " + uri);
+        return uri;
     }
 
 }

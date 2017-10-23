@@ -86,7 +86,9 @@ dependencies {
     */
 
     //compile project(':SymbIoTeLibraries')
-    compile('com.github.symbiote-h2020:SymbIoTeSemantics:develop-SNAPSHOT') {changing = true }
+    compile('com.github.symbiote-h2020:SymbIoTeSemantics:develop-SNAPSHOT') {changing = true
+                exclude group: 'org.slf4j'
+            }
     compile('com.github.symbiote-h2020:SymbIoTeLibraries:1.+') { changing=true }
     compile('com.github.symbiote-h2020:SymbIoTeSecurity:21.+') { changing=true }
 
