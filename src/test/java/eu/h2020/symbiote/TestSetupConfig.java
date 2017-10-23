@@ -1,11 +1,10 @@
 package eu.h2020.symbiote;
 
-import eu.h2020.symbIoTe.ontology.BestPracticeInformationModel;
 import eu.h2020.symbiote.core.model.*;
 import eu.h2020.symbiote.core.model.resources.*;
-import eu.h2020.symbiote.ontology.utils.OntologyHelper;
 import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
-import org.apache.commons.io.IOUtils;
+import eu.h2020.symbiote.semantics.ModelHelper;
+import eu.h2020.symbiote.semantics.ontology.BIM;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,6 +26,7 @@ public class TestSetupConfig {
     public static final String GENERAL_FOI_NAME = "Room1";
     public static final String GENERAL_FOI_DESC = "This is room 1";
     public static final FeatureOfInterest GENERAL_FOI = new FeatureOfInterest();
+
     static {
         GENERAL_FOI.setLabels(Arrays.asList(GENERAL_FOI_NAME));
         GENERAL_FOI.setComments(Arrays.asList(GENERAL_FOI_DESC));
@@ -38,7 +38,7 @@ public class TestSetupConfig {
     public static final double GENERAL_LOCATION_LAT = 48.864716d;
     public static final double GENERAL_LOCATION_LONG = 2.349014d;
     public static final double GENERAL_LOCATION_ALT = 15d;
-    public static final Location GENERAL_LOCATION = new WGS84Location( GENERAL_LOCATION_LONG,GENERAL_LOCATION_LAT,GENERAL_LOCATION_ALT,Arrays.asList(GENERAL_LOCATION_NAME),Arrays.asList(GENERAL_LOCATION_DESCRIPTION ));
+    public static final Location GENERAL_LOCATION = new WGS84Location(GENERAL_LOCATION_LONG, GENERAL_LOCATION_LAT, GENERAL_LOCATION_ALT, Arrays.asList(GENERAL_LOCATION_NAME), Arrays.asList(GENERAL_LOCATION_DESCRIPTION));
 
     public static final String INTERWORKING1_INFORMATION_MODEL_ID = "BIM";
 
@@ -57,7 +57,7 @@ public class TestSetupConfig {
     public static final String STATIONARY1_URL = GENERAL_INTERWORKING_URL;
     public static final Location STATIONARY1_LOCATION = GENERAL_LOCATION;
     public static final FeatureOfInterest STATIONARY1_FOI = GENERAL_FOI;
-    public static final List<String> STATIONARY1_PROPERTIES = Arrays.asList("temperature","humidity");
+    public static final List<String> STATIONARY1_PROPERTIES = Arrays.asList("temperature", "humidity");
 
     public static final String MOBILE1_ID = "mobile1";
     public static final List<String> MOBILE1_LABELS = Arrays.asList("Mobile 1");
@@ -121,8 +121,6 @@ public class TestSetupConfig {
     public static final List<String> STATIONARYDEVICE1_PROPERTIES = Arrays.asList("temperature");
     public static final List<ActuatingService> STATIONARYDEVICE1_CAPABILITIES = new ArrayList<>();
 
-
-
     static {
         ActuatingService service = new ActuatingService();
         service.setId(ACTUATING_SERVICE1_ID);
@@ -139,7 +137,6 @@ public class TestSetupConfig {
         MOBILEDEVICE1_CAPABILITIES.add(service);
         STATIONARYDEVICE1_CAPABILITIES.add(service);
     }
-
 
     public static Parameter createService1Param() {
         Parameter param = new Parameter();
@@ -158,12 +155,12 @@ public class TestSetupConfig {
         InformationModel im = new InformationModel();
         im.setName("BIM");
         im.setOwner("BIM");
-        im.setUri(OntologyHelper.getInformationModelUri("BIM"));
+        im.setUri(ModelHelper.getInformationModelURI("BIM"));
         im.setId("BIM");
 
         String bimRdf = null;
-        try {
-            bimRdf = IOUtils.toString(BestPracticeInformationModel.SOURCE_ABSOLUTE);
+        try {                        
+            bimRdf = ModelHelper.writeAll(ModelHelper.readModel(BIM.getURI(), true, false), RDFFormat.Turtle);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -178,6 +175,5 @@ public class TestSetupConfig {
         type.setDatatypeName("http://www.w3.org/2001/XMLSchema#string");
         return type;
     }
-
 
 }

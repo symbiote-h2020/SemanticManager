@@ -1,21 +1,15 @@
 package eu.h2020.symbiote;
 
-import eu.h2020.symbIoTe.ontology.BestPracticeInformationModel;
-import eu.h2020.symbiote.core.cci.InformationModelRequest;
 import eu.h2020.symbiote.core.internal.InformationModelValidationResult;
-import eu.h2020.symbiote.core.internal.PIMMetaModelValidationResult;
 import eu.h2020.symbiote.core.internal.ResourceInstanceValidationRequest;
 import eu.h2020.symbiote.core.internal.ResourceInstanceValidationResult;
 import eu.h2020.symbiote.core.model.InformationModel;
 import eu.h2020.symbiote.core.model.RDFFormat;
-import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.ontology.SemanticManager;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
-import eu.h2020.symbiote.ontology.utils.OntologyHelper;
 import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -25,6 +19,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.*;
 import static eu.h2020.symbiote.TestSetupConfig.*;
+import eu.h2020.symbiote.semantics.ModelHelper;
+import eu.h2020.symbiote.semantics.ontology.BIM;
 
 /**
  * Created by Szymon Mueller on 03/05/2017.
@@ -64,7 +60,7 @@ public class ValidationTests {
         InformationModel rdfInfo = new InformationModel();
         try {
             rdfInfo.setRdfFormat(RDFFormat.Turtle);
-            rdfInfo.setRdf(IOUtils.toString(BestPracticeInformationModel.SOURCE_ABSOLUTE));
+            rdfInfo.setRdf(ModelHelper.writeAll(ModelHelper.readModel(BIM.getURI(), true, false), RDFFormat.Turtle));
         } catch (IOException e) {
             e.printStackTrace();
             fail();

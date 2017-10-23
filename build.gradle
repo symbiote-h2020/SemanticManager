@@ -86,6 +86,7 @@ dependencies {
     */
 
     //compile project(':SymbIoTeLibraries')
+    compile('com.github.symbiote-h2020:SymbIoTeSemantics:develop-SNAPSHOT') {changing = true }
     compile('com.github.symbiote-h2020:SymbIoTeLibraries:1.+') { changing=true }
     compile('com.github.symbiote-h2020:SymbIoTeSecurity:21.+') { changing=true }
 
@@ -135,44 +136,3 @@ check.dependsOn(jacocoTestReport, 'dependencyCheck')
 tasks.withType(Test) {
     systemProperty 'eureka.client.enabled', 'false'
 }
-
-// automatically create ontology classes
-def generatedSourcesFolder = "generated-src";
-def ontologyDir = "src/main/resources/ontologies"
-def ontologyDirShort = "ontologies"
-def ontologyPackage = "eu.h2020.symbIoTe.ontology"
-def ontologyFileExtensions= ["**/*.rdf", "**/*.owl", "**/*.ttl", "**/*.n3"]
-
-import static org.apache.tools.ant.taskdefs.condition.Os.*
-
-task generateOntologies {
-    description = 'Generate Ontology Classes'
-    fileTree(dir: ontologyDir, include: ontologyFileExtensions).each { file ->
-        doLast {
-            javaexec {
-                classpath sourceSets.main.runtimeClasspath
-                main = 'jena.schemagen'
-                if( isFamily(FAMILY_WINDOWS) ) {                                                                                                                                                             
-                    args = ["-i", "$ontologyDir/$file.name", "-o", generatedSourcesFolder, "--package", ontologyPackage, "--nocomments", "--ontology", "--nostrict", "--declarations", "    public static final String SOURCE_RELATIVE = \"\"$ontologyDirShort/$file.name\"\"; \n\n    public static final URL SOURCE_ABSOLUTE = MethodHandles.lookup().lookupClass().getResource(\"\"/$ontologyDirShort/$file.name\"\");", "--header", "%package%\n%imports%\nimport java.net.URL;\nimport java.lang.invoke.MethodHandles;\n"]
-                } else if( isFamily(FAMILY_UNIX) || isFamily(FAMILY_MAC) ) {
-                    args = ["-i", "$ontologyDir/$file.name", "-o", generatedSourcesFolder, "--package", ontologyPackage, "--nocomments", "--ontology", "--nostrict", "--declarations", "    public static final String SOURCE_RELATIVE = \"$ontologyDirShort/$file.name\"; \n\n    public static final URL SOURCE_ABSOLUTE = MethodHandles.lookup().lookupClass().getResource(\"/$ontologyDirShort/$file.name\");", "--header", "%package%\n%imports%\nimport java.net.URL;\nimport java.lang.invoke.MethodHandles;\n"]
-                }
-            }
-        }
-    }
-    sourceSets {
-        main {
-            java.srcDirs generatedSourcesFolder
-        }
-        test {
-            java.srcDirs generatedSourcesFolder
-        }
-    }
-}
-
-clean {
-    delete generatedSourcesFolder
-}
-
-compileTestJava.dependsOn generateOntologies
-compileJava.dependsOn generateOntologies

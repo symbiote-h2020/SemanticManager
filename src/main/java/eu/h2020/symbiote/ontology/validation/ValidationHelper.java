@@ -5,9 +5,9 @@
  */
 package eu.h2020.symbiote.ontology.validation;
 
-import eu.h2020.symbIoTe.ontology.CoreInformationModel;
 import eu.h2020.symbiote.core.model.RDFFormat;
-import eu.h2020.symbiote.ontology.utils.OntologyHelper;
+import eu.h2020.symbiote.semantics.ModelHelper;
+import eu.h2020.symbiote.semantics.ontology.CIM;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jena.ontology.Individual;
@@ -226,7 +227,7 @@ public class ValidationHelper {
     public static boolean checkImportsCIM(OntModel model) {
         // check also in the import closure for CIM
         // return model.listImportedOntologyURIs(true).contains(CoreInformationModel.NS);
-        return model.listImportedOntologyURIs().stream().anyMatch(x -> x.startsWith(CoreInformationModel.NS.substring(0, CoreInformationModel.NS.length() - 1)));
+        return model.listImportedOntologyURIs().stream().anyMatch(x -> x.startsWith(CIM.getURI()));
     }
 
     public static Set<String> getDefinedClasses(OntModel model) {
@@ -287,8 +288,8 @@ public class ValidationHelper {
     public static Map<Resource, Model> sepearteResources(OntModel instances, Model pim) {
         Map<Resource, Model> result = new HashMap<>();
         instances.addSubModel(pim);
-        Set<Individual> resourcesDefinedInPIM = OntologyHelper.withInf(pim).listIndividuals(CoreInformationModel.Resource).toSet();
-        Set<Individual> resourceIndividuals = instances.listIndividuals(CoreInformationModel.Resource).toSet();
+        Set<Individual> resourcesDefinedInPIM = ModelHelper.withInf(pim).listIndividuals(CIM.Resource).toSet();
+        Set<Individual> resourceIndividuals = instances.listIndividuals(CIM.Resource).toSet();
         resourceIndividuals.removeAll(resourcesDefinedInPIM);
         instances.removeSubModel(pim);
         for (Individual resource : resourceIndividuals) {
@@ -316,7 +317,7 @@ public class ValidationHelper {
                 .toSet());
         return result;
     }
-    
+
     private static String setResourceUri(String source, Resource resource) {
         return source.replace(TAG_RESOURCE_URI, "<" + resource.getURI() + ">");
     }
@@ -324,24 +325,30 @@ public class ValidationHelper {
     public static List<String> checkCardinalityViolations(Resource instance, OntModel pim, Model instanceData) {
         List<String> result = new ArrayList<>();
         pim.addSubModel(instanceData);
-        result.addAll(OntologyHelper.executeSelectWithResults(pim, 
-                setResourceUri(QUERY_CARDINALITY_EXACTLY_DATA_PROPERTY, instance),
-                "exact cardinaility for data property violated - "));
-        result.addAll(OntologyHelper.executeSelectWithResults(pim, 
-                setResourceUri(QUERY_CARDINALITY_EXACTLY_OBJECT_PROPERTY, instance),
-                "exact cardinaility for object property violated - "));
-        result.addAll(OntologyHelper.executeSelectWithResults(pim, 
-                setResourceUri(QUERY_CARDINALITY_MIN_DATA_PROPERTY, instance),
-                "min cardinaility for data property violated - "));
-        result.addAll(OntologyHelper.executeSelectWithResults(pim, 
-                setResourceUri(QUERY_CARDINALITY_MIN_OBJECT_PROPERTY, instance),
-                "min cardinaility for object property violated - "));
-        result.addAll(OntologyHelper.executeSelectWithResults(pim, 
-                setResourceUri(QUERY_CARDINALITY_MAX_DATA_PROPERTY, instance),
-                "max cardinaility for data property violated - "));
-        result.addAll(OntologyHelper.executeSelectWithResults(pim, 
-                setResourceUri(QUERY_CARDINALITY_MAX_OBJECT_PROPERTY, instance),
-                "max cardinaility for object property violated - "));
+        result.addAll(ModelHelper.executeSelectAsList(pim, setResourceUri(QUERY_CARDINALITY_EXACTLY_DATA_PROPERTY, instance))
+                .stream()
+                .map(x -> "exact cardinaility for data property violated - " + x)
+                .collect(Collectors.toList()));
+        result.addAll(ModelHelper.executeSelectAsList(pim, setResourceUri(QUERY_CARDINALITY_EXACTLY_OBJECT_PROPERTY, instance))
+                .stream()
+                .map(x -> "exact cardinaility for object property violated - " + x)
+                .collect(Collectors.toList()));
+        result.addAll(ModelHelper.executeSelectAsList(pim, setResourceUri(QUERY_CARDINALITY_MIN_DATA_PROPERTY, instance))
+                .stream()
+                .map(x -> "min cardinaility for data property violated - " + x)
+                .collect(Collectors.toList()));
+        result.addAll(ModelHelper.executeSelectAsList(pim, setResourceUri(QUERY_CARDINALITY_MIN_OBJECT_PROPERTY, instance))
+                .stream()
+                .map(x -> "min cardinaility for object property violated - " + x)
+                .collect(Collectors.toList()));
+        result.addAll(ModelHelper.executeSelectAsList(pim, setResourceUri(QUERY_CARDINALITY_MAX_DATA_PROPERTY, instance))
+                .stream()
+                .map(x -> "max cardinaility for data property violated - " + x)
+                .collect(Collectors.toList()));
+        result.addAll(ModelHelper.executeSelectAsList(pim, setResourceUri(QUERY_CARDINALITY_MAX_OBJECT_PROPERTY, instance))
+                .stream()
+                .map(x -> "max cardinaility for object property violated - " + x)
+                .collect(Collectors.toList()));
         pim.removeSubModel(instanceData);
         return result;
     }

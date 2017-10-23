@@ -2,17 +2,14 @@ package eu.h2020.symbiote;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.h2020.symbIoTe.ontology.CoreInformationModel;
 import eu.h2020.symbiote.core.cci.RDFResourceRegistryRequest;
-import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
 import eu.h2020.symbiote.core.model.Platform;
 import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.core.model.internal.CoreResource;
 import eu.h2020.symbiote.ontology.errors.RDFParsingError;
-import eu.h2020.symbiote.ontology.utils.OntologyHelper;
 import eu.h2020.symbiote.ontology.utils.RDFReader;
-import java.io.FileReader;
+import eu.h2020.symbiote.semantics.ModelHelper;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,10 +39,7 @@ public class RDFReaderTests {
 
     @Before
     public void init() throws MalformedURLException, IOException, URISyntaxException {
-        RDFInfo rdfInfoCIM = new RDFInfo();
-        rdfInfoCIM.setRdfFormat(RDFFormat.Turtle);
-        rdfInfoCIM.setRdf(IOUtils.toString(CoreInformationModel.SOURCE_ABSOLUTE));
-        CIM = OntologyHelper.read(rdfInfoCIM, true, true);
+        CIM = ModelHelper.readModel(eu.h2020.symbiote.semantics.ontology.CIM.getURI(), true, true);
     }
 
     @Test

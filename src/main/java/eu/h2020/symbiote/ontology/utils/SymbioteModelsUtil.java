@@ -1,29 +1,27 @@
 package eu.h2020.symbiote.ontology.utils;
 
-import eu.h2020.symbIoTe.ontology.BestPracticeInformationModel;
-import eu.h2020.symbIoTe.ontology.CoreInformationModel;
-import eu.h2020.symbIoTe.ontology.MetaInformationModel;
-import eu.h2020.symbIoTe.ontology.QU;
 import eu.h2020.symbiote.core.model.InformationModel;
-import eu.h2020.symbiote.core.model.RDFFormat;
 import eu.h2020.symbiote.core.model.internal.CoreResourceType;
 import eu.h2020.symbiote.core.model.resources.*;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
-import org.apache.commons.io.IOUtils;
+import eu.h2020.symbiote.semantics.GraphHelper;
+import eu.h2020.symbiote.semantics.ModelHelper;
+import eu.h2020.symbiote.semantics.ontology.BIM;
+import eu.h2020.symbiote.semantics.ontology.CIM;
+import eu.h2020.symbiote.semantics.ontology.MIM;
+import eu.h2020.symbiote.semantics.ontology.QU;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.query.ReadWrite;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Utility class to handle symbIoTe-defined models.
@@ -52,38 +50,37 @@ public class SymbioteModelsUtil {
 
     }
 
+    private static void loadBaseModel(String loadUri, String insertUri, Dataset dataset) {
+        try {
+            Model model = ModelHelper.readModel(loadUri);
+            GraphHelper.insertGraph(dataset, insertUri, model);
+        } catch (IOException ex) {
+            log.error("could not load model '" + loadUri + "'. Reason: " + ex.getMessage());
+        }
+    }
+
+    private static void initDatasets() {
+        cimDataset = DatasetFactory.create();
+        bimDataset = DatasetFactory.create();
+        mimDataset = DatasetFactory.create();
+        quRecDataset = DatasetFactory.create();
+        pimDataset = DatasetFactory.create();
+    }
+
     static {
         //Loads models
-        try {
-            String cimRdf = IOUtils.toString(CoreInformationModel.SOURCE_ABSOLUTE);
-
-            String bimRdf = IOUtils.toString(BestPracticeInformationModel.SOURCE_ABSOLUTE);
-
-            String mimRdf = IOUtils.toString(MetaInformationModel.SOURCE_ABSOLUTE);
-
-            String quRecRdf = IOUtils.toString(QU.SOURCE_ABSOLUTE);
-
-            cimDataset = DatasetFactory.create();
-            bimDataset = DatasetFactory.create();
-            mimDataset = DatasetFactory.create();
-            quRecDataset = DatasetFactory.create();
-            pimDataset = DatasetFactory.create();
-
-            insertGraph(cimDataset, OntologyHelper.getInformationModelUri(CIM_ID), cimRdf, RDFFormat.Turtle);
-            insertGraph(bimDataset, OntologyHelper.getInformationModelUri(BIM_ID), bimRdf, RDFFormat.Turtle);
-            insertGraph(mimDataset, OntologyHelper.getInformationModelUri(MIM_ID), mimRdf, RDFFormat.Turtle);
-            insertGraph(quRecDataset, OntologyHelper.getInformationModelUri(QU_ID), quRecRdf, RDFFormat.RDFXML);
-
-        } catch (IOException e) {
-            log.fatal("Error creating basic meta models");
-        }
+        loadBaseModel(CIM.getURI(), ModelHelper.getInformationModelURI(CIM_ID), cimDataset);
+        loadBaseModel(MIM.getURI(), ModelHelper.getInformationModelURI(MIM_ID), cimDataset);
+        loadBaseModel(BIM.getURI(), ModelHelper.getInformationModelURI(BIM_ID), cimDataset);
+        // should not be neccesarry if BIM is loaded with imports
+        loadBaseModel(QU.getURI(), ModelHelper.getInformationModelURI(QU_ID), cimDataset);
     }
 
     public static void addModels(List<InformationModel> informationModels) {
         if (informationModels != null) {
             log.info("Adding " + informationModels.size() + " information models to Semantic Manager cache");
             for (InformationModel model : informationModels) {
-                insertGraph(pimDataset, OntologyHelper.getInformationModelUri(model.getId()), model.getRdf(), model.getRdfFormat());
+                GraphHelper.insertGraph(pimDataset, ModelHelper.getInformationModelURI(model.getId()), model.getRdf(), model.getRdfFormat());
             }
             log.debug("Adding finished");
         } else {
@@ -95,8 +92,8 @@ public class SymbioteModelsUtil {
         if (informationModels != null) {
             log.info("Modifying " + informationModels.size() + " information models in Semantic Manager cache");
             for (InformationModel model : informationModels) {
-                removeGraph(pimDataset, OntologyHelper.getInformationModelUri(model.getId()));
-                insertGraph(pimDataset, OntologyHelper.getInformationModelUri(model.getId()), model.getRdf(), model.getRdfFormat());
+                GraphHelper.removeGraph(pimDataset, ModelHelper.getInformationModelURI(model.getId()));
+                GraphHelper.insertGraph(pimDataset, ModelHelper.getInformationModelURI(model.getId()), model.getRdf(), model.getRdfFormat());
             }
             log.debug("Modifying finished");
         } else {
@@ -108,7 +105,7 @@ public class SymbioteModelsUtil {
         if (informationModels != null) {
             log.info("Removing " + informationModels.size() + " information models from Semantic Manager cache");
             for (InformationModel model : informationModels) {
-                removeGraph(pimDataset, OntologyHelper.getInformationModelUri(model.getId()));
+                GraphHelper.removeGraph(pimDataset, ModelHelper.getInformationModelURI(model.getId()));
             }
             log.debug("Removing finished");
         } else {
@@ -130,7 +127,11 @@ public class SymbioteModelsUtil {
         log.debug("Checking for " + name + " in symbIoTe models");
         //Check in BIM
         try {
-            uri = findUriForNameInModel(name, OntologyHelper.getInformationModelUri(BIM_ID), bimDataset, BIM_PROPERTY_NAME);
+//            Optional<Resource> result = ModelHelper.findResource(CIM.Property, name, BIM_ID, bimDataset);
+//            if (!result.isPresent()) {
+//                throw new PropertyNotFoundException(name, BIM.getURI());
+//            }
+            uri = findUriForNameInModel(name, ModelHelper.getInformationModelURI(BIM_ID), bimDataset, BIM_PROPERTY_NAME);
         } catch (eu.h2020.symbiote.ontology.errors.PropertyNotFoundException e) {
             log.error(e);
             propertyNotFoundExceptions.add(e);
@@ -138,7 +139,7 @@ public class SymbioteModelsUtil {
 
         if (uri == null) {
             try {
-                uri = findUriForNameInModel(name, OntologyHelper.getInformationModelUri(QU_ID), quRecDataset, QU_QUANTITY_BASE_NAME);
+                uri = findUriForNameInModel(name, ModelHelper.getInformationModelURI(QU_ID), quRecDataset, QU_QUANTITY_BASE_NAME);
             } catch (eu.h2020.symbiote.ontology.errors.PropertyNotFoundException e) {
                 log.error(e);
                 propertyNotFoundExceptions.add(e);
@@ -171,32 +172,7 @@ public class SymbioteModelsUtil {
     }
 
     public static Model findInformationModelById(String id) {
-        return pimDataset.getNamedModel(OntologyHelper.getInformationModelUri(id));
-    }
-
-    private static void insertGraph(Dataset dataset, String uri, String rdf, RDFFormat format) {
-        Model model = ModelFactory.createDefaultModel();
-        model.read(new ByteArrayInputStream(rdf.getBytes()), null, format.toString());
-        insertGraph(dataset, uri, model);
-    }
-
-    private static void insertGraph(Dataset dataset, String uri, Model model) {
-//        dataset.begin(ReadWrite.WRITE);
-//        if (!dataset.containsNamedModel(uri)) {
-//            dataset.addNamedModel(uri, ModelFactory.createDefaultModel());
-//        }
-//        dataset.getNamedModel(uri).add(model);
-        dataset.begin(ReadWrite.WRITE);
-        dataset.getNamedModel(uri).add(model);
-        dataset.commit();
-        dataset.end();
-    }
-
-    private static void removeGraph(Dataset dataset, String uri) {
-        dataset.begin(ReadWrite.WRITE);
-        dataset.removeNamedModel(uri);
-        dataset.commit();
-        dataset.end();
+        return pimDataset.getNamedModel(ModelHelper.getInformationModelURI(id));
     }
 
     public static CoreResourceType getTypeForResource(eu.h2020.symbiote.core.model.resources.Resource resource) {

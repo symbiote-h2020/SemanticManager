@@ -5,32 +5,15 @@
  */
 package eu.h2020.symbiote.ontology.utils;
 
-import eu.h2020.symbIoTe.ontology.MetaInformationModel;
-import eu.h2020.symbIoTe.ontology.CoreInformationModel;
-import eu.h2020.symbiote.core.model.RDFFormat;
-import eu.h2020.symbiote.core.model.RDFInfo;
+
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import eu.h2020.symbiote.semantics.ModelHelper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jena.ontology.OntDocumentManager;
-import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.util.FileManager;
-import org.apache.jena.vocabulary.OWL;
-import org.apache.jena.vocabulary.RDF;
 
 /**
  *
@@ -48,20 +31,6 @@ public class OntologyHelper {
 
     public static final int CORE_MODEL_ID = -1;
 
-    protected static final OntDocumentManager DOC_MANAGER;
-    protected static final OntModelSpec MODEL_SPEC_OWL = OntModelSpec.OWL_DL_MEM;
-    protected static final OntModelSpec MODEL_SPEC_OWL_INF = OntModelSpec.OWL_DL_MEM_RDFS_INF;
-
-    static {
-        String liveConfigFile = Thread.currentThread().getContextClassLoader().getResource(ONT_DOC_MANAGER_CONFIG).toString();
-        String cachePath = liveConfigFile.substring(0, liveConfigFile.lastIndexOf("/") + 1);
-        Model config = FileManager.get().loadModel(ONT_DOC_MANAGER_CONFIG, cachePath, "TURTLE");
-        DOC_MANAGER = new OntDocumentManager(config);
-        DOC_MANAGER.addAltEntry(CoreInformationModel.NS, CoreInformationModel.SOURCE_RELATIVE);
-        DOC_MANAGER.addAltEntry(CoreInformationModel.NS.substring(0, CoreInformationModel.NS.length() - 1), CoreInformationModel.SOURCE_RELATIVE);
-        MODEL_SPEC_OWL.setDocumentManager(DOC_MANAGER);
-        MODEL_SPEC_OWL_INF.setDocumentManager(DOC_MANAGER);
-    }
 
     /**
      * Graphs
@@ -91,27 +60,12 @@ public class OntologyHelper {
 
     }
 
-//    public static String getModelGraphURI(BigInteger modelId) {
-//        return MODELS_GRAPH + "/" + modelId;
+//    public static String getFoiURI(String platformId, String foi) {
+//        return getPlatformGraphURI(platformId) + "/foi/" + foi;
 //    }
-    public static String getPlatformGraphURI(String platformId) {
-        return PLATFORMS_GRAPH + "/" + platformId;
-    }
-
-    public static String getResourceGraphURI(String resourceId) {
-        return RESOURCES_GRAPH + "/" + resourceId;
-    }
-
-    public static String getInformationModelUri(String modelId) {
-        return INFORMATION_MODEL_GRAPH + "/" + modelId;
-    }
-
-    public static String getFoiURI(String platformId, String foi) {
-        return getPlatformGraphURI(platformId) + "/foi/" + foi;
-    }
-
+//
     public static String getLocationURI(String platformId, String location) {
-        return getPlatformGraphURI(platformId) + "/location/" + location;
+        return ModelHelper.getPlatformURI(platformId) + "/location/" + location;
     }
 
     public static String findBIMPlatformPropertyUri(String property) throws PropertyNotFoundException {
@@ -120,103 +74,4 @@ public class OntologyHelper {
         return uri;
     }
 
-//    public static String getMappingGraphURI(BigInteger mappingId) {
-//        return MAPPING_GRAPH + "/" + mappingId;
-//    }
-    public static String getPlatformMetadata(String platformId, String modelId) {
-        return "<" + getPlatformGraphURI(platformId) + "> <" + RDF.type + "> <" + PLATFORM + "> ." + "\n" //For now remove model reference
-                //                + "<" + getPlatformGraphURI(platformId) + "> <" + USES + "> <" + getModelGraphURI(modelId) + "> ."
-                ;
-    }
-
-    public static String getResourceMetadata(String serviceURI, String resourceUri) {
-        return "<" + serviceURI + "> <" + MetaInformationModel.hasResource + "> <" + resourceUri + "> .";
-    }
-
-//    public static String getMappingMetadata(BigInteger modelId1, BigInteger modelId2, BigInteger mappingId) {
-//        return "<" + getMappingGraphURI(mappingId) + "> <" + IS_A + "> <" + MAPPING + "> ." + "\n"
-//                + "<" + getMappingGraphURI(mappingId) + "> <" + FROM + "> <" + getModelGraphURI(modelId1) + "> . \n"
-//                + "<" + getMappingGraphURI(mappingId) + "> <" + TO + "> <" + getModelGraphURI(modelId2) + "> .";
-//    }
-    public static String modelAsString(Model model, RDFFormat format) {
-        StringWriter writer = new StringWriter();
-        model.write(writer, format.name());
-        return writer.toString();
-    }
-
-    public static OntModel create(boolean withInference) {
-        OntModel result = ModelFactory.createOntologyModel(
-                withInference
-                        ? MODEL_SPEC_OWL_INF
-                        : MODEL_SPEC_OWL,
-                ModelFactory.createDefaultModel());
-        return result;
-    }
-
-    public static OntModel create(Model model, boolean includeImport, boolean withInference) {
-        DOC_MANAGER.setProcessImports(includeImport);
-        OntModel result = create(withInference);
-        result.add(model);
-        if (includeImport) {
-            result.loadImports();
-        }
-        return result;
-    }
-
-    public static OntModel read(RDFInfo rdfInfo, boolean includeImport, boolean withInference) throws IOException {
-        DOC_MANAGER.setProcessImports(includeImport);
-        OntModel model = create(withInference);
-        try (InputStream is = new ByteArrayInputStream(rdfInfo.getRdf().getBytes())) {
-            model.read(is, null, rdfInfo.getRdfFormat().name());
-        }
-        if (includeImport) {
-            model.loadImports();
-        }
-        return model;
-    }
-
-    public static OntModel withInf(Model model) {
-        if (model instanceof OntModel) {
-            OntModel ontModel;
-            ontModel = (OntModel) model;
-            if (ontModel.getSpecification().equals(MODEL_SPEC_OWL_INF)) {
-                return ontModel;
-            }
-        }
-        return ModelFactory.createOntologyModel(MODEL_SPEC_OWL_INF, model);
-    }
-
-    public static void loadImports(OntModel model) {
-        DOC_MANAGER.setProcessImports(true);
-        DOC_MANAGER.loadImports(model);
-    }
-
-    public static void unloadImports(OntModel model) {
-        model.listImportedOntologyURIs().forEach(x -> DOC_MANAGER.unloadImport(model, x));
-    }
-
-    public static Set<String> getOntologyDefinitions(OntModel model) {
-        return model.listSubjectsWithProperty(RDF.type, OWL.Ontology)
-                .toSet().stream()
-                .map(x -> x.getURI())
-                .collect(Collectors.toSet());
-    }
-
-    public static List<String> executeSelectWithResults(OntModel model, String query, String message) {
-        try (QueryExecution qexec1 = QueryExecutionFactory.create(query, model)) {
-            ResultSet result = qexec1.execSelect();
-            while (result.hasNext()) {
-                QuerySolution solution = result.next();
-                System.out.println(solution.toString());
-            }
-        }
-        try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
-            return StreamHelper.stream(qexec.execSelect())
-                    .map(qs
-                            -> message + StreamHelper.stream(qs.varNames())
-                            .map(x -> x + ": " + qs.get(x))
-                            .collect(Collectors.joining(",")))
-                    .collect(Collectors.toList());
-        }
-    }
 }

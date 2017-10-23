@@ -1,7 +1,5 @@
 package eu.h2020.symbiote.ontology.utils;
 
-import eu.h2020.symbIoTe.ontology.CoreInformationModel;
-import eu.h2020.symbIoTe.ontology.MetaInformationModel;
 import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
 import eu.h2020.symbiote.core.model.InterworkingService;
 import eu.h2020.symbiote.core.model.Platform;
@@ -10,6 +8,9 @@ import eu.h2020.symbiote.core.model.RDFInfo;
 import eu.h2020.symbiote.core.model.internal.CoreResource;
 import eu.h2020.symbiote.ontology.errors.RDFParsingError;
 import eu.h2020.symbiote.ontology.validation.ValidationHelper;
+import eu.h2020.symbiote.semantics.ModelHelper;
+import eu.h2020.symbiote.semantics.ontology.CIM;
+import eu.h2020.symbiote.semantics.ontology.MIM;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jena.rdf.model.*;
@@ -50,13 +51,13 @@ public class RDFReader {
             model.read(reader, null, rdfInfo.getRdfFormat().toString());
         }
 
-        StmtIterator platformsIterator = model.listStatements(null, RDF.type, MetaInformationModel.Platform);
+        StmtIterator platformsIterator = model.listStatements(null, RDF.type, MIM.Platform);
         if (platformsIterator.hasNext()) {
             Resource platformRes = platformsIterator.next().getSubject();
             if (platformsIterator.hasNext()) {
                 throw new RDFParsingError("Found too many platforms in the RDF. It is possible to only register one platform during single registration.");
             }
-            StmtIterator idIterator = model.listStatements(platformRes, CoreInformationModel.id, (RDFNode) null);
+            StmtIterator idIterator = model.listStatements(platformRes, CIM.id, (RDFNode) null);
             String platformId = ensureSingleStatement(idIterator).getObject().asLiteral().toString();
             StmtIterator labelIterator = model.listStatements(platformRes, RDFS.label, (RDFNode) null);
             List<String> labelsList = new ArrayList<>();
@@ -73,14 +74,14 @@ public class RDFReader {
                 commentList.add(comment);
             }
 
-            StmtIterator interworkingInterfaceIterator = model.listStatements(null, RDF.type, MetaInformationModel.InterworkingService);
+            StmtIterator interworkingInterfaceIterator = model.listStatements(null, RDF.type, MIM.InterworkingService);
             List<InterworkingService> services = new ArrayList<>();
             while (interworkingInterfaceIterator.hasNext()) {
                 Resource serviceRes = interworkingInterfaceIterator.next().getSubject();
-                StmtIterator urlIterator = model.listStatements(serviceRes, MetaInformationModel.url, (RDFNode) null);
+                StmtIterator urlIterator = model.listStatements(serviceRes, MIM.url, (RDFNode) null);
                 String url = ensureSingleStatement(urlIterator).getObject().asLiteral().toString();
 
-                StmtIterator informationModelIterator = model.listStatements(serviceRes, MetaInformationModel.usesInformationModel, (RDFNode) null);
+                StmtIterator informationModelIterator = model.listStatements(serviceRes, MIM.usesInformationModel, (RDFNode) null);
                 RDFNode informationModelRDFNode = ensureSingleStatement(informationModelIterator).getObject();
                 if (informationModelRDFNode instanceof Resource) {
                     Resource informationModelResource = informationModelRDFNode.asResource();
@@ -143,7 +144,7 @@ public class RDFReader {
         }
         OntModel inputModel;
         try {
-            inputModel = OntologyHelper.read(rdfInfo, false, true);
+            inputModel = ModelHelper.readModel(rdfInfo, false, true);
         } catch (IOException ex) {
             throw new RDFParsingError("Could not parse RDF, reason: " + ex);
         }
@@ -162,8 +163,8 @@ public class RDFReader {
     }
 
     private static String getResourceId(Resource resource) {
-        if (resource.hasProperty(CoreInformationModel.id)) {
-            RDFNode idNode = resource.getProperty(CoreInformationModel.id).getObject();
+        if (resource.hasProperty(CIM.id)) {
+            RDFNode idNode = resource.getProperty(CIM.id).getObject();
             if (idNode.isLiteral()) {
                 return idNode.asLiteral().toString();
             }
@@ -185,7 +186,7 @@ public class RDFReader {
         // comments
         resource.setComments(rdfResource.listProperties(RDFS.comment).mapWith(x -> x.getObject().asLiteral().getString()).toList());
         resource.setRdfFormat(rdfFormat);
-        resource.setRdf(OntologyHelper.modelAsString(model, rdfFormat));
+        resource.setRdf(ModelHelper.writeModel(model, rdfFormat));
         return resource;
     }
 

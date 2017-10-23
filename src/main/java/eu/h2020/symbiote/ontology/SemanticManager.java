@@ -2,7 +2,6 @@ package eu.h2020.symbiote.ontology;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.h2020.symbIoTe.ontology.CoreInformationModel;
 import eu.h2020.symbiote.core.internal.*;
 import eu.h2020.symbiote.core.model.InformationModel;
 import eu.h2020.symbiote.core.model.Platform;
@@ -17,10 +16,10 @@ import eu.h2020.symbiote.ontology.utils.GenerationResult;
 import eu.h2020.symbiote.ontology.utils.OntologyHelper;
 import eu.h2020.symbiote.ontology.utils.RDFGenerator;
 import eu.h2020.symbiote.ontology.utils.RDFReader;
-import eu.h2020.symbiote.ontology.utils.StreamHelper;
 import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
 import eu.h2020.symbiote.ontology.validation.ValidationHelper;
-import org.apache.commons.lang3.StringEscapeUtils;
+import eu.h2020.symbiote.semantics.ModelHelper;
+import eu.h2020.symbiote.semantics.ontology.CIM;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jena.rdf.model.Model;
@@ -34,15 +33,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.rdf.model.Statement;
-import org.apache.jena.reasoner.ValidityReport;
-import org.apache.jena.vocabulary.OWL;
-import org.apache.jena.vocabulary.RDF;
 
 /**
  * Main class for handling validation and translation. All RDF-related tasks are
@@ -101,14 +97,14 @@ public class SemanticManager {
         // 1. check for valid RDF
         OntModel pim;
         try {
-            pim = OntologyHelper.read(request, false, false);
+            pim = ModelHelper.readModel(request, false, false);
         } catch (IOException ex) {
             result.setSuccess(false);
             result.setMessage("PIM could not be parsed! Reason: " + ex);
             return result;
         }
         // 2. check exactly one owl:Ontology
-        Set<String> ontologyDefinitions = OntologyHelper.getOntologyDefinitions(pim);
+        Set<String> ontologyDefinitions = ModelHelper.getOntologyDefinitionsURI(pim);
         if (ontologyDefinitions.size() != 1) {
             result.setSuccess(false);
             result.setMessage("PIM must contain exactly one owl:Ontology");
@@ -122,7 +118,7 @@ public class SemanticManager {
             return result;
         }
         // 4. check if any definitions were made in CIM namespace
-        Set<String> resourcesDefinedInCIMNamespace = ValidationHelper.getDefinedResourcesInNamespace(pim, CoreInformationModel.NS);
+        Set<String> resourcesDefinedInCIMNamespace = ValidationHelper.getDefinedResourcesInNamespace(pim, CIM.NS);
         if (!resourcesDefinedInCIMNamespace.isEmpty()) {
             result.setSuccess(false);
             result.setMessage("PIM is not allowed to define Resources within the CIM namespace! Found resources: "
@@ -132,8 +128,14 @@ public class SemanticManager {
         }
 
         // for all further steps we need inference and the imports to be loaded
-        pim = OntologyHelper.withInf(pim);
-        OntologyHelper.loadImports(pim);
+        pim = ModelHelper.withInf(pim);
+        try {
+            ModelHelper.loadImports(pim);
+        } catch (IOException ex) {
+            result.setSuccess(false);
+            result.setMessage("enabling inference on PIM failed! Reason: " + ex.getMessage());
+            return result;
+        }
         // 5. check only declared classes used
         Set<String> undefinedButUsedClasses = ValidationHelper.getUndefinedButUsedClasses(pim);
         if (undefinedButUsedClasses.size() > 0) {
@@ -159,7 +161,7 @@ public class SemanticManager {
 
         result.setSuccess(true);
         result.setMessage("Validation successful");
-        result.setModelValidatedAgainst(CoreInformationModel.getURI());
+        result.setModelValidatedAgainst(CIM.getURI());
         result.setModelValidated(ontologyURI);
         InformationModel modelInfo = new InformationModel();
 
@@ -346,14 +348,14 @@ public class SemanticManager {
     }
 
     private static void checkAndCreateId(org.apache.jena.rdf.model.Resource resource) {
-        if (resource.hasProperty(CoreInformationModel.id)) {
-            RDFNode idNode = resource.getProperty(CoreInformationModel.id).getObject();
+        if (resource.hasProperty(CIM.id)) {
+            RDFNode idNode = resource.getProperty(CIM.id).getObject();
             if (idNode.isLiteral()) {
                 return;
             }
         }
         resource.addLiteral(
-                CoreInformationModel.id, 
+                CIM.id, 
                 resource.getModel().createTypedLiteral(
                         String.valueOf(ObjectId.get()),
                         XSDDatatype.XSDstring));
@@ -399,7 +401,7 @@ public class SemanticManager {
 
         OntModel instances = null;
         try {
-            instances = OntologyHelper.read(request, false, false);
+            instances = ModelHelper.readModel(request.getRdf(), request.getRdfFormat(), false, false);
         } catch (IOException ex) {
             result.setSuccess(false);
             result.setMessage("instances could not be parsed! Reason: " + ex);
@@ -442,9 +444,16 @@ public class SemanticManager {
             return result;
         }
         // from now on we need inference
-        OntModel pim = OntologyHelper.create(loadedPIM, true, true);
+        OntModel pim;
+        try {
+            pim = ModelHelper.asOntModel(loadedPIM, true, true);
+        } catch (IOException ex) {
+            result.setSuccess(false);
+            result.setMessage("enabling inference on PIM failed! Reason: " + ex.getMessage());
+            return result;
+        }
 
-        instances = OntologyHelper.withInf(instances);
+        instances = ModelHelper.withInf(instances);
 
         Map<org.apache.jena.rdf.model.Resource, Model> rdfResources = ValidationHelper.sepearteResources(instances, pim);
         if (rdfResources.isEmpty()) {
@@ -490,7 +499,7 @@ public class SemanticManager {
             result.setMessage("errors validating RDF for resources: " + System.lineSeparator());
             return result;
         }
-        result.setModelValidatedAgainst(OntologyHelper.modelAsString(pim, request.getRdfFormat()));
+        result.setModelValidatedAgainst(ModelHelper.writeModel(pim, request.getRdfFormat()));
         result.setSuccess(true);
         resources.values().stream().forEach( res -> res.setInterworkingServiceURL(request.getInterworkingServiceURL()));
         result.setObjectDescription(resources);
