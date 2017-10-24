@@ -91,7 +91,7 @@ dependencies {
             }
 
     compile('com.github.symbiote-h2020:SymbIoTeLibraries:3.0.0') { changing=true }
-    compile('com.github.symbiote-h2020:SymbIoTeSecurity:21.+') { changing=true }
+    compile('com.github.symbiote-h2020:SymbIoTeSecurity:22.+') { changing=true }
 
     //Just to generate object ids
     compile('org.mongodb:bson:3.4.2')
