@@ -8,7 +8,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 import eu.h2020.symbiote.core.internal.PIMInstanceValidationResult;
-import eu.h2020.symbiote.core.model.RDFInfo;
+import eu.h2020.symbiote.core.internal.RDFInfo;
 import eu.h2020.symbiote.messaging.RabbitManager;
 import eu.h2020.symbiote.ontology.SemanticManager;
 import org.apache.commons.logging.Log;

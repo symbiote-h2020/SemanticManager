@@ -1,9 +1,10 @@
 package eu.h2020.symbiote.ontology.utils;
 
+import eu.h2020.symbiote.core.internal.CoreResource;
 import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
-import eu.h2020.symbiote.core.model.*;
-import eu.h2020.symbiote.core.model.internal.CoreResource;
-import eu.h2020.symbiote.core.model.resources.*;
+import eu.h2020.symbiote.core.internal.RDFFormat;
+import eu.h2020.symbiote.model.cim.*;
+import eu.h2020.symbiote.model.mim.InterworkingService;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.errors.RDFGenerationError;
 import eu.h2020.symbiote.semantics.ModelHelper;
@@ -57,13 +58,12 @@ public class RDFGenerator {
 
         //Add general resource properties
         org.apache.jena.rdf.model.Resource modelResource = model.createResource(ModelHelper.getResourceURI(resource.getId()));
-//        modelResource.addProperty(RDF.type, CoreInformationModel.Resource);
         modelResource.addProperty(CIM.id, resource.getId()); //TODO this needs to be changed to cim:ID type
-        for (String label : resource.getLabels()) {
-            modelResource.addProperty(RDFS.label, label);
-        }
-        for (String comment : resource.getComments()) {
-            modelResource.addProperty(RDFS.comment, comment);
+
+            modelResource.addProperty(CIM.name, resource.getName());
+
+        for (String description : resource.getDescription()) {
+            modelResource.addProperty(CIM.description, description);
         }
         if (resource instanceof MobileSensor) {
             modelResource.addProperty(RDF.type, CIM.MobileSensor);
@@ -75,7 +75,7 @@ public class RDFGenerator {
                     modelResource.addProperty(CIM.observesProperty, model.createResource(findBIMPlatformPropertyUri(property)));
                 }
             }
-//            modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT,OntologyHelper.getLocationURI(platformId,locatedAt));
+
             addLocationToModelResource(model, modelResource, locatedAt, platformId);
         }
         if (resource instanceof StationarySensor) {
@@ -90,13 +90,10 @@ public class RDFGenerator {
                     modelResource.addProperty(CIM.observesProperty, model.createResource(findBIMPlatformPropertyUri(property)));
                 }
             }
-//            modelResource.addProperty(CoreInformationModel.CIM_HAS_FOI, OntologyHelper.getFoiURI(platformId,featureOfInterest));
-//            modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT,OntologyHelper.getLocationURI(platformId,locatedAt));
+
             addLocationToModelResource(model, modelResource, locatedAt, platformId);
             addFoiToModelResource(model, modelResource, featureOfInterest);
         }
-//        if (resource instanceof ActuatingService) {
-//            addActuatingServiceToModelResource(model, modelResource, (ActuatingService) resource);
         if (resource instanceof Service) {
             modelResource.addProperty(RDF.type, CIM.Service);
             //Add name, output parameter and input parameters
@@ -109,12 +106,6 @@ public class RDFGenerator {
             org.apache.jena.rdf.model.Resource resultTypeResource = createDatatypeModelResource(model, resultType);
             modelResource.addProperty(CIM.hasResultType, resultTypeResource);
 
-//            modelResource.addProperty(CoreInformationModel.CIM_HAS_RESULT_TYPE, resultTypeResource)
-//                    .addProperty()
-//                    model.createResource().addProperty(RDF.type, CoreInformationModel.CIM_PARAMETER)
-//                            .addProperty(CoreInformationModel.CIM_IS_ARRAY, String.valueOf(outputParameter.isArray()))
-//                            .addProperty(CoreInformationModel.CIM_DATATYPE, outputParameter.getDatatype()));
-//            addInputParametersToModelResource(model, modelResource, inputParameters);
         }
 
         if (resource instanceof Actuator) {
@@ -123,56 +114,9 @@ public class RDFGenerator {
             Location locatedAt = ((Actuator) resource).getLocatedAt();
             List<Capability> capabilities = ((Actuator) resource).getCapabilities();
 
-//            modelResource.addProperty(CoreInformationModel.CIM_LOCATED_AT,OntologyHelper.getLocationURI(platformId,locatedAt));
             addLocationToModelResource(model, modelResource, locatedAt, platformId);
             addCapabilitiesToModelResource(model, modelResource, capabilities);
-//            log.debug("Found " + newRes.size() + " subresources (services) of actuator");
-//            resources.putAll(newRes);
         }
-//        if (resource instanceof MobileDevice) {
-//            modelResource.addProperty(RDF.type, CoreInformationModel.CIM_ACTUATOR);
-//            modelResource.addProperty(RDF.type, CoreInformationModel.CIM_MOBILE);
-//            Location locatedAt = ((MobileDevice) resource).getLocatedAt();
-//            List<ActuatingService> capabilities = ((MobileDevice) resource).getCapabilities();
-//
-//            addLocationToModelResource(model, modelResource, locatedAt,platformId);
-//            Map<String,CoreResource> newRes = addCapabilitiesToModelResource(model, modelResource, capabilities);
-//            log.debug("Found " + newRes.size() + " subresources (services) of actuator");
-//            resources.putAll(newRes);
-//
-//            //Add observed properties and location
-//            List<String> observesProperty = ((MobileDevice) resource).getObservesProperty();
-//
-//            if (observesProperty != null) {
-//                for (String property : observesProperty) {
-//                    modelResource.addProperty(CIM.observesProperty, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
-//                }
-//            }
-//        }
-//        if (resource instanceof StationaryDevice) {
-//            modelResource.addProperty(RDF.type, CoreInformationModel.CIM_ACTUATOR);
-//            modelResource.addProperty(RDF.type, CoreInformationModel.CIM_STATIONARY);
-//            //Add location and capabilities, ie actuating services connected with this actuator
-//            Location locatedAt = ((StationaryDevice) resource).getLocatedAt();
-//            List<ActuatingService> capabilities = ((StationaryDevice) resource).getCapabilities();
-//
-//            addLocationToModelResource(model, modelResource, locatedAt,platformId);
-//            Map<String,CoreResource> newRes = addCapabilitiesToModelResource(model, modelResource, capabilities);
-//            log.debug("Found " + newRes.size() + " subresources (services) of actuator");
-//            resources.putAll(newRes);
-//
-//            //Add foi, observed properties and location
-//            FeatureOfInterest featureOfInterest = ((StationaryDevice) resource).getFeatureOfInterest();
-//            List<String> observesProperty = ((StationaryDevice) resource).getObservesProperty();
-//
-//
-//            if (observesProperty != null) {
-//                for (String property : observesProperty) {
-//                    modelResource.addProperty(CIM.observesProperty, model.createResource(OntologyHelper.findBIMPlatformPropertyUri(property)));
-//                }
-//            }
-//            addFoiToModelResource(model, modelResource, featureOfInterest);
-//        }
 
         StringWriter writer = new StringWriter();
         model.write(writer, RDFFormat.Turtle.toString());
@@ -245,8 +189,8 @@ public class RDFGenerator {
                 datatypeResource.addProperty(CIM.hasDatatype, dataPropertyResource);
             }
         }
-        if (datatype instanceof RdfsDatatype) {
-            datatypeResource = model.createResource(((RdfsDatatype) datatype).getDatatypeName());
+        if (datatype instanceof PrimitiveDatatype) {
+            datatypeResource = model.createResource(((PrimitiveDatatype) datatype).getBaseDatatype());
             datatypeResource.addProperty(RDF.type, RDFS.Datatype);
         }
         return datatypeResource;
@@ -292,14 +236,12 @@ public class RDFGenerator {
         }
         org.apache.jena.rdf.model.Resource locationResource = model.createResource(locationURI);
 //            locationResource.addProperty(RDF.type, CoreInformationModel.Location);
-        if (location.getLabels() != null) {
-            for (String label : location.getLabels()) {
-                locationResource.addProperty(RDFS.label, label);
-            }
+        if (location.getName() != null) {
+            locationResource.addProperty(CIM.name, location.getName());
         }
-        if (location.getComments() != null) {
-            for (String comment : location.getComments()) {
-                locationResource.addProperty(RDFS.comment, comment);
+        if (location.getDescription() != null) {
+            for (String comment : location.getDescription()) {
+                locationResource.addProperty(CIM.description, comment);
             }
         }
         if (location instanceof WGS84Location) {
@@ -325,16 +267,14 @@ public class RDFGenerator {
             org.apache.jena.rdf.model.Resource foiResource = model.createResource();
             foiResource.addProperty(RDF.type, CIM.FeatureOfInterest);
 
-            if (featureOfInterest.getLabels() != null && featureOfInterest.getLabels().size() > 0) {
-                for (String foiLabel : featureOfInterest.getLabels()) {
-                    foiResource.addProperty(RDFS.label, foiLabel);
-                }
+            if (featureOfInterest.getName() != null) {
+                foiResource.addProperty(CIM.name, featureOfInterest.getName());
             } else {
-                throw new IllegalArgumentException(featureOfInterest.getLabels() == null ? "Feature of interest must have not null labels!" : "Feature of interest must have at least one label!");
+                throw new IllegalArgumentException("Feature of interest must have not null name!");
             }
-            if (featureOfInterest.getComments() != null) {
-                for (String foiComment : featureOfInterest.getComments()) {
-                    foiResource.addProperty(RDFS.comment, foiComment);
+            if (featureOfInterest.getDescription() != null) {
+                for (String foiComment : featureOfInterest.getDescription()) {
+                    foiResource.addProperty(CIM.description, foiComment);
                 }
             }
 
@@ -449,10 +389,10 @@ public class RDFGenerator {
                 .addProperty(CIM.id, platform.getId());
 
         for (String comment : platform.getComments()) {
-            platformRes.addProperty(RDFS.comment, comment);
+            platformRes.addProperty(CIM.description, comment);
         }
         for (String name : platform.getLabels()) {
-            platformRes.addProperty(RDFS.label, name);
+            platformRes.addProperty(CIM.name, name);
         }
 
         for (InterworkingService service : platform.getInterworkingServices()) {
@@ -486,8 +426,8 @@ public class RDFGenerator {
         if (location == null) {
             throw new RDFGenerationError("Location must not be null");
         }
-        if (location.getLabels() == null || location.getLabels().size() == 0) {
-            throw new RDFGenerationError("Location must have at least one name");
+        if (location.getName() == null ) {
+            throw new RDFGenerationError("Location must have not null name");
         }
     }
 
@@ -498,8 +438,8 @@ public class RDFGenerator {
         if (service.getResultType() == null) {
             throw new RDFGenerationError("Actuating service must have an output parameter");
         }
-        if (service.getLabels() == null || service.getLabels().size() == 0) {
-            throw new RDFGenerationError("Actuating must have at least one label");
+        if (service.getName() == null) {
+            throw new RDFGenerationError("Actuating must have not null name");
         }
         if (service.getName() == null || service.getName().isEmpty()) {
             throw new RDFGenerationError("Actuating service must have a name property");

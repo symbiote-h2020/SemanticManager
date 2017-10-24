@@ -9,13 +9,13 @@
 
 <http://www.symbiote-h2020.eu/ontology/resources/actuator1>
         a                   core:Actuator ;
-        rdfs:comment        "This is actuator 1" ;
-        rdfs:label          "Actuator 1" ;
+        core:description        "This is actuator 1" ;
+        core:name          "Actuator 1" ;
         core:hasCapability  [ a                  core:Capability ;
                               core:hasEffect     [ a                          core:Effect ;
                                                    core:hasFeatureOfInterest  [ a                 core:FeatureOfInterest ;
-                                                                                rdfs:comment      "This is room 1" ;
-                                                                                rdfs:label        "Room1" ;
+                                                                                core:description      "This is room 1" ;
+                                                                                core:name        "Room1" ;
                                                                                 core:hasProperty  qu:temperature
                                                                               ] ;
                                                    core:hasProperty           qu:humidity , qu:temperature
@@ -35,8 +35,8 @@
 
 <http://www.symbiote-h2020.eu/ontology/platforms/Platform1/location/59ad0b5f8d116620906557f2>
         a             core:WGS84Location ;
-        rdfs:comment  "This is paris" ;
-        rdfs:label    "Paris" ;
+        core:description  "This is paris" ;
+        core:name    "Paris" ;
         geo:alt       "15.0" ;
         geo:lat       "48.864716" ;
         geo:long      "2.349014" .

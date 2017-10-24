@@ -1,8 +1,8 @@
 package eu.h2020.symbiote.ontology.utils;
 
-import eu.h2020.symbiote.core.model.InformationModel;
-import eu.h2020.symbiote.core.model.internal.CoreResourceType;
-import eu.h2020.symbiote.core.model.resources.*;
+import eu.h2020.symbiote.core.internal.CoreResourceType;
+import eu.h2020.symbiote.model.cim.*;
+import eu.h2020.symbiote.model.mim.InformationModel;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.semantics.GraphHelper;
 import eu.h2020.symbiote.semantics.ModelHelper;
@@ -177,7 +177,7 @@ public class SymbioteModelsUtil {
         return pimDataset.getNamedModel(ModelHelper.getInformationModelURI(id));
     }
 
-    public static CoreResourceType getTypeForResource(eu.h2020.symbiote.core.model.resources.Resource resource) {
+    public static CoreResourceType getTypeForResource(eu.h2020.symbiote.model.cim.Resource resource) {
         CoreResourceType type = null;
         if (resource instanceof Device) {
             type = CoreResourceType.DEVICE;

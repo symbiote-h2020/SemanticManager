@@ -10,9 +10,9 @@
 
 :platformA
         a meta:Platform , owl:Ontology ;
-        rdfs:label "Platform A" ;
+        core:name "Platform A" ;
         core:id "1" ;
-        rdfs:comment "Test platform A" ;
+        core:description "Test platform A" ;
         meta:hasService :platformA_RAP .
 
 :platformA_RAP a meta:InterworkingService ;

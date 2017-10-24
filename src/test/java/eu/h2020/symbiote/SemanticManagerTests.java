@@ -3,23 +3,22 @@ package eu.h2020.symbiote;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.h2020.symbiote.core.internal.*;
-import eu.h2020.symbiote.core.model.Property;
-import eu.h2020.symbiote.core.model.internal.CoreResource;
-import eu.h2020.symbiote.core.model.resources.*;
+import eu.h2020.symbiote.core.internal.CoreResource;
+import eu.h2020.symbiote.core.internal.CoreResourceRegistryRequest;
+import eu.h2020.symbiote.core.internal.DescriptionType;
+import eu.h2020.symbiote.core.internal.ResourceInstanceValidationResult;
+import eu.h2020.symbiote.model.cim.*;
 import eu.h2020.symbiote.ontology.SemanticManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
 import static eu.h2020.symbiote.TestSetupConfig.*;
+import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SemanticManagerTests {
@@ -28,8 +27,8 @@ public class SemanticManagerTests {
     public void testStationarySensorValidateAndCreate() {
         StationarySensor stationarySensor = new StationarySensor();
         stationarySensor.setId(STATIONARY1_ID);
-        stationarySensor.setLabels(STATIONARY1_LABELS);
-        stationarySensor.setComments(STATIONARY1_COMMENTS);
+        stationarySensor.setName(STATIONARY1_LABEL);
+        stationarySensor.setDescription(STATIONARY1_COMMENTS);
         stationarySensor.setLocatedAt(STATIONARY1_LOCATION);
         stationarySensor.setInterworkingServiceURL(STATIONARY1_URL);
         stationarySensor.setFeatureOfInterest(STATIONARY1_FOI);
@@ -42,8 +41,8 @@ public class SemanticManagerTests {
     public void testMobileSensorValidateAndCreate() {
         MobileSensor mobileSensor = new MobileSensor();
         mobileSensor.setId(MOBILE1_ID);
-        mobileSensor.setLabels(MOBILE1_LABELS);
-        mobileSensor.setComments(MOBILE1_COMMENTS);
+        mobileSensor.setName(MOBILE1_LABEL);
+        mobileSensor.setDescription(MOBILE1_COMMENTS);
         mobileSensor.setLocatedAt(MOBILE1_LOCATION);
         mobileSensor.setInterworkingServiceURL(MOBILE1_URL);
         mobileSensor.setObservesProperty(MOBILE1_PROPERTIES);
@@ -55,8 +54,8 @@ public class SemanticManagerTests {
     public void testServiceValidateAndCreate() {
         Service service = new Service();
         service.setId(SERVICE1_ID);
-        service.setLabels(SERVICE1_LABELS);
-        service.setComments(SERVICE1_COMMENTS);
+        service.setName(SERVICE1_LABEL);
+        service.setDescription(SERVICE1_COMMENTS);
         service.setInterworkingServiceURL(SERVICE1_URL);
         service.setName(SERVICE1_NAME);
 
@@ -78,8 +77,8 @@ public class SemanticManagerTests {
     public void testServiceWithComplexDatatypeValidateAndCreate() {
         Service service = new Service();
         service.setId(SERVICE1_ID);
-        service.setLabels(SERVICE1_LABELS);
-        service.setComments(SERVICE1_COMMENTS);
+        service.setName(SERVICE1_LABEL);
+        service.setDescription(SERVICE1_COMMENTS);
         service.setInterworkingServiceURL(SERVICE1_URL);
         service.setName(SERVICE1_NAME);
 
@@ -89,10 +88,10 @@ public class SemanticManagerTests {
         complexDatatype.setArray(false);
         complexDatatype.setBasedOnClass("bim:Light");
         PrimitiveProperty dp = new PrimitiveProperty();
-        RdfsDatatype propertyDatatype = new RdfsDatatype();
-        propertyDatatype.setDatatypeName("xsd:string");
+        PrimitiveDatatype propertyDatatype = new PrimitiveDatatype();
+        propertyDatatype.setBaseDatatype("xsd:string");
         propertyDatatype.setArray(false);
-        dp.setRdfsDatatype( propertyDatatype );
+        dp.setPrimitiveDatatype( propertyDatatype );
         dp.setBasedOnProperty("owl:property");
         complexDatatype.setDataProperties(Arrays.asList(dp));
         service.setResultType(complexDatatype);
@@ -144,8 +143,8 @@ public class SemanticManagerTests {
     public void testActuatorValidateAndCreate() {
         Actuator actuator = new Actuator();
         actuator.setId(ACTUATOR1_ID);
-        actuator.setLabels(ACTUATOR1_LABELS);
-        actuator.setComments(ACTUATOR1_COMMENTS);
+        actuator.setName(ACTUATOR1_LABEL);
+        actuator.setDescription(ACTUATOR1_COMMENTS);
         actuator.setLocatedAt(ACTUATOR1_LOCATION);
         actuator.setInterworkingServiceURL(ACTUATOR1_URL);
 
@@ -167,14 +166,14 @@ public class SemanticManagerTests {
     @Test
     public void testServiceWithoutId() {
         Actuator actuator = new Actuator();
-        actuator.setLabels(Arrays.asList("Inner actuating service 1"));
-        actuator.setComments(ACTUATOR1_COMMENTS);
+        actuator.setName("Inner actuating service 1");
+        actuator.setDescription(ACTUATOR1_COMMENTS);
         actuator.setLocatedAt(ACTUATOR1_LOCATION);
         actuator.setInterworkingServiceURL(ACTUATOR1_URL);
 
         Service service = new Service();
-        service.setLabels(ACTUATING_SERVICE1_LABELS);
-        service.setComments(ACTUATING_SERVICE1_COMMENTS);
+        service.setName(ACTUATING_SERVICE1_LABEL);
+        service.setDescription(ACTUATING_SERVICE1_COMMENTS);
         service.setInterworkingServiceURL(ACTUATING_SERVICE1_URL);
         service.setName(ACTUATING_SERVICE1_NAME);
 //        service.setActsOn(ACTUATING_SERVICE1_ACTSON);
@@ -299,8 +298,8 @@ public class SemanticManagerTests {
         } else {
             assertNotNull("If resource had null id it must be generated", resultResource.getId());
         }
-        assertEquals("Labels of the result must be the same", resource.getLabels(),resultResource.getLabels());
-        assertEquals("Comments of the result must be the same", resource.getComments(),resultResource.getComments());
+        assertEquals("Labels of the result must be the same", resource.getName(),resultResource.getName());
+        assertEquals("Comments of the result must be the same", resource.getDescription(),resultResource.getDescription());
         assertEquals("Interworking service URL of the result must be the same", resource.getInterworkingServiceURL(),resultResource.getInterworkingServiceURL());
         assertNotNull("Created RDF must not be null", resultResource.getRdf());
         assertFalse("Created RDF must not be empty", resultResource.getRdf().isEmpty());

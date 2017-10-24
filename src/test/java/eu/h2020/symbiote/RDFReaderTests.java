@@ -3,10 +3,10 @@ package eu.h2020.symbiote;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.h2020.symbiote.core.cci.RDFResourceRegistryRequest;
-import eu.h2020.symbiote.core.model.Platform;
-import eu.h2020.symbiote.core.model.RDFFormat;
-import eu.h2020.symbiote.core.model.RDFInfo;
-import eu.h2020.symbiote.core.model.internal.CoreResource;
+import eu.h2020.symbiote.core.internal.CoreResource;
+import eu.h2020.symbiote.core.internal.RDFFormat;
+import eu.h2020.symbiote.core.internal.RDFInfo;
+import eu.h2020.symbiote.model.mim.Platform;
 import eu.h2020.symbiote.ontology.errors.RDFParsingError;
 import eu.h2020.symbiote.ontology.utils.RDFReader;
 import eu.h2020.symbiote.semantics.ModelHelper;
@@ -64,8 +64,8 @@ public class RDFReaderTests {
         assertNotNull(coreResource.getId());
         // Removed becaue want said to get rid of this
 //        assertNotNull(coreResource.getInterworkingServiceURL());
-        assertNotNull(coreResource.getLabels());
-        assertNotNull(coreResource.getComments());
+        assertNotNull(coreResource.getName());
+        assertNotNull(coreResource.getDescription());
 //        assertEquals(coreResource.getRdf(),stationarySensorRdf);
         assertEquals(coreResource.getRdfFormat(), RDFFormat.Turtle);
     }
@@ -98,8 +98,8 @@ public class RDFReaderTests {
             assertNotNull(coreRes.getId());
             // Removed becaue want said to get rid of this
 //            assertNotNull(coreRes.getInterworkingServiceURL());
-            assertNotNull(coreRes.getLabels());
-            assertNotNull(coreRes.getComments());
+            assertNotNull(coreRes.getName());
+            assertNotNull(coreRes.getDescription());
 //            assertEquals(coreRes.getRdf(), stationarySensorRdf);
             assertEquals(coreRes.getRdfFormat(), RDFFormat.Turtle);
         }

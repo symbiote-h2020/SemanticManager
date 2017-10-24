@@ -11,12 +11,12 @@
 
 :Sensor1
         a core:StationarySensor ;
-        rdfs:comment "custom stationary 1" ;
-        rdfs:label "custom sensor 1" ;
+        core:description "custom stationary 1" ;
+        core:name "custom sensor 1" ;
         core:hasFeatureOfInterest
                 [ a core:FeatureOfInterest ;
-                  rdfs:comment "custom platform room1" ;
-                  rdfs:label "customRoom1" ;
+                  core:description "custom platform room1" ;
+                  core:name "customRoom1" ;
                   core:hasProperty qu:temperature
                 ] ;
         core:locatedAt :Paris1 ;
@@ -24,8 +24,8 @@
 
 :Actuator1
 	a core:Actuator ;
-	rdfs:comment "dummy actuator for custom platform" ;
-	rdfs:label "actuator 1" ;
+	core:description "dummy actuator for custom platform" ;
+	core:name "actuator 1" ;
 	core:hasCapability [
 		a core:Capability ;
 		core:hasParameter [ 
@@ -43,8 +43,8 @@
 		core:hasEffect [
 			core:actsOn [ 
 					a core:FeatureOfInterest ;
-					rdfs:comment "custom platform room1" ;
-					rdfs:label "customRoom1" ;
+					core:description "custom platform room1" ;
+					core:name "customRoom1" ;
 					core:hasProperty qu:temperature
 				] ; 
 			core:affects qu:temperature
@@ -55,8 +55,7 @@
 
 :Service1
         a core:Service ;
-        rdfs:comment "customPlatform service 1" ;
-        rdfs:label "service 1" ;
+        core:description "customPlatform service 1" ;
         core:hasParameter
                 [ a core:Parameter ;
                   core:datatype xsd:string ;
@@ -70,20 +69,20 @@
                   core:name "inputParam1"
                 ] ;
         core:hasResultType xsd:string ;
-        core:name "service1" .
+        core:name "Service 1" .
 
 :Paris1
         a core:WGS84Location ;
-        rdfs:comment "This is paris" ;
-        rdfs:label "Paris" ;
+        core:description "This is paris" ;
+        core:name "Paris" ;
         geo:alt "15.0"^^xsd:double ;
         geo:lat "48.864716"^^xsd:double ;
         geo:long "2.349014"^^xsd:double .		
 		
 :Paris2
         a core:WGS84Location ;
-        rdfs:comment "This is paris" ;
-        rdfs:label "Paris" ;
+        core:description "This is paris" ;
+        core:name "Paris" ;
         geo:alt "15.0"^^xsd:double ;
         geo:lat "48.864716"^^xsd:double ;
         geo:long "2.349014"^^xsd:double .

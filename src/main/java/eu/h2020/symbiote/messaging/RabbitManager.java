@@ -3,7 +3,6 @@ package eu.h2020.symbiote.messaging;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.*;
 import eu.h2020.symbiote.core.internal.InformationModelListResponse;
-import eu.h2020.symbiote.core.model.InformationModel;
 import eu.h2020.symbiote.messaging.consumers.*;
 import eu.h2020.symbiote.ontology.utils.LocationFinder;
 import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;

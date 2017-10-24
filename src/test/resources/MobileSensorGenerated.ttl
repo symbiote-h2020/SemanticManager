@@ -9,16 +9,16 @@
 
 <http://www.symbiote-h2020.eu/ontology/platforms/Platform1/location/59ad0b5f8d116620906557f1>
         a             core:WGS84Location ;
-        rdfs:comment  "This is paris" ;
-        rdfs:label    "Paris" ;
+        core:description  "This is paris" ;
+        core:name    "Paris" ;
         geo:alt       "15.0" ;
         geo:lat       "48.864716" ;
         geo:long      "2.349014" .
 
 <http://www.symbiote-h2020.eu/ontology/resources/mobile1>
         a                      core:MobileSensor ;
-        rdfs:comment           "This is mobile 1" ;
-        rdfs:label             "Mobile 1" ;
+        core:description           "This is mobile 1" ;
+        core:name             "Mobile 1" ;
         core:id                "mobile1" ;
         core:locatedAt         <http://www.symbiote-h2020.eu/ontology/platforms/Platform1/location/59ad0b5f8d116620906557f1> ;
         core:observesProperty  qu:temperature .

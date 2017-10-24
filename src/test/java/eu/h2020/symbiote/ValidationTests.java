@@ -1,10 +1,10 @@
 package eu.h2020.symbiote;
 
 import eu.h2020.symbiote.core.internal.InformationModelValidationResult;
+import eu.h2020.symbiote.core.internal.RDFFormat;
 import eu.h2020.symbiote.core.internal.ResourceInstanceValidationRequest;
 import eu.h2020.symbiote.core.internal.ResourceInstanceValidationResult;
-import eu.h2020.symbiote.core.model.InformationModel;
-import eu.h2020.symbiote.core.model.RDFFormat;
+import eu.h2020.symbiote.model.mim.InformationModel;
 import eu.h2020.symbiote.ontology.SemanticManager;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;

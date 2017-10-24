@@ -9,11 +9,11 @@
 
 <http://www.symbiote-h2020.eu/ontology/resources/stationary1>
         a                          core:StationarySensor ;
-        rdfs:comment               "This is stationary 1" ;
-        rdfs:label                 "Stationary 1" ;
+        core:description               "This is stationary 1" ;
+        core:name                 "Stationary 1" ;
         core:hasFeatureOfInterest  [ a                 core:FeatureOfInterest ;
-                                     rdfs:comment      "This is room 1" ;
-                                     rdfs:label        "Room1" ;
+                                     core:description      "This is room 1" ;
+                                     core:name        "Room1" ;
                                      core:hasProperty  qu:temperature
                                    ] ;
         core:id                    "stationary1" ;
@@ -22,8 +22,8 @@
 
 <http://www.symbiote-h2020.eu/ontology/platforms/Platform1/location/59ad0b5f8d116620906557ee>
         a             core:WGS84Location ;
-        rdfs:comment  "This is paris" ;
-        rdfs:label    "Paris" ;
+        core:description  "This is paris" ;
+        core:name    "Paris" ;
         geo:alt       "15.0" ;
         geo:lat       "48.864716" ;
         geo:long      "2.349014" .

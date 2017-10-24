@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.*;
 import eu.h2020.symbiote.core.ci.SparqlQueryOutputFormat;
 import eu.h2020.symbiote.core.internal.CoreSparqlQueryRequest;
-import eu.h2020.symbiote.core.model.Location;
-import eu.h2020.symbiote.core.model.WGS84Location;
 import eu.h2020.symbiote.messaging.RabbitManager;
+import eu.h2020.symbiote.model.cim.Location;
+import eu.h2020.symbiote.model.cim.WGS84Location;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -65,7 +65,7 @@ public class LocationFinder {
         String uri = null;
         String query = null;
 
-        if( location instanceof WGS84Location ) {
+        if( location instanceof WGS84Location) {
             query = getWGS84SparqlQuery((WGS84Location) location, platformId);
         }
 
@@ -137,11 +137,11 @@ public class LocationFinder {
         query.append("\t?location a cim:Location ;\n");
         query.append("\t\ta cim:WGS84Location .\n");
         //TODO locations are now array, need to ensure
-        for( String label: location.getLabels() ) {
-            query.append("\t?location rdfs:label \"" + label + "\" .\n");
-        }
-        for( String comment: location.getComments()) {
-            query.append("\t?location rdfs:comment \"" + location.getComments() + "\" .\n");
+//        for( String label: location.getLabels() ) {
+            query.append("\t?location cim:name \"" + location.getName() + "\" .\n");
+//        }
+        for( String comment: location.getDescription()) {
+            query.append("\t?location cim:description \"" + comment + "\" .\n");
         }
 
         //Ensure that location is defined for this platform...
@@ -161,65 +161,5 @@ public class LocationFinder {
         return query.toString();
     }
 
-//    /**
-//     * Method used to send message via RPC (Remote Procedure Call) pattern.
-//     * In this implementation it covers asynchronous Rabbit communication with synchronous one, as it is used by conventional REST facade.
-//     * Before sending a message, a temporary response queue is declared and its name is passed along with the message.
-//     * When a consumer handles the message, it returns the result via the response queue.
-//     * Since this is a synchronous pattern, it uses timeout of 20 seconds. If the response doesn't come in that time, the method returns with null result.
-//     *
-//     * @param exchangeName name of the eschange to send message to
-//     * @param routingKey   routing key to send message to
-//     * @param message      message to be sent
-//     * @return response from the consumer or null if timeout occurs
-//     */
-//    public String sendRpcMessage(String exchangeName, String routingKey, String message, String classType) {
-//        try {
-//            log.info("Sending RPC message: " + message);
-//
-//            String correlationId = UUID.randomUUID().toString();
-//
-//            Map<String, Object> headers = new HashMap<>();
-//            headers.put("__TypeId__", classType);
-//            headers.put("__ContentTypeId__", Object.class.getCanonicalName());
-//
-//            AMQP.BasicProperties props = new AMQP.BasicProperties()
-//                    .builder()
-//                    .correlationId(correlationId)
-//                    .replyTo(durableResponseQueueName)
-//                    .contentType("application/json")
-//                    .headers(headers)
-//                    .build();
-//
-//            final BlockingQueue<String> response = new ArrayBlockingQueue<String>(1);
-//
-//            DefaultConsumer consumer = new DefaultConsumer(channel) {
-//                @Override
-//                public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-//                    if (properties.getCorrelationId().equals(correlationId)) {
-//                        log.debug("Got reply with correlationId: " + correlationId);
-////                        responseMsg = new String(delivery.getBody());
-//                        response.offer(new String(body, "UTF-8"));
-////                        getChannel().basicAck(envelope.getDeliveryTag(),false);
-//                        getChannel().basicCancel(this.getConsumerTag());
-//
-//                    } else {
-//                        log.debug("Got answer with wrong correlationId... should be " + correlationId + " but got " + properties.getCorrelationId() );
-//                    }
-//                }
-//            };
-//
-//            this.channel.basicConsume(durableResponseQueueName, true, consumer);
-//
-//            this.channel.basicPublish(exchangeName, routingKey, props, message.getBytes());
-//
-//            String responseMsg = response.take();
-//            log.info("Response received: " + responseMsg);
-//            return responseMsg;
-//        } catch (IOException | InterruptedException e) {
-//            log.error(e.getMessage(), e);
-//        }
-//        return null;
-//    }
 
 }

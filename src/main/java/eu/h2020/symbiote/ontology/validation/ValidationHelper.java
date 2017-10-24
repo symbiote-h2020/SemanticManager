@@ -5,7 +5,7 @@
  */
 package eu.h2020.symbiote.ontology.validation;
 
-import eu.h2020.symbiote.core.model.RDFFormat;
+import eu.h2020.symbiote.core.internal.RDFFormat;
 import eu.h2020.symbiote.semantics.ModelHelper;
 import eu.h2020.symbiote.semantics.ontology.CIM;
 import java.io.FileWriter;

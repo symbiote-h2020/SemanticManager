@@ -1,9 +1,8 @@
 package eu.h2020.symbiote.ontology.utils;
 
-import eu.h2020.symbiote.core.model.internal.CoreResource;
+import eu.h2020.symbiote.core.internal.CoreResource;
 import org.apache.jena.rdf.model.Model;
 
-import java.util.List;
 import java.util.Map;
 
 /**

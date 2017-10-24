@@ -1,11 +1,10 @@
 package eu.h2020.symbiote.ontology.utils;
 
-import eu.h2020.symbiote.core.internal.PIMInstanceDescription;
-import eu.h2020.symbiote.core.model.InterworkingService;
-import eu.h2020.symbiote.core.model.Platform;
-import eu.h2020.symbiote.core.model.RDFFormat;
-import eu.h2020.symbiote.core.model.RDFInfo;
-import eu.h2020.symbiote.core.model.internal.CoreResource;
+import eu.h2020.symbiote.core.internal.CoreResource;
+import eu.h2020.symbiote.core.internal.RDFFormat;
+import eu.h2020.symbiote.core.internal.RDFInfo;
+import eu.h2020.symbiote.model.mim.InterworkingService;
+import eu.h2020.symbiote.model.mim.Platform;
 import eu.h2020.symbiote.ontology.errors.RDFParsingError;
 import eu.h2020.symbiote.ontology.validation.ValidationHelper;
 import eu.h2020.symbiote.semantics.ModelHelper;
@@ -59,14 +58,13 @@ public class RDFReader {
             }
             StmtIterator idIterator = model.listStatements(platformRes, CIM.id, (RDFNode) null);
             String platformId = ensureSingleStatement(idIterator).getObject().asLiteral().toString();
-            StmtIterator labelIterator = model.listStatements(platformRes, RDFS.label, (RDFNode) null);
-            List<String> labelsList = new ArrayList<>();
-            while (labelIterator.hasNext()) {
-                Statement labelStmt = labelIterator.next();
-                labelsList.add(labelStmt.getObject().asLiteral().toString());
+            StmtIterator labelIterator = model.listStatements(platformRes, CIM.name, (RDFNode) null);
+            String platformName = labelIterator.next().getObject().asLiteral().toString();
+            if (labelIterator.hasNext()) {
+                throw new RDFParsingError("Found too many names of the platform - only one name field is possible. ");
             }
 
-            StmtIterator commentsIterator = model.listStatements(platformRes, RDFS.comment, (RDFNode) null);
+            StmtIterator commentsIterator = model.listStatements(platformRes, CIM.description, (RDFNode) null);
             List<String> commentList = new ArrayList<>();
             while (commentsIterator.hasNext()) {
                 String comment = commentsIterator.next().getObject().asLiteral().toString();
@@ -101,8 +99,8 @@ public class RDFReader {
 
             platform = new Platform();
             platform.setId(platformId);
-            platform.setLabels(labelsList);
-            platform.setComments(commentList);
+            platform.setName(platformName);
+            platform.setDescription(commentList);
             platform.setInterworkingServices(services);
             platform.setRdf(rdfInfo.getRdf());
             platform.setRdfFormat(rdfInfo.getRdfFormat());
@@ -178,13 +176,17 @@ public class RDFReader {
         resource.setType(SymbioteModelsUtil.getTypeForResource(rdfResource));
         // id                
         resource.setId(getResourceId(rdfResource));
-        // labels                
-        resource.setLabels(rdfResource.listProperties(RDFS.label).mapWith(x -> x.getObject().asLiteral().getString()).toList());
-        if (resource.getLabels().isEmpty()) {
-            throw new RDFParsingError("Must define at least one label for resource " + rdfResource.getURI());
+        // labels
+        StmtIterator nameIterator = rdfResource.listProperties(CIM.name);
+        if (!nameIterator.hasNext()) {
+            throw new RDFParsingError("Must define one name" + rdfResource.getURI());
+        }
+        resource.setName(nameIterator.next().getObject().asLiteral().getString());
+        if (nameIterator.hasNext()) {
+            throw new RDFParsingError("Must define only one name " + rdfResource.getURI());
         }
         // comments
-        resource.setComments(rdfResource.listProperties(RDFS.comment).mapWith(x -> x.getObject().asLiteral().getString()).toList());
+        resource.setDescription(rdfResource.listProperties(CIM.description).mapWith(x -> x.getObject().asLiteral().getString()).toList());
         resource.setRdfFormat(rdfFormat);
         resource.setRdf(ModelHelper.writeModel(model, rdfFormat));
         return resource;

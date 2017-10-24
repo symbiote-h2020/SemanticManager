@@ -7,8 +7,8 @@ import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
-import eu.h2020.symbiote.core.model.InformationModel;
 import eu.h2020.symbiote.messaging.RabbitManager;
+import eu.h2020.symbiote.model.mim.InformationModel;
 import eu.h2020.symbiote.ontology.SemanticManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -17,7 +17,7 @@ import java.io.IOException;
 
 /**
  * RabbitMQ Consumer implementation used for Placeholder actions
- *
+ * <p>
  * Created by Szymon Mueller
  */
 public class ModifyPIMMetaModelConsumer extends DefaultConsumer {
@@ -29,8 +29,8 @@ public class ModifyPIMMetaModelConsumer extends DefaultConsumer {
      * Constructs a new instance and records its association to the passed-in channel.
      * Managers beans passed as parameters because of lack of possibility to inject it to consumer.
      *
-     * @param channel           the channel to which this consumer is attached
-     * @param rabbitManager     rabbit manager bean passed for access to messages manager
+     * @param channel       the channel to which this consumer is attached
+     * @param rabbitManager rabbit manager bean passed for access to messages manager
      */
     public ModifyPIMMetaModelConsumer(Channel channel,
                                       RabbitManager rabbitManager) {
@@ -53,7 +53,7 @@ public class ModifyPIMMetaModelConsumer extends DefaultConsumer {
                                AMQP.BasicProperties properties, byte[] body)
             throws IOException {
         String msg = new String(body);
-        log.debug( "Consume modify PIM meta model message: " + msg );
+        log.debug("Consume modify PIM meta model message: " + msg);
 
         //Try to parse the message
         try {
@@ -62,14 +62,14 @@ public class ModifyPIMMetaModelConsumer extends DefaultConsumer {
 
             SemanticManager.getManager().modifyPIMMetaModel(registerRequest);
 
-            getChannel().basicAck(envelope.getDeliveryTag(),false);
+            getChannel().basicAck(envelope.getDeliveryTag(), false);
 
-        } catch( JsonParseException | JsonMappingException e ) {
+        } catch (JsonParseException | JsonMappingException e) {
             log.error("Error occurred when registering new PIM meta model: " + msg, e);
-        } catch( IOException e ) {
-            log.error("I/O Exception occurred when parsing PIM meta model object" , e);
-        } catch( Exception e ) {
-            log.error("Generic error ocurred when handling delivery" , e);
+        } catch (IOException e) {
+            log.error("I/O Exception occurred when parsing PIM meta model object", e);
+        } catch (Exception e) {
+            log.error("Generic error ocurred when handling delivery", e);
         }
     }
 }

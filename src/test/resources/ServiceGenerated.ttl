@@ -11,8 +11,8 @@ xsd:string  a   rdfs:Datatype .
 
 <http://www.symbiote-h2020.eu/ontology/resources/service1>
         a                   core:Service ;
-        rdfs:comment        "This is service 1" ;
-        rdfs:label          "Service 1" ;
+        core:description        "This is service 1" ;
+        core:name          "Service 1" ;
         core:hasParameter   [ a                    core:Parameter ;
                               core:hasDatatype     xsd:string ;
                               core:hasRestriction  [ a         core:RangeRestriction ;

@@ -3,12 +3,9 @@ package eu.h2020.symbiote.ontology;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.h2020.symbiote.core.internal.*;
-import eu.h2020.symbiote.core.model.InformationModel;
-import eu.h2020.symbiote.core.model.Platform;
-import eu.h2020.symbiote.core.model.RDFFormat;
-import eu.h2020.symbiote.core.model.RDFInfo;
-import eu.h2020.symbiote.core.model.internal.CoreResource;
-import eu.h2020.symbiote.core.model.resources.*;
+import eu.h2020.symbiote.model.cim.Resource;
+import eu.h2020.symbiote.model.mim.InformationModel;
+import eu.h2020.symbiote.model.mim.Platform;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.errors.RDFGenerationError;
 import eu.h2020.symbiote.ontology.errors.RDFParsingError;
@@ -32,8 +29,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.ontology.OntModel;
@@ -286,7 +281,7 @@ public class SemanticManager {
      */
     public void registerNewPIMInstanceModel(Platform pimInstanceModel) {
         log.info("Registering new PIM instance " + pimInstanceModel.toString());
-        List<String> pimLabels = pimInstanceModel.getLabels();
+        String pimLabels = pimInstanceModel.getName();
         if (pimLabels != null) {
             log.info("[NYI] Model for platform " + pimLabels + " will be implemented in R3");
 //            log.info("Registering new PIM instance " + pimLabel);
@@ -543,8 +538,8 @@ public class SemanticManager {
 
                     //Copy all meta-information about the platform to the response
                     CoreResource translatedResource = new CoreResource();
-                    translatedResource.setLabels(resource.getLabels());
-                    translatedResource.setComments(resource.getComments());
+                    translatedResource.setName(resource.getName());
+                    translatedResource.setDescription(resource.getDescription());
                     translatedResource.setInterworkingServiceURL(resource.getInterworkingServiceURL());
                     translatedResource.setType(SymbioteModelsUtil.getTypeForResource(resource));
 
@@ -576,11 +571,11 @@ public class SemanticManager {
                     resourceList.put(resourcePairingId, translatedResource);
 
                 } catch (IllegalArgumentException e) {
-                    log.error("Error occurred during verifying resource: " + resource.getLabels(), e);
+                    log.error("Error occurred during verifying resource: " + resource.getName(), e);
                     success = false;
                     errorMessage.append(e.getMessage() + "\n");
                 } catch (RDFGenerationError e) {
-                    log.error("Error occurred during rdf generation: " + resource.getLabels(), e);
+                    log.error("Error occurred during rdf generation: " + resource.getName(), e);
                     success = false;
                     errorMessage.append(e.getMessage() + "\n");
                 }
@@ -613,11 +608,8 @@ public class SemanticManager {
     }
 
     private void verifyCompleteBIMResourceDescription(Resource resource) throws IllegalArgumentException {
-        if (resource.getLabels() == null) {
+        if (resource.getName() == null) {
             throw new IllegalArgumentException("Label must not be null");
-        }
-        if (resource.getLabels().size() == 0) {
-            throw new IllegalArgumentException("Label must not be empty list");
         }
         if (resource.getInterworkingServiceURL() == null) {
             throw new IllegalArgumentException("Interworking service URL of the resource must not be null");
