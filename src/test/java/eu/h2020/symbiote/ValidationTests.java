@@ -61,7 +61,7 @@ public class ValidationTests {
         InformationModel rdfInfo = new InformationModel();
         try {
             rdfInfo.setRdfFormat(RDFFormat.Turtle);
-            rdfInfo.setRdf(ModelHelper.writeAll(ModelHelper.readModel(BIM.getURI(), true, false), RDFFormat.Turtle));
+            rdfInfo.setRdf(ModelHelper.writeAll(ModelHelper.readModel(BIM.getURI(), false, false), RDFFormat.Turtle));
         } catch (IOException e) {
             e.printStackTrace();
             fail();
