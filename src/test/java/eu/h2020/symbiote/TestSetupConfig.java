@@ -7,6 +7,7 @@ import eu.h2020.symbiote.model.mim.InterworkingService;
 import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
 import eu.h2020.symbiote.semantics.ModelHelper;
 import eu.h2020.symbiote.semantics.ontology.BIM;
+import eu.h2020.symbiote.semantics.ontology.BIM_PROPERTY;
 
 import java.io.IOException;
 import java.util.ArrayList;

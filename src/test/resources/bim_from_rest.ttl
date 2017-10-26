@@ -18,7 +18,6 @@
         a                   core:FeatureOfInterest ;
         core:description        "Light sensor 1" ;
         core:name          "NXW Light 1" ;
-        rdfs:label         "laebl" ;
         core:locatedAt      nxw-location:Location1 ;
         core:hasCapability  [ a                  bim-sr:OnOffCapabililty ;
                               core:hasEffect     [ a                          bim-sr:OnOffEffect ;

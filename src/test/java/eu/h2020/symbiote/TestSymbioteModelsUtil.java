@@ -2,6 +2,7 @@ package eu.h2020.symbiote;
 
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
+import fr.inrialpes.exmo.align.gen.TestSet;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,22 +25,23 @@ public class TestSymbioteModelsUtil {
     @Before
     public void init() {
         TestSetupConfig.loadBIM();
+//        TestSetupConfig.loadBIMProperty();
     }
 
     //TODO
-    //@Test
+    @Test
     public void testBIMPropertyFind() {
         findExistingProperty(BIM_PROPERTY_CARBONMONOXIDE);
     }
 
     //TODO
-    //@Test
+    @Test
     public void testQURECPropertyFind() {
         findExistingProperty(QU_REC_TEMPERATURE);
     }
 
     //TODO
-    //@Test
+    @Test
     public void testNonexistingFind() {
         findNonExistingProperty(NON_EXISTING);
     }

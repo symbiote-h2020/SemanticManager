@@ -73,7 +73,7 @@ public class SymbioteModelsUtil {
         //Loads models
         loadBaseModel(CIM.getURI(), ModelHelper.getInformationModelURI(CIM_ID), cimDataset);
         loadBaseModel(MIM.getURI(), ModelHelper.getInformationModelURI(MIM_ID), mimDataset);
-        loadBaseModel(BIM.getURI(), ModelHelper.getInformationModelURI(BIM_ID), bimDataset);
+        loadBaseModel(BIM.getURI(), ModelHelper.getInformationModelURI(BIM_ID), pimDataset);
         // should not be neccesarry if BIM is loaded with imports
         loadBaseModel(QU.getURI(), ModelHelper.getInformationModelURI(QU_ID), quRecDataset);
     }
@@ -133,7 +133,7 @@ public class SymbioteModelsUtil {
 //            if (!result.isPresent()) {
 //                throw new PropertyNotFoundException(name, BIM.getURI());
 //            }
-            uri = findUriForNameInModel(name, ModelHelper.getInformationModelURI(BIM_ID), bimDataset, BIM_PROPERTY_NAME);
+            uri = findUriForNameInModel(name, ModelHelper.getInformationModelURI(BIM_ID), pimDataset, BIM_PROPERTY_NAME);
         } catch (eu.h2020.symbiote.ontology.errors.PropertyNotFoundException e) {
             log.error(e);
             propertyNotFoundExceptions.add(e);

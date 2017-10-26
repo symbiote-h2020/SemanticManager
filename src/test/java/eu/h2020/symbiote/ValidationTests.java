@@ -38,8 +38,7 @@ public class ValidationTests {
         loadBIM();
     }
 
-    //TODO
-//    @Test
+    @Test
     public void testFindInSymbioteModels() {
         try {
             String temperatureUri = SymbioteModelsUtil.findInSymbioteCoreModels(TEMPERATURE_NAME);
@@ -57,7 +56,7 @@ public class ValidationTests {
     }
 
     //TODO why apparently BIM does not have owl:Ontology?
-//    @Test
+    @Test
     public void testLoadBIMasPIM() {
         InformationModel rdfInfo = new InformationModel();
         try {
@@ -74,8 +73,7 @@ public class ValidationTests {
         }
     }
 
-    //TODO fails
-//    @Test
+    @Test
     public void bimResourceValidationTest() {
         try {
 

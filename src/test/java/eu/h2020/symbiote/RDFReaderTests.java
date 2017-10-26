@@ -39,6 +39,7 @@ public class RDFReaderTests {
 
     @Before
     public void init() throws MalformedURLException, IOException, URISyntaxException {
+
         CIM = ModelHelper.readModel(eu.h2020.symbiote.semantics.ontology.CIM.getURI(), true, true);
     }
 
