@@ -41,7 +41,9 @@
                                                    core:actsOn nxw-foi:nxw-Room1 ;
                                                    core:affects qu:illuminance
                                                  ]
-                            ] .
+                            ] ;
+        core:observesProperty  qu:illuminance.
+
 nxw-location:Location1
         a             core:WGS84Location ;
         core:description  "Location of first deployment nxw" ;
