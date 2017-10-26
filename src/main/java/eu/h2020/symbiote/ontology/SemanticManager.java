@@ -490,7 +490,7 @@ public class SemanticManager {
         }
         if (instanceResults.length() > 0) {
             result.setSuccess(false);
-            result.setMessage("errors validating RDF for resources: " + System.lineSeparator());
+            result.setMessage("errors validating RDF for resources: " + System.lineSeparator() + String.join(System.lineSeparator(), instanceResults));
             return result;
         }
         result.setModelValidatedAgainst(ModelHelper.writeModel(pim, request.getRdfFormat()));
