@@ -29,6 +29,7 @@ import eu.h2020.symbiote.semantics.ontology.BIM;
 public class ValidationTests {
 
     private String TEMPERATURE_NAME = "temperature";
+    private String CARBON_MONOXIDE = "carbonMonoxideConcentration";
     private String NONEXISTENT_NAME = "temperature1234566789";
 //    private String BIM_RESOURCE_FILE = "/bim_resource.ttl";
     private String BIM_RESOURCE_FILE = "/bim_from_rest.ttl";
@@ -39,13 +40,21 @@ public class ValidationTests {
     }
 
     @Test
-    public void testFindInSymbioteModels() {
+    public void testFindInSymbioteModelsFromQU() {
         try {
             String temperatureUri = SymbioteModelsUtil.findInSymbioteCoreModels(TEMPERATURE_NAME);
             assertNotNull(temperatureUri);
         } catch (PropertyNotFoundException e) {
             e.printStackTrace();
-            fail();
+            fail("Property " + TEMPERATURE_NAME + " should be found in QUREC");
+        }
+
+        try {
+            String temperatureUri = SymbioteModelsUtil.findInSymbioteCoreModels(CARBON_MONOXIDE);
+            assertNotNull(temperatureUri);
+        } catch (PropertyNotFoundException e) {
+            e.printStackTrace();
+            fail("Property " + CARBON_MONOXIDE + " should be found in BIM");
         }
 
         try {
