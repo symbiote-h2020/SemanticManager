@@ -231,7 +231,7 @@ public class RDFGenerator {
 
         if (locationURI == null) {
             String locationId = ObjectId.get().toString();
-            locationURI = ModelHelper.getPlatformURI(platformId) + "/location/" + location;
+            locationURI = ModelHelper.getPlatformURI(platformId) + "/location/" + locationId;
             log.info("No existing locations have been found fulfilling criteria, created new location with ID: " + locationId + " and URI: <" + locationURI + ">");
         }
         org.apache.jena.rdf.model.Resource locationResource = model.createResource(locationURI);
