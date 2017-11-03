@@ -609,7 +609,7 @@ public class SemanticManager {
 
     private void verifyCompleteBIMResourceDescription(Resource resource) throws IllegalArgumentException {
         if (resource.getName() == null) {
-            throw new IllegalArgumentException("Label must not be null");
+            throw new IllegalArgumentException("Name must not be null");
         }
         if (resource.getInterworkingServiceURL() == null) {
             throw new IllegalArgumentException("Interworking service URL of the resource must not be null");
