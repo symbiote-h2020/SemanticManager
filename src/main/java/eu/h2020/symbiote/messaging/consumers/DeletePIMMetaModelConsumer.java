@@ -23,19 +23,19 @@ import java.io.IOException;
 public class DeletePIMMetaModelConsumer extends DefaultConsumer {
 
     private static Log log = LogFactory.getLog(DeletePIMMetaModelConsumer.class);
-    private RabbitManager rabbitManager;
+    private SemanticManager semanticManager;
 
     /**
      * Constructs a new instance and records its association to the passed-in channel.
      * Managers beans passed as parameters because of lack of possibility to inject it to consumer.
      *
      * @param channel           the channel to which this consumer is attached
-     * @param rabbitManager     rabbit manager bean passed for access to messages manager
+     * @param semanticManager     semantic manager
      */
     public DeletePIMMetaModelConsumer(Channel channel,
-                                      RabbitManager rabbitManager) {
+                                      SemanticManager semanticManager) {
         super(channel);
-        this.rabbitManager = rabbitManager;
+        this.semanticManager = semanticManager;
     }
 
     /**
@@ -60,7 +60,7 @@ public class DeletePIMMetaModelConsumer extends DefaultConsumer {
             ObjectMapper mapper = new ObjectMapper();
             InformationModel registerRequest = mapper.readValue(msg, InformationModel.class);
 
-            SemanticManager.getManager().deletePIMMetaModel(registerRequest);
+            this.semanticManager.deletePIMMetaModel(registerRequest);
 
             getChannel().basicAck(envelope.getDeliveryTag(),false);
 

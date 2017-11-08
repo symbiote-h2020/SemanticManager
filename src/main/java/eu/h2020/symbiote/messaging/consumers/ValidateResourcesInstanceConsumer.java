@@ -25,19 +25,19 @@ import java.io.IOException;
 public class ValidateResourcesInstanceConsumer extends DefaultConsumer {
 
     private static Log log = LogFactory.getLog(ValidateResourcesInstanceConsumer.class);
-    private RabbitManager rabbitManager;
+    private SemanticManager semanticManager;
 
     /**
      * Constructs a new instance and records its association to the passed-in channel.
      * Managers beans passed as parameters because of lack of possibility to inject it to consumer.
      *
      * @param channel           the channel to which this consumer is attached
-     * @param rabbitManager     rabbit manager bean passed for access to messages manager
+     * @param semanticManager   semantic manager
      */
     public ValidateResourcesInstanceConsumer(Channel channel,
-                                             RabbitManager rabbitManager) {
+                                             SemanticManager semanticManager) {
         super(channel);
-        this.rabbitManager = rabbitManager;
+        this.semanticManager = semanticManager;
     }
 
     /**
@@ -65,7 +65,7 @@ public class ValidateResourcesInstanceConsumer extends DefaultConsumer {
             ResourceInstanceValidationRequest validateRequest = mapper.readValue(msg, ResourceInstanceValidationRequest.class);
             ResourceInstanceValidationResult response = null;
             try {
-                response = SemanticManager.getManager().validateResourcesInstance(validateRequest);
+                response = semanticManager.validateResourcesInstance(validateRequest);
                 //Send the response back to the client
                 log.debug("Validation status: " + response.isSuccess() + ", message: " + response.getMessage());
             } catch( Exception e ) {

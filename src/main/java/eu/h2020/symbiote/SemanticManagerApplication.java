@@ -1,6 +1,7 @@
 package eu.h2020.symbiote;
 
 import eu.h2020.symbiote.messaging.RabbitManager;
+import eu.h2020.symbiote.ontology.SemanticManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,8 @@ public class SemanticManagerApplication {
         public void run(String... args) throws Exception {
 //
             //message retrieval - start rabbit exchange and consumers
-            this.rabbitManager.init();
+//            this.rabbitManager.init();
+            this.rabbitManager.startConsumers(SemanticManager.getManager());
 
             //Load all PIM models
 

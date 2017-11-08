@@ -212,91 +212,91 @@ public class SemanticManager {
 
     }
 
-    /**
-     * Validates if the RDF passed as a parameter in the request is valid as an
-     * instance of a PIM. Algorithm checks which PIM meta model is being used by
-     * the RDF and validates against that model. Validation status, as well as
-     * information about the platform being validated, is returned.
-     *
-     * @param request Request containing RDF to be validated
-     * @return Validation result as well as POJO representing the platform which
-     * was validated.
-     */
-    @Deprecated
-    public PIMInstanceValidationResult validatePIMInstance(RDFInfo request) {
-        // NOT USED ANYMORE - just PIM meta model is validated (it contains also "PIM instance" part)
-        return null;
-
-//        log.info("Validating PIM instance " + request.getRdf().substring(0, 30) + " ... ");
-//        PIMInstanceValidationResult result = new PIMInstanceValidationResult();
-//
-//        result.setModelValidated(request.getRdf());
-//
-//        try {
-//            PIMInstanceDescription pimInstance = RDFReader.readPlatformInstance(request);
-//            result.setSuccess(true);
-//            result.setMessage("Validation successful");
-//            result.setModelValidatedAgainst(""); //Read from RDF what kind of model is being used, insert it here
-//            result.setObjectDescription(pimInstance);
-//        } catch (RDFParsingError rdfParsingError) {
-//            rdfParsingError.printStackTrace();
-//            result.setSuccess(false);
-//            result.setMessage("Validation failed. Detailed message: " + rdfParsingError.getMessage());
-//            result.setModelValidatedAgainst(""); //Read from RDF what kind of model is being used, insert it here
-//            result.setObjectDescription(null);
-//        }
-//
-//        return result;
-    }
-
 //    /**
-//     * Registers new PIM instance model in rdf store of Semantic Manager.This model is gonna be used to validate resources being registered for the platform.
+//     * Validates if the RDF passed as a parameter in the request is valid as an
+//     * instance of a PIM. Algorithm checks which PIM meta model is being used by
+//     * the RDF and validates against that model. Validation status, as well as
+//     * information about the platform being validated, is returned.
 //     *
-//     * @param pimInstanceModel Information about platform, including RDF representing the platform.
+//     * @param request Request containing RDF to be validated
+//     * @return Validation result as well as POJO representing the platform which
+//     * was validated.
 //     */
-//    public void registerNewPIMInstanceModel(PIMInstanceDescription pimInstanceModel) {
+//    @Deprecated
+//    public PIMInstanceValidationResult validatePIMInstance(RDFInfo request) {
+//        // NOT USED ANYMORE - just PIM meta model is validated (it contains also "PIM instance" part)
+//        return null;
+//
+////        log.info("Validating PIM instance " + request.getRdf().substring(0, 30) + " ... ");
+////        PIMInstanceValidationResult result = new PIMInstanceValidationResult();
+////
+////        result.setModelValidated(request.getRdf());
+////
+////        try {
+////            PIMInstanceDescription pimInstance = RDFReader.readPlatformInstance(request);
+////            result.setSuccess(true);
+////            result.setMessage("Validation successful");
+////            result.setModelValidatedAgainst(""); //Read from RDF what kind of model is being used, insert it here
+////            result.setObjectDescription(pimInstance);
+////        } catch (RDFParsingError rdfParsingError) {
+////            rdfParsingError.printStackTrace();
+////            result.setSuccess(false);
+////            result.setMessage("Validation failed. Detailed message: " + rdfParsingError.getMessage());
+////            result.setModelValidatedAgainst(""); //Read from RDF what kind of model is being used, insert it here
+////            result.setObjectDescription(null);
+////        }
+////
+////        return result;
+//    }
+//
+////    /**
+////     * Registers new PIM instance model in rdf store of Semantic Manager.This model is gonna be used to validate resources being registered for the platform.
+////     *
+////     * @param pimInstanceModel Information about platform, including RDF representing the platform.
+////     */
+////    public void registerNewPIMInstanceModel(PIMInstanceDescription pimInstanceModel) {
+////        log.info("Registering new PIM instance " + pimInstanceModel.toString());
+////        String pimLabel = pimInstanceModel.getLabels() != null && pimInstanceModel.getLabels().size() > 1 ? pimInstanceModel.getLabels().get(0) : null;
+////        if (pimLabel != null) {
+////            log.info("Registering new PIM instance " + pimLabel);
+////            if (pimInstanceModel.getRdf() != null && pimInstanceModel.getRdf().trim().length() > 0 && pimInstanceModel.getRdfFormat() != null) {
+////                Model model = ModelFactory.createDefaultModel();
+////                try( StringReader reader = new StringReader( pimInstanceModel.getRdf() ) ) {
+////                    model.read(reader, null, pimInstanceModel.getRdfFormat().toString());
+////                }
+////            } else {
+////                log.error("Could not register PIM instance with empty ");
+////            }
+////        } else {
+////            log.error("Could not find platform's label");
+////        }
+////    }
+//    /**
+//     * Registers new PIM instance model in rdf store of Semantic Manager.This
+//     * model is gonna be used to validate resources being registered for the
+//     * platform.
+//     *
+//     * @param pimInstanceModel Information about platform, including RDF
+//     * representing the platform.
+//     */
+//    public void registerNewPIMInstanceModel(Platform pimInstanceModel) {
 //        log.info("Registering new PIM instance " + pimInstanceModel.toString());
-//        String pimLabel = pimInstanceModel.getLabels() != null && pimInstanceModel.getLabels().size() > 1 ? pimInstanceModel.getLabels().get(0) : null;
-//        if (pimLabel != null) {
-//            log.info("Registering new PIM instance " + pimLabel);
-//            if (pimInstanceModel.getRdf() != null && pimInstanceModel.getRdf().trim().length() > 0 && pimInstanceModel.getRdfFormat() != null) {
-//                Model model = ModelFactory.createDefaultModel();
-//                try( StringReader reader = new StringReader( pimInstanceModel.getRdf() ) ) {
-//                    model.read(reader, null, pimInstanceModel.getRdfFormat().toString());
-//                }
-//            } else {
-//                log.error("Could not register PIM instance with empty ");
-//            }
+//        String pimLabels = pimInstanceModel.getName();
+//        if (pimLabels != null) {
+//            log.info("[NYI] Model for platform " + pimLabels + " will be implemented in R3");
+////            log.info("Registering new PIM instance " + pimLabel);
+////            if (pimInstanceModel.getRdf() != null && pimInstanceModel.getRdf().trim().length() > 0 && pimInstanceModel.getRdfFormat() != null) {
+////                Model model = ModelFactory.createDefaultModel();
+////                try( StringReader reader = new StringReader( pimInstanceModel.getRdf() ) ) {
+////                    model.read(reader, null, pimInstanceModel.getRdfFormat().toString());
+////                }
+////            } else {
+////                log.error("Could not register PIM instance with empty ");
+////            }
 //        } else {
 //            log.error("Could not find platform's label");
 //        }
 //    }
-    /**
-     * Registers new PIM instance model in rdf store of Semantic Manager.This
-     * model is gonna be used to validate resources being registered for the
-     * platform.
-     *
-     * @param pimInstanceModel Information about platform, including RDF
-     * representing the platform.
-     */
-    public void registerNewPIMInstanceModel(Platform pimInstanceModel) {
-        log.info("Registering new PIM instance " + pimInstanceModel.toString());
-        String pimLabels = pimInstanceModel.getName();
-        if (pimLabels != null) {
-            log.info("[NYI] Model for platform " + pimLabels + " will be implemented in R3");
-//            log.info("Registering new PIM instance " + pimLabel);
-//            if (pimInstanceModel.getRdf() != null && pimInstanceModel.getRdf().trim().length() > 0 && pimInstanceModel.getRdfFormat() != null) {
-//                Model model = ModelFactory.createDefaultModel();
-//                try( StringReader reader = new StringReader( pimInstanceModel.getRdf() ) ) {
-//                    model.read(reader, null, pimInstanceModel.getRdfFormat().toString());
-//                }
-//            } else {
-//                log.error("Could not register PIM instance with empty ");
-//            }
-        } else {
-            log.error("Could not find platform's label");
-        }
-    }
 
     /**
      * Validates if the description provided as the parameter is enough to

@@ -24,19 +24,19 @@ import java.io.IOException;
 public class ValidatePIMMetaModelConsumer extends DefaultConsumer {
 
     private static Log log = LogFactory.getLog(ValidatePIMMetaModelConsumer.class);
-    private RabbitManager rabbitManager;
+    private SemanticManager semanticManager;
 
     /**
      * Constructs a new instance and records its association to the passed-in channel.
      * Managers beans passed as parameters because of lack of possibility to inject it to consumer.
      *
      * @param channel           the channel to which this consumer is attached
-     * @param rabbitManager     rabbit manager bean passed for access to messages manager
+     * @param semanticManager   semantic manager
      */
     public ValidatePIMMetaModelConsumer(Channel channel,
-                                        RabbitManager rabbitManager) {
+                                        SemanticManager semanticManager) {
         super(channel);
-        this.rabbitManager = rabbitManager;
+        this.semanticManager = semanticManager;
     }
 
     /**
@@ -61,7 +61,7 @@ public class ValidatePIMMetaModelConsumer extends DefaultConsumer {
             ObjectMapper mapper = new ObjectMapper();
             InformationModel validateRequest = mapper.readValue(msg, InformationModel.class);
 
-            InformationModelValidationResult response = SemanticManager.getManager().validatePIMMetaModel(validateRequest);
+            InformationModelValidationResult response = this.semanticManager.validatePIMMetaModel(validateRequest);
             //Send the response back to the client
             log.debug( "Validation status: " + response.isSuccess() + ", message: " + response.getMessage());
 

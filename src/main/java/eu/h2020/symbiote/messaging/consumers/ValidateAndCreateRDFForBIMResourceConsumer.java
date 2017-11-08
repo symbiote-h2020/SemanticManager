@@ -22,19 +22,19 @@ import java.io.IOException;
 public class ValidateAndCreateRDFForBIMResourceConsumer extends DefaultConsumer {
 
     private static Log log = LogFactory.getLog(ValidateAndCreateRDFForBIMResourceConsumer.class);
-    private RabbitManager rabbitManager;
+    private SemanticManager semanticManager;
 
     /**
      * Constructs a new instance and records its association to the passed-in channel.
      * Managers beans passed as parameters because of lack of possibility to inject it to consumer.
      *
      * @param channel       the channel to which this consumer is attached
-     * @param rabbitManager rabbit manager bean passed for access to messages manager
+     * @param semanticManager semantic manager
      */
     public ValidateAndCreateRDFForBIMResourceConsumer(Channel channel,
-                                                      RabbitManager rabbitManager) {
+                                                      SemanticManager semanticManager) {
         super(channel);
-        this.rabbitManager = rabbitManager;
+        this.semanticManager = semanticManager;
     }
 
     /**
@@ -61,7 +61,7 @@ public class ValidateAndCreateRDFForBIMResourceConsumer extends DefaultConsumer 
 
             CoreResourceRegistryRequest coreResourceRegistryRequest = mapper.readValue(msg, CoreResourceRegistryRequest.class);
 
-            response = SemanticManager.getManager().validateAndCreateBIMResourceToRDF(coreResourceRegistryRequest);
+            response = this.semanticManager.validateAndCreateBIMResourceToRDF(coreResourceRegistryRequest);
             //Send the response back to the client
             log.debug("Validation status: " + response.isSuccess() + ", message: " + response.getMessage());
 
