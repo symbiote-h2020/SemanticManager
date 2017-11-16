@@ -30,7 +30,7 @@ apply plugin: 'idea'
 apply plugin: 'com.cinnober.gradle.semver-git'
 
 // XXX please change with your commits according to http://semver.org/
-project.version = '1.0.0'
+project.version = '1.1.0'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -86,12 +86,10 @@ dependencies {
     */
 
     //compile project(':SymbIoTeLibraries')
-    compile('com.github.symbiote-h2020:SymbIoTeSemantics:develop-SNAPSHOT') {changing = true
+    compile('com.github.symbiote-h2020:SymbIoTeSemantics:1.+') {changing = true
                 exclude group: 'org.slf4j'
             }
-
-    compile('com.github.symbiote-h2020:SymbIoTeLibraries:3.0.0') { changing=true }
-    compile('com.github.symbiote-h2020:SymbIoTeSecurity:22.+') { changing=true }
+    compile('com.github.symbiote-h2020:SymbIoTeLibraries:4.+') { changing=true }
 
     //Just to generate object ids
     compile('org.mongodb:bson:3.4.2')

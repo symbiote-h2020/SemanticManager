@@ -142,3 +142,6 @@ logs
 
 #generated ontology classes
 generated-src/
+
+# Keystores
+*.jks
