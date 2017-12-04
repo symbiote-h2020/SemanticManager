@@ -130,38 +130,40 @@ public class RDFGenerator {
         return result;
     }
 
-    private static void addParametersToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, List<Parameter> parameters) {
+    private static void addParametersToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, List<Parameter> parameters) throws RDFGenerationError {
         if (parameters != null) {
             for (Parameter parameter : parameters) {
                 List<org.apache.jena.rdf.model.Resource> restrictionResources = new ArrayList<>();
-                for (Restriction restriction : parameter.getRestrictions()) {
-                    org.apache.jena.rdf.model.Resource restrictionResource = model.createResource();
-                    if (restriction instanceof RangeRestriction) {
-                        restrictionResource.addProperty(RDF.type, CIM.RangeRestriction)
-                                .addProperty(CIM.min, String.valueOf(((RangeRestriction) restriction).getMin()))
-                                .addProperty(CIM.max, String.valueOf(((RangeRestriction) restriction).getMax()));
-                    }
-                    if (restriction instanceof LengthRestriction) {
-                        restrictionResource.addProperty(RDF.type, CIM.LengthRestriction)
-                                .addProperty(CIM.min, String.valueOf(((LengthRestriction) restriction).getMin()))
-                                .addProperty(CIM.max, String.valueOf(((LengthRestriction) restriction).getMax()));
-                    }
-                    if (restriction instanceof EnumRestriction) {
-                        restrictionResource.addProperty(RDF.type, CIM.EnumRestriction);
-                        for (String enumValue : ((EnumRestriction) restriction).getValues()) {
-                            restrictionResource.addProperty(RDF.value, enumValue);
+                if( parameter.getRestrictions() != null ) {
+                    for (Restriction restriction : parameter.getRestrictions()) {
+                        org.apache.jena.rdf.model.Resource restrictionResource = model.createResource();
+                        if (restriction instanceof RangeRestriction) {
+                            restrictionResource.addProperty(RDF.type, CIM.RangeRestriction)
+                                    .addProperty(CIM.min, String.valueOf(((RangeRestriction) restriction).getMin()))
+                                    .addProperty(CIM.max, String.valueOf(((RangeRestriction) restriction).getMax()));
                         }
+                        if (restriction instanceof LengthRestriction) {
+                            restrictionResource.addProperty(RDF.type, CIM.LengthRestriction)
+                                    .addProperty(CIM.min, String.valueOf(((LengthRestriction) restriction).getMin()))
+                                    .addProperty(CIM.max, String.valueOf(((LengthRestriction) restriction).getMax()));
+                        }
+                        if (restriction instanceof EnumRestriction) {
+                            restrictionResource.addProperty(RDF.type, CIM.EnumRestriction);
+                            for (String enumValue : ((EnumRestriction) restriction).getValues()) {
+                                restrictionResource.addProperty(RDF.value, enumValue);
+                            }
+                        }
+                        if (restriction instanceof RegExRestriction) {
+                            restrictionResource.addProperty(RDF.type, CIM.RegExRestriction)
+                                    .addProperty(CIM.pattern, String.valueOf(((RegExRestriction) restriction).getPattern()));
+                        }
+                        if (restriction instanceof InstanceOfRestriction) {
+                            restrictionResource.addProperty(RDF.type, CIM.InstanceOfRestriction)
+                                    .addProperty(CIM.onlyInstancesOfClass, String.valueOf(((InstanceOfRestriction) restriction).getInstanceOfClass()))
+                                    .addProperty(CIM.valueProperty, String.valueOf(((InstanceOfRestriction) restriction).getValueProperty()));
+                        }
+                        restrictionResources.add(restrictionResource);
                     }
-                    if (restriction instanceof RegExRestriction) {
-                        restrictionResource.addProperty(RDF.type, CIM.RegExRestriction)
-                                .addProperty(CIM.pattern, String.valueOf(((RegExRestriction) restriction).getPattern()));
-                    }
-                    if (restriction instanceof InstanceOfRestriction) {
-                        restrictionResource.addProperty(RDF.type, CIM.InstanceOfRestriction)
-                                .addProperty(CIM.onlyInstancesOfClass, String.valueOf(((InstanceOfRestriction) restriction).getInstanceOfClass()))
-                                .addProperty(CIM.valueProperty, String.valueOf(((InstanceOfRestriction) restriction).getValueProperty()));
-                    }
-                    restrictionResources.add(restrictionResource);
                 }
 
                 org.apache.jena.rdf.model.Resource inputResource = model.createResource().addProperty(RDF.type, CIM.Parameter)
@@ -177,13 +179,19 @@ public class RDFGenerator {
     }
 
     //TODO add a lot of nullchecks - probably as seperate method
-    private static org.apache.jena.rdf.model.Resource createDatatypeModelResource(Model model, Datatype datatype) {
+    private static org.apache.jena.rdf.model.Resource createDatatypeModelResource(Model model, Datatype datatype) throws RDFGenerationError {
         org.apache.jena.rdf.model.Resource datatypeResource = model.createResource();
 
         if (datatype instanceof ComplexDatatype) {
             datatypeResource.addProperty(RDF.type, CIM.ComplexDatatype)
                     .addProperty(CIM.isArray, String.valueOf(datatype.isArray()))
                     .addProperty(CIM.basedOnClass, ((ComplexDatatype) datatype).getBasedOnClass());
+            if( ((ComplexDatatype) datatype).getDataProperties() == null ) {
+                throw new RDFGenerationError("Complex data property must be provided for description to be valid");
+            }
+            if( ((ComplexDatatype) datatype).getDataProperties().size() == 0 ) {
+                throw new RDFGenerationError("Complex data property must not be empty for description to be valid");
+            }
             for (DataProperty dataProperty : ((ComplexDatatype) datatype).getDataProperties()) {
                 org.apache.jena.rdf.model.Resource dataPropertyResource = createDataPropertyModelResource(model, datatypeResource, dataProperty);
                 datatypeResource.addProperty(CIM.hasDatatype, dataPropertyResource);
