@@ -30,6 +30,7 @@ public class ValidationTests {
 
     private String TEMPERATURE_NAME = "temperature";
     private String CARBON_MONOXIDE = "carbonMonoxideConcentration";
+    private String PH = "pH";
     private String NONEXISTENT_NAME = "temperature1234566789";
 //    private String BIM_RESOURCE_FILE = "/bim_resource.ttl";
     private String BIM_RESOURCE_FILE = "/bim_from_rest.ttl";
@@ -55,6 +56,15 @@ public class ValidationTests {
         } catch (PropertyNotFoundException e) {
             e.printStackTrace();
             fail("Property " + CARBON_MONOXIDE + " should be found in BIM");
+        }
+
+        try {
+            System.out.println("ph");
+            String temperatureUri = SymbioteModelsUtil.findInSymbioteCoreModels(PH);
+            assertNotNull(temperatureUri);
+        } catch (PropertyNotFoundException e) {
+            e.printStackTrace();
+            fail("Property " + PH + " should be found in BIM");
         }
 
         try {
@@ -90,13 +100,17 @@ public class ValidationTests {
             request.setInformationModelId("BIM");
             request.setRdfFormat(RDFFormat.Turtle);
             String resourceRdf = IOUtils.toString(this.getClass()
-                    .getResource(BIM_RESOURCE_FILE));
+                    .getResource("/retailerDevice.ttl"));
             request.setRdf(resourceRdf);
             ResourceInstanceValidationResult result = SemanticManager.getManager().validateResourcesInstance(request);
             assertNotNull(result);
             assertNotNull(result.getObjectDescription());
             assertTrue(result.isSuccess());
             assertEquals("Should find 1 resource", 1, result.getObjectDescription().size());
+            System.out.println("Result RDF:");
+            System.out.println(result.getObjectDescription().values().iterator().next().getRdf());
+
+
         } catch (IOException e) {
             e.printStackTrace();
             fail("Error occurred when loading model from file");
