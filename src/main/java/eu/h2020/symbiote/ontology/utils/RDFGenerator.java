@@ -62,8 +62,10 @@ public class RDFGenerator {
 
             modelResource.addProperty(CIM.name, resource.getName());
 
-        for (String description : resource.getDescription()) {
-            modelResource.addProperty(CIM.description, description);
+        if( resource.getDescription() != null ) {
+            for (String description : resource.getDescription()) {
+                modelResource.addProperty(CIM.description, description);
+            }
         }
         if (resource instanceof MobileSensor) {
             modelResource.addProperty(RDF.type, CIM.MobileSensor);
