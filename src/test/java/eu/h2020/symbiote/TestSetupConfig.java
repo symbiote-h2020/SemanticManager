@@ -163,7 +163,7 @@ public class TestSetupConfig {
 
         String bimRdf = null;
         try {                        
-            bimRdf = ModelHelper.writeAll(ModelHelper.readModel(BIM.getURI(), false, false), RDFFormat.Turtle);
+            bimRdf = ModelHelper.writeAll(ModelHelper.readModel(BIM.getURI(), true, true), RDFFormat.Turtle);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -6,10 +6,7 @@ import eu.h2020.symbiote.model.mim.InformationModel;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.semantics.GraphHelper;
 import eu.h2020.symbiote.semantics.ModelHelper;
-import eu.h2020.symbiote.semantics.ontology.BIM;
-import eu.h2020.symbiote.semantics.ontology.CIM;
-import eu.h2020.symbiote.semantics.ontology.MIM;
-import eu.h2020.symbiote.semantics.ontology.QU;
+import eu.h2020.symbiote.semantics.ontology.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jena.query.Dataset;
@@ -68,12 +65,14 @@ public class SymbioteModelsUtil {
     }
 
     static {
+        System.out.println("init datasets...");
         initDatasets();
 
         //Loads models
         loadBaseModel(CIM.getURI(), ModelHelper.getInformationModelURI(CIM_ID), cimDataset);
         loadBaseModel(MIM.getURI(), ModelHelper.getInformationModelURI(MIM_ID), mimDataset);
         loadBaseModel(BIM.getURI(), ModelHelper.getInformationModelURI(BIM_ID), pimDataset);
+        loadBaseModel(BIM_PROPERTY.getURI(), ModelHelper.getInformationModelURI(BIM_ID), pimDataset);
         // should not be neccesarry if BIM is loaded with imports
         loadBaseModel(QU.getURI(), ModelHelper.getInformationModelURI(QU_ID), quRecDataset);
     }

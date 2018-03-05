@@ -24,7 +24,7 @@ public class TestSymbioteModelsUtil {
 
     @Before
     public void init() {
-        TestSetupConfig.loadBIM();
+//        TestSetupConfig.loadBIM();
 //        TestSetupConfig.loadBIMProperty();
     }
 

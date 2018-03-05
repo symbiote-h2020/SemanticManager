@@ -25,11 +25,12 @@ import eu.h2020.symbiote.semantics.ontology.BIM;
 /**
  * Created by Szymon Mueller on 03/05/2017.
  */
-//@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class ValidationTests {
 
     private String TEMPERATURE_NAME = "temperature";
     private String CARBON_MONOXIDE = "carbonMonoxideConcentration";
+    private String NITROGEN = "nitrogenDioxideConcentration";
     private String PH = "pH";
     private String NONEXISTENT_NAME = "temperature1234566789";
 //    private String BIM_RESOURCE_FILE = "/bim_resource.ttl";
@@ -45,6 +46,7 @@ public class ValidationTests {
         try {
             String temperatureUri = SymbioteModelsUtil.findInSymbioteCoreModels(TEMPERATURE_NAME);
             assertNotNull(temperatureUri);
+            System.out.println("Found temperature");
         } catch (PropertyNotFoundException e) {
             e.printStackTrace();
             fail("Property " + TEMPERATURE_NAME + " should be found in QUREC");
@@ -53,15 +55,26 @@ public class ValidationTests {
         try {
             String temperatureUri = SymbioteModelsUtil.findInSymbioteCoreModels(CARBON_MONOXIDE);
             assertNotNull(temperatureUri);
+            System.out.println("Found carbon monoxide");
         } catch (PropertyNotFoundException e) {
             e.printStackTrace();
             fail("Property " + CARBON_MONOXIDE + " should be found in BIM");
         }
 
         try {
+            String nitrogen = SymbioteModelsUtil.findInSymbioteCoreModels(NITROGEN);
+            assertNotNull(nitrogen);
+            System.out.println("Found nitrogen");
+        } catch (PropertyNotFoundException e) {
+            e.printStackTrace();
+            fail("Property " + NITROGEN + " should be found in BIM");
+        }
+
+        try {
             System.out.println("ph");
             String temperatureUri = SymbioteModelsUtil.findInSymbioteCoreModels(PH);
             assertNotNull(temperatureUri);
+            System.out.println("Found ph");
         } catch (PropertyNotFoundException e) {
             e.printStackTrace();
             fail("Property " + PH + " should be found in BIM");
