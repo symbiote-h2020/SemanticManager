@@ -201,7 +201,8 @@ public class RDFGenerator {
         }
         if (datatype instanceof PrimitiveDatatype) {
             datatypeResource = model.createResource(((PrimitiveDatatype) datatype).getBaseDatatype());
-            datatypeResource.addProperty(RDF.type, RDFS.Datatype);
+            datatypeResource.addProperty(RDF.type, CIM.PrimitiveDatatype);
+
         }
         return datatypeResource;
     }
@@ -300,6 +301,8 @@ public class RDFGenerator {
 
     private static void addCapabilitiesToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, List<Capability> capabilities) throws PropertyNotFoundException, RDFGenerationError {
 //        Map<String,CoreResource> services = new HashMap<>();
+        verifyCapabilities( capabilities);
+
         if (capabilities != null) {
             for (Capability capability : capabilities) {
 
@@ -327,6 +330,7 @@ public class RDFGenerator {
         }
 //        return services;
     }
+
 
     private static void addEffectToModelResource(Model model, org.apache.jena.rdf.model.Resource capabilityResource, List<Effect> effects) throws PropertyNotFoundException {
         if (effects != null) {
@@ -440,6 +444,17 @@ public class RDFGenerator {
             throw new RDFGenerationError("Location must have not null name");
         }
     }
+
+    private static void verifyCapabilities(List<Capability> capabilities) throws RDFGenerationError {
+        if( capabilities != null && capabilities.size() > 0 ) {
+            for( Capability cap: capabilities) {
+                if (cap == null) throw new RDFGenerationError("Capability must not be null");
+                if (cap.getName() == null) throw new RDFGenerationError("Capability name must not be null");
+                if (cap.getName().trim().length() == 0 ) throw new RDFGenerationError("Capability name must not be empty");
+            }
+        }
+    }
+
 
     private static void checkService(Service service) throws RDFGenerationError {
         if (service == null) {

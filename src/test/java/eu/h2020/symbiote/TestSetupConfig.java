@@ -83,6 +83,11 @@ public class TestSetupConfig {
     public static final boolean SERVICE1_OUTPUT_ARRAY = false;
     public static final String SERVICE1_OUTPUT_DATATYPE = "xsd:string";
 
+    public static final String DEVICE1_ID = "device1";
+    public static final String DEVICE1_LABEL = "Device 1";
+    public static final String DEVICE1_ = "device1";
+
+
     public static final String ACTUATING_SERVICE1_ID = "actuatingService1";
     public static final String ACTUATING_SERVICE1_LABEL = "Actuating Service 1";
     public static final List<String> ACTUATING_SERVICE1_COMMENTS = Arrays.asList("This is actuating service 1");

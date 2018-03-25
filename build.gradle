@@ -89,7 +89,7 @@ dependencies {
     compile('com.github.symbiote-h2020:SymbIoTeSemantics:1.+') {changing = true
                 exclude group: 'org.slf4j'
             }
-    compile('com.github.symbiote-h2020:SymbIoTeLibraries:4.+') { changing=true }
+    compile('com.github.symbiote-h2020:SymbIoTeLibraries:enablers_service_integration-SNAPSHOT') {changing=true}
 
     //Just to generate object ids
     compile('org.mongodb:bson:3.4.2')

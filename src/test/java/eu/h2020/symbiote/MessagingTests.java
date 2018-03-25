@@ -13,6 +13,8 @@ import eu.h2020.symbiote.model.mim.InterworkingService;
 import eu.h2020.symbiote.model.mim.Platform;
 import eu.h2020.symbiote.ontology.SemanticManager;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
+import eu.h2020.symbiote.security.accesspolicies.common.AccessPolicyType;
+import eu.h2020.symbiote.security.accesspolicies.common.IAccessPolicySpecifier;
 import eu.h2020.symbiote.security.accesspolicies.common.singletoken.SingleTokenAccessPolicySpecifier;
 import eu.h2020.symbiote.security.commons.exceptions.custom.InvalidArgumentsException;
 import eu.h2020.symbiote.security.communication.payloads.SecurityRequest;
@@ -209,9 +211,9 @@ public class MessagingTests {
 
             ObjectMapper mapper = new ObjectMapper();
 
-            Map<String, SingleTokenAccessPolicySpecifier> filteringPolicies = new HashMap<>();
+            Map<String, IAccessPolicySpecifier> filteringPolicies = new HashMap<>();
             String resId= "res_id";
-            filteringPolicies.put(resId,new SingleTokenAccessPolicySpecifier(SingleTokenAccessPolicySpecifier.SingleTokenAccessPolicyType.PUBLIC,null));
+            filteringPolicies.put(resId,new SingleTokenAccessPolicySpecifier(AccessPolicyType.PUBLIC,null));
             SecurityRequest securityRequest = new SecurityRequest("test1");
             CoreResourceRegistryRequest request = new CoreResourceRegistryRequest(securityRequest,"body", DescriptionType.BASIC,"platform_id",filteringPolicies);
 
@@ -224,7 +226,7 @@ public class MessagingTests {
             assertEquals("Captured object must have the same security request", securityRequest , imCaptor.getValue().getSecurityRequest());
             assertTrue("Captured object must have filtering policies for resource", imCaptor.getValue().getFilteringPolicies().containsKey(resId));
             assertEquals("Captured object must have the same filtering policies type", filteringPolicies.get(resId).getPolicyType(),imCaptor.getValue().getFilteringPolicies().get(resId).getPolicyType());
-            assertEquals("Captured object must have the same filtering policies claims", filteringPolicies.get(resId).getRequiredClaims(),imCaptor.getValue().getFilteringPolicies().get(resId).getRequiredClaims());
+//            assertEquals("Captured object must have the same filtering policies claims", filteringPolicies.get(resId).getPolicyType(),imCaptor.getValue().getFilteringPolicies().get(resId).getPolicyType());
             assertEquals("Captured object must have the same description type", request.getDescriptionType(), imCaptor.getValue().getDescriptionType());
             assertEquals("Captured object must have the same platform id", request.getPlatformId(), imCaptor.getValue().getPlatformId());
             assertEquals("Captured object must have the same body", request.getBody(), imCaptor.getValue().getBody());

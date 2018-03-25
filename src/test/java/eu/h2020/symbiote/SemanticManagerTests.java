@@ -73,6 +73,30 @@ public class SemanticManagerTests {
         resourceValidateAndTranslate(service,1);
     }
 
+//    @Test
+//    public void testDeviceValidateAndCreate() {
+//        Device device = new Device();
+//        Service service = new Service();
+//        service.setId(SERVICE1_ID);
+//        service.setName(SERVICE1_LABEL);
+//        service.setDescription(SERVICE1_COMMENTS);
+//        service.setInterworkingServiceURL(SERVICE1_URL);
+//        service.setName(SERVICE1_NAME);
+//
+//        service.setParameters(Arrays.asList(createService1Param()));
+//
+////        Parameter outputParameter = new Parameter();
+////        outputParameter.setDatatype(SERVICE1_OUTPUT_DATATYPE);
+////        outputParameter.setArray(SERVICE1_OUTPUT_ARRAY);
+////        service.setOutputParameter(outputParameter);
+//
+////        Datatype resultType = new Datatype();
+//
+//        service.setResultType(createDatatypeString());
+//
+//        resourceValidateAndTranslate(service,1);
+//    }
+
     @Test
     public void testServiceWithComplexDatatypeValidateAndCreate() {
         Service service = new Service();
@@ -149,6 +173,7 @@ public class SemanticManagerTests {
         actuator.setInterworkingServiceURL(ACTUATOR1_URL);
 
         Capability capability = new Capability();
+        capability.setName("Cap1");
 
         capability.setParameters(Arrays.asList(createService1Param()));
 
