@@ -178,9 +178,7 @@ public class SymbioteModelsUtil {
 
     public static CoreResourceType getTypeForResource(eu.h2020.symbiote.model.cim.Resource resource) {
         CoreResourceType type = null;
-        if (resource instanceof Device) {
-            type = CoreResourceType.DEVICE;
-        } else if (resource instanceof MobileSensor) {
+        if (resource instanceof MobileSensor) {
             type = CoreResourceType.MOBILE_SENSOR;
         } else if (resource instanceof StationarySensor) {
             type = CoreResourceType.STATIONARY_SENSOR;
@@ -188,6 +186,8 @@ public class SymbioteModelsUtil {
             type = CoreResourceType.ACTUATOR;
         } else if (resource instanceof Service) {
             type = CoreResourceType.SERVICE;
+        } else if (resource instanceof Device) {
+            type = CoreResourceType.DEVICE;
         }
         return type;
     }
