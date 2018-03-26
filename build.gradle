@@ -2,7 +2,8 @@
 // initial extensions to gradle
 buildscript {
     ext {
-        springBootVersion = '1.5.8.RELEASE'
+        springBootVersion = '1.5.10.RELEASE'
+        springCloudVersion = 'Dalston.SR5'
     }
     repositories {
         mavenCentral()
@@ -49,7 +50,7 @@ repositories {
 // Spring related configs
 dependencyManagement {
     imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Dalston.SR4"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }
 
@@ -89,7 +90,7 @@ dependencies {
     compile('com.github.symbiote-h2020:SymbIoTeSemantics:1.+') {changing = true
                 exclude group: 'org.slf4j'
             }
-    compile('com.github.symbiote-h2020:SymbIoTeLibraries:enablers_service_integration-SNAPSHOT') {changing=true}
+    compile('com.github.symbiote-h2020:SymbIoTeLibraries:5.11+') {changing=true}
 
     //Just to generate object ids
     compile('org.mongodb:bson:3.4.2')
