@@ -1,0 +1,26 @@
+@prefix : <http://atos.com/smartstadium/ontology/resource#> .
+@prefix atos-ss-location: <http://atos.com/smartstadium/ontology/location#> .
+@prefix geo:   <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix core:  <http://www.symbiote-h2020.eu/ontology/core#> .
+@prefix qu:    <http://purl.oclc.org/NET/ssnx/qu/quantity#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix meta:  <http://www.symbiote-h2020.eu/ontology/meta#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix bim: <http://www.symbiote-h2020.eu/ontology/bim#> .
+@prefix bim-ss: <http://www.symbiote-h2020.eu/ontology/bim/smartstadium#> .
+@base <http://atos.com/smartstadium/ontology/resource#> .
+
+:SSTRD-1.1-N a bim-ss:RetailerDevice ;
+    core:name "SSTRD-1.1-N"^^xsd:string ;
+    core:description "Smart Stadium Retailer Device 1.1"^^xsd:string ;
+    core:locatedAt atos-ss-location:Location1 .
+
+atos-ss-location:LOC1
+        a             core:WGS84Location ;
+        core:description  "LOC1D" ;
+        core:name    "LOC1" ;
+        geo:alt       "17.0"^^xsd:decimal ;
+        geo:lat       "41.4056677"^^xsd:decimal ;
+        geo:long      "2.1979013"^^xsd:decimal .
