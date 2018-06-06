@@ -7,9 +7,8 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 import eu.h2020.symbiote.core.internal.CoreResourceRegistryRequest;
-import eu.h2020.symbiote.core.internal.DescriptionType;
+import eu.h2020.symbiote.core.internal.CoreSspResourceRegistryRequest;
 import eu.h2020.symbiote.core.internal.ResourceInstanceValidationResult;
-import eu.h2020.symbiote.messaging.RabbitManager;
 import eu.h2020.symbiote.model.cim.Resource;
 import eu.h2020.symbiote.ontology.SemanticManager;
 import org.apache.commons.logging.Log;
@@ -19,13 +18,13 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * RabbitMQ Consumer implementation used for Placeholder actions
+ * RabbitMQ Consumer implementation used for ssp resource translation
  * <p>
  * Created by Szymon Mueller
  */
-public class ValidateAndCreateRDFForBIMResourceConsumer extends DefaultConsumer {
+public class ValidateAndCreateRDFForSspResourceConsumer extends DefaultConsumer {
 
-    private static Log log = LogFactory.getLog(ValidateAndCreateRDFForBIMResourceConsumer.class);
+    private static Log log = LogFactory.getLog(ValidateAndCreateRDFForSspResourceConsumer.class);
     private SemanticManager semanticManager;
 
     /**
@@ -35,7 +34,7 @@ public class ValidateAndCreateRDFForBIMResourceConsumer extends DefaultConsumer 
      * @param channel       the channel to which this consumer is attached
      * @param semanticManager semantic manager
      */
-    public ValidateAndCreateRDFForBIMResourceConsumer(Channel channel,
+    public ValidateAndCreateRDFForSspResourceConsumer(Channel channel,
                                                       SemanticManager semanticManager) {
         super(channel);
         this.semanticManager = semanticManager;
@@ -56,25 +55,20 @@ public class ValidateAndCreateRDFForBIMResourceConsumer extends DefaultConsumer 
                                AMQP.BasicProperties properties, byte[] body)
             throws IOException {
         String msg = new String(body);
-        log.debug("Consume validate and create RDF for resource " + msg);
+        log.debug("Consume validate and create RDF for ssp resource " + msg);
         ObjectMapper mapper = new ObjectMapper();
         ResourceInstanceValidationResult response = null;
         //Try to parse the message
         try {
-//            List<Resource> validateAndTranslateRequest = mapper.readValue(msg, new TypeReference<List<Resource>>(){});
 
-            CoreResourceRegistryRequest coreResourceRegistryRequest = mapper.readValue(msg, CoreResourceRegistryRequest.class);
+            CoreSspResourceRegistryRequest coreResourceRegistryRequest = mapper.readValue(msg, CoreSspResourceRegistryRequest.class);
 
-            if (!coreResourceRegistryRequest.getDescriptionType().equals(DescriptionType.BASIC)) {
-                log.fatal("Validate and create should only be used by BASIC (JSON) type of description");
-                throw new IllegalArgumentException("Validate and create should only be used by BASIC (JSON) type of description");
-            }
+//
+//            Map<String, Resource> resources = null;
+//            resources = mapper.readValue(coreResourceRegistryRequest.getBody(), new TypeReference<Map<String, Resource>>() {
+//            });
 
-            Map<String, Resource> resources = null;
-            resources = mapper.readValue(coreResourceRegistryRequest.getBody(), new TypeReference<Map<String, Resource>>() {
-            });
-
-            response = this.semanticManager.validateAndCreateBIMResourceToRDF(resources,coreResourceRegistryRequest.getPlatformId(),false);
+            response = this.semanticManager.validateAndCreateBIMResourceToRDF(coreResourceRegistryRequest.getBody(),coreResourceRegistryRequest.getSspId(),true);
             //Send the response back to the client
             log.debug("Validation status: " + response.isSuccess() + ", message: " + response.getMessage());
 
@@ -86,7 +80,7 @@ public class ValidateAndCreateRDFForBIMResourceConsumer extends DefaultConsumer 
 //            log.error("Could not find property: " + e.getMessage() , e);
         } catch (Exception e) {
             response = createResponseForError(e);
-            log.error("Generic error occurred when handling delivery: " + e.getMessage(), e);
+            log.error("Generic error occurred when handling delivery", e);
         }
         byte[] responseBytes = mapper.writeValueAsBytes(response != null ? response : "[]");
 

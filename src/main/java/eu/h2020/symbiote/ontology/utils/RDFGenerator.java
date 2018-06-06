@@ -42,7 +42,7 @@ public class RDFGenerator {
      * @param platformId
      * @return String containing resource description in RDF.
      */
-    public static GenerationResult generateRDFForResource(Resource resource, String platformId) throws PropertyNotFoundException, RDFGenerationError {
+    public static GenerationResult generateRDFForResource(Resource resource, String platformId, boolean isSsp) throws PropertyNotFoundException, RDFGenerationError {
         log.debug("Generating model for resource " + resource.getId());
         // create an empty Model
         Model model = ModelFactory.createDefaultModel();
@@ -78,7 +78,7 @@ public class RDFGenerator {
                 }
             }
 
-            addLocationToModelResource(model, modelResource, locatedAt, platformId);
+            addLocationToModelResource(model, modelResource, locatedAt, platformId, isSsp);
         }
         if (resource instanceof StationarySensor) {
             modelResource.addProperty(RDF.type, CIM.StationarySensor);
@@ -93,7 +93,7 @@ public class RDFGenerator {
                 }
             }
 
-            addLocationToModelResource(model, modelResource, locatedAt, platformId);
+            addLocationToModelResource(model, modelResource, locatedAt, platformId, isSsp);
             addFoiToModelResource(model, modelResource, featureOfInterest);
         }
         if (resource instanceof Service) {
@@ -116,7 +116,7 @@ public class RDFGenerator {
             Location locatedAt = ((Actuator) resource).getLocatedAt();
             List<Capability> capabilities = ((Actuator) resource).getCapabilities();
 
-            addLocationToModelResource(model, modelResource, locatedAt, platformId);
+            addLocationToModelResource(model, modelResource, locatedAt, platformId, isSsp);
             addCapabilitiesToModelResource(model, modelResource, capabilities);
         }
 
@@ -223,7 +223,7 @@ public class RDFGenerator {
         return dataPropertyResource;
     }
 
-    private static void addLocationToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, Location location, String platformId) throws RDFGenerationError {
+    private static void addLocationToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, Location location, String platformId, boolean isSsp) throws RDFGenerationError {
 
         verifyLocation(location);
 
@@ -242,7 +242,12 @@ public class RDFGenerator {
 
         if (locationURI == null) {
             String locationId = ObjectId.get().toString();
-            locationURI = ModelHelper.getPlatformURI(platformId) + "/location/" + locationId;
+            if( isSsp ) {
+                locationURI = ModelHelper.getSspURI(platformId) + "/location/" + locationId;
+            } else {
+                locationURI = ModelHelper.getPlatformURI(platformId) + "/location/" + locationId;
+            }
+
             log.info("No existing locations have been found fulfilling criteria, created new location with ID: " + locationId + " and URI: <" + locationURI + ">");
         }
         org.apache.jena.rdf.model.Resource locationResource = model.createResource(locationURI);

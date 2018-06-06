@@ -74,6 +74,9 @@ public class RabbitManager {
     @Value("${rabbit.routingKey.resource.instance.translationPerformed}")
     private String resourceInstanceTranslationPerformedRoutingKey;
 
+    @Value("${rabbit.routingKey.ssp.resource.instance.translationRequested}")
+    private String sspResourceInstanceTranslationRequestedRoutingKey;
+
     //Platform exchange
     @Value("${rabbit.exchange.platform.name}")
     private String platformExchangeName;
@@ -218,6 +221,7 @@ public class RabbitManager {
             registerPIMMetaModelModifyConsumer(semanticManager);
 //            registerValidateAndCreateBIMPlatform(semanticManager);
             registerValidateAndCreateBIMResource(semanticManager);
+            registerValidateAndCreateSspResource(semanticManager);
 //            registerValidatePIMInstanceConsumer(semanticManager);
             registerValidatePIMMetaModelConsumer(semanticManager);
             registerValidateResourceInstanceConsumer(semanticManager);
@@ -433,6 +437,21 @@ public class RabbitManager {
         ValidateAndCreateRDFForBIMResourceConsumer consumer = new ValidateAndCreateRDFForBIMResourceConsumer(channel, semanticManager);
 
         log.debug("Creating BIM resource validation and creation consumer");
+        channel.basicConsume(queueName, false, consumer);
+    }
+
+    /**
+     * Registers a Validate and Create SSP resource consumer
+     */
+    public void registerValidateAndCreateSspResource(SemanticManager semanticManager) throws IOException {
+        String queueName = "symbIoTe-SemanticManager-validate-and-create-SSP-Resource";
+
+        Channel channel = connection.createChannel();
+        channel.queueDeclare(queueName, false, true, true, null);
+        channel.queueBind(queueName, resourceExchangeName, sspResourceInstanceTranslationRequestedRoutingKey);
+        ValidateAndCreateRDFForSspResourceConsumer consumer = new ValidateAndCreateRDFForSspResourceConsumer(channel, semanticManager);
+
+        log.debug("Creating Ssp resource validation and creation consumer");
         channel.basicConsume(queueName, false, consumer);
     }
 

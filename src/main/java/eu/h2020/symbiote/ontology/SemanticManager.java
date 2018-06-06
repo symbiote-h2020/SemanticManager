@@ -349,7 +349,7 @@ public class SemanticManager {
             }
         }
         resource.addLiteral(
-                CIM.id, 
+                CIM.id,
                 resource.getModel().createTypedLiteral(
                         String.valueOf(ObjectId.get()),
                         XSDDatatype.XSDstring));
@@ -504,15 +504,18 @@ public class SemanticManager {
      * Validates description of resources of BIM-compliant platform and
      * translates them into RDF.
      *
-     * @param request Request containing list of resources, for which RDF will
-     * be created.
+     * @param resources Map of resources, for which RDF will be created.
+     * @param cloudId Id of the cloud entity registering the resources - id of the platform or id of the ssp.
+     * @param cloudIsSsp <code>true</code> if the cloud entity is a ssp, <code>false</code> if it is a platform
+     *
      * @return Validation result, containing information about the resources and
      * created RDF.
      */
-    public ResourceInstanceValidationResult validateAndCreateBIMResourceToRDF(CoreResourceRegistryRequest request) throws IOException, PropertyNotFoundException {
+    public ResourceInstanceValidationResult validateAndCreateBIMResourceToRDF(Map<String, Resource> resources, String cloudId, boolean cloudIsSsp) throws IOException, PropertyNotFoundException {
+        log.info("Validating and creating RDF for resources");
         ResourceInstanceValidationResult result = new ResourceInstanceValidationResult();
-        if (request != null) {
-            log.info("Validating and creating RDF for platform " + request.getPlatformId());
+        if (resources != null) {
+//            log.info("Validating and creating RDF for platform " + request.getPlatformId());
 
             Model completeModel = ModelFactory.createDefaultModel();
 
@@ -520,15 +523,12 @@ public class SemanticManager {
             StringBuilder errorMessage = new StringBuilder();
 
             Map<String, CoreResource> resourceList = new HashMap<>();
-            if (!request.getDescriptionType().equals(DescriptionType.BASIC)) {
-                log.fatal("Validate and create should only be used by BASIC (JSON) type of description");
-                throw new IllegalArgumentException("Validate and create should only be used by BASIC (JSON) type of description");
-            }
+
 
             ObjectMapper mapper = new ObjectMapper();
-            Map<String, Resource> resources = null;
-            resources = mapper.readValue(request.getBody(), new TypeReference<Map<String, Resource>>() {
-            });
+//            Map<String, Resource> resources = null;
+//            resources = mapper.readValue(request.getBody(), new TypeReference<Map<String, Resource>>() {
+//            });
             for (String resourcePairingId : resources.keySet()) {
                 Resource resource = resources.get(resourcePairingId);
 
@@ -552,7 +552,7 @@ public class SemanticManager {
                     }
 
                     //Generate the rdf for the resource and save it into CoreResource
-                    GenerationResult generationResult = RDFGenerator.generateRDFForResource(resource, request.getPlatformId());
+                    GenerationResult generationResult = RDFGenerator.generateRDFForResource(resource, cloudId, cloudIsSsp );
                     completeModel.add(generationResult.getModel());
                     StringWriter stringWriter = new StringWriter();
                     generationResult.getModel().write(stringWriter, DEFAULT_RDF_FORMAT.toString());

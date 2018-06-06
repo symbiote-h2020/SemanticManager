@@ -81,19 +81,19 @@ public class LocationFinder {
                 String l3 = reader.readLine();
                 if (l1.equals("location")) {
                     if (l3 != null) {
-                        log.error("Found more than one locations: <" + l2 + "> and <" + l3 + ">");
+//                        log.error("Found more than one locations: <" + l2 + "> and <" + l3 + ">");
                     } else if( l2 == null) {
-                        log.debug("Could not find any locations for the parameters");
+//                        log.debug("Could not find any locations for the parameters");
                     } else {
-                        log.debug("Found location fulfilling the criteria! LocationURI: " + l2);
+//                        log.debug("Found location fulfilling the criteria! LocationURI: " + l2);
                         uri = l2;
                     }
                 } else {
-                    log.error("Location query returned different value (instead of location): " + l1);
+//                    log.error("Location query returned different value (instead of location): " + l1);
                 }
                 reader.close();
             } catch (Exception e) {
-                log.error("Exception occurred when executing location query: " + e.getMessage(), e);
+//                log.error("Exception occurred when executing location query: " + e.getMessage(), e);
             }
         }
 
@@ -145,8 +145,8 @@ public class LocationFinder {
         }
 
         //Ensure that location is defined for this platform...
-        query.append("\t?platform a owl:Ontology ;\n");
-        query.append("\t\tcim:id \"" + platformId + "\" ;\n");
+//        query.append("\t?platform a owl:Ontology .\n");
+        query.append("\t?platform cim:id \"" + platformId + "\" ;\n");
         query.append("\t\tmim:hasService ?service .\n");
         query.append("\t?service mim:hasResource ?sensor .\n");
         query.append("\t?sensor a cim:Resource ;\n");

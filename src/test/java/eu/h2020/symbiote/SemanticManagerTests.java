@@ -292,9 +292,9 @@ public class SemanticManagerTests {
 
         CoreResourceRegistryRequest request = new CoreResourceRegistryRequest();
         request.setPlatformId(PLATFORM_ID);
+        Map<String,Resource> map = new HashMap<>();
+        map.put(resourcePairingId,resource);
         try {
-            Map<String,Resource> map = new HashMap<>();
-            map.put(resourcePairingId,resource);
             String resourcesJson = mapper.writerFor(new TypeReference<Map<String,Resource>>() {
             }).writeValueAsString(map);
             request.setBody(resourcesJson);
@@ -307,7 +307,7 @@ public class SemanticManagerTests {
 
         ResourceInstanceValidationResult validationResult = null;
         try {
-            validationResult = manager.validateAndCreateBIMResourceToRDF(request);
+            validationResult = manager.validateAndCreateBIMResourceToRDF(map,request.getPlatformId(),false);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Error during handling of the validate and create resource request");

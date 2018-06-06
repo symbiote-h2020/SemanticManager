@@ -10,6 +10,7 @@ import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
 
 import java.io.IOException;
+import java.util.Formatter;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -96,12 +97,12 @@ public class ValidationTests {
             rdfInfo.setRdf(ModelHelper.writeAll(ModelHelper.readModel(BIM.getURI(), false, false), RDFFormat.Turtle));
         } catch (IOException e) {
             e.printStackTrace();
-            fail();
+            fail("Error occurred during ModelHelper.readModel(BIM.getURI())=" + BIM.getURI() + " msg: " + e.getMessage());
         }
         InformationModelValidationResult validationResult = SemanticManager.getManager().validatePIMMetaModel(rdfInfo);
         if (!validationResult.isSuccess()) {
             System.out.println(validationResult.getMessage());
-            fail();
+            fail("Validation was not successful: " +validationResult.getMessage());
         }
     }
 

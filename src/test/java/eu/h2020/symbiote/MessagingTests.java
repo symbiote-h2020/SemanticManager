@@ -1,6 +1,8 @@
 package eu.h2020.symbiote;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import eu.h2020.symbiote.core.internal.CoreResourceRegistryRequest;
@@ -8,6 +10,8 @@ import eu.h2020.symbiote.core.internal.DescriptionType;
 import eu.h2020.symbiote.core.internal.RDFFormat;
 import eu.h2020.symbiote.core.internal.ResourceInstanceValidationRequest;
 import eu.h2020.symbiote.messaging.RabbitManager;
+import eu.h2020.symbiote.model.cim.Resource;
+import eu.h2020.symbiote.model.cim.StationarySensor;
 import eu.h2020.symbiote.model.mim.InformationModel;
 import eu.h2020.symbiote.model.mim.InterworkingService;
 import eu.h2020.symbiote.model.mim.Platform;
@@ -34,7 +38,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
+import static eu.h2020.symbiote.TestSetupConfig.*;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -215,21 +222,55 @@ public class MessagingTests {
             String resId= "res_id";
             filteringPolicies.put(resId,new SingleTokenAccessPolicySpecifier(AccessPolicyType.PUBLIC,null));
             SecurityRequest securityRequest = new SecurityRequest("test1");
-            CoreResourceRegistryRequest request = new CoreResourceRegistryRequest(securityRequest,"body", DescriptionType.BASIC,"platform_id",filteringPolicies);
+            Map<String, Resource> resMap = new HashMap<>();
+            Resource stationarySensor = new StationarySensor();
+            stationarySensor.setId(STATIONARY1_ID);
+            stationarySensor.setName(STATIONARY1_LABEL);
+            stationarySensor.setDescription(STATIONARY1_COMMENTS);
+            ((StationarySensor)stationarySensor).setLocatedAt(STATIONARY1_LOCATION);
+            stationarySensor.setInterworkingServiceURL(STATIONARY1_URL);
+            ((StationarySensor)stationarySensor).setFeatureOfInterest(STATIONARY1_FOI);
+            ((StationarySensor)stationarySensor).setObservesProperty(STATIONARY1_PROPERTIES);
+
+//            String sensorString = mapper.writeValueAsString(stationarySensor);
+//
+            resMap.put(resId,stationarySensor);
+            ObjectWriter objectWriter = mapper.writerFor(new TypeReference<Map<String, Resource>>() {
+            });
+            String bodyToSend = objectWriter.writeValueAsString(resMap);
+
+            CoreResourceRegistryRequest request = new CoreResourceRegistryRequest(securityRequest,bodyToSend, DescriptionType.BASIC,"platform_id",filteringPolicies);
+
 
             String jsonIm = mapper.writeValueAsString(request);
+//
+//            CoreResourceRegistryRequest coreResourceRegistryRequest = mapper.readValue(jsonIm, CoreResourceRegistryRequest.class);
+//
+//            String mapBody = coreResourceRegistryRequest.getBody();
+//
+//            Map<String, Resource> resources = null;
+//            resources = mapper.readValue(mapBody, new TypeReference<Map<String, Resource>>() {
+//            });
+
             sendMessage(RESOURCE_EXCHANGE_NAME, RESOURCE_INSTANCE_TRANSLATION_REQUESTED_ROUTING_KEY, null, jsonIm);
             Thread.sleep(1000);
-            ArgumentCaptor<CoreResourceRegistryRequest> imCaptor = ArgumentCaptor.forClass(CoreResourceRegistryRequest.class);
-            verify(semanticManager, times(1)).validateAndCreateBIMResourceToRDF(imCaptor.capture());
-            assertNotNull(imCaptor.getValue());
-            assertEquals("Captured object must have the same security request", securityRequest , imCaptor.getValue().getSecurityRequest());
-            assertTrue("Captured object must have filtering policies for resource", imCaptor.getValue().getFilteringPolicies().containsKey(resId));
-            assertEquals("Captured object must have the same filtering policies type", filteringPolicies.get(resId).getPolicyType(),imCaptor.getValue().getFilteringPolicies().get(resId).getPolicyType());
+//            ArgumentCaptor<CoreResourceRegistryRequest> imCaptor = ArgumentCaptor.forClass(CoreResourceRegistryRequest.class);
+            ArgumentCaptor<Map> imCaptor = ArgumentCaptor.forClass(Map.class);
+
+            verify(semanticManager, times(1)).validateAndCreateBIMResourceToRDF(imCaptor.capture(),anyString(),anyBoolean());
+
+            Map<String,Resource> value = imCaptor.<Map<String, Resource>>getValue();
+            assertNotNull(value);
+            assertEquals("Captured resource size must be 1", 1, value.size());
+            assertEquals("Captured resource name must be same", STATIONARY1_LABEL, value.values().iterator().next().getName());
+
+//            assertEquals("Captured object must have the same security request", securityRequest , value.getSecurityRequest());
+//            assertTrue("Captured object must have filtering policies for resource", imCaptor.getValue().getFilteringPolicies().containsKey(resId));
+//            assertEquals("Captured object must have the same filtering policies type", filteringPolicies.get(resId).getPolicyType(),imCaptor.getValue().getFilteringPolicies().get(resId).getPolicyType());
 //            assertEquals("Captured object must have the same filtering policies claims", filteringPolicies.get(resId).getPolicyType(),imCaptor.getValue().getFilteringPolicies().get(resId).getPolicyType());
-            assertEquals("Captured object must have the same description type", request.getDescriptionType(), imCaptor.getValue().getDescriptionType());
-            assertEquals("Captured object must have the same platform id", request.getPlatformId(), imCaptor.getValue().getPlatformId());
-            assertEquals("Captured object must have the same body", request.getBody(), imCaptor.getValue().getBody());
+//            assertEquals("Captured object must have the same description type", request.getDescriptionType(), imCaptor.getValue().getDescriptionType());
+//            assertEquals("Captured object must have the same platform id", request.getPlatformId(), imCaptor.getValue().getPlatformId());
+//            assertEquals("Captured object must have the same body", request.getBody(), );
 
         } catch (IOException e) {
             e.printStackTrace();
