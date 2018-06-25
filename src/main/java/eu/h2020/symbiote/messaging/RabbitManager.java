@@ -74,7 +74,7 @@ public class RabbitManager {
     @Value("${rabbit.routingKey.resource.instance.translationPerformed}")
     private String resourceInstanceTranslationPerformedRoutingKey;
 
-    @Value("${rabbit.routingKey.ssp.resource.instance.translationRequested}")
+    @Value("${rabbit.routingKey.ssp.sdev.resource.instance.translationRequested}")
     private String sspResourceInstanceTranslationRequestedRoutingKey;
 
     //Platform exchange
