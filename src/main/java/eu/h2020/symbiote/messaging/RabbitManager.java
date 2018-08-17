@@ -5,7 +5,6 @@ import com.rabbitmq.client.*;
 import eu.h2020.symbiote.core.internal.InformationModelListResponse;
 import eu.h2020.symbiote.messaging.consumers.*;
 import eu.h2020.symbiote.ontology.SemanticManager;
-import eu.h2020.symbiote.ontology.utils.LocationFinder;
 import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
 import eu.h2020.symbiote.utils.LocationRepository;
 import org.apache.commons.logging.Log;
@@ -21,8 +20,6 @@ import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeoutException;
-
-import static org.apache.jena.vocabulary.RSS.channel;
 
 /**
  * Bean used to manage internal communication using RabbitMQ.
@@ -177,7 +174,7 @@ public class RabbitManager {
                     null);
 
 //            LocationFinder.getSingleton(this.resourceExchangeName, this.resourceSparqlSearchRequestedRoutingKey, this.connection, this);
-            LocationFinder.getSingleton(this.insertWholeLocation,locationRepository);
+//            LocationFinder.getSingleton(this.insertWholeLocation,locationRepository);
 
             scheduleLoadingOfPIMs();
 

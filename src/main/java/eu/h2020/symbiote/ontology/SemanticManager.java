@@ -1,11 +1,9 @@
 package eu.h2020.symbiote.ontology;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.h2020.symbiote.core.internal.*;
 import eu.h2020.symbiote.model.cim.Resource;
 import eu.h2020.symbiote.model.mim.InformationModel;
-import eu.h2020.symbiote.model.mim.Platform;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.errors.RDFGenerationError;
 import eu.h2020.symbiote.ontology.errors.RDFParsingError;
@@ -16,23 +14,21 @@ import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
 import eu.h2020.symbiote.ontology.validation.ValidationHelper;
 import eu.h2020.symbiote.semantics.ModelHelper;
 import eu.h2020.symbiote.semantics.ontology.CIM;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.jena.datatypes.xsd.XSDDatatype;
+import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.RDFNode;
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.jena.datatypes.xsd.XSDDatatype;
-import org.apache.jena.ontology.OntModel;
-import org.apache.jena.rdf.model.RDFNode;
+import java.util.*;
 
 /**
  * Main class for handling validation and translation. All RDF-related tasks are
@@ -40,36 +36,44 @@ import org.apache.jena.rdf.model.RDFNode;
  * <p>
  * Created by Szymon Mueller on 21/03/2017.
  */
+@Component
 public class SemanticManager {
 
     private static final Log log = LogFactory.getLog(SemanticManager.class);
 
     private static final RDFFormat DEFAULT_RDF_FORMAT = RDFFormat.JSONLD;
 
-    private static SemanticManager manager = null;
+    private final RDFGenerator rdfGenerator;
 
-    private SemanticManager() {
-
+    @Autowired
+    public SemanticManager( RDFGenerator rdfGenerator ) {
+        this.rdfGenerator = rdfGenerator;
     }
 
-    public static SemanticManager getManager() {
-        synchronized (SemanticManager.class) {
-            if (manager == null) {
-                log.info("Creating Semantic Manager");
-                manager = new SemanticManager();
-                //Trying to initialize semantic parts: load models into in-memory jena etc
-                manager.init();
-            }
-            return manager;
-        }
-    }
-
-    /**
-     * Initialize semantic database, used for validations and translations
-     */
-    private void init() {
-        log.info("Initializing Semantic Manager");
-    }
+//    private static SemanticManager manager = null;
+//
+//    private SemanticManager() {
+//
+//    }
+//
+//    public static SemanticManager getManager() {
+//        synchronized (SemanticManager.class) {
+//            if (manager == null) {
+//                log.info("Creating Semantic Manager");
+//                manager = new SemanticManager();
+//                //Trying to initialize semantic parts: load models into in-memory jena etc
+//                manager.init();
+//            }
+//            return manager;
+//        }
+//    }
+//
+//    /**
+//     * Initialize semantic database, used for validations and translations
+//     */
+//    private void init() {
+//        log.info("Initializing Semantic Manager");
+//    }
 
     /**
      * Validates PIM meta model against symbIoTe core models: CIM & MIM.
@@ -324,7 +328,7 @@ public class SemanticManager {
 
         //Create RDF from meta-information about the platform
         //TODO create RDF representing BIM compliant platform
-        Model rdf = RDFGenerator.generateRDFForPlatform(pimInstanceDescription);
+        Model rdf = rdfGenerator.generateRDFForPlatform(pimInstanceDescription);
 
         StringWriter stringWriter = new StringWriter();
         rdf.write(stringWriter, DEFAULT_RDF_FORMAT.toString());
@@ -552,7 +556,7 @@ public class SemanticManager {
                     }
 
                     //Generate the rdf for the resource and save it into CoreResource
-                    GenerationResult generationResult = RDFGenerator.generateRDFForResource(resource, cloudId, cloudIsSsp );
+                    GenerationResult generationResult = rdfGenerator.generateRDFForResource(resource, cloudId, cloudIsSsp );
                     completeModel.add(generationResult.getModel());
                     StringWriter stringWriter = new StringWriter();
                     generationResult.getModel().write(stringWriter, DEFAULT_RDF_FORMAT.toString());

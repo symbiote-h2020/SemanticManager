@@ -9,19 +9,46 @@ import eu.h2020.symbiote.core.internal.DescriptionType;
 import eu.h2020.symbiote.core.internal.ResourceInstanceValidationResult;
 import eu.h2020.symbiote.model.cim.*;
 import eu.h2020.symbiote.ontology.SemanticManager;
+import eu.h2020.symbiote.ontology.utils.RDFGenerator;
+import eu.h2020.symbiote.utils.LocationInfo;
+import eu.h2020.symbiote.utils.LocationManager;
+import eu.h2020.symbiote.utils.LocationRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import static eu.h2020.symbiote.TestSetupConfig.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SemanticManagerTests {
+
+
+    @Mock
+    LocationRepository locationRepository;
+
+    LocationManager locationManager;
+    RDFGenerator rdfGenerator;
+    SemanticManager semanticManager;
+
+
+    @Before
+    public void init() {
+        loadBIM();
+        locationManager = new LocationManager(true,locationRepository);
+        rdfGenerator = new RDFGenerator(locationManager);
+        semanticManager = new SemanticManager(rdfGenerator);
+        when(locationRepository.findByPlatformId(any())).thenReturn(new ArrayList<LocationInfo>());
+    }
 
     @Test
     public void testStationarySensorValidateAndCreate() {
@@ -287,7 +314,7 @@ public class SemanticManagerTests {
             e.printStackTrace();
         }
 
-        SemanticManager manager = SemanticManager.getManager();
+//        SemanticManager manager = SemanticManager.getManager();
 
 
         CoreResourceRegistryRequest request = new CoreResourceRegistryRequest();
@@ -307,7 +334,7 @@ public class SemanticManagerTests {
 
         ResourceInstanceValidationResult validationResult = null;
         try {
-            validationResult = manager.validateAndCreateBIMResourceToRDF(map,request.getPlatformId(),false);
+            validationResult = semanticManager.validateAndCreateBIMResourceToRDF(map,request.getPlatformId(),false);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Error during handling of the validate and create resource request");

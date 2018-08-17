@@ -163,7 +163,8 @@ public class TestSetupConfig {
         InformationModel im = new InformationModel();
         im.setName("BIM");
         im.setOwner("BIM");
-        im.setUri(ModelHelper.getInformationModelURI("BIM"));
+//        im.setUri(ModelHelper.getInformationModelURI("BIM"));
+        im.setUri("http://www.symbiote-h2020.eu/ontology/bim");
         im.setId("BIM");
 
         String bimRdf = null;

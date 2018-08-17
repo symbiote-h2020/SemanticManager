@@ -38,10 +38,12 @@ public class SemanticManagerApplication {
     public static class CLR implements CommandLineRunner {
 
         private final RabbitManager rabbitManager;
+        private final SemanticManager semanticManager;
 
         @Autowired
-        public CLR(RabbitManager rabbitManager) {
+        public CLR(RabbitManager rabbitManager, SemanticManager semanticManager) {
             this.rabbitManager = rabbitManager;
+            this.semanticManager = semanticManager;
         }
 
         @Override
@@ -49,7 +51,7 @@ public class SemanticManagerApplication {
 //
             //message retrieval - start rabbit exchange and consumers
 //            this.rabbitManager.init();
-            this.rabbitManager.startConsumers(SemanticManager.getManager());
+            this.rabbitManager.startConsumers(semanticManager);
 
             //Load all PIM models
 

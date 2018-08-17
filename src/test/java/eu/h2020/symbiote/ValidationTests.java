@@ -7,15 +7,18 @@ import eu.h2020.symbiote.core.internal.ResourceInstanceValidationResult;
 import eu.h2020.symbiote.model.mim.InformationModel;
 import eu.h2020.symbiote.ontology.SemanticManager;
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
+import eu.h2020.symbiote.ontology.utils.RDFGenerator;
 import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
 
 import java.io.IOException;
 import java.util.Formatter;
 
+import eu.h2020.symbiote.utils.LocationManager;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.*;
@@ -37,9 +40,19 @@ public class ValidationTests {
 //    private String BIM_RESOURCE_FILE = "/bim_resource.ttl";
     private String BIM_RESOURCE_FILE = "/bim_from_rest.ttl";
 
+    @Mock
+    LocationManager locationManager;
+
+    RDFGenerator rdfGenerator;
+    SemanticManager semanticManager;
+
+
     @Before
     public void init() {
         loadBIM();
+        rdfGenerator = new RDFGenerator(locationManager);
+        semanticManager = new SemanticManager(rdfGenerator);
+
     }
 
     @Test
@@ -99,7 +112,7 @@ public class ValidationTests {
             e.printStackTrace();
             fail("Error occurred during ModelHelper.readModel(BIM.getURI())=" + BIM.getURI() + " msg: " + e.getMessage());
         }
-        InformationModelValidationResult validationResult = SemanticManager.getManager().validatePIMMetaModel(rdfInfo);
+        InformationModelValidationResult validationResult = semanticManager.validatePIMMetaModel(rdfInfo);
         if (!validationResult.isSuccess()) {
             System.out.println(validationResult.getMessage());
             fail("Validation was not successful: " +validationResult.getMessage());
@@ -116,7 +129,7 @@ public class ValidationTests {
             String resourceRdf = IOUtils.toString(this.getClass()
                     .getResource("/retailerDevice.ttl"));
             request.setRdf(resourceRdf);
-            ResourceInstanceValidationResult result = SemanticManager.getManager().validateResourcesInstance(request);
+            ResourceInstanceValidationResult result = semanticManager.validateResourcesInstance(request);
             assertNotNull(result);
             assertNotNull(result.getObjectDescription());
             assertTrue(result.isSuccess());

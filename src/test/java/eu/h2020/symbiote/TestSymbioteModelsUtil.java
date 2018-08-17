@@ -2,13 +2,8 @@ package eu.h2020.symbiote;
 
 import eu.h2020.symbiote.ontology.errors.PropertyNotFoundException;
 import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
-import fr.inrialpes.exmo.align.gen.TestSet;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
-
-
 
 import static org.junit.Assert.*;
 

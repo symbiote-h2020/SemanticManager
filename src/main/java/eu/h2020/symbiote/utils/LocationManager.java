@@ -30,4 +30,29 @@ public class LocationManager {
     }
 
 
+    public Optional<LocationInfo> findExistingLocation(String name, String platformId, double latitude, double longitude, double altitude) {
+        List<LocationInfo> platformLocationsList = locationRepo.findByPlatformId(platformId);
+        List<LocationInfo> equalLocations = platformLocationsList.stream().filter(locationInfo -> locationDetailsAreEqual(locationInfo, new LocationInfo(null, platformId, latitude, longitude, altitude))).collect(Collectors.toList());
+        switch (equalLocations.size()) {
+            case 1: return Optional.of(equalLocations.get(0));
+            default: if(equalLocations.size() > 1 ) {
+                log.debug("Size of location entries fulfilling the equality is more than 1: " + equalLocations.size() + ". Returning first one found.");
+                return Optional.of(equalLocations.get(0));
+            } else {
+                return Optional.empty();
+            }
+        }
+    }
+
+    public boolean locationDetailsAreEqual( LocationInfo location1, LocationInfo location2 ) {
+        if( location1 == null || location2 == null ) return false;
+        if (location1 == location2) return true;
+
+        if (Double.compare(location1.getLatitude(), location2.getLatitude()) != 0) return false;
+        if (Double.compare(location1.getLongitude(), location2.getLongitude()) != 0) return false;
+        if (Double.compare(location1.getAltitude(), location2.getAltitude()) != 0) return false;
+        return location1.getPlatformId() != null ? location1.getPlatformId().equals(location2.getPlatformId()) : location2.getPlatformId() == null;
+    }
+
+
 }

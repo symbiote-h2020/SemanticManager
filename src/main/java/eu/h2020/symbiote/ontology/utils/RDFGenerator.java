@@ -12,6 +12,7 @@ import eu.h2020.symbiote.semantics.ontology.CIM;
 import eu.h2020.symbiote.semantics.ontology.MIM;
 import eu.h2020.symbiote.semantics.ontology.WGS84;
 import eu.h2020.symbiote.utils.LocationInfo;
+import eu.h2020.symbiote.utils.LocationManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jena.rdf.model.Model;
@@ -19,6 +20,7 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDF;
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.StringWriter;
@@ -34,6 +36,13 @@ public class RDFGenerator {
 
     private static final Log log = LogFactory.getLog(RDFGenerator.class);
 
+    private LocationManager locationManager;
+
+    @Autowired
+    public RDFGenerator( LocationManager locationManager ) {
+        this.locationManager = locationManager;
+    }
+
     /**
      * Generates and returns RDF for the resource in specified format.
      *
@@ -41,7 +50,7 @@ public class RDFGenerator {
      * @param platformId
      * @return String containing resource description in RDF.
      */
-    public static GenerationResult generateRDFForResource(Resource resource, String platformId, boolean isSsp) throws PropertyNotFoundException, RDFGenerationError {
+    public GenerationResult generateRDFForResource(Resource resource, String platformId, boolean isSsp) throws PropertyNotFoundException, RDFGenerationError {
         log.debug("Generating model for resource " + resource.getId());
         // create an empty Model
         Model model = ModelFactory.createDefaultModel();
@@ -131,7 +140,7 @@ public class RDFGenerator {
         return result;
     }
 
-    private static void addParametersToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, List<Parameter> parameters) throws RDFGenerationError {
+    private void addParametersToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, List<Parameter> parameters) throws RDFGenerationError {
         if (parameters != null) {
             for (Parameter parameter : parameters) {
                 List<org.apache.jena.rdf.model.Resource> restrictionResources = new ArrayList<>();
@@ -180,7 +189,7 @@ public class RDFGenerator {
     }
 
     //TODO add a lot of nullchecks - probably as seperate method
-    private static org.apache.jena.rdf.model.Resource createDatatypeModelResource(Model model, Datatype datatype) throws RDFGenerationError {
+    private org.apache.jena.rdf.model.Resource createDatatypeModelResource(Model model, Datatype datatype) throws RDFGenerationError {
         org.apache.jena.rdf.model.Resource datatypeResource = model.createResource();
 
         if (datatype instanceof ComplexDatatype) {
@@ -207,7 +216,7 @@ public class RDFGenerator {
     }
 
     //TODO refactor using interface
-    private static org.apache.jena.rdf.model.Resource createDataPropertyModelResource(Model model, org.apache.jena.rdf.model.Resource datatypeResource, DataProperty dataProperty) {
+    private org.apache.jena.rdf.model.Resource createDataPropertyModelResource(Model model, org.apache.jena.rdf.model.Resource datatypeResource, DataProperty dataProperty) {
         org.apache.jena.rdf.model.Resource dataPropertyResource = model.createResource();
         String basedOn = "";
         if (dataProperty instanceof PrimitiveProperty) {
@@ -222,7 +231,7 @@ public class RDFGenerator {
         return dataPropertyResource;
     }
 
-    private static void addLocationToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, Location location, String platformId, boolean isSsp) throws RDFGenerationError {
+    private void addLocationToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, Location location, String platformId, boolean isSsp) throws RDFGenerationError {
 
         verifyLocation(location);
 
@@ -230,9 +239,7 @@ public class RDFGenerator {
 
 //        LocationFinder locationFinder = LocationFinder.getSingleton();
 
-        LocationFinder locationFinder = LocationFinder.getSingleton();
-
-        if (locationFinder != null) {
+        if (locationManager != null) {
 //            try {
 //                log.debug("Fetching for location URI... ");
 //                locationURI = locationFinder.queryForLocationUri(location, platformId);
@@ -241,7 +248,7 @@ public class RDFGenerator {
 //                log.error("Could not contact search to retrieve location URI: " + e.getMessage(), e);
 //            }
             if (location instanceof WGS84Location) {
-                Optional<LocationInfo> foundLoc = locationFinder.findExistingLocation(location.getName(),
+                Optional<LocationInfo> foundLoc = locationManager.findExistingLocation(location.getName(),
                         platformId, ((WGS84Location) location).getLatitude(),
                         ((WGS84Location) location).getLongitude(), ((WGS84Location) location).getAltitude());
                 if( foundLoc.isPresent() ) locationURI = foundLoc.get().getLocationUri();
@@ -286,7 +293,7 @@ public class RDFGenerator {
 
     }
 
-    private static void addFoiToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, FeatureOfInterest featureOfInterest) throws PropertyNotFoundException {
+    private void addFoiToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, FeatureOfInterest featureOfInterest) throws PropertyNotFoundException {
         if (featureOfInterest != null) {
             org.apache.jena.rdf.model.Resource foiResource = model.createResource();
             foiResource.addProperty(RDF.type, CIM.FeatureOfInterest);
@@ -312,7 +319,7 @@ public class RDFGenerator {
         }
     }
 
-    private static void addCapabilitiesToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, List<Capability> capabilities) throws PropertyNotFoundException, RDFGenerationError {
+    private void addCapabilitiesToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, List<Capability> capabilities) throws PropertyNotFoundException, RDFGenerationError {
 //        Map<String,CoreResource> services = new HashMap<>();
         verifyCapabilities(capabilities);
 
@@ -345,7 +352,7 @@ public class RDFGenerator {
     }
 
 
-    private static void addEffectToModelResource(Model model, org.apache.jena.rdf.model.Resource capabilityResource, List<Effect> effects) throws PropertyNotFoundException {
+    private void addEffectToModelResource(Model model, org.apache.jena.rdf.model.Resource capabilityResource, List<Effect> effects) throws PropertyNotFoundException {
         if (effects != null) {
             for (Effect effect : effects) {
                 org.apache.jena.rdf.model.Resource effectResource = model.createResource();
@@ -399,7 +406,7 @@ public class RDFGenerator {
 //        }
 //        return result;
 //    }
-    public static Model generateRDFForPlatform(PIMInstanceDescription platform) {
+    public Model generateRDFForPlatform(PIMInstanceDescription platform) {
         log.debug("Generating model from platform");
         Model model = ModelFactory.createDefaultModel();
         model.setNsPrefix("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
@@ -439,7 +446,7 @@ public class RDFGenerator {
         return model;
     }
 
-    public static String generateInterworkingServiceUri(String platformUri, String serviceUrl) {
+    public String generateInterworkingServiceUri(String platformUri, String serviceUrl) {
         String cutServiceUrl = "";
         if (serviceUrl.startsWith("http://")) {
             cutServiceUrl = serviceUrl.substring(7);
@@ -449,7 +456,7 @@ public class RDFGenerator {
         return platformUri + "/service/" + cutServiceUrl;
     }
 
-    private static void verifyLocation(Location location) throws RDFGenerationError {
+    private void verifyLocation(Location location) throws RDFGenerationError {
         if (location == null) {
             throw new RDFGenerationError("Location must not be null");
         }
@@ -458,7 +465,7 @@ public class RDFGenerator {
         }
     }
 
-    private static void verifyCapabilities(List<Capability> capabilities) throws RDFGenerationError {
+    private void verifyCapabilities(List<Capability> capabilities) throws RDFGenerationError {
         if (capabilities != null && capabilities.size() > 0) {
             for (Capability cap : capabilities) {
                 if (cap == null) throw new RDFGenerationError("Capability must not be null");
@@ -470,7 +477,7 @@ public class RDFGenerator {
     }
 
 
-    private static void checkService(Service service) throws RDFGenerationError {
+    private void checkService(Service service) throws RDFGenerationError {
         if (service == null) {
             throw new RDFGenerationError("Actuating service must not be null");
         }
@@ -485,7 +492,7 @@ public class RDFGenerator {
         }
     }
 
-    private static String findBIMPlatformPropertyUri(String property) throws PropertyNotFoundException {
+    private String findBIMPlatformPropertyUri(String property) throws PropertyNotFoundException {
         String uri = SymbioteModelsUtil.findInSymbioteCoreModels(property);
         log.debug("Found property in symbIoTe models: " + uri);
         return uri;
