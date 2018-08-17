@@ -7,6 +7,7 @@ import eu.h2020.symbiote.messaging.consumers.*;
 import eu.h2020.symbiote.ontology.SemanticManager;
 import eu.h2020.symbiote.ontology.utils.LocationFinder;
 import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
+import eu.h2020.symbiote.utils.LocationRepository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,14 +110,20 @@ public class RabbitManager {
     @Value("${rabbit.exchange.resource.internal}")
     private boolean resourceExchangeInternal;
 
-
     @Value("${rabbit.routingKey.resource.sparqlSearchRequested}")
     private String resourceSparqlSearchRequestedRoutingKey;
+
+    @Value("${semantic.insert.whole.location.for.existing}")
+    private boolean insertWholeLocation;
 
 
     private Connection connection;
 
-    public RabbitManager() {
+    private final LocationRepository locationRepository;
+
+    @Autowired
+    public RabbitManager(LocationRepository locationRepository) {
+        this.locationRepository = locationRepository;
     }
 
     /**
@@ -169,7 +176,8 @@ public class RabbitManager {
                     this.resourceExchangeInternal,
                     null);
 
-            LocationFinder.getSingleton(this.resourceExchangeName, this.resourceSparqlSearchRequestedRoutingKey, this.connection, this);
+//            LocationFinder.getSingleton(this.resourceExchangeName, this.resourceSparqlSearchRequestedRoutingKey, this.connection, this);
+            LocationFinder.getSingleton(this.insertWholeLocation,locationRepository);
 
             scheduleLoadingOfPIMs();
 

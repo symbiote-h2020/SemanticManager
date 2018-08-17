@@ -11,26 +11,25 @@ import eu.h2020.symbiote.semantics.ModelHelper;
 import eu.h2020.symbiote.semantics.ontology.CIM;
 import eu.h2020.symbiote.semantics.ontology.MIM;
 import eu.h2020.symbiote.semantics.ontology.WGS84;
+import eu.h2020.symbiote.utils.LocationInfo;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDF;
-import org.apache.jena.vocabulary.RDFS;
 import org.bson.types.ObjectId;
+import org.springframework.stereotype.Component;
 
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Helper class for generating RDF models from BIM objects.
  * <p>
  * Created by Szymon Mueller on 12/04/2017.
  */
+@Component
 public class RDFGenerator {
 
     private static final Log log = LogFactory.getLog(RDFGenerator.class);
@@ -60,9 +59,9 @@ public class RDFGenerator {
         org.apache.jena.rdf.model.Resource modelResource = model.createResource(ModelHelper.getResourceURI(resource.getId()));
         modelResource.addProperty(CIM.id, resource.getId()); //TODO this needs to be changed to cim:ID type
 
-            modelResource.addProperty(CIM.name, resource.getName());
+        modelResource.addProperty(CIM.name, resource.getName());
 
-        if( resource.getDescription() != null ) {
+        if (resource.getDescription() != null) {
             for (String description : resource.getDescription()) {
                 modelResource.addProperty(CIM.description, description);
             }
@@ -136,7 +135,7 @@ public class RDFGenerator {
         if (parameters != null) {
             for (Parameter parameter : parameters) {
                 List<org.apache.jena.rdf.model.Resource> restrictionResources = new ArrayList<>();
-                if( parameter.getRestrictions() != null ) {
+                if (parameter.getRestrictions() != null) {
                     for (Restriction restriction : parameter.getRestrictions()) {
                         org.apache.jena.rdf.model.Resource restrictionResource = model.createResource();
                         if (restriction instanceof RangeRestriction) {
@@ -188,10 +187,10 @@ public class RDFGenerator {
             datatypeResource.addProperty(RDF.type, CIM.ComplexDatatype)
                     .addProperty(CIM.isArray, String.valueOf(datatype.isArray()))
                     .addProperty(CIM.basedOnClass, ((ComplexDatatype) datatype).getBasedOnClass());
-            if( ((ComplexDatatype) datatype).getDataProperties() == null ) {
+            if (((ComplexDatatype) datatype).getDataProperties() == null) {
                 throw new RDFGenerationError("Complex data property must be provided for description to be valid");
             }
-            if( ((ComplexDatatype) datatype).getDataProperties().size() == 0 ) {
+            if (((ComplexDatatype) datatype).getDataProperties().size() == 0) {
                 throw new RDFGenerationError("Complex data property must not be empty for description to be valid");
             }
             for (DataProperty dataProperty : ((ComplexDatatype) datatype).getDataProperties()) {
@@ -229,20 +228,29 @@ public class RDFGenerator {
 
         String locationURI = null;
 
+//        LocationFinder locationFinder = LocationFinder.getSingleton();
+
         LocationFinder locationFinder = LocationFinder.getSingleton();
+
         if (locationFinder != null) {
-            try {
-                log.debug("Fetching for location URI... ");
-                locationURI = locationFinder.queryForLocationUri(location, platformId);
-                log.debug("Query returned following URI: " + locationURI);
-            } catch (Exception e) {
-                log.error("Could not contact search to retrieve location URI: " + e.getMessage(), e);
+//            try {
+//                log.debug("Fetching for location URI... ");
+//                locationURI = locationFinder.queryForLocationUri(location, platformId);
+//                log.debug("Query returned following URI: " + locationURI);
+//            } catch (Exception e) {
+//                log.error("Could not contact search to retrieve location URI: " + e.getMessage(), e);
+//            }
+            if (location instanceof WGS84Location) {
+                Optional<LocationInfo> foundLoc = locationFinder.findExistingLocation(location.getName(),
+                        platformId, ((WGS84Location) location).getLatitude(),
+                        ((WGS84Location) location).getLongitude(), ((WGS84Location) location).getAltitude());
+                if( foundLoc.isPresent() ) locationURI = foundLoc.get().getLocationUri();
             }
         }
 
         if (locationURI == null) {
             String locationId = ObjectId.get().toString();
-            if( isSsp ) {
+            if (isSsp) {
                 locationURI = ModelHelper.getSspURI(platformId) + "/location/" + locationId;
             } else {
                 locationURI = ModelHelper.getPlatformURI(platformId) + "/location/" + locationId;
@@ -306,7 +314,7 @@ public class RDFGenerator {
 
     private static void addCapabilitiesToModelResource(Model model, org.apache.jena.rdf.model.Resource modelResource, List<Capability> capabilities) throws PropertyNotFoundException, RDFGenerationError {
 //        Map<String,CoreResource> services = new HashMap<>();
-        verifyCapabilities( capabilities);
+        verifyCapabilities(capabilities);
 
         if (capabilities != null) {
             for (Capability capability : capabilities) {
@@ -445,17 +453,18 @@ public class RDFGenerator {
         if (location == null) {
             throw new RDFGenerationError("Location must not be null");
         }
-        if (location.getName() == null ) {
+        if (location.getName() == null) {
             throw new RDFGenerationError("Location must have not null name");
         }
     }
 
     private static void verifyCapabilities(List<Capability> capabilities) throws RDFGenerationError {
-        if( capabilities != null && capabilities.size() > 0 ) {
-            for( Capability cap: capabilities) {
+        if (capabilities != null && capabilities.size() > 0) {
+            for (Capability cap : capabilities) {
                 if (cap == null) throw new RDFGenerationError("Capability must not be null");
                 if (cap.getName() == null) throw new RDFGenerationError("Capability name must not be null");
-                if (cap.getName().trim().length() == 0 ) throw new RDFGenerationError("Capability name must not be empty");
+                if (cap.getName().trim().length() == 0)
+                    throw new RDFGenerationError("Capability name must not be empty");
             }
         }
     }

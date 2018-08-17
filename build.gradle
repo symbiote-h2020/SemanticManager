@@ -72,7 +72,7 @@ dependencies {
         exclude group: 'org.slf4j'
     }
 
-    compile('eu.symbiote-h2020:MediationFramework:1.0')
+//    compile('eu.symbiote-h2020:MediationFramework:1.0')
 
     /* SymbIoTeLibraries manual:
         One can use the library from jitpack by default with the notation:
@@ -90,10 +90,7 @@ dependencies {
     compile('com.github.symbiote-h2020:SymbIoTeSemantics:develop-SNAPSHOT') {changing = true
                 exclude group: 'org.slf4j'
             }
-    compile('com.github.symbiote-h2020:SymbIoTeLibraries:ssp_integration-SNAPSHOT') {changing=true}
-
-    //Just to generate object ids
-    compile('org.mongodb:bson:3.4.2')
+    compile('com.github.symbiote-h2020:SymbIoTeLibraries:5.27+') { changing = true }
 
     // Spring
     compile('org.springframework.cloud:spring-cloud-starter-config')
@@ -102,6 +99,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-amqp')
     compile('org.springframework.boot:spring-boot-starter-data-rest')
     compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-data-mongodb')
 
     // tests only
     testCompile('junit:junit:4.+')
