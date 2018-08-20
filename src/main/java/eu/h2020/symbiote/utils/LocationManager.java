@@ -23,9 +23,11 @@ public class LocationManager {
     private final LocationRepository locationRepo;
 
     @Autowired
-    public LocationManager(@Value("semantic.insert.whole.location.for.existing") boolean insertWholeLocation,
+//    public LocationManager(@Value("semantic.insert.whole.location.for.existing") boolean insertWholeLocation,
+    public LocationManager(
                            LocationRepository locationRepo) {
-        this.insertWholeLocation = insertWholeLocation;
+//        this.insertWholeLocation = insertWholeLocation;
+        this.insertWholeLocation = true;
         this.locationRepo = locationRepo;
     }
 

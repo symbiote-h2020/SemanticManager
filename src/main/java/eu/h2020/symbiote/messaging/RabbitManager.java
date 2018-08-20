@@ -110,8 +110,8 @@ public class RabbitManager {
     @Value("${rabbit.routingKey.resource.sparqlSearchRequested}")
     private String resourceSparqlSearchRequestedRoutingKey;
 
-    @Value("${semantic.insert.whole.location.for.existing}")
-    private boolean insertWholeLocation;
+//    @Value("${semantic.insert.whole.location.for.existing}")
+    private boolean insertWholeLocation = true;
 
 
     private Connection connection;
