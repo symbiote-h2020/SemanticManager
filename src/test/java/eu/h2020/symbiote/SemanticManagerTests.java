@@ -44,7 +44,7 @@ public class SemanticManagerTests {
     @Before
     public void init() {
         loadBIM();
-        locationManager = new LocationManager(true,locationRepository);
+        locationManager = new LocationManager(locationRepository);
         rdfGenerator = new RDFGenerator(locationManager);
         semanticManager = new SemanticManager(rdfGenerator);
         when(locationRepository.findByPlatformId(any())).thenReturn(new ArrayList<LocationInfo>());
