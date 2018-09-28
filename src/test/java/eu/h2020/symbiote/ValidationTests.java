@@ -11,6 +11,7 @@ import eu.h2020.symbiote.ontology.utils.RDFGenerator;
 import eu.h2020.symbiote.ontology.utils.SymbioteModelsUtil;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Formatter;
 
 import eu.h2020.symbiote.utils.LocationManager;
@@ -143,4 +144,46 @@ public class ValidationTests {
             fail("Error occurred when loading model from file");
         }
     }
+
+    public void loadIosb() throws IOException {
+        InformationModel im = new InformationModel();
+        im.setName("iosb");
+        im.setOwner("iosb");
+//        im.setUri(ModelHelper.getInformationModelURI("BIM"));
+        im.setUri("http://iosb.fraunhofer.de/ilt/ontologies/educampus");
+        im.setId("iosb");
+
+        String stringRdf = IOUtils.toString(this.getClass()
+                .getResource("/educampus-v1.0.0.ttl"));
+        im.setRdf(stringRdf);
+        im.setRdfFormat(RDFFormat.Turtle);
+        SymbioteModelsUtil.addModels(Arrays.asList(im));
+    }
+
+    @Test
+    public void iosbResourceValidationTest() {
+        try {
+            loadIosb();
+            ResourceInstanceValidationRequest request = new ResourceInstanceValidationRequest();
+            request.setInformationModelId("iosb");
+            request.setRdfFormat(RDFFormat.Turtle);
+            String resourceRdf = IOUtils.toString(this.getClass()
+                    .getResource("/iosbRes.ttl"));
+            request.setRdf(resourceRdf);
+            ResourceInstanceValidationResult result = semanticManager.validateResourcesInstance(request);
+            assertNotNull(result);
+            assertNotNull(result.getObjectDescription());
+            assertTrue(result.isSuccess());
+            assertEquals("Should find 1 resource", 1, result.getObjectDescription().size());
+            System.out.println("Result RDF:");
+            System.out.println(result.getObjectDescription().values().iterator().next().getRdf());
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail("Error occurred when loading model from file");
+        }
+    }
+
+
 }

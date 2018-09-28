@@ -347,11 +347,13 @@ public class SemanticManager {
 
     private static void checkAndCreateId(org.apache.jena.rdf.model.Resource resource) {
         if (resource.hasProperty(CIM.id)) {
+            log.debug("Checking id existing in the resource : " + resource.getProperty(CIM.id).getObject().toString());
             RDFNode idNode = resource.getProperty(CIM.id).getObject();
             if (idNode.isLiteral()) {
                 return;
             }
         }
+        log.debug( "Id not present - generating id");
         resource.addLiteral(
                 CIM.id,
                 resource.getModel().createTypedLiteral(
@@ -461,8 +463,10 @@ public class SemanticManager {
         }
         Map<String, CoreResource> resources = new HashMap<>();
         StringBuilder instanceResults = new StringBuilder();
+        log.debug("Parsing resource map, size: " + rdfResources.size());
         for (Map.Entry<org.apache.jena.rdf.model.Resource, Model> entry : rdfResources.entrySet()) {
             checkAndCreateId(entry.getKey());
+
             StringBuilder instanceResult = new StringBuilder();
             pim.addSubModel(entry.getValue());
 //            ValidityReport report = pim.validate();
@@ -475,14 +479,25 @@ public class SemanticManager {
 //            }
             List<String> cardinalityViolations = ValidationHelper.checkCardinalityViolations(entry.getKey(), pim, entry.getValue());
             if (!cardinalityViolations.isEmpty()) {
+                log.debug("Found cardinality validation errors: " + String.join(System.lineSeparator(), cardinalityViolations));
                 instanceResult.append("errors during cardinality validation").append(System.lineSeparator());
                 instanceResult.append(String.join(System.lineSeparator(), cardinalityViolations));
+            } else {
+                log.debug("Cardinality validation fine");
             }
             pim.removeSubModel(entry.getValue());
             // if resource has no error - create java representation for it
             if (instanceResult.length() == 0) {
                 try {
-                    resources.put(entry.getKey().getURI(), RDFReader.createCoreResource(entry.getKey(), entry.getValue(), request.getRdfFormat()));
+                    log.debug("Creating core resource object");
+                    CoreResource coreResource = RDFReader.createCoreResource(entry.getKey(), entry.getValue(), request.getRdfFormat());
+                    if( coreResource != null ) {
+                        log.debug("Core resource created: " + coreResource.getName() + " | id " + coreResource.getId());
+                        resources.put(entry.getKey().getURI(), coreResource);
+                    } else {
+                        log.debug("Returned core resource is null");
+                        instanceResult.append("Error creating resource object - resource is null").append(System.lineSeparator());
+                    }
                 } catch (RDFParsingError ex) {
                     instanceResult.append("error creating CoreResource: ").append(ex);
                 }
@@ -499,6 +514,7 @@ public class SemanticManager {
         }
         result.setModelValidatedAgainst(ModelHelper.writeModel(pim, request.getRdfFormat()));
         result.setSuccess(true);
+        log.debug("Resource parsing finished, found " + resources.size() + " resources");
         resources.values().stream().forEach( res -> res.setInterworkingServiceURL(request.getInterworkingServiceURL()));
         result.setObjectDescription(resources);
         return result;

@@ -67,7 +67,7 @@ public class ValidateResourcesInstanceConsumer extends DefaultConsumer {
             try {
                 response = semanticManager.validateResourcesInstance(validateRequest);
                 //Send the response back to the client
-                log.debug("Validation status: " + response.isSuccess() + ", message: " + response.getMessage());
+                log.debug("Validation status: " + response.isSuccess() + ", message: " + response.getMessage() + " resources size: " + response.getObjectDescription().size());
             } catch( Exception e ) {
                 log.error( "Error occurred during validating resources " + e.getMessage(), e );
                 response = new ResourceInstanceValidationResult();
