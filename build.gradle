@@ -69,9 +69,9 @@ configurations.all {
 }
 
 dependencies {
-    compile('org.apache.jena:jena-core:3.4.0')
-    compile('org.apache.jena:jena-querybuilder:3.4.0')
-	compile('org.apache.jena:jena-cmds:3.4.0') { exclude group: 'org.slf4j'}
+    compile('org.apache.jena:jena-core:3.9.0')
+    compile('org.apache.jena:jena-querybuilder:3.9.0')
+	compile('org.apache.jena:jena-cmds:3.9.0') { exclude group: 'org.slf4j'}
 
 //    compile('eu.symbiote-h2020:MediationFramework:1.0')
 
