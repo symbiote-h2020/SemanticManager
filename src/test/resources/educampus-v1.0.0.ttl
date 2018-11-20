@@ -1,0 +1,159 @@
+@prefix : <http://iosb.fraunhofer.de/ilt/ontologies/educampus#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix core: <http://www.symbiote-h2020.eu/ontology/core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://iosb.fraunhofer.de/ilt/ontologies/educampus> .
+
+<http://iosb.fraunhofer.de/ilt/ontologies/educampus> rdf:type owl:Ontology ;
+                                                      owl:versionIRI <http://iosb.fraunhofer.de/ilt/ontologies/educampus/1.0.0> ;
+                                                      owl:imports <http://www.symbiote-h2020.eu/ontology/core/2.2.0> ;
+                                                      owl:versionInfo "v1.0.0 2018/06/20 12:00:00"^^xsd:string ;
+                                                      rdfs:comment "Ontology to be used in symbIoTe EduCampus use case"@en ;
+                                                      rdfs:label "EduCampus ontology of Fraunhofer IOSB"@en .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://iosb.fraunhofer.de/ilt/ontologies/educampus#attachedTo
+:attachedTo rdf:type owl:ObjectProperty .
+
+
+###  http://iosb.fraunhofer.de/ilt/ontologies/educampus#hasFeature
+:hasFeature rdf:type owl:ObjectProperty ;
+            rdfs:range :Feature .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://iosb.fraunhofer.de/ilt/ontologies/educampus#beaconId
+:beaconId rdf:type owl:DatatypeProperty ;
+          rdfs:range xsd:string .
+
+
+###  http://iosb.fraunhofer.de/ilt/ontologies/educampus#capacity
+:capacity rdf:type owl:DatatypeProperty ;
+          rdfs:range xsd:integer .
+
+
+###  http://iosb.fraunhofer.de/ilt/ontologies/educampus#major
+:major rdf:type owl:DatatypeProperty ;
+       rdfs:range xsd:integer .
+
+
+###  http://iosb.fraunhofer.de/ilt/ontologies/educampus#minor
+:minor rdf:type owl:DatatypeProperty ;
+       rdfs:range xsd:integer .
+
+
+###  http://iosb.fraunhofer.de/ilt/ontologies/educampus#roomNo
+:roomNo rdf:type owl:DatatypeProperty ;
+        rdfs:range xsd:string .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://iosb.fraunhofer.de/ilt/ontologies/educampus#BeaconRoomService
+
+:BeaconRoomService rdf:type owl:Class ;
+                            rdfs:subClassOf core:Service .
+
+###  http://iosb.fraunhofer.de/ilt/ontologies/educampus#BleBeacon
+:BleBeacon rdf:type owl:Class ;
+           rdfs:subClassOf [ rdf:type owl:Restriction ;
+                             owl:onProperty :attachedTo ;
+                             owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                             owl:onClass :Thing
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :attachedTo ;
+                             owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                             owl:onClass :Thing
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :beaconId ;
+                             owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                             owl:onDataRange xsd:string
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :major ;
+                             owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                             owl:onDataRange xsd:integer
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :minor ;
+                             owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                             owl:onDataRange xsd:integer
+                           ] .
+
+
+###  http://iosb.fraunhofer.de/ilt/ontologies/educampus#Feature
+:Feature rdf:type owl:Class .
+
+
+###  http://iosb.fraunhofer.de/ilt/ontologies/educampus#Room
+:Room rdf:type owl:Class ;
+      rdfs:subClassOf :Thing ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty :hasFeature ;
+                        owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                        owl:onClass :Feature
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty :capacity ;
+                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                        owl:onDataRange xsd:integer
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty :roomNo ;
+                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                        owl:onDataRange xsd:string
+                      ] .
+
+
+###  http://iosb.fraunhofer.de/ilt/ontologies/educampus#Thing
+:Thing rdf:type owl:Class ;
+       rdfs:subClassOf [ rdf:type owl:Restriction ;
+                         owl:onProperty core:description ;
+                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                         owl:onDataRange xsd:string
+                       ] ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty core:name ;
+                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                         owl:onDataRange xsd:string
+                       ] .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://iosb.fraunhofer.de/ilt/ontologies/educampus#airConditioning
+:airConditioning rdf:type owl:NamedIndividual ,
+                          :Feature .
+
+
+###  http://iosb.fraunhofer.de/ilt/ontologies/educampus#dockingStation
+:dockingStation rdf:type owl:NamedIndividual ,
+                         :Feature .
+
+
+###  http://iosb.fraunhofer.de/ilt/ontologies/educampus#projector
+:projector rdf:type owl:NamedIndividual ,
+                    :Feature .
+
+
+###  http://iosb.fraunhofer.de/ilt/ontologies/educampus#whiteboard
+:whiteboard rdf:type owl:NamedIndividual ,
+                     :Feature .
+
+
+###  Generated by the OWL API (version 4.2.8.20170104-2310) https://github.com/owlcs/owlapi
