@@ -1,0 +1,47 @@
+@prefix : <http://iosb.fraunhofer.de/ilt/ontologies/educampus#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix core:  <http://www.symbiote-h2020.eu/ontology/core#> .
+@base <http://iosb.fraunhofer.de/ilt/ontologies/educampus#> .
+
+:IOSBBeaconRoomService a owl:NamedIndividual ;
+    a core:Service ;
+    a :BeaconRoomService ;
+    core:name "IOSB Beacon Room Service" ;
+    core:hasResultType [
+        a core:ComplexDatatype ;
+        core:basedOnClass :Room ;
+        core:hasProperty [
+            a core:PrimitiveProperty ;
+            core:basedOnProperty :capacity ;
+            core:hasDatatype core:int
+        ];
+        core:hasProperty [
+            a core:PrimitiveProperty ;
+            core:basedOnProperty :roomNo ;
+            core:hasDatatype core:string
+        ];
+    ];
+    core:hasParameter [
+        core:name "beacons";
+        core:mandatory "true"^^xsd:boolean ;
+        core:hasDatatype [
+            a core:ComplexDatatype ;
+            core:basedOnClass :BleBeacon ;
+            core:hasProperty [
+                a core:PrimitiveProperty ;
+                core:basedOnProperty :beaconId ;
+                core:hasDatatype core:string
+            ];
+            core:hasProperty [
+                a core:PrimitiveProperty ;
+                core:basedOnProperty :major ;
+                core:hasDatatype core:int
+            ];
+            core:hasProperty [
+                a core:PrimitiveProperty ;
+                core:basedOnProperty :minor ;
+                core:hasDatatype core:int
+            ]
+        ]
+    ].
