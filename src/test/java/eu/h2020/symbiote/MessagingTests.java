@@ -126,6 +126,7 @@ public class MessagingTests {
         ReflectionTestUtils.setField(rabbitManager, "resourceExchangeDurable", false);
         ReflectionTestUtils.setField(rabbitManager, "resourceExchangeAutodelete", true);
         ReflectionTestUtils.setField(rabbitManager, "resourceExchangeInternal", false);
+        ReflectionTestUtils.setField(rabbitManager, "rabbitMessageTimeout", 30000);
 
 
         ReflectionTestUtils.setField(rabbitManager, "resourceSparqlSearchRequestedRoutingKey", "resourceSparqlSearchRequestedRoutingKey");

@@ -38,6 +38,8 @@ public class RabbitManager {
     private String rabbitUsername;
     @Value("${rabbit.password}")
     private String rabbitPassword;
+    @Value("${spring.rabbitmq.template.reply-timeout}")
+    private Integer rabbitMessageTimeout;
 
     //Platform ontology routing keys
     @Value("${rabbit.routingKey.platform.model.validationRequested}")
@@ -113,6 +115,8 @@ public class RabbitManager {
 //    @Value("${semantic.insert.whole.location.for.existing}")
     private boolean insertWholeLocation = true;
 
+    private Map<String,Object> queueArgs;
+
 
     private Connection connection;
 
@@ -148,6 +152,8 @@ public class RabbitManager {
     public void init() {
         //FIXME check if there is better exception handling in @postconstruct method
         Channel channel = null;
+        queueArgs = new HashMap<>();
+        queueArgs.put("x-message-ttl", rabbitMessageTimeout);
 
         try {
             ConnectionFactory factory = new ConnectionFactory();
@@ -240,7 +246,7 @@ public class RabbitManager {
         try {
             Channel tempChannel = connection.createChannel();
 
-            String queueName = tempChannel.queueDeclare("symbIoTe-SemanticManager-pimsLookup", true, true, false, null).getQueue();
+            String queueName = tempChannel.queueDeclare("symbIoTe-SemanticManager-pimsLookup", true, true, false, queueArgs).getQueue();
 
             TimerTask task = new TimerTask() {
                 @Override
@@ -377,7 +383,7 @@ public class RabbitManager {
         String queueName = "symbIoTe-SemanticManager-validate-PIM-MetaModel";
 
         Channel channel = connection.createChannel();
-        channel.queueDeclare(queueName, false, true, true, null);
+        channel.queueDeclare(queueName, false, true, true, queueArgs);
         channel.queueBind(queueName, platformExchangeName, platformModelValidationRequestedRoutingKey);
         ValidatePIMMetaModelConsumer consumer = new ValidatePIMMetaModelConsumer(channel, semanticManager);
 
@@ -407,7 +413,7 @@ public class RabbitManager {
         String queueName = "symbIoTe-SemanticManager-validate-Resource-Instance";
 
         Channel channel = connection.createChannel();
-        channel.queueDeclare(queueName, false, true, true, null);
+        channel.queueDeclare(queueName, false, true, true, queueArgs);
         channel.queueBind(queueName, resourceExchangeName, resourceInstanceValidationRequestedRoutingKey);
         ValidateResourcesInstanceConsumer consumer = new ValidateResourcesInstanceConsumer(channel, semanticManager);
 
@@ -437,7 +443,7 @@ public class RabbitManager {
         String queueName = "symbIoTe-SemanticManager-validate-and-create-BIM-Resource";
 
         Channel channel = connection.createChannel();
-        channel.queueDeclare(queueName, false, true, true, null);
+        channel.queueDeclare(queueName, false, true, true, queueArgs);
         channel.queueBind(queueName, resourceExchangeName, resourceInstanceTranslationRequestedRoutingKey);
         ValidateAndCreateRDFForBIMResourceConsumer consumer = new ValidateAndCreateRDFForBIMResourceConsumer(channel, semanticManager);
 
@@ -452,7 +458,7 @@ public class RabbitManager {
         String queueName = "symbIoTe-SemanticManager-validate-and-create-SSP-Resource";
 
         Channel channel = connection.createChannel();
-        channel.queueDeclare(queueName, false, true, true, null);
+        channel.queueDeclare(queueName, false, true, true, queueArgs);
         channel.queueBind(queueName, resourceExchangeName, sspResourceInstanceTranslationRequestedRoutingKey);
         ValidateAndCreateRDFForSspResourceConsumer consumer = new ValidateAndCreateRDFForSspResourceConsumer(channel, semanticManager);
 
@@ -482,7 +488,7 @@ public class RabbitManager {
         String queueName = "symbIoTe-SemanticManager-PIM-MetaModel-creation";
 
         Channel channel = connection.createChannel();
-        channel.queueDeclare(queueName, false, true, true, null);
+        channel.queueDeclare(queueName, false, true, true, queueArgs);
         channel.queueBind(queueName, platformExchangeName, platformModelCreatedRoutingKey);
         RegisterPIMMetaModelConsumer consumer = new RegisterPIMMetaModelConsumer(channel, semanticManager);
 
@@ -497,7 +503,7 @@ public class RabbitManager {
         String queueName = "symbIoTe-SemanticManager-PIM-MetaModel-delete";
 
         Channel channel = connection.createChannel();
-        channel.queueDeclare(queueName, false, true, true, null);
+        channel.queueDeclare(queueName, false, true, true, queueArgs);
         channel.queueBind(queueName, platformExchangeName, platformModelRemovedRoutingKey);
         DeletePIMMetaModelConsumer consumer = new DeletePIMMetaModelConsumer(channel, semanticManager);
 
@@ -512,7 +518,7 @@ public class RabbitManager {
         String queueName = "symbIoTe-SemanticManager-PIM-MetaModel-modify";
 
         Channel channel = connection.createChannel();
-        channel.queueDeclare(queueName, false, true, true, null);
+        channel.queueDeclare(queueName, false, true, true, queueArgs);
         channel.queueBind(queueName, platformExchangeName, platformModelModifiedRoutingKey);
         ModifyPIMMetaModelConsumer consumer = new ModifyPIMMetaModelConsumer(channel, semanticManager);
 

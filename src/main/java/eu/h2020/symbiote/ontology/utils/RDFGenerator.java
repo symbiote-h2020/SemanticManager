@@ -194,8 +194,10 @@ public class RDFGenerator {
 
         if (datatype instanceof ComplexDatatype) {
             datatypeResource.addProperty(RDF.type, CIM.ComplexDatatype)
-                    .addProperty(CIM.isArray, String.valueOf(datatype.isArray()))
-                    .addProperty(CIM.basedOnClass, ((ComplexDatatype) datatype).getBasedOnClass());
+                    .addProperty(CIM.isArray, String.valueOf(datatype.isArray()));
+            if (((ComplexDatatype) datatype).getBasedOnClass() != null) {
+                datatypeResource.addProperty(CIM.basedOnClass, ((ComplexDatatype) datatype).getBasedOnClass());
+            }
             if (((ComplexDatatype) datatype).getDataProperties() == null) {
                 throw new RDFGenerationError("Complex data property must be provided for description to be valid");
             }
@@ -225,8 +227,10 @@ public class RDFGenerator {
             basedOn = ((ComplexProperty) dataProperty).getBasedOnProperty();
         }
         dataPropertyResource.addProperty(RDF.type, CIM.PrimitiveProperty)
-                .addProperty(CIM.hasDatatype, datatypeResource)
-                .addProperty(CIM.basedOnProperty, basedOn);
+                .addProperty(CIM.hasDatatype, datatypeResource);
+        if( basedOn != null ) {
+            dataPropertyResource.addProperty(CIM.basedOnProperty, basedOn);
+        }
 
         return dataPropertyResource;
     }
