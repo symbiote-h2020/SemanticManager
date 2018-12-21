@@ -167,7 +167,9 @@ public class SemanticManager {
         modelInfo.setRdfFormat(request.getRdfFormat());
         String modelId = String.valueOf(ObjectId.get());
         log.debug("Generating id for the ontology model: " + modelId);
-        modelInfo.setUri("http://www.symbiote-h2020.eu/ontology/pim/" + modelId);
+//        modelInfo.setUri("http://www.symbiote-h2020.eu/ontology/pim/" + modelId);
+        log.debug("Using passed uri of the model: " + request.getUri());
+        modelInfo.setUri(request.getUri());
         modelInfo.setId(modelId);
         modelInfo.setOwner(request.getOwner());
         modelInfo.setName(request.getName());
